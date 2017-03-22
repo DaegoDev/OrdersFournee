@@ -1,0 +1,29 @@
+{
+  "name": "OrdersFournee",
+  "description": "a Sails application",
+  "main": "app.js",
+  "authors": [
+    "Diego Alvarez",
+    "Jonnatan Rios"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/daegodev/OrdersFournee.git",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.6.x",
+    "angular-route": "~1.6.x",
+    "angular-ui-router": "~0.4.x",
+    "angular-bootstrap": "~2.5.x",
+    "angular-animate": "~1.6.3",
+    "angular-touch": "~1.6.3",
+    "bootstrap": "~3.3.7",
+    "jquery": "~3.1.1"
+  }
+}

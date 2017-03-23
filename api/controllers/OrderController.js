@@ -52,8 +52,8 @@ module.exports = {
       return res.badRequest("La fecha de entrega no es correcta");
     }
     state = setState(createdAt, deliveryDate);
-    sails.log.debug("El estado es: " + state);
 
+    // crear las credenciales para guardar un pedido
     var orderCredentials = {
       created_at: createdAt,
       delivery_date: deliveryDate,
@@ -64,29 +64,7 @@ module.exports = {
       observation: observation
     };
 
-    Client.findOne({
-        id: client
-      })
-      .then(function(client) {
-        if (client) {
-          orderCredentials.client = client.id;
-          return ClientEmployee.findOne({
-            id: clientEmployee
-          });
-        }
-        return res.badRequest("El cliente no existe");
-      })
-      .then(function(clientemployee) {
-        if (clientemployee) {
-          orderCredentials.client_employee = clientemployee.id;
-        }
-        return res.badRequest("El empleado no existe");
-      })
-      .catch(function(err) {
-        sails.log.debug(err);
-        return res.serverError();
-      });
-
+    // Arreglo de productos para registrar con la pedido
     productsToOrder = [{
         client_product: 1,
         amount: 10,
@@ -104,25 +82,31 @@ module.exports = {
       }
     ];
 
-    //crea una coneccion con mysql
-    var mySqlPath = process.env.PWD + '/node_modules/sails-mysql/node_modules/mysql';
-    var mysql = require(mySqlPath);
-
-    var sailsMySqlConfig = sails.config.connections.localMysql;
-    var connection = mysql.createConnection({
-      host: sailsMySqlConfig.host,
-      user: sailsMySqlConfig.user,
-      password: sailsMySqlConfig.password,
-      database: sailsMySqlConfig.database
-    });
-
-    // Paso la coneccion al constructor de la libreria mysql-wrap
-    var createMySQLWrap = require('mysql-wrap');
-    var sql = createMySQLWrap(connection);
+    //Obtengo la conección para realizar transacciones
+    var connectionConfig = AlternativeConnectionService.getConnection();
+    var sql = connectionConfig.sql;
 
     sql.beginTransaction()
       .then(function() {
-        return sql.insert('order', orderCredentials);
+        return Client.findOne({
+          id: client
+        });
+      })
+      .then(function(client) {
+        if (client) {
+          orderCredentials.client = client.id;
+          return ClientEmployee.findOne({
+            id: clientEmployee
+          });
+        }
+        throw "El cliente no existe";
+      })
+      .then(function(clientemployee) {
+        if (clientemployee) {
+          orderCredentials.client_employee = clientemployee.id;
+          return sql.insert('order', orderCredentials);
+        }
+        throw "El empleado no existe";
       })
       .then(function(order) {
         productsToOrder.forEach(function(product, i, productsToOrder) {
@@ -131,7 +115,7 @@ module.exports = {
           //  })
           //  .then(function(clientProduct) {
           //    if (clientProduct) {
-                product.order = order.insertId;
+          product.order = order.insertId;
           //    }
           //    return res.serverError();
           //  });
@@ -141,7 +125,7 @@ module.exports = {
       })
       .then(function(orderProduct) {
         sql.commit();
-        connection.end(function(err) {
+        connectionConfig.connection.end(function(err) {
           if (err) {
             sails.log.debug(err);
           }
@@ -151,17 +135,48 @@ module.exports = {
         });
       })
       .catch(function(err) {
-        sails.log.debug(err);
-        return sql.rollback(function(err) {
-          connection.end(function(err) {
+        sql.rollback(function(err) {
+          connectionConfig.connection.end(function(err) {
             if (err) {
               sails.log.debug(err);
             }
           });
-          res.serverError("No se pudo crear el pedido");
         });
+        res.serverError(err);
       });
+  }
+  /**
+   * Funcion para crear un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  updateDeliveryDate: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var deliveryDate = null;
+    var orderId = null;
 
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    var deliveryDateString = req.param('deliveryDate');
+    if (!deliveryDateString) {
+      return res.badRequest('Se debe ingresar la fecha de entrega.');
+    }
+    var dataDate = deliveryDateString.split("-", 3);
+    deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
+
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id de la orden vacio.');
+    }
+
+    Order.findOne({id: orderId})
+    .then(function(order) {
+      if(!order){
+        throw "La orden no existe";
+      }
+      Order.update({id: orderId}, {deliveryDate: deliveryDate});
+    })
   }
 };
 

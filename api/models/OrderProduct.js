@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  migrate: 'drop',
+  // migrate: 'drop',
   tableName: 'order_product',
   attributes: {
     // Añade una referencia a client_product

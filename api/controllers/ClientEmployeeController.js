@@ -58,7 +58,7 @@ module.exports = {
         clientEmployeeCredentials.client = client.id;
         return ClientEmployee.create(clientEmployeeCredentials);
       }
-      return res.serverError();
+      throw "El cliente no existe";
     })
     .then(function(clientEmployee) {
       sails.log.debug(clientEmployee);
@@ -68,7 +68,7 @@ module.exports = {
     })
     .catch(function(err) {
       sails.log.debug(err);
-      res.serverError();
+      res.serverError(err);
     })
 
   }

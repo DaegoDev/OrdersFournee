@@ -55,21 +55,9 @@ module.exports = {
       name: name,
     };
 
-    //crea una coneccion con mysql
-    var mySqlPath = process.env.PWD + '/node_modules/sails-mysql/node_modules/mysql';
-    var mysql = require(mySqlPath);
-
-    var sailsMySqlConfig = sails.config.connections.localMysql;
-    var connection = mysql.createConnection({
-      host: sailsMySqlConfig.host,
-      user: sailsMySqlConfig.user,
-      password: sailsMySqlConfig.password,
-      database: sailsMySqlConfig.database
-    });
-
-    // Paso la coneccion al constructor de la libreria mysql-wrap
-    var createMySQLWrap = require('mysql-wrap');
-    var sql = createMySQLWrap(connection);
+    //Obtengo la conección para realizar transacciones
+    var connectionConfig = AlternativeConnectionService.getConnection();
+    var sql = connectionConfig.sql;
 
     // Se verifica que el usuario no exista antes de su creación, en caso de que exista
     // se retorna un error de conflicto con codigo de error 409. En caso de que no exista
@@ -82,7 +70,6 @@ module.exports = {
       })
       .then(function(user) {
         if (user.length == 0) {
-
           return sql.insert('user', userCredentials)
         }
         return res.conflict();
@@ -93,9 +80,9 @@ module.exports = {
       })
       .then(function(user) {
         sql.commit();
-        connection.end(function(err) {
+        connectionConfig.connection.end(function(err) {
           if (err) {
-            console.log(err)
+            sails.log.debug(err);
           }
         });
         res.created({
@@ -103,14 +90,14 @@ module.exports = {
         });
       })
       .catch(function(err) {
-        return sql.rollback(function(err) {
-          connection.end(function(err) {
+        sql.rollback(function(err) {
+          connectionConfig.connection.end(function(err) {
             if (err) {
-              console.log(err)
+              sails.log.debug(err);
             }
           });
-          res.serverError();
         });
+        res.serverError();
       });
   },
   /**

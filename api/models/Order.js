@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  migrate: 'drop',
+  // migrate: 'drop',
   tableName: 'order',
   attributes: {
     createdAt: {

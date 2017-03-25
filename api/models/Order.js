@@ -11,14 +11,14 @@ module.exports = {
   tableName: 'order',
   attributes: {
     createdAt: {
-      type: 'date',
+      type: 'datetime',
       unique: true,
       notNull: true,
       required: true,
       columnName: 'created_at'
     },
     deliveryDate: {
-      type: 'date',
+      type: 'datetime',
       notNull: true,
       required: true,
       columnName: 'delivery_date'

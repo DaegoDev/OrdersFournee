@@ -45,7 +45,6 @@ module.exports = {
     initialSuggestedTime = req.param('initialSuggestedTime');
     finalSuggestedTime = req.param('finalSuggestedTime');
     additionalInformation = req.param('additionalInformation');
-    observation = req.param('observation');
 
     createdAt = new Date();
     if (!isCorrectDeliveryDate(createdAt, deliveryDate)) {
@@ -144,9 +143,9 @@ module.exports = {
         });
         res.serverError(err);
       });
-  }
+  },
   /**
-   * Funcion para crear un pedido.
+   * Funcion para actualizar la fecha de entrega de un pedido.
    * @param  {Object} req Request object
    * @param  {Object} res Response object
    * @return {Object}
@@ -154,6 +153,7 @@ module.exports = {
   updateDeliveryDate: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
+    //El formato de fecha es yyyy-mm-dd. mm = 0-11
     var deliveryDate = null;
     var orderId = null;
 
@@ -169,15 +169,105 @@ module.exports = {
     if (!orderId) {
       return res.badRequest('Id de la orden vacio.');
     }
+    //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
+    Order.findOne({
+        id: orderId
+      })
+      .then(function(order) {
+        if (!order) {
+          throw "La orden no existe";
+        } else if (!isCorrectDeliveryDate(order.deliveryDate, deliveryDate)) {
+          throw "La nueva fecha de entrega no es correcta";
+        }
+        return Order.update({
+          id: orderId
+        }, {
+          deliveryDate: deliveryDate
+        });
+      })
+      .then(function(order) {
+        res.ok()
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
+  /**
+   * Funcion para cambiar el estado de un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+   changeState: function(req, res) {
+     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+     // de la solicitud.
+     var orderId = null;
+     var newState = null;
+     var states = ["confirmado", "pendiente de confirmacion", "alistado", "despachado"];
 
-    Order.findOne({id: orderId})
-    .then(function(order) {
-      if(!order){
-        throw "La orden no existe";
-      }
-      Order.update({id: orderId}, {deliveryDate: deliveryDate});
-    })
-  }
+     // Definición de variables apartir de los parametros de la solicitud y validaciones.
+     orderId = parseInt(req.param('orderId'));
+     if (!orderId) {
+       return res.badRequest('Id de la orden vacio.');
+     }
+     newState = req.param("state");
+     if (!newState) {
+       return res.badRequest('Se debe ingresar la el nuevo estado.');
+     }
+     sails.log.debug(states.indexOf(newState.toLowerCase()));
+     if(states.indexOf(newState.toLowerCase()) == -1){
+       return res.badRequest("El estado no existe");
+     }
+     //Verifica que la orden exista. Si existe cambia el campo estado con el nuevo valor enviado
+     Order.findOne({
+         id: orderId
+       })
+       .then(function(order) {
+         if (!order) {
+           throw "La orden no existe";
+         }
+         return Order.update({id: orderId}, {state: newState});
+       })
+       .then(function(order) {
+         res.ok()
+       })
+       .catch(function(err) {
+         res.serverError(err);
+       })
+   },
+   /**
+    * Funcion para obtener los pedidos dado una fecha de entrega.
+    * @param  {Object} req Request object
+    * @param  {Object} res Response object
+    * @return {Object}
+    */
+   getByDeliveryDate: function(req, res) {
+     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+     // de la solicitud.
+     var deliveryDate = null
+
+     // Definición de variables apartir de los parametros de la solicitud y validaciones.
+     var deliveryDateString = req.param('deliveryDate');
+     if (!deliveryDateString) {
+       return res.badRequest('Se debe ingresar la fecha de entrega.');
+     }
+     var dataDate = deliveryDateString.split("-", 3);
+     deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
+
+     Order.find({deliveryDate: deliveryDate})
+     .populate("clientEmployee")
+     .populate("client")
+     .populate("billAddress")
+     .then(function(order) {
+       res.ok({
+         pedido: order
+       })
+     })
+     .catch(function(err) {
+       res.serverError(err);
+     })
+
+   }
 };
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {

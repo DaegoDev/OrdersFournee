@@ -1,3 +1,7 @@
-<div ng-app="fournee">
-  <sidebar></sidebar>
+<div class="main-wrapper" ng-app="fournee">
+  <sidebar class="sidebar" toggle="toggle" ng-class="{toggle: toggle}">
+    <login-form></login-form>
+
+  </sidebar>
+  <div class="main" ng-class="{toggle: toggle}" ui-view ></div>
 </div>

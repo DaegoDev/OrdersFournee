@@ -4,28 +4,33 @@
           <a ui-sref="home">La Fournee</a>
       </li>
       <li class="hamburger">
-        <a href="#" ng-click="toggleSidebar()">&#9776</a>
+        <a href="" ng-click="toggleSidebar()">&#9776</a>
 
       </li>
     </div>
-    <div class="login-wrapper" ng-transclude>
-
+    <div ng-transclude>
+      <!-- Content for login  -->
     </div>
-    <ul class="x-navigation">
-        <li class="xn-openable" >
-            <a href="#" ng-click="dashboard.isCollapsed = !dashboard.isCollapsed">
-              <span class="fa fa-files-o"></span> <span class="xn-text">Clientes</span>
+    <ul class="">
+      <li class="item" >
+          <a ui-sref="home">
+            <span class="fa fa-files-o"></span> <span class="">Inicio</span>
+          </a>
+      </li>
+        <li class="item" >
+            <a ng-click="dashboard.isCollapsed = !dashboard.isCollapsed">
+              <span class="fa fa-files-o"></span> <span class="">Clientes</span>
             </a>
-            <ul uib-collapse="dashboard.isCollapsed" >
-                <li><a href="#"><span class="fa fa-image"></span> Item 1</a></li>
+            <ul uib-collapse="dashboard.isCollapsed" class="subitem">
+                <li><a ui-sref="client-create.user"><span class="fa fa-image"></span> Crear</a></li>
                 <li><a href="#"><span class="fa fa-user"></span> Item 2</a></li>
             </ul>
         </li>
-        <li class="xn-openable">
-            <a href="#" ng-click="layout.isCollapsed = !layout.isCollapsed">
-              <span class="fa fa-file-text-o"></span> <span class="xn-text">Productos</span>
+        <li class="item">
+            <a ng-click="layout.isCollapsed = !layout.isCollapsed">
+              <span class="fa fa-file-text-o"></span> <span class="">Productos</span>
             </a>
-            <ul uib-collapse="layout.isCollapsed">
+            <ul uib-collapse="layout.isCollapsed" class="subitem">
                 <li><a href="#">Item 1</a></li>
                 <li><a href="#">Item 2</a></li>
                 <li><a href="#">Item 3</a></li>

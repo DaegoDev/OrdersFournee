@@ -17,10 +17,10 @@ module.exports = {
       columnName: 'client_product'
     },
     // Añade una referencia a order
-    order: {
+    orderId: {
       model: 'order',
       notNull: true,
-      columnName: 'order'
+      columnName: 'order_id'
     },
     amount: {
       type: 'integer',

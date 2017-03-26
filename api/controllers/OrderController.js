@@ -114,7 +114,7 @@ module.exports = {
           //  })
           //  .then(function(clientProduct) {
           //    if (clientProduct) {
-          product.order = order.insertId;
+          product.order_id = order.insertId;
           //    }
           //    return res.serverError();
           //  });
@@ -198,76 +198,100 @@ module.exports = {
    * @param  {Object} res Response object
    * @return {Object}
    */
-   changeState: function(req, res) {
-     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
-     // de la solicitud.
-     var orderId = null;
-     var newState = null;
-     var states = ["confirmado", "pendiente de confirmacion", "alistado", "despachado"];
+  changeState: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var orderId = null;
+    var newState = null;
+    var states = ["confirmado", "pendiente de confirmacion", "alistado", "despachado"];
 
-     // Definición de variables apartir de los parametros de la solicitud y validaciones.
-     orderId = parseInt(req.param('orderId'));
-     if (!orderId) {
-       return res.badRequest('Id de la orden vacio.');
-     }
-     newState = req.param("state");
-     if (!newState) {
-       return res.badRequest('Se debe ingresar la el nuevo estado.');
-     }
-     sails.log.debug(states.indexOf(newState.toLowerCase()));
-     if(states.indexOf(newState.toLowerCase()) == -1){
-       return res.badRequest("El estado no existe");
-     }
-     //Verifica que la orden exista. Si existe cambia el campo estado con el nuevo valor enviado
-     Order.findOne({
-         id: orderId
-       })
-       .then(function(order) {
-         if (!order) {
-           throw "La orden no existe";
-         }
-         return Order.update({id: orderId}, {state: newState});
-       })
-       .then(function(order) {
-         res.ok()
-       })
-       .catch(function(err) {
-         res.serverError(err);
-       })
-   },
-   /**
-    * Funcion para obtener los pedidos dado una fecha de entrega.
-    * @param  {Object} req Request object
-    * @param  {Object} res Response object
-    * @return {Object}
-    */
-   getByDeliveryDate: function(req, res) {
-     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
-     // de la solicitud.
-     var deliveryDate = null
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id de la orden vacio.');
+    }
+    newState = req.param("state");
+    if (!newState) {
+      return res.badRequest('Se debe ingresar la el nuevo estado.');
+    }
+    sails.log.debug(states.indexOf(newState.toLowerCase()));
+    if (states.indexOf(newState.toLowerCase()) == -1) {
+      return res.badRequest("El estado no existe");
+    }
+    //Verifica que la orden exista. Si existe cambia el campo estado con el nuevo valor enviado
+    Order.findOne({
+        id: orderId
+      })
+      .then(function(order) {
+        if (!order) {
+          throw "La orden no existe";
+        }
+        return Order.update({
+          id: orderId
+        }, {
+          state: newState
+        });
+      })
+      .then(function(order) {
+        res.ok()
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
+  /**
+   * Funcion para obtener los pedidos dado una fecha de entrega.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getByDeliveryDate: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var deliveryDate = null
 
-     // Definición de variables apartir de los parametros de la solicitud y validaciones.
-     var deliveryDateString = req.param('deliveryDate');
-     if (!deliveryDateString) {
-       return res.badRequest('Se debe ingresar la fecha de entrega.');
-     }
-     var dataDate = deliveryDateString.split("-", 3);
-     deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
-
-     Order.find({deliveryDate: deliveryDate})
-     .populate("clientEmployee")
-     .populate("client")
-     .populate("billAddress")
-     .then(function(order) {
-       res.ok({
-         pedido: order
-       })
-     })
-     .catch(function(err) {
-       res.serverError(err);
-     })
-
-   }
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    var deliveryDateString = req.param('deliveryDate');
+    if (!deliveryDateString) {
+      return res.badRequest('Se debe ingresar la fecha de entrega.');
+    }
+    var dataDate = deliveryDateString.split("-", 3);
+    deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
+    
+    Order.query('SELECT orders.id, orders.created_at, orders.delivery_date, orders.state, orders.initial_suggested_time, \
+                orders.final_suggested_time, orders.additional_information, client_employee.name as employeeName, client.trade_name, client.business_phonenumber, \
+                address.country, address.department, address.city, address.neighborhood, address.nomenclature, address.additional_information as referencia, \
+                product.short_name, order_product.amount, order_product.baked \
+                   FROM ordersFournee.`order` as orders \
+		               LEFT JOIN client_employee ON orders.client_employee = client_employee.id \
+                   LEFT JOIN client ON orders.client = client.id \
+                   LEFT JOIN address ON client.delivery_address = address.id \
+                   LEFT JOIN order_product ON order_product.order_id = orders.id \
+                   LEFT JOIN client_product ON order_product.client_product = client_product.id \
+                   LEFT JOIN product ON client_product.product = product.code \
+                   WHERE orders.delivery_date = ?', [deliveryDate],
+      function(err, orders) {
+        var arrayOrders = {};
+        orders.forEach(function(order, index, orders){
+          var orderId = order.id.toString();
+          var short_name = order.short_name;
+          var amount = order.amount;
+          var baked = order.baked;
+          if(typeof arrayOrders[orderId] == "undefined"){
+            order["products"] = [];
+            delete order.short_name;
+            delete order.amount;
+            delete order.baked;
+            arrayOrders[orderId] = order;
+          }
+          arrayOrders[orderId]["products"].push({short_name: short_name, amount: amount, baked: baked});
+        });
+        if (err) {
+          return res.serverError(err);
+        }
+        res.ok(arrayOrders);
+      })
+  }
 };
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {

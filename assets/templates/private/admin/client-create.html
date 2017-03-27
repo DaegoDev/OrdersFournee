@@ -1,6 +1,20 @@
 <div class="basic-wrapper">
-  <a ui-sref=".user">User</a>
-  <a ui-sref=".info">Info</a>
-  <a ui-sref=".products">Products</a>
-  <div id="client-create-form" ui-view></div>
+  <div id="client-create">
+    <!-- <div class="header">
+      <h1>Creación de cliente</h1>
+    </div> -->
+    <div class="tabs">
+      <span class="step-box">
+        <a ui-sref=".user" ui-sref-active="active">User</a>
+      </span>
+      <span class="step-box">
+        <a ui-sref=".info" ui-sref-active="active">Info</a>
+      </span>
+      <span class="step-box">
+        <a ui-sref=".products" ui-sref-active="active">Products</a>
+      </span>
+    </div>
+    <div id="client-create-form" ui-view></div>
+
+  </div>
 </div>

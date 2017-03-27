@@ -11,30 +11,32 @@
     <div ng-transclude>
       <!-- Content for login  -->
     </div>
-    <ul class="">
-      <li class="item" >
-          <a ui-sref="home">
-            <span class="fa fa-files-o"></span> <span class="">Inicio</span>
-          </a>
-      </li>
+    <div class="navigation">
+      <ul>
         <li class="item" >
-            <a ng-click="dashboard.isCollapsed = !dashboard.isCollapsed">
-              <span class="fa fa-files-o"></span> <span class="">Clientes</span>
-            </a>
-            <ul uib-collapse="dashboard.isCollapsed" class="subitem">
-                <li><a ui-sref="client-create.user"><span class="fa fa-image"></span> Crear</a></li>
-                <li><a href="#"><span class="fa fa-user"></span> Item 2</a></li>
-            </ul>
+          <a ui-sref="home">
+            <span class="fa fa-home"></span> <span class="">Inicio</span>
+          </a>
+        </li>
+        <li class="item" >
+          <a ng-click="dashboard.isCollapsed = !dashboard.isCollapsed">
+            <span class="fa fa-user"></span> <span class="">Clientes</span>
+          </a>
+          <ul uib-collapse="dashboard.isCollapsed" class="subitem">
+            <li><a ui-sref="client-create.user"><span class=""></span> Crear</a></li>
+            <li><a href="#"><span class=""></span> Item 2</a></li>
+          </ul>
         </li>
         <li class="item">
-            <a ng-click="layout.isCollapsed = !layout.isCollapsed">
-              <span class="fa fa-file-text-o"></span> <span class="">Productos</span>
-            </a>
-            <ul uib-collapse="layout.isCollapsed" class="subitem">
-                <li><a href="#">Item 1</a></li>
-                <li><a href="#">Item 2</a></li>
-                <li><a href="#">Item 3</a></li>
-            </ul>
+          <a ng-click="layout.isCollapsed = !layout.isCollapsed">
+            <span class="fa fa-coffee"></span> <span class="">Productos</span>
+          </a>
+          <ul uib-collapse="layout.isCollapsed" class="subitem">
+            <li><a href="#">Item 1</a></li>
+            <li><a href="#">Item 2</a></li>
+            <li><a href="#">Item 3</a></li>
+          </ul>
         </li>
-    </ul>
+      </ul>
+    </div>
 </div>

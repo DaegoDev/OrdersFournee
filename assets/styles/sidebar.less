@@ -4,64 +4,57 @@
   position: fixed;
   width: 20%;
   height: 100%;
-  // background-color: @theme-color1;
-
-  background: #603813; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #603813 , #b29f94); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #603813 , #b29f94); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-  color: @font-color1;
+  background-color: @theme-nero;
+  color: @font-tussock;
+  // border: 1px solid;
+  box-shadow: 5px 0px 10px @theme-jambalaya;
   overflow-y: auto;
   overflow-x: hidden;
   transition: 0.5s;
 
   &.toggle {
-      width: 10%;
+    width: 10%;
   }
-  a {
-    text-decoration: none;
-    color: white;
-  }
+
   .title-header {
     display: block;
+    a {
+      text-decoration: none;
+      color: @font-tussock;
+    }
+
     li {
-      color: white;
       height: 40px;
       list-style: none;
       display: table-cell;
     }
   }
 
-  .item {
-    padding-left: 5%;
-  }
-
-  .subitem {
-    padding-left: 5%;
-  }
-
   .login-wrapper {
-      width: 100%;
-      height: 200px;
-      background-color: white;
-      color: black;
+    width: 100%;
+    height: 200px;
   }
-  ul {
-    li {
-      width: 100%;
-      list-style: none;
-      a {
-        display: block;
-        width: 100%;
-        height: 100%;
-        color: white;
-        &:hover {
-            background-color: @theme-hover1;
-            color: black;
-        }
-      }
+
+  .navigation {
+    width: 100%;
+    a {
+      width: 1000px;
+      height: 100%;
+      text-decoration: none;
+      color: @font-tussock;
 
     }
+    .item {
+      width: 100%;
+      text-decoration: none;
+      padding-left: 5%;
+      font-size: 20px;
+      &:hover {
+        background-color: @theme-nero-hover;
+      }
+    }
+    .subitem {
+      padding-left: 15%;
+    }
   }
-
 }

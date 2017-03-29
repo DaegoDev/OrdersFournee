@@ -26,7 +26,42 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+   '*': true,
+
+   ClientController: {
+    getProfile: 'isClient',
+    updatePassword:  'isClient',
+    // recuperarContrasena: 'isRecuperacionValida',
+    enableProduct: 'isAdmin',
+    disableProduct: 'isAdmin',
+    signup: 'isAdmin'
+  },
+
+  ClientEmployeeController: {
+    addClientEmployee: 'isClient'
+  },
+
+  EmployeeController: {
+    signup: 'isAdmin',
+    delete: 'isAdmin',
+    updatePassword: 'isDespachador',
+    getProfile: 'isDespachador'
+  },
+
+  ItemController: {
+    create: 'isAdmin',
+  },
+
+  OrderController: {
+    create: 'isClient',
+    updateDeliveryDate: 'isEmployee',
+    changeState: 'isEmployee',
+    getByDeliveryDate: 'isEmployee'
+  },
+
+  ProductController: {
+    create: 'isAdmin'
+  },
 
   /***************************************************************************
   *                                                                          *

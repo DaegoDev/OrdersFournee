@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-	/**
+  /**
    * Funcion para registrar un cliente.
    * @param  {Object} req Request object
    * @param  {Object} res Response object
@@ -16,8 +16,8 @@ module.exports = {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var legalName = null;
-		var nit = null;
-		var tradeName = null;
+    var nit = null;
+    var tradeName = null;
     var managerName = null;
     var managerPhonenumber = null;
     var businessPhonenumber = null;
@@ -34,7 +34,7 @@ module.exports = {
     var deliveryNeighborhood = null;
     var deliveryNomenclature = null;
     var delivAddrAdditionalInformation = null;
-		var role = null;
+    var role = null;
     var username = null;
     var password = null;
 
@@ -86,13 +86,13 @@ module.exports = {
     var userCredentials = createUserCredentials(username, password);
     // Organización de credenciales de la dirección de entrega.
     var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
-                                                          billNomenclature, billAddrAdditionalInformation);
+      billNomenclature, billAddrAdditionalInformation);
     // Organización de credenciales de la dirección de facturación.
     var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
-                                                              deliveryNomenclature, delivAddrAdditionalInformation);
+      deliveryNomenclature, delivAddrAdditionalInformation);
     // Organización de credenciales del cliente.
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
-                                                    businessPhonenumber, clientAdditionalInformation);
+      businessPhonenumber, clientAdditionalInformation);
     var arrayAddressCredentials = [billAddressCredentials, deliveryAddressCredentials];
 
     //Obtengo la conección para realizar transacciones
@@ -162,20 +162,26 @@ module.exports = {
       return res.badRequest('Id del cliente vacio.');
     }
     // valida si existe el cliente con el ese id, si existe cambia el estado de su usuario en false
-    Client.findOne({id: clientId})
-    .then(function(client) {
-      if (client) {
-        return User.update({id: client.user}, {state: false});
-      }
-      return res.serverError();
-    })
-    .then(function(user) {
-				return res.ok();
-		})
-    .catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    })
+    Client.findOne({
+        id: clientId
+      })
+      .then(function(client) {
+        if (client) {
+          return User.update({
+            id: client.user
+          }, {
+            state: false
+          });
+        }
+        return res.serverError();
+      })
+      .then(function(user) {
+        return res.ok();
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
   },
 
   /**
@@ -187,7 +193,7 @@ module.exports = {
     // Se declara las variables necesarias para actualizar la contraseña de un cliente
     var clientId = null;
     var currentPassword = req.param('currentPassword');
-		var newPassword = req.param('newPassword');
+    var newPassword = req.param('newPassword');
 
     // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
     clientId = parseInt(req.param('clientId'));
@@ -195,21 +201,27 @@ module.exports = {
       return res.badRequest('Id del cliente vacio.');
     }
     // valida si existe el cliente con el ese id, si existe cambia la contraseña de su usuario en false
-    Client.findOne({id: clientId})
-    .populate('user')
-		.then(function(client) {
-			if (CriptoService.compararHash(currentPassword, client.user.password)) {
-				newPassword = CriptoService.hashValor(newPassword);
-				return User.update({id: client.user.id}, {password: newPassword});
-			}
-		})
-		.then(function(user) {
-				return res.ok();
-		})
-		.catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    });
+    Client.findOne({
+        id: clientId
+      })
+      .populate('user')
+      .then(function(client) {
+        if (CriptoService.compararHash(currentPassword, client.user.password)) {
+          newPassword = CriptoService.hashValor(newPassword);
+          return User.update({
+            id: client.user.id
+          }, {
+            password: newPassword
+          });
+        }
+      })
+      .then(function(user) {
+        return res.ok();
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      });
   },
 
   /**
@@ -227,27 +239,27 @@ module.exports = {
     if (!clientId) {
       return res.badRequest('Id del cliente vacio.');
     }
-    products = ["1A","2B","4B"];
+    products = ["1A", "2B", "4B"];
 
     // Valida que el cliente si exista, en caso de que si añade los preductos habilitados para él,
     // en caso de que no, envia el mensaje de error
     Client.findOne(clientId)
-    .then(function(client) {
-      if (client) {
-        client.products.add(products);
-        return client.save();
-      }
-      return res.serverError();
-    })
-    .then(function(client) {
-      res.ok({
-        client: client
+      .then(function(client) {
+        if (client) {
+          client.products.add(products);
+          return client.save();
+        }
+        return res.serverError();
       })
-    })
-    .catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    })
+      .then(function(client) {
+        res.ok({
+          client: client
+        })
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
   },
   /**
    * Funcion para deshabilitar los productos de un cliente.
@@ -269,23 +281,42 @@ module.exports = {
     // Valida que el cliente si exista, en caso de que si añade los preductos habilitados para él,
     // en caso de que no, envia el mensaje de error
     Client.findOne(clientId)
-    .then(function(client) {
-      if (client) {
-        client.products.remove(products);
-        return client.save();
-      }
-      return res.serverError();
-    })
-    .then(function(client) {
-      sails.log.debug(client);
-      res.ok({
-        client: client
+      .then(function(client) {
+        if (client) {
+          client.products.remove(products);
+          return client.save();
+        }
+        return res.serverError();
       })
-    })
-    .catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    })
+      .then(function(client) {
+        sails.log.debug(client);
+        res.ok({
+          client: client
+        })
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
+  },
+  /**
+   * Funcion para obtener el perfil de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getProfile: function(req, res) {
+    var client = req.user;
+    Client.find({
+        id: client.id
+      })
+      .populate('billAddress')
+      .populate('deliveryAddress')
+      .then(function(client) {
+        return res.ok(client[0]);
+      })
+      .catch(function(err) {
+        res.serverError(err)
+      });
   },
 };
 // crea las credenciales para insertar una dirección
@@ -312,7 +343,7 @@ function createUserCredentials(username, password) {
   return userCredentials;
 }
 // crea las credenciales para insertar un cliente
-function createClientCredentials(legalName, nit, tradeName, managerName,managerPhonenumber, businessPhonenumber, additionalInformation) {
+function createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber, businessPhonenumber, additionalInformation) {
   var clientCredentials = {
     legal_name: legalName,
     nit: nit,

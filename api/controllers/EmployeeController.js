@@ -160,4 +160,19 @@ module.exports = {
       res.serverError();
     });
   },
+  /**
+   * Funcion para obtener el perfil de un empleado.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+   getProfile: function(req, res) {
+    var employee = req.user;
+    Employee.find({id: employee.id})
+    .then(function(employee) {
+      return res.ok(employee[0]);
+    })
+    .catch(function(err) {
+      res.serverError(err)
+    });
+  },
 };

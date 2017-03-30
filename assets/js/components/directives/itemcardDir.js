@@ -11,8 +11,27 @@
     }
   })
 
-  fournee.controller('itemCard', ['$scope', '$log', itemCard]);
-  function itemCard($scope,$log) {
+  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc', itemCard]);
+  function itemCard($scope, $log, productItemSvc) {
+    $scope.createItem = function () {
+      var item = {
+        name: $scope.item.name,
+        value: $scope.itemValue,
+        shortValue: $scope.itemShortValue
+      }
+      productItemSvc.create(item)
+      .then(function (res) {
+        $scope.itemValue = '';
+        $scope.itemShortValue = '';
+        $scope.item.values.push({
+          id: res.data.id,
+          value: res.data.value,
+          shortValue: res.data.shortValue
+        })
+      })
+      .catch(function () {
 
+      });
+    }
   }
 }())

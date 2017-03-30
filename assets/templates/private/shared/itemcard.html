@@ -1,16 +1,32 @@
-<div class="">
-  <div class="">
-    <hr>
-    {{item.name}}
-  <hr>
-  </div>
-  <div class="">
-    <p ng-repeat="jsonValue in item.values">{{jsonValue.value}} {{jsonValue.shortValue}}</p>
+<div class="" >
+  <div class="card-header" ng-click="toggle = !toggle">
+    <h1>{{item.name | capitalize}}</h1>
+    <h1>{{item.values.length}}</h1>
   </div>
 
-  <div class="">
-    <hr>
-    <a href="">Añadir</a>
-    <hr>
+  <div class="items-content" ng-hide="toggle">
+    <ul class="items">
+      <li ng-repeat="jsonValue in item.values">
+        <h2>{{jsonValue.value}}</h2>
+        <h3>{{jsonValue.shortValue}}</h3>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-footer" ng-hide="toggle">
+    <div class="footer">
+      <form class="form-inline">
+        <button type="button" name="button" ng-click="createItem()" class="btn btn-sm btn-sienna">
+          <h1 style="display:inline-block">Añadir</h1>
+          <span class="fa fa-plus" aria-hidden="true"></span>
+        </button>
+        <label for="" class="sr-only">Valor:</label>
+        <input type="text" name="" placeholder="Valor" ng-model="itemValue"
+        class="form-control">
+        <label for="" class="sr-only">Abreviación:</label>
+        <input type="text" name="" placeholder="Abreviación" ng-model="itemShortValue"
+        class="form-control">
+      </form>
+    </div>
   </div>
 </div>

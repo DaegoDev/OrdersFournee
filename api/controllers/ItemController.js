@@ -46,9 +46,7 @@ module.exports = {
     // se crea un item en la base de datos
     Item.create(itemCredentials)
       .then(function(item) {
-        res.created({
-          item: item
-        });
+        res.created(item);
       })
       .catch(function(err) {
         sails.log.debug(err);

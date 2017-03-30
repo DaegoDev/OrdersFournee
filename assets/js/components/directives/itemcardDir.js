@@ -6,7 +6,7 @@
       restric: 'E',
       require: '^sidebar',
       templateUrl: 'templates/private/shared/itemcard.html',
-      scope : {},
+      scope : {item: '='},
       controller: 'itemCard'
     }
   })

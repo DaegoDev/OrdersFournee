@@ -67,15 +67,39 @@ module.exports = {
       return res.badRequest('Se debe ingresar el nombre del item.');
     }
     //Obtenemos los valores y los valores abreviados dado su nombre.
-    Item.find({name: name})
-    .then(function(items) {
-      delete items['name'];
-      res.ok(items);
-    })
-    .catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    })
+    Item.find({
+        name: name
+      })
+      .then(function(items) {
+        delete items['name'];
+        res.ok(items);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
+  },
 
+  getAll: function(req, res) {
+    var itemsCollection = [];
+    var itemNameList = [];
+    var itemName = "";
+    Item.find()
+      .then(function(items) {
+        for (var i in items) {
+          itemName =items[i].name;
+          if (!itemNameList[itemName]) {
+            itemNameList[itemName] = Object.keys(itemNameList).length;
+            itemsCollection.push({name: itemName, values: []});
+          }
+          itemsCollection[itemNameList[itemName]].values.push(items[i]);
+        }
+        sails.log.debug(itemsCollection)
+        res.ok(itemsCollection);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      });
   }
 };

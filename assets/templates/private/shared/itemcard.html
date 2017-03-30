@@ -1,11 +1,15 @@
 <div class="">
   <div class="">
-    Header
+    <hr>
+    {{item.name}}
+  <hr>
   </div>
   <div class="">
-    List values
+    <p ng-repeat="value in item.values">{{value}}</p>
   </div>
   <div class="">
-    Create new
+    <hr>
+    <a href="">Añadir</a>
+    <hr>
   </div>
 </div>

@@ -257,7 +257,7 @@ module.exports = {
     }
     var dataDate = deliveryDateString.split("-", 3);
     deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
-    
+
     Order.query('SELECT orders.id, orders.created_at, orders.delivery_date, orders.state, orders.initial_suggested_time, \
                 orders.final_suggested_time, orders.additional_information, client_employee.name as employeeName, client.trade_name, client.business_phonenumber, \
                 address.country, address.department, address.city, address.neighborhood, address.nomenclature, address.additional_information as referencia, \
@@ -272,26 +272,65 @@ module.exports = {
                    WHERE orders.delivery_date = ?', [deliveryDate],
       function(err, orders) {
         var arrayOrders = {};
-        orders.forEach(function(order, index, orders){
+        orders.forEach(function(order, index, orders) {
           var orderId = order.id.toString();
           var short_name = order.short_name;
           var amount = order.amount;
           var baked = order.baked;
-          if(typeof arrayOrders[orderId] == "undefined"){
+          if (typeof arrayOrders[orderId] == "undefined") {
             order["products"] = [];
             delete order.short_name;
             delete order.amount;
             delete order.baked;
             arrayOrders[orderId] = order;
           }
-          arrayOrders[orderId]["products"].push({short_name: short_name, amount: amount, baked: baked});
+          arrayOrders[orderId]["products"].push({
+            short_name: short_name,
+            amount: amount,
+            baked: baked
+          });
         });
         if (err) {
           return res.serverError(err);
         }
         res.ok(arrayOrders);
       })
-  }
+  },
+  /**
+   * Funcion para obtener el estado de un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getState: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var orderId = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id de la orden vacio.');
+    }
+
+    //Verifica que la orden exista. Si existe, obtiene su estado;
+    Order.findOne({
+        id: orderId
+      })
+      .then(function(order) {
+        if (!order) {
+          throw "La orden no existe";
+        }
+        res.ok({
+          id: order.id,
+          State: order.state
+        });
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
+
 };
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {

@@ -122,4 +122,39 @@ module.exports = {
         res.serverError();
       });
   },
+  /**
+   * Funcion para obtener los productos de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getProductsByClient: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var clientId = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    clientId = parseInt(req.param('clientId'));
+    if (!clientId) {
+      return res.badRequest('Id del cliente vacio.');
+    }
+
+    // Se verifica que el cliente exista, en caso de que no exista
+    // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
+    sails.log.debug(clientId);
+    Client.findOne({id: clientId})
+    .then(function(client) {
+      if(client){
+        return ClientProduct.find({client: clientId})
+        .populate('product');
+      }
+      throw "El cliente no existe";
+    })
+    .then(function(products) {
+      res.ok(products);
+    })
+    .catch(function(err) {
+      res.serverError(err);
+    })
+  },
 };

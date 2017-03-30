@@ -5,8 +5,9 @@
   <hr>
   </div>
   <div class="">
-    <p ng-repeat="value in item.values">{{value}}</p>
+    <p ng-repeat="jsonValue in item.values">{{jsonValue.value}} {{jsonValue.shortValue}}</p>
   </div>
+
   <div class="">
     <hr>
     <a href="">Añadir</a>

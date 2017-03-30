@@ -55,7 +55,12 @@ module.exports = {
         res.serverError();
       });
   },
-
+  /**
+   * Funcion para obtener items dado su nombre.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   getByName: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -77,29 +82,41 @@ module.exports = {
       .catch(function(err) {
         sails.log.debug(err);
         res.serverError();
-      })
+      });
   },
-
+  /**
+   * Funcion para obtener todos los items.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   getAll: function(req, res) {
-    var itemsCollection = [];
-    var itemNameList = [];
-    var itemName = "";
+    // Consultamos todos los items en la base de datos
     Item.find()
       .then(function(items) {
-        for (var i in items) {
-          itemName =items[i].name;
-          if (!itemNameList[itemName]) {
-            itemNameList[itemName] = Object.keys(itemNameList).length;
-            itemsCollection.push({name: itemName, values: []});
+        var arrayItems = {};
+        items.forEach(function(item, index, items) {
+          var itemName = item.name;
+          var id = item.id;
+          var value = item.value;
+          var shortValue = item.shortValue;
+          if (!arrayItems[itemName]) {
+            arrayItems[itemName] = {};
+            arrayItems[itemName].name = itemName;
+            arrayItems[itemName].values = [];
           }
-          itemsCollection[itemNameList[itemName]].values.push(items[i]);
-        }
-        sails.log.debug(itemsCollection)
-        res.ok(itemsCollection);
+          arrayItems[itemName].values.push({
+            id: id,
+            value: value,
+            shortValue: shortValue
+          });
+        })
+        res.ok(arrayItems);
       })
       .catch(function(err) {
         sails.log.debug(err);
-        res.serverError();
+        res.serverError(err);
       });
-  }
+  },
+
 };

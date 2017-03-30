@@ -55,7 +55,12 @@ module.exports = {
         res.serverError();
       });
   },
-
+  /**
+   * Funcion para obtener items dado su nombre.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   getByName: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -67,15 +72,49 @@ module.exports = {
       return res.badRequest('Se debe ingresar el nombre del item.');
     }
     //Obtenemos los valores y los valores abreviados dado su nombre.
-    Item.find({name: name})
-    .then(function(items) {
-      delete items['name'];
-      res.ok(items);
-    })
-    .catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    })
+    Item.find({
+        name: name
+      })
+      .then(function(items) {
+        delete items['name'];
+        res.ok(items);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      });
+  },
+  /**
+   * Funcion para obtener todos los items.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getAll: function(req, res) {
+    // Consultamos todos los items en la base de datos
+    Item.find()
+      .then(function(items) {
+        var arrayItems = {};
+        items.forEach(function(item, index, items) {
+          var itemName = item.name;
+          var id = item.id;
+          var value = item.value;
+          var shortValue = item.shortValue;
+          if (!arrayItems[itemName]) {
+            arrayItems[itemName] = [];
+          }
+          arrayItems[itemName].push({
+            id: id,
+            value: value,
+            shortValue: shortValue
+          });
+        })
+        res.ok(arrayItems);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError(err);
+      });
+  },
 
-  }
 };

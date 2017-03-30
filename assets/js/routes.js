@@ -9,6 +9,8 @@
           url: '/',
           templateUrl: 'templates/public/home.html'
         })
+
+        // Client creation routes.
         .state('client-create', {
           url: '/client/create',
           templateUrl: 'templates/private/admin/client-create.html',
@@ -25,7 +27,27 @@
         .state('client-create.products', {
           url: '/products',
           templateUrl: 'templates/private/admin/client-create-products.html'
+        })
+
+        // Product routes.
+        .state('product', {
+          url: '/product',
+          templateUrl: 'templates/private/shared/product.html'
+        })
+        .state('product.list', {
+          url: '/list',
+          templateUrl: 'templates/private/shared/product-list.html'
+        })
+        .state('product.create', {
+          url: '/create',
+          templateUrl: 'templates/private/shared/product-create.html'
+        })
+        .state('product.items', {
+          url: '/items',
+          templateUrl: 'templates/private/shared/product-items.html',
+          controller: 'productItemsCtrl'
         });
+
 
     }]);
 }());

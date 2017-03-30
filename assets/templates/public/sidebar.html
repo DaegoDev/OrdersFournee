@@ -5,7 +5,6 @@
       </li>
       <li class="hamburger">
         <a href="" ng-click="toggleSidebar()">&#9776</a>
-
       </li>
     </div>
     <div ng-transclude>
@@ -28,13 +27,13 @@
           </ul>
         </li>
         <li class="item">
-          <a ng-click="layout.isCollapsed = !layout.isCollapsed">
+          <a ui-sref="product" ng-click="layout.isCollapsed = !layout.isCollapsed">
             <span class="fa fa-coffee"></span> <span class="">Productos</span>
           </a>
           <ul uib-collapse="layout.isCollapsed" class="subitem">
-            <li><a href="#">Item 1</a></li>
-            <li><a href="#">Item 2</a></li>
-            <li><a href="#">Item 3</a></li>
+            <li><a href="">Item 1</a></li>
+            <li><a href="">Item 2</a></li>
+            <li><a href="">Item 3</a></li>
           </ul>
         </li>
       </ul>

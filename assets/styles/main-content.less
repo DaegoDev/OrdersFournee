@@ -6,19 +6,45 @@
 
 .basic-wrapper {
   position: relative;
+  width: 100%;
   min-height: 100%;
   overflow: hidden;
   padding: 30px;
 }
 
+.nav-step {
+  padding: 0;
+  margin: 0;
+  li {
+    // float: left;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    a {
+      text-decoration: none;
+      display: block;
+      padding: 10px 15px;
+      background-color: @theme-jambalaya;
+      color: @font-tussock;
+
+      &:hover:not(.active) {
+        background-color: @theme-nero-hover;
+      }
+      &.active {
+        background-color: @theme-nero;
+      }
+    }
+  }
+}
+
 
 .main {
   min-height: 100%;
-  padding-left: 20%;
+  margin-left: 20%;
   background-color: @bg-straw;
   transition: 0.5s;
 
   &.toggle {
-    padding-left: 10%;
+    margin-left: 10%;
   }
 }

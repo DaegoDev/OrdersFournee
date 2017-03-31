@@ -3,6 +3,18 @@
 
   </div>
   <div class="section-content">
+    <div class="form-inline">
+      <form class="inline-form">
+        <label for="">Nombre:</label>
+        <input type="text" name="" value="{{product.name}}" class="form-control" >
+        <label for="">Nombre corto:</label>
+        <input type="text" name="" value="{{product.shortName}}" class="form-control" >
 
+      </form>
+    </div>
+
+    <div class="product-items">
+      <item-card ng-repeat="item in items" item="item" item-selected="itemList"></item-card>
+    </div>
   </div>
 </div>

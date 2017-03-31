@@ -1,12 +1,12 @@
 <div class="" >
   <div class="card-header" ng-click="toggle = !toggle">
-    <h1>{{item.name | capitalize}}</h1>
+    <h1>{{item.name | capitalize}}: {{selectedItem.value}}</h1>
     <h1>{{item.values.length}}</h1>
   </div>
 
   <div class="items-content" ng-hide="toggle">
     <ul class="items">
-      <li ng-repeat="jsonValue in item.values">
+      <li ng-repeat="jsonValue in item.values" ng-click="selectItem(jsonValue)">
         <h2>{{jsonValue.value}}</h2>
         <h3>{{jsonValue.shortValue}}</h3>
       </li>

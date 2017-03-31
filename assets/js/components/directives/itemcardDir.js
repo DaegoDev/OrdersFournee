@@ -4,10 +4,12 @@
   fournee.directive('itemCard', function () {
     return {
       restric: 'E',
-      require: '^sidebar',
       templateUrl: 'templates/private/shared/itemcard.html',
-      scope : {item: '='},
-      controller: 'itemCard'
+      scope : {
+        item: '=',
+        itemSelected: '='
+      },
+      controller: 'itemCard',
     }
   })
 
@@ -29,9 +31,19 @@
           shortValue: res.data.shortValue
         })
       })
-      .catch(function () {
+      .catch(function (err) {
 
       });
+    }
+
+    $scope.selectItem = function (item) {
+      $scope.selectedItem = item;
+      if (!$scope.itemSelected[$scope.item.name]) {
+        $scope.itemSelected[$scope.item.name] = {name: $scope.item.name};
+      }
+      $scope.itemSelected[$scope.item.name].id = item.id;
+      $scope.itemSelected[$scope.item.name].value = item.value;
+      $scope.itemSelected[$scope.item.name].shortValue = item.shortValue;
     }
   }
 }())

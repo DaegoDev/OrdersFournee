@@ -40,12 +40,8 @@
         })
         .state('product.create', {
           url: '/create',
-          templateUrl: 'templates/private/shared/product-create.html'
-        })
-        .state('product.items', {
-          url: '/items',
-          templateUrl: 'templates/private/shared/product-items.html',
-          controller: 'productItemsCtrl'
+          templateUrl: 'templates/private/shared/product-create.html',
+          controller: 'productCreateCtrl' 
         });
 
 

@@ -16,51 +16,49 @@ module.exports = {
   create: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
-    var code = null;
     var name = "";
     var shortName = "";
     var items = [];
-
-    // Definición de variables apartir de los parametros de la solicitud y validaciones.
-    code = req.param('code');
-    if (!code) {
-      return res.badRequest('Se debe ingresar un codigo.');
-    }
-
+    var doughName = null;
+    var arrayDough = [];
     //items = req.param('items');
-    items = [
-  {
-    "name": "masa",
-    "value": "clasica",
-    "id": 3,
-    "shortValue": "cla"
-  },
-  {
-    "name": "forma",
-    "value": "barra",
-    "id": 7,
-    "shortValue": "bar"
-  },
-   {
-    "name": "complemento forma",
-    "value": "bandeja cavidades",
-    "id": 10,
-    "shortValue": "cv"
-  },
-  {
-    "name": "gramaje crudo",
-    "value": "120",
-    "id": 14,
-    "shortValue": "120"
-  },
- {
-    "name": "dimension",
-    "value": "15x9",
-    "id": 20,
-    "shortValue": "15x9"
-  }
-  ];
-
+    items = [{
+        "name": "masa",
+        "value": "aleman",
+        "id": 1,
+        "shortValue": "ale"
+      },
+      {
+        "name": "forma",
+        "value": "bola",
+        "id": 5,
+        "shortValue": "bol"
+      },
+      {
+        "name": "complemento forma",
+        "value": "molde perro",
+        "id": 11,
+        "shortValue": "mp"
+      },
+      {
+        "name": "gramaje crudo",
+        "value": "40",
+        "id": 13,
+        "shortValue": "40"
+      },
+      {
+        "name": "dimension",
+        "value": "10",
+        "id": 17,
+        "shortValue": "10"
+      }
+    ];
+    // Array que contiene los valores de las masas
+    arrayDough.push(...["aleman", "baguette", "baguettine", "brioche", "buns", "briocheT", "ciabatta",
+      "frances", "clasica", "maiz", "papas", "nube", "integral3granos", "Integral7granos",
+      "Pita", "Vapita", "Campesinasalvado", "Integralvegano"
+    ]);
+    // Se genera el nombre y el nombre abreviado de un producto de acuerdo a los items
     items.forEach(function(item, i, items) {
       name = name + " " + item.value;
       shortName = shortName + " " + item.shortValue;
@@ -68,7 +66,6 @@ module.exports = {
 
     // Organización de credenciales de un producto.
     var productCredentials = {
-      code: code,
       name: name,
       short_name: shortName
     };
@@ -77,25 +74,38 @@ module.exports = {
     var connectionConfig = AlternativeConnectionService.getConnection();
     var sql = connectionConfig.sql;
 
-    // Se verifica que el usuario no exista antes de su creación, en caso de que exista
-    // se retorna un error de conflicto con codigo de error 409. En caso de que no exista
-    // se crea el regitro del usuario.
-    sql.beginTransaction()
-      .then(function() {
-        return sql.select('product', {
-          code: code
-        });
-      })
-      .then(function(product) {
-        if (product.length == 0) {
-          return sql.insert('product', productCredentials)
+    // Construye la parte númerica del codigo del producto
+    doughName = items[0].value;
+    doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
+    var numberCode = arrayDough.indexOf(doughNameArray) + 1;
+
+    // Construye la letra del codigo del producto
+    Item.find({value: doughName})
+      .populate('products')
+      .then(function(items) {
+        var products = items[0].products;
+        if (items[0].products.length == 0) {
+          productCredentials.code = numberCode.toString() + "A";
+        } else {
+          var lastCode = products[products.length - 1].code;
+          var lastLetterCode = lastCode.substring(lastCode.length, lastCode.length -1);
+          var letterCode = nextChar(lastLetterCode);
+          var code = numberCode + letterCode;
+          productCredentials.code = code;
         }
-        return res.conflict();
+        return sql.beginTransaction()
+      })
+      // se crea el regitro del producto.
+      .then(function() {
+        return sql.insert('product', productCredentials)
       })
       .then(function(newProduct) {
         var itemProductCredentials = [];
         items.forEach(function(item, i, items) {
-          itemProductCredentials[i]= {product: productCredentials.code, item: item.id};
+          itemProductCredentials[i] = {
+            product: productCredentials.code,
+            item: item.id
+          };
         });
         return sql.insert('item_product', itemProductCredentials)
       })
@@ -142,19 +152,28 @@ module.exports = {
     // Se verifica que el cliente exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
     sails.log.debug(clientId);
-    Client.findOne({id: clientId})
-    .then(function(client) {
-      if(client){
-        return ClientProduct.find({client: clientId})
-        .populate('product');
-      }
-      throw "El cliente no existe";
-    })
-    .then(function(products) {
-      res.ok(products);
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+    Client.findOne({
+        id: clientId
+      })
+      .then(function(client) {
+        if (client) {
+          return ClientProduct.find({
+              client: clientId
+            })
+            .populate('product');
+        }
+        throw "El cliente no existe";
+      })
+      .then(function(products) {
+        res.ok(products);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
 };
+
+// Retorna la letra siguiente de acuerdo al alfabeto de la letra ingresada
+function nextChar(c) {
+  return String.fromCharCode(c.charCodeAt(0) + 1);
+}

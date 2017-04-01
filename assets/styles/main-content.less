@@ -1,45 +1,6 @@
-.main-wrapper {
-    height: 100%;
-    min-height: 100%;
-    width: auto;
-}
-
-.basic-wrapper {
-  position: relative;
-  width: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  padding: 30px;
-}
-
-.nav-step {
-  padding: 0;
-  margin: 0;
-  li {
-    // float: left;
-    display: inline-block;
-    padding: 0;
-    margin: 0;
-    a {
-      text-decoration: none;
-      display: block;
-      padding: 10px 15px;
-      background-color: @theme-jambalaya;
-      color: @font-tussock;
-
-      &:hover:not(.active) {
-        background-color: @theme-nero-hover;
-        color: @font-white;
-      }
-      &.active {
-        background-color: @theme-nero;
-      }
-    }
-  }
-}
-
-
 .main {
+  padding-top: 20px;
+  padding-bottom: 20px;
   min-height: 100%;
   margin-left: 20%;
   background-color: @bg-straw;
@@ -47,5 +8,85 @@
 
   &.toggle {
     margin-left: 10%;
+  }
+}
+
+.main-wrapper {
+    position: absolute;
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+}
+
+.basic-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  background-color: @bg-white;
+  border: 1px solid;
+  border-radius: 5px 5px 20px 20px;
+  box-shadow: 5px 5px 10px black;
+  margin: auto;
+  margin-top: 10px;
+  padding: 0px;
+  &.sm {
+    width: 50%;
+  }
+  &.md {
+    width: 70%;
+  }
+  &.lg {
+    width: 90%;
+  }
+}
+
+.nav-step {
+  margin: auto;
+  margin-bottom: 20px;
+  background-color: @theme-nero;
+  border-radius: 10px 10px 5px 5px;
+  box-shadow: 5px 5px 10px black;
+  display: table;
+  table-layout: fixed;
+
+  &.sm {
+    width: 50%;
+  }
+  &.md {
+    width: 70%;
+  }
+  &.lg {
+    width: 90%;
+  }
+
+  li {
+    display: table-cell;
+    text-align: center;
+    a {
+      text-decoration: none;
+      display: block;
+      width: auto;
+      padding: 20px 15px;
+      background-color: @theme-nero;
+      color: @font-tussock;
+      &.first {
+        border-radius: 8px 0px 0px 4px;
+      }
+      &.last {
+        border-radius: 0px 8px 4px 0px;
+      }
+      &:hover:not(.active) {
+        background-color: @theme-nero;
+        color: @font-tussock;
+      }
+      &.active {
+        background-color: @theme-nero-hover;
+        color: @font-white;
+      }
+    }
   }
 }

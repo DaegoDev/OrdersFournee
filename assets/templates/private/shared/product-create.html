@@ -1,20 +1,32 @@
-<div class="">
+<div class="product-create-wrapper">
   <div class="section-header">
-
+    <h1>Creación de producto</h1>
   </div>
   <div class="section-content">
-    <div class="form-inline">
-      <form class="inline-form">
-        <label for="">Nombre:</label>
-        <input type="text" name="" value="{{product.name}}" class="form-control" >
-        <label for="">Nombre corto:</label>
-        <input type="text" name="" value="{{product.shortName}}" class="form-control" >
-
+    <div class="product-info">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="name" class="col-sm-2 control-label">Nombre:</label>
+          <div class="col-sm-10">
+            <input id="name" type="text" class="form-control" disabled value="{{product.name}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="short-name" class="col-sm-2 control-label">Nombre abreviado:</label>
+          <div class="col-sm-10">
+            <input id="short-name" type="text" class="form-control" disabled value="{{product.shortName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="button" value="Añadir elemento" ng-click="" class="btn btn-sienna">
+            <input type="button" value="Crear producto" ng-click="createProduct()" class="btn btn-sienna"> </div>
+        </div>
       </form>
-    </div>
 
-    <div class="product-items">
-      <item-card ng-repeat="item in items" item="item" item-selected="itemList"></item-card>
+      <div class="product-items">
+        <item-card ng-repeat="item in items" item="item" selected-item="selectedItems"></item-card>
+      </div>
     </div>
   </div>
 </div>

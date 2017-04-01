@@ -21,49 +21,20 @@ module.exports = {
     var items = [];
     var doughName = null;
     var arrayDough = [];
-    //items = req.param('items');
-    items = [{
-        "name": "masa",
-        "value": "aleman",
-        "id": 1,
-        "shortValue": "ale"
-      },
-      {
-        "name": "forma",
-        "value": "bola",
-        "id": 5,
-        "shortValue": "bol"
-      },
-      {
-        "name": "complemento forma",
-        "value": "molde perro",
-        "id": 11,
-        "shortValue": "mp"
-      },
-      {
-        "name": "gramaje crudo",
-        "value": "40",
-        "id": 13,
-        "shortValue": "40"
-      },
-      {
-        "name": "dimension",
-        "value": "10",
-        "id": 17,
-        "shortValue": "10"
-      }
-    ];
+    items = req.param('items');
+
     // Array que contiene los valores de las masas
-    arrayDough.push(...["aleman", "baguette", "baguettine", "brioche", "buns", "briocheT", "ciabatta",
+    arrayDough.push(["aleman", "baguette", "baguettine", "brioche", "buns", "briocheT", "ciabatta",
       "frances", "clasica", "maiz", "papas", "nube", "integral3granos", "Integral7granos",
       "Pita", "Vapita", "Campesinasalvado", "Integralvegano"
     ]);
     // Se genera el nombre y el nombre abreviado de un producto de acuerdo a los items
     items.forEach(function(item, i, items) {
+      item = JSON.parse(item)
+      items[i] = item;
       name = name + " " + item.value;
       shortName = shortName + " " + item.shortValue;
     });
-
     // Organización de credenciales de un producto.
     var productCredentials = {
       name: name,
@@ -132,6 +103,7 @@ module.exports = {
         res.serverError();
       });
   },
+
   /**
    * Funcion para obtener los productos de un cliente.
    * @param  {Object} req Request object
@@ -171,7 +143,28 @@ module.exports = {
         res.serverError(err);
       })
   },
+
+  /**
+   * Funcion para obtener los productos de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getAll: function(req, res) {
+    Product.find().populate('items')
+      .then(function(products) {
+        if (products) {
+          return res.ok(products)
+        }
+        throw "El cliente no existe";
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
 };
+
+
 
 // Retorna la letra siguiente de acuerdo al alfabeto de la letra ingresada
 function nextChar(c) {

@@ -4,10 +4,10 @@
   fournee.directive('itemCard', function () {
     return {
       restric: 'E',
-      templateUrl: 'templates/private/shared/itemcard.html',
+      templateUrl: 'templates/private/shared/item-card.html',
       scope : {
         item: '=',
-        itemSelected: '='
+        selectedItem: '='
       },
       controller: 'itemCard',
     }
@@ -37,13 +37,13 @@
     }
 
     $scope.selectItem = function (item) {
-      $scope.selectedItem = item;
-      if (!$scope.itemSelected[$scope.item.name]) {
-        $scope.itemSelected[$scope.item.name] = {name: $scope.item.name};
+      $scope.currentItem = item;
+      if (!$scope.selectedItem[$scope.item.name]) {
+        $scope.selectedItem[$scope.item.name] = {name: $scope.item.name};
       }
-      $scope.itemSelected[$scope.item.name].id = item.id;
-      $scope.itemSelected[$scope.item.name].value = item.value;
-      $scope.itemSelected[$scope.item.name].shortValue = item.shortValue;
+      $scope.selectedItem[$scope.item.name].id = item.id;
+      $scope.selectedItem[$scope.item.name].value = item.value;
+      $scope.selectedItem[$scope.item.name].shortValue = item.shortValue;
     }
   }
 }())

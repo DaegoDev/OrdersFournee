@@ -1,11 +1,10 @@
-<div class="basic-wrapper">
-  <div id="product-wrapper">
-    <ul class="nav-step">
-      <li><a ui-sref=".list" ui-sref-active="active">Productos</a></li>
-      <li><a ui-sref=".create" ui-sref-active="active">Crear producto</a></li>
-    </ul>
+<ul class="nav-step lg">
+  <li><a ui-sref=".list" ui-sref-active="active" class="first">Productos</a></li>
+  <li><a ui-sref=".create" ui-sref-active="active" class="last">Crear producto</a></li>
+</ul>
 
+<div class="content-wrapper lg">
+  <div class="basic-wrapper">
     <div id="product-view" ui-view></div>
-
   </div>
 </div>

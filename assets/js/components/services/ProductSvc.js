@@ -1,5 +1,5 @@
 angular.module('fournee')
-.factory('SignupService', ['$http', '$rootScope',
+.factory('productSvc', ['$http', '$rootScope',
 function ($http, $rootScope) {
   return {
     // Servicio para crear un producto.
@@ -8,6 +8,14 @@ function ($http, $rootScope) {
         url: '/product/create',
         method: 'POST',
         params: credentials
+      });
+      return create;
+    },
+    getProducts: function(items) {
+      var create = $http({
+        url: '/product/getAll',
+        method: 'GET',
+        params: items
       });
       return create;
     },

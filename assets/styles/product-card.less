@@ -1,0 +1,41 @@
+product-card {
+  display: inline-block;
+  vertical-align: top;
+  height: 200px;
+  width: 200px;
+  margin: 10px;
+  border: 1px solid;
+  border-radius: 5px;
+
+  &:hover {
+    .product-header {
+      background-color: @theme-nero-hover;
+
+      h4 {
+        color: @font-white;
+      }
+    }
+  }
+
+  .product-header {
+    width: auto;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px 5px 0 0;
+    background-color: @theme-nero;
+
+    h4 {
+      font-size: 20px;
+      color: @font-tussock;
+    }
+
+    h5 {
+      font-size: 14px;
+      color: @font-tussock;
+    }
+  }
+
+  .product-items {
+    padding: 5px;
+  }
+}

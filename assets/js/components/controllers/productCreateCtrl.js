@@ -1,12 +1,26 @@
 (function() {
     var fournee = angular.module('fournee');
-    fournee.controller('productCreateCtrl', ['$scope', '$log', 'productItemSvc', productCreateCtrl]);
+    fournee.controller('productCreateCtrl', ['$scope', '$log', 'productItemSvc','productSvc', productCreateCtrl]);
 
-    function productCreateCtrl($scope, $log, productItemSvc) {
+    function productCreateCtrl($scope, $log, productItemSvc, productSvc) {
       $scope.product = {};
-      $scope.itemList = {};
+      $scope.selectedItems = {};
 
-      $scope.$watch('itemList', function functionName(newValue, oldValue, scope) {
+      $scope.createProduct = function () {
+        var items = [];
+        for (var i in $scope.selectedItems) {
+          items.push($scope.selectedItems[i])
+        }
+        productSvc.createProduct({items: items})
+          .then(function (res) {
+            $log.warn(res.data);
+          })
+          .catch(function () {
+            $log.info("ERROR!!!!!!!!");
+          });
+      }
+
+      $scope.$watch('selectedItems', function functionName(newValue, oldValue, scope) {
           if (newValue != oldValue) {
             var name = '';
             var shortName = '';

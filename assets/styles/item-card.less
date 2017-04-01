@@ -1,9 +1,8 @@
 item-card {
   overflow: hidden;
   display: block;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  width: auto;
+  margin: 10px 0px 10px 0px;
   border: 1px solid;
   border-radius: 5px;
   box-shadow: inset 0px 0px 5px @theme-nero;
@@ -15,7 +14,6 @@ item-card {
     border-bottom: 1px solid;
     border-radius: 5px 5px 0px 0px;
     background-color: @theme-nero;
-    // height: 50px;
     float: left;
 
     &:hover {
@@ -30,7 +28,8 @@ item-card {
       padding: 10px;
       color: @font-tussock;
       float: left;
-      font-size: 30px;
+      font-size: 24px;
+      font-weight: bold;
       &:last-child {
         float: right;
       }
@@ -41,18 +40,26 @@ item-card {
   padding: 10px;
   .items {
     li {
+      cursor: pointer;
       padding: 10px;
       width: 150px;
       display: inline-block;
       margin: 5px 10px 5px 5px;
       border-radius: 5px;
       box-shadow: inset 0 0 5px @theme-nero;
+      transition: 0.2s;
+
+      &:hover {
+        background-color: #BBB;
+        box-shadow: 0px 0px 10px @theme-nero
+      }
+
       h2 {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
       }
       h3 {
-        font-size: 15px;
+        font-size: 14px;
         font-style: italic;
       }
     }

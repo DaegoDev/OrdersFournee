@@ -100,26 +100,9 @@ module.exports = {
   getAll: function(req, res) {
     // Consultamos todos los items en la base de datos
     Element.find()
-    .populate('items')
+      .sort('id ASC')
+      .populate('items')
       .then(function(items) {
-        // sails.log.debug(items);
-        // var arrayItems = {};
-        // items.forEach(function(item, index, items) {
-        //   var itemName = item.name;
-        //   var id = item.id;
-        //   var value = item.value;
-        //   var shortValue = item.shortValue;
-        //   if (!arrayItems[itemName]) {
-        //     arrayItems[itemName] = {};
-        //     arrayItems[itemName].name = itemName;
-        //     arrayItems[itemName].values = [];
-        //   }
-        //   arrayItems[itemName].values.push({
-        //     id: id,
-        //     value: value,
-        //     shortValue: shortValue
-        //   });
-        // })
         res.ok(items);
       })
       .catch(function(err) {

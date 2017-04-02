@@ -51,25 +51,24 @@ module.exports = {
           // Array que contiene los valores de las masas
           arrayDough.push(itemObject.value);
         });
-        // sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
-        doughName = items[0].value;
-        sails.log.debug(items);
-        doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
-        numberCode = arrayDough.indexOf(doughNameArray) + 1;
+        items.forEach(function(item, i, items) {
+          if(item.name == 'masa'){
+            doughName = item.value;
+          }
+        })
         // Construye la letra del codigo del producto
-        return Element.find({name: doughName});
-      })
-      .then(function(element) {
-        return Item.find({element: element.id}).populate('products')
+        return Item.find({value: doughName}).populate('products')
       })
       .then(function(items) {
-        sails.log.debug(items);
         var products = items[0].products;
-        if (items[0].products.length == 0) {
+        if (products == 0) {
+          doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
+          numberCode = arrayDough.indexOf(doughNameArray) + 1;
           productCredentials.code = numberCode.toString() + "A";
         } else {
           var lastCode = products[products.length - 1].code;
+          numberCode = lastCode.replace(/[^0-9]/g, '');
           var lastLetterCode = lastCode.substring(lastCode.length, lastCode.length - 1);
           var letterCode = nextChar(lastLetterCode);
           var code = numberCode + letterCode;
@@ -134,7 +133,6 @@ module.exports = {
 
     // Se verifica que el cliente exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
-    sails.log.debug(clientId);
     Client.findOne({
         id: clientId
       })

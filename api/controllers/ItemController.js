@@ -13,7 +13,7 @@ module.exports = {
    * @return {Object}
    */
 
-  create: function(req, res) {
+  createItem: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var elementId = null;
@@ -123,6 +123,8 @@ module.exports = {
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     name = req.param('name');
+    sails.log.debug(req.param)
+      sails.log.debug(req.param('name'))
     if (!name) {
       return res.badRequest('Se debe ingresar un nombre.');
     }
@@ -142,5 +144,4 @@ module.exports = {
         res.serverError();
       });
   },
-
 };

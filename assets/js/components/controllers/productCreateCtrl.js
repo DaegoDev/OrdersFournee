@@ -15,9 +15,20 @@
           .then(function (res) {
             $log.warn(res.data);
           })
-          .catch(function () {
-            $log.info("ERROR!!!!!!!!");
+          .catch(function (err) {
+            $log.info(err);
           });
+      }
+
+      $scope.createElement = function () {
+        productItemSvc.createElement({name: $scope.elementName})
+        .then(function(res) {
+          $scope.items.push(res.data)
+          $log.warn($scope.items)
+        })
+        .catch(function(err) {
+
+        });
       }
 
       $scope.$watch('selectedItems', function functionName(newValue, oldValue, scope) {

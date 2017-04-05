@@ -1,6 +1,6 @@
 <div class="product-create-wrapper">
   <div class="section-header">
-    <h1>Creación de producto</h1>
+    <h1>Creación de producto {{elementName}}</h1>
   </div>
   <div class="section-content">
     <div class="product-info">
@@ -19,11 +19,14 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <input type="button" value="Añadir elemento" ng-click="" class="btn btn-sienna">
+            <input type="button" value="Añadir elemento" ng-show="!isElementCreate"
+            ng-click="isElementCreate = true" class="btn btn-sienna">
+            <input type="button" value="Crear elemento" ng-show="isElementCreate"
+            ng-click="createElement(); isElementCreate = false" class="btn btn-sienna">
+            <input type="text" name="" ng-show="isElementCreate" ng-model="elementName">
             <input type="button" value="Crear producto" ng-click="createProduct()" class="btn btn-sienna"> </div>
         </div>
       </form>
-
       <div class="product-items">
         <item-card ng-repeat="item in items" item="item" selected-item="selectedItems"></item-card>
       </div>

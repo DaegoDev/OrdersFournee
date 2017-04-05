@@ -12,17 +12,17 @@
 
         // Client creation routes.
         .state('client', {
-          url: '/client/create',
-          templateUrl: 'templates/private/admin/client-create.html',
+          url: '/client',
+          templateUrl: 'templates/private/admin/client.html',
           controller: 'clientCreateCtrl'
         })
         .state('client.list', {
-          url: '/client/create',
+          url: '/list',
           templateUrl: 'templates/private/admin/client-list.html',
         })
         .state('client.create', {
-          url: '/client/create',
-          templateUrl: 'templates/private/admin/client-list.html',
+          url: '/create',
+          templateUrl: 'templates/private/admin/client-create.html',
         })
         .state('client.create.user', {
           url: '/user',

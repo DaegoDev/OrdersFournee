@@ -1,0 +1,167 @@
+.client-create-wrapper {
+  overflow: hidden;
+
+  .section-header {
+    background-color: @theme-nero;
+    padding-left: 40px;
+
+    h1 {
+      font-size: 36px;
+      color: @font-tussock;
+      padding: 15px;
+    }
+  }
+
+  .client-breadcrumb {
+    overflow: hidden;
+    li {
+      display: inline-block;
+      a {
+        text-decoration: none;
+        display: block;
+        padding: 12px;
+        &:hover {
+          color: #96c03d;
+          background-color: @theme-nero;
+          border-color: @theme-nero;
+        }
+        &:hover::after {
+          border-left-color: @theme-nero;
+        }
+      }
+    }
+    &.triangle {
+      /* reset basic style */
+      background-color: transparent;
+      padding: 0;
+      li {
+        position: relative;
+        padding: 0;
+        margin: 4px 4px 4px 0;
+        // &:last-of-type {
+        //   margin-right: 0;
+        // }
+
+        & > * {
+          position: relative;
+          padding: 1em .8em 1em 2.5em;
+          color: #2c3f4c;
+          background-color: #edeff0;
+          /* the border color is used to style its ::after pseudo-element */
+          border-color: #edeff0;
+        }
+        &.current {
+          color: #ffffff;
+          background-color: #96c03d;
+          border-color: #96c03d;
+        }
+      }
+    }
+    &.triangle li::after, &.triangle li > *::after {
+      /*
+      	li > *::after is the colored triangle after each item
+      	li::after is the white separator between two items
+      */
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 100%;
+      content: '';
+      height: 0;
+      width: 0;
+      /* 48px is the height of the <a> element */
+      border: 24px solid transparent;
+      border-right-width: 0;
+      border-left-width: 20px;
+    }
+    //
+    &.triangle li::after {
+      /* this is the white separator between two items */
+      z-index: 1;
+      -webkit-transform: translateX(4px);
+      -moz-transform: translateX(4px);
+      -ms-transform: translateX(4px);
+      -o-transform: translateX(4px);
+      transform: translateX(4px);
+      border-left-color: #ffffff;
+      /* reset style */
+      margin: 0;
+    }
+    &.triangle li > *::after {
+      /* this is the colored triangle after each element */
+      z-index: 2;
+      border-left-color: inherit;
+    }
+  }
+}
+
+#client-create-form {
+  width: 100%;
+  overflow: hidden;
+
+  &.ng-enter,
+  &.ng-leave {
+    position: relative;
+    transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+  }
+
+  &.ng-enter {
+    -webkit-animation: slideInRight 0.5s both ease;
+    -moz-animation: slideInRight 0.5s both ease;
+    animation: slideInRight 0.5s both ease;
+  }
+
+  &.ng-leave {
+    -webkit-animation: slideOutLeft 0.5s both ease;
+    -moz-animation: slideOutLeft 0.5s both ease;
+    animation: slideOutLeft 0.5s both ease;
+  }
+}
+/* ANIMATIONS
+============================================================================= */
+/* slide out to the left */
+@keyframes slideOutLeft {
+  to {
+    transform: translateX(-200%);
+  }
+}
+@-moz-keyframes slideOutLeft {
+  to {
+    -moz-transform: translateX(-200%);
+  }
+}
+@-webkit-keyframes slideOutLeft {
+  to {
+    -webkit-transform: translateX(-200%);
+  }
+}
+/* slide in from the right */
+@keyframes slideInRight {
+  from {
+    transform: translateX(200%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+@-moz-keyframes slideInRight {
+  from {
+    -moz-transform: translateX(200%);
+  }
+
+  to {
+    -moz-transform: translateX(0);
+  }
+}
+@-webkit-keyframes slideInRight {
+  from {
+    -webkit-transform: translateX(200%);
+  }
+
+  to {
+    -webkit-transform: translateX(0);
+  }
+}

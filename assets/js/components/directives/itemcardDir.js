@@ -44,6 +44,7 @@
       $scope.selectedItem[$scope.item.name].id = item.id;
       $scope.selectedItem[$scope.item.name].value = item.value;
       $scope.selectedItem[$scope.item.name].shortValue = item.shortValue;
+      $scope.toggle = true;
     }
   }
 }())

@@ -7,16 +7,9 @@
  */
 
 module.exports = {
-  migrate: 'safe',
+  // migrate: 'drop',
   tableName: 'item',
   attributes: {
-    name: {
-      type: 'string',
-      size: 64,
-      notNull: true,
-      required: true,
-      columnName: 'name',
-    },
     value: {
       type: 'string',
       size: 64,
@@ -38,6 +31,12 @@ module.exports = {
       collection: 'product',
       via: 'item',
       through: 'itemproduct'
+    },
+    // Añade una referencia a elemento
+    element: {
+      model: 'element',
+      notNull: true,
+      columnName: 'element'
     }
   }
 };

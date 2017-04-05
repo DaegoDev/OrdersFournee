@@ -21,13 +21,9 @@ module.exports = {
     var items = [];
     var doughName = null;
     var arrayDough = [];
+    var numberCode = null;
     items = req.param('items');
 
-    // Array que contiene los valores de las masas
-    arrayDough.push(["aleman", "baguette", "baguettine", "brioche", "buns", "briocheT", "ciabatta",
-      "frances", "clasica", "maiz", "papas", "nube", "integral3granos", "Integral7granos",
-      "Pita", "Vapita", "Campesinasalvado", "Integralvegano"
-    ]);
     // Se genera el nombre y el nombre abreviado de un producto de acuerdo a los items
     items.forEach(function(item, i, items) {
       item = JSON.parse(item)
@@ -45,21 +41,35 @@ module.exports = {
     var connectionConfig = AlternativeConnectionService.getConnection();
     var sql = connectionConfig.sql;
 
-    // Construye la parte númerica del codigo del producto
-    doughName = items[0].value;
-    doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
-    var numberCode = arrayDough.indexOf(doughNameArray) + 1;
-
-    // Construye la letra del codigo del producto
-    Item.find({value: doughName})
-      .populate('products')
+    Element.find({
+        name: 'masa'
+      })
+      .populate('items')
+      .then(function(elementItems) {
+        var arrayObjectsItems = elementItems[0].items;
+        arrayObjectsItems.forEach(function(itemObject, i, arrayObjectsItems) {
+          // Array que contiene los valores de las masas
+          arrayDough.push(itemObject.value);
+        });
+        // Construye la parte númerica del codigo del producto
+        items.forEach(function(item, i, items) {
+          if(item.name == 'masa'){
+            doughName = item.value;
+          }
+        })
+        // Construye la letra del codigo del producto
+        return Item.find({value: doughName}).populate('products')
+      })
       .then(function(items) {
         var products = items[0].products;
-        if (items[0].products.length == 0) {
+        if (products == 0) {
+          doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
+          numberCode = arrayDough.indexOf(doughNameArray) + 1;
           productCredentials.code = numberCode.toString() + "A";
         } else {
           var lastCode = products[products.length - 1].code;
-          var lastLetterCode = lastCode.substring(lastCode.length, lastCode.length -1);
+          numberCode = lastCode.replace(/[^0-9]/g, '');
+          var lastLetterCode = lastCode.substring(lastCode.length, lastCode.length - 1);
           var letterCode = nextChar(lastLetterCode);
           var code = numberCode + letterCode;
           productCredentials.code = code;
@@ -123,7 +133,6 @@ module.exports = {
 
     // Se verifica que el cliente exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
-    sails.log.debug(clientId);
     Client.findOne({
         id: clientId
       })

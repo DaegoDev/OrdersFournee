@@ -51,7 +51,29 @@
           url: '/create',
           templateUrl: 'templates/private/shared/product-create.html',
           controller: 'productCreateCtrl'
-        });
+        })
+
+        // Order routes.
+        .state('order', {
+          url: '/order',
+          templateUrl: 'templates/private/client/order.html'
+        })
+        .state('order.list', {
+          url: '/list',
+          templateUrl: 'templates/private/client/order-list.html'
+        })
+        .state('order.create', {
+          url: '/create',
+          templateUrl: 'templates/private/client/order-create.html'
+        })
+        .state('order.create.shoppingCart', {
+          url: '/shoppingCart',
+          templateUrl: 'templates/private/client/order-create-shoppingCart.html'
+        })
+        .state('client.order.info', {
+          url: '/info',
+          templateUrl: 'templates/private/client/order-create-info.html'
+        })
 
 
     }]);

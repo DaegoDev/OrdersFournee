@@ -17,22 +17,28 @@
   function itemCard($scope, $log, productItemSvc) {
     $scope.createItem = function () {
       var item = {
+        elementId: $scope.item.id,
         name: $scope.item.name,
         value: $scope.itemValue,
         shortValue: $scope.itemShortValue
       }
-      productItemSvc.create(item)
+      productItemSvc.createItem(item)
       .then(function (res) {
         $scope.itemValue = '';
         $scope.itemShortValue = '';
-        $scope.item.values.push({
+        
+        if (!$scope.item.items) {
+          $scope.item.items = []
+        }
+        $scope.item.items.push({
           id: res.data.id,
           value: res.data.value,
           shortValue: res.data.shortValue
         })
+
       })
       .catch(function (err) {
-
+        $log.warn(err)
       });
     }
 

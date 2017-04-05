@@ -4,13 +4,21 @@
   fournee.factory('productItemSvc', ['$http', '$log',
     function($http, $log) {
       return {
-        create: function (newItem) {
+        createItem: function (newItem) {
           var item = $http({
-            url: '/item/create',
+            url: '/item/createItem',
             method: 'POST',
             params: newItem
           });
           return item;
+        },
+        createElement: function (newElement) {
+          var element = $http({
+            url: '/item/createElement',
+            method: 'POST',
+            params: newElement
+          });
+          return element;
         },
         getByName: function(nameStr) {
           var item = $http({

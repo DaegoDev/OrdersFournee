@@ -53,12 +53,14 @@ module.exports = {
         });
         // Construye la parte númerica del codigo del producto
         items.forEach(function(item, i, items) {
-          if(item.name == 'masa'){
+          if (item.name == 'masa') {
             doughName = item.value;
           }
         })
         // Construye la letra del codigo del producto
-        return Item.find({value: doughName}).populate('products')
+        return Item.find({
+          value: doughName
+        }).populate('products')
       })
       .then(function(items) {
         var products = items[0].products;
@@ -84,8 +86,8 @@ module.exports = {
         var itemProductCredentials = [];
         items.forEach(function(item, i, items) {
           itemProductCredentials[i] = {
-            product: productCredentials.code,
-            item: item.id
+            product_code: productCredentials.code,
+            item_id: item.id
           };
         });
         return sql.insert('item_product', itemProductCredentials)
@@ -160,20 +162,54 @@ module.exports = {
    * @return {Object}
    */
   getAll: function(req, res) {
-    Product.find().populate('items')
-      .then(function(products) {
-        if (products) {
-          return res.ok(products)
+    var product = null;
+    var products = [];
+    var item = null;
+    var productQueryStr= 'SELECT ' +
+      'p.code, p.name, p.short_name, ' +
+      'e.name as element_name, ' +
+      'i.id as item_id, i.value, i.short_value ' +
+      'FROM product as p, item_product as ip, item as i, element as e ' +
+      'WHERE p.code = ip.product_code AND ip.item_id = i.id AND i.element = e.id ' +
+      'ORDER BY p.code;';
+
+    Product.query(productQueryStr,
+      function(err, rawData) {
+        if(err) {
+          sails.log.debug(err);
+          return res.serverError();
         }
-        throw "El cliente no existe";
-      })
-      .catch(function(err) {
-        res.serverError(err);
-      })
+        rawData.forEach(function(data, i, dataArray) {
+          if (product == null) {
+            product = {
+              code: data.code,
+              name: data.name,
+              shortName: data.short_name,
+              items: []
+            }
+          }
+
+          item = {
+            itemId: data.item_id,
+            elementName: data.element_name,
+            value: data.value,
+            short_value: data.short_value
+          },
+
+          product.items.push(item);
+
+          if (!dataArray[i+1]) {
+            products.push(product);
+          } else if (dataArray[i+1].code != product.code) {
+            products.push(product);
+            product = null;
+          }
+        })
+
+        return res.ok(products)
+      });
   },
 };
-
-
 
 // Retorna la letra siguiente de acuerdo al alfabeto de la letra ingresada
 function nextChar(c) {

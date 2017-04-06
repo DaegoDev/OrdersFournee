@@ -318,6 +318,40 @@ module.exports = {
         res.serverError(err)
       });
   },
+  /**
+   * Funcion para obtener los productos habilitados a un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getProductsEnabled: function(req, res) {
+    // Declaración de variables
+    var clientId = null;
+
+    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
+    clientId = parseInt(req.param('clientId'));
+    if (!clientId) {
+      return res.badRequest('Id del cliente vacio.');
+    }
+
+    // Valida que el cliente si exista, en caso de que si, obtiene los preductos habilitados para él,
+    // en caso de que no, envia el mensaje de error
+    Client.findOne(clientId)
+      .then(function(client) {
+        if (client) {
+          return ClientProduct.find({client: clientId}).populate('product');
+        }
+        return res.serverError();
+      })
+      .then(function(clientProducts) {
+        res.ok({
+          clientProducts: clientProducts
+        })
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
+  }
 };
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {

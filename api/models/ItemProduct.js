@@ -13,12 +13,14 @@ module.exports = {
     // Añade una referencia a product
     product:{
       model:'product',
-      notNull: true
+      notNull: true,
+      columnName: 'product_code'
     },
     // Añade una referencia a items
     item: {
       model: 'item',
-      notNull: true
+      notNull: true,
+      columnName: 'item_id'
     }
   }
 };

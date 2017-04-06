@@ -70,11 +70,9 @@
           url: '/shoppingCart',
           templateUrl: 'templates/private/client/order-create-shoppingCart.html'
         })
-        .state('client.order.info', {
+        .state('order.create.info', {
           url: '/info',
           templateUrl: 'templates/private/client/order-create-info.html'
         })
-
-
     }]);
 }());

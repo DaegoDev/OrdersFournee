@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2017-04-05 05:18:00.432
+-- Last modification date: 2017-04-05 22:56:58.329
 
 -- tables
 -- Table: address
@@ -89,7 +89,7 @@ CREATE TABLE item (
 CREATE TABLE item_product (
     id int NOT NULL AUTO_INCREMENT,
     item_id int NOT NULL,
-    product_codigo varchar(8) NOT NULL,
+    product_code varchar(8) NOT NULL,
     CONSTRAINT item_product_pk PRIMARY KEY (id)
 );
 
@@ -179,7 +179,7 @@ ALTER TABLE item_product ADD CONSTRAINT item_product_item FOREIGN KEY item_produ
     REFERENCES item (id);
 
 -- Reference: item_product_product (table: item_product)
-ALTER TABLE item_product ADD CONSTRAINT item_product_product FOREIGN KEY item_product_product (product_codigo)
+ALTER TABLE item_product ADD CONSTRAINT item_product_product FOREIGN KEY item_product_product (product_code)
     REFERENCES product (code);
 
 -- Reference: order_client (table: order)

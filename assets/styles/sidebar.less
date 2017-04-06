@@ -1,38 +1,52 @@
 .sidebar {
   z-index: 1000;
-  display: inline-block;
+  display: block;
   position: fixed;
-  width: 20%;
+
+  width: @sidebar-width;
   height: 100%;
+
   background-color: @theme-nero;
-  color: @font-tussock;
   box-shadow: 5px 0 10px @theme-jambalaya;
+
   overflow-y: auto;
   overflow-x: hidden;
   transition: 0.5s;
 
-  &.toggle {
-    width: 10%;
+  a {
+    display: block;
+    color: @font-tussock;
+    &:hover {
+      color: @font-white;
+    }
   }
 
   .title-header {
     display: block;
+    overflow: hidden;
+    margin-top: 10px;
     .logo {
+      width: auto;
       float: left;
+      a {
+        font-size: 15px;
+        text-decoration: none;
+        &:hover {
+          color: @font-white;
+        }
+      }
     }
     .hamburger {
       float: right;
-    }
-    a {
-      display: block;
-      text-decoration: none;
-      text-align: center;
-      color: @font-tussock;
-      font-size: 20px;
-    }
-    li {
-      list-style: none;
-      display: table-cell;
+      margin-right: 10px;
+      a {
+        font-size: 15px;
+        padding: 15px 10px 30px 15px;
+        text-decoration: none;
+        &:hover {
+          color: @font-white;
+        }
+      }
     }
   }
 
@@ -40,23 +54,89 @@
     width: 100%;
     height: 200px;
     overflow: auto;
+    a {
+      padding: 15px 10px 30px 15px;
+      i {
+        padding: 0;
+      }
+    }
   }
 
   .navigation {
-    width: 100%;
-    a {
+    font-size: 15px;
+    .item {
       display: block;
-      text-decoration: none;
-      color: @font-tussock;
       &:hover {
-        background-color: @theme-nero-hover;
-        color: @font-white;
+        padding-left: 20px;
       }
     }
-    .item {
+  }
 
+  &.toggle {
+    width: @sidebar-width-toggle;
+    .title-header {
+      .logo {
+        display: none;
+      }
+      .hamburger {
+        clear: both;
+        display: block;
+        width: auto;
+        a {
+          display: block;
+          padding: 15px 10px 30px 15px;
+          border-bottom: 1px solid @theme-nero-hover;
+        }
+      }
     }
-    .subitem {
+
+    .login-wrapper {
+      height: auto;
+      i {
+        font-size: 15px;
+      }
+      a {
+        border-bottom: 1px solid @theme-nero-hover;
+      }
+      form {
+        display: none;
+      }
+    }
+
+    .navigation {
+      display: block;
+      font-size: 15px;
+      width: 100%;
+
+      .item {
+        display: block;
+        &:hover {
+          padding-left: 0;
+          font-size: 15px;
+          cursor: pointer;
+          a {
+            color: @font-white;
+          }
+        }
+        a {
+          display: block;
+          text-align: center;
+          padding: 15px 10px 30px 15px;
+          transition: all 0.3s ease;
+          color: @font-tussock;
+          font-size: 15px;
+          border-bottom: 1px solid @theme-nero-hover;
+          &:hover {
+            color: @font-white;
+          }
+          i {
+            padding: 0;
+          }
+          span {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

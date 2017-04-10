@@ -148,7 +148,8 @@ module.exports = {
           }
         });
         res.created({
-          ClientProduct: clientProduct
+          username: legalName,
+          password: nit
         });
       })
       .catch(function(err) {
@@ -387,10 +388,21 @@ module.exports = {
       var client = clients[0];
       for (var field in client) {
         if (!client[field]) {
-          return res.ok();
+          return res.conflict();
         }
       }
-      res.conflict();
+      sails.log.debug(client.id);
+      ClientEmployee.find({client: client.id})
+      .then(function(clientEmployees) {
+        sails.log.debug(clientEmployees);
+        if(clientEmployees.length == 0){
+          res.conflict();
+        }
+        res.ok(client);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
     })
   },
   /**

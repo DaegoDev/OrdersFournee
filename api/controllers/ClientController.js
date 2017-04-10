@@ -104,22 +104,22 @@ module.exports = {
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-        if(billAddressCredentials){
+        if (billAddressCredentials) {
           return sql.insert('address', billAddressCredentials);
         }
         return null;
       })
       .then(function(insertedBillAddress) {
-        if(insertedBillAddress){
+        if (insertedBillAddress) {
           clientCredentials.bill_address = insertedBillAddress.insertId;
         }
-        if(deliveryAddressCredentials){
+        if (deliveryAddressCredentials) {
           return sql.insert('address', deliveryAddressCredentials);
         }
         return null;
       })
       .then(function(insertedDeliveryAddress) {
-        if(insertedDeliveryAddress){
+        if (insertedDeliveryAddress) {
           clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
         }
         return sql.insert('client', clientCredentials);
@@ -305,7 +305,6 @@ module.exports = {
    * @param  {Object} res Response object
    */
   getProfile: function(req, res) {
-    sails.log.debug(req.user);
     var user = req.user;
     Client.find({
         user: user.id
@@ -357,39 +356,59 @@ module.exports = {
       })
   },
   /**
-   * Funcion para obtener el perfil de un cliente.
+   * Funcion para obtener validar que el cliente tenga toda la información en la base de datos.
    * @param  {Object} req Request object
    * @param  {Object} res Response object
    */
   validateInformation: function(req, res) {
+    // Obtiene el id del usuario desde la petición
     var user = req.user;
-    Client.find({
-        user: user.id
-      })
+    // Obtiene el cliente dado el usuario y valida que todos los campos no sean nulos
+    Client.query('SELECT * FROM client WHERE client.user = ?', [user.id], function(err, clients) {
+      if (err) {
+        return res.serverError(err);
+      }
+      var client = clients[0];
+      for (var field in client) {
+        if (!client[field]) {
+          return res.ok();
+        }
+      }
+      res.conflict();
+    })
+  },
+  /**
+   * Funcion para obtener todos los clientes.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getAll: function(req, res) {
+    Client.find()
       .populate('billAddress')
       .populate('deliveryAddress')
-      .then(function(client) {
-        res.ok(client[0]);
+      .then(function(clients) {
+        return res.ok(clients);
       })
       .catch(function(err) {
-        sails.log.debug(err);
-      })
+        res.serverError(err)
+      });
   }
+
 };
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {
-if(!country || !department || !city || !neighborhood || !nomenclature){
-  return null;
-}
-var addressCredentials = {
-  country: country,
-  department: department,
-  city: city,
-  neighborhood: neighborhood,
-  nomenclature: nomenclature,
-  additional_information: additionalInformation
-};
-return addressCredentials;
+  if (!country || !department || !city || !neighborhood || !nomenclature) {
+    return null;
+  }
+  var addressCredentials = {
+    country: country,
+    department: department,
+    city: city,
+    neighborhood: neighborhood,
+    nomenclature: nomenclature,
+    additional_information: additionalInformation
+  };
+  return addressCredentials;
 }
 // crea las credenciales para insertar un usuario
 function createUserCredentials(username, password) {

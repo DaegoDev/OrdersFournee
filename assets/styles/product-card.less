@@ -1,7 +1,4 @@
 product-card {
-  display: inline-block;
-  vertical-align: top;
-  height: 200px;
   width: 200px;
   margin: 10px;
   border: 1px solid;
@@ -15,6 +12,12 @@ product-card {
         color: @font-white;
       }
     }
+  }
+
+  .product-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .product-header {
@@ -36,7 +39,12 @@ product-card {
   }
 
   .product-items {
+    flex-grow: 1;
     word-wrap: break-word;
     padding: 5px;
+  }
+
+  .amount-order {
+    padding: 5px 10px;
   }
 }

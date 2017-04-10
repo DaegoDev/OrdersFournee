@@ -117,7 +117,6 @@ module.exports = {
           return sql.insert('address', deliveryAddressCredentials);
         }
         return null;
-
       })
       .then(function(insertedDeliveryAddress) {
         if(insertedDeliveryAddress){

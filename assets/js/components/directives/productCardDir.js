@@ -6,8 +6,17 @@
       restric: 'E',
       templateUrl: 'templates/private/shared/product-card.html',
       scope : {
-        product: '='
-      }
+        product: '=',
+        options: '=?',
+        selectArray: '=?'
+      },
+      controller: 'productCardCtrl'
     }
   })
+
+  fournee.controller('productCardCtrl', ['$scope', '$log', productCardCtrl]);
+
+  function productCardCtrl($scope, $log) {
+
+  }
 }())

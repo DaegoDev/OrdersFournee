@@ -131,10 +131,10 @@ module.exports = {
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
-        productsCodes.forEach(function(productId, i, productsCodes) {
+        productsCodes.forEach(function(productCode, i, productsCodes) {
           var clientProduct = {
             client: client.insertId,
-            product: productId
+            product: productCode
           }
           clientProductsCredentials.push(clientProduct);
         })

@@ -40,6 +40,7 @@ var jsFilesToInject = [
   'bower_components/angular-touch/angular-touch.min.js',
   'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
   'bower_components/angular-cookies/angular-cookies.min.js',
+  'bower_components/angular-i18n/angular-locale_es-co.js',
 
   // Angular files are here.
   'js/main.js',

@@ -1,36 +1,101 @@
 (function() {
   var fournee = angular.module('fournee');
-  fournee.controller('orderCreateCtrl', ['$scope', '$log']);
+  fournee.controller('orderCreateCtrl', ['$scope', '$log', orderCreateCtrl]);
 
+  // Timepicker para el rango de hora sugerida
   function orderCreateCtrl($scope, $log) {
-    $scope.mytime = new Date();
+    $scope.timeInitial = new Date();
+    $scope.timeFinal = new Date();
 
     $scope.hstep = 1;
-    $scope.mstep = 15;
+    $scope.mstep = 10;
 
-    $scope.options = {
-      hstep: [1, 2, 3],
-      mstep: [1, 5, 10, 15, 25, 30]
+    $scope.changedInitial = function() {
+      $log.log('Time changed to: ' + $scope.timeInitial);
     };
 
-    $scope.ismeridian = true;
-    $scope.toggleMode = function() {
-      $scope.ismeridian = !$scope.ismeridian;
+    $scope.changedFinal = function() {
+      $log.log('Time changed to: ' + $scope.timeFinal);
     };
 
-    $scope.update = function() {
-      var d = new Date();
-      d.setHours(14);
-      d.setMinutes(0);
-      $scope.mytime = d;
+    // Datepicker para la fecha de entrega
+    $scope.today = function() {
+      $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.inlineOptions = {
+      customClass: getDayClass,
+      minDate: new Date(),
+      showWeeks: true
     };
 
-    $scope.changed = function() {
-      $log.log('Time changed to: ' + $scope.mytime);
+    $scope.dateOptions = {
+      dateDisabled: disabled,
+      formatYear: 'yy',
+      maxDate: new Date(2020, 5, 22),
+      minDate: new Date(),
+      startingDay: 1
     };
 
-    $scope.clear = function() {
-      $scope.mytime = null;
+    // Disable weekend selection
+    function disabled(data) {
+      var date = data.date,
+        mode = data.mode;
+      return mode === 'day' && (date.getDay() === 0);
+    }
+
+    $scope.open1 = function() {
+      $scope.popup1.opened = true;
+    };
+
+    $scope.setDate = function(year, month, day) {
+      $scope.dt = new Date(year, month, day);
+    };
+
+    $scope.popup1 = {
+      opened: false
+    };
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 1);
+    $scope.events = [{
+        date: tomorrow,
+        status: 'full'
+      },
+      {
+        date: afterTomorrow,
+        status: 'partially'
+      }
+    ];
+
+    function getDayClass(data) {
+      var date = data.date,
+        mode = data.mode;
+      if (mode === 'day') {
+        var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+        for (var i = 0; i < $scope.events.length; i++) {
+          var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+
+          if (dayToCheck === currentDay) {
+            return $scope.events[i].status;
+          }
+        }
+      }
+      return '';
+    }
+
+    // Dropdown para listar los empleados del cliente
+    $scope.placement = {
+      options: [
+        'Empleado 1',
+        'Empleado 2',
+        'Empleado 3'
+      ],
+      selected: 'Empleado 1'
     };
   }
 }())

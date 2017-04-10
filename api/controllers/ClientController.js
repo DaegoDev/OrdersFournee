@@ -35,8 +35,6 @@ module.exports = {
     var deliveryNomenclature = null;
     var delivAddrAdditionalInformation = null;
     var role = null;
-    var username = null;
-    var password = null;
 
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
@@ -55,15 +53,6 @@ module.exports = {
       return res.badRequest('Se debe ingresar el nombre de la empresa.');
     }
 
-    username = req.param('username');
-    if (!username) {
-      return res.badRequest('Se debe ingresar un nombre de usuario.');
-    }
-
-    password = req.param('password');
-    if (!password) {
-      return res.badRequest('Se debe ingresar una contraseña.');
-    }
 
     managerName = req.param('managerName');
     managerPhonenumber = req.param('managerPhonenumber');
@@ -83,7 +72,7 @@ module.exports = {
     delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
 
     // Organización de credenciales y cifrado de la contraseña del usuario.
-    var userCredentials = createUserCredentials(username, password);
+    var userCredentials = createUserCredentials(legalName, nit);
     // Organización de credenciales de la dirección de entrega.
     var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
       billNomenclature, billAddrAdditionalInformation);
@@ -93,7 +82,6 @@ module.exports = {
     // Organización de credenciales del cliente.
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
       businessPhonenumber, clientAdditionalInformation);
-    var arrayAddressCredentials = [billAddressCredentials, deliveryAddressCredentials];
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -105,7 +93,7 @@ module.exports = {
     sql.beginTransaction()
       .then(function() {
         return sql.select('user', {
-          username: username
+          username: legalName
         });
       })
       .then(function(user) {
@@ -116,12 +104,25 @@ module.exports = {
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-        sails.log.debug(arrayAddressCredentials);
-        return sql.insert('address', arrayAddressCredentials);
+        if(billAddressCredentials){
+          return sql.insert('address', billAddressCredentials);
+        }
+        return null;
       })
-      .then(function(insertedAddresses) {
-        clientCredentials.bill_address = insertedAddresses.insertId;
-        clientCredentials.delivery_address = insertedAddresses.insertId + 1;
+      .then(function(insertedBillAddress) {
+        if(insertedBillAddress){
+          clientCredentials.bill_address = insertedBillAddress.insertId;
+        }
+        if(deliveryAddressCredentials){
+          return sql.insert('address', deliveryAddressCredentials);
+        }
+        return null;
+
+      })
+      .then(function(insertedDeliveryAddress) {
+        if(insertedDeliveryAddress){
+          clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
+        }
         return sql.insert('client', clientCredentials);
       })
       .then(function(user) {
@@ -239,7 +240,7 @@ module.exports = {
     if (!clientId) {
       return res.badRequest('Id del cliente vacio.');
     }
-    products = ["1A", "2B", "4B"];
+    products = ["1A", "2A", "3A"];
 
     // Valida que el cliente si exista, en caso de que si añade los preductos habilitados para él,
     // en caso de que no, envia el mensaje de error
@@ -305,13 +306,15 @@ module.exports = {
    * @param  {Object} res Response object
    */
   getProfile: function(req, res) {
-    var client = req.user;
+    sails.log.debug(req.user);
+    var user = req.user;
     Client.find({
-        id: client.id
+        user: user.id
       })
       .populate('billAddress')
       .populate('deliveryAddress')
       .then(function(client) {
+        // sails.log.debug(client);
         return res.ok(client[0]);
       })
       .catch(function(err) {
@@ -338,7 +341,9 @@ module.exports = {
     Client.findOne(clientId)
       .then(function(client) {
         if (client) {
-          return ClientProduct.find({client: clientId}).populate('product');
+          return ClientProduct.find({
+            client: clientId
+          }).populate('product');
         }
         return res.serverError();
       })
@@ -351,19 +356,41 @@ module.exports = {
         sails.log.debug(err);
         res.serverError();
       })
+  },
+  /**
+   * Funcion para obtener el perfil de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  validateInformation: function(req, res) {
+    var user = req.user;
+    Client.find({
+        user: user.id
+      })
+      .populate('billAddress')
+      .populate('deliveryAddress')
+      .then(function(client) {
+        res.ok(client[0]);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+      })
   }
 };
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {
-  var addressCredentials = {
-    country: country,
-    department: department,
-    city: city,
-    neighborhood: neighborhood,
-    nomenclature: nomenclature,
-    additional_information: additionalInformation
-  };
-  return addressCredentials;
+if(!country || !department || !city || !neighborhood || !nomenclature){
+  return null;
+}
+var addressCredentials = {
+  country: country,
+  department: department,
+  city: city,
+  neighborhood: neighborhood,
+  nomenclature: nomenclature,
+  additional_information: additionalInformation
+};
+return addressCredentials;
 }
 // crea las credenciales para insertar un usuario
 function createUserCredentials(username, password) {

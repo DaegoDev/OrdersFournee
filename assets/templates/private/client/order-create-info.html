@@ -1,47 +1,52 @@
 <div class="container-fluid" ng-controller="orderCreateCtrl">
   <form>
     <fieldset>
-      <legend>Información acerca de la entrega</legend>
-      <div class="form-group col-sm-4">
-        <label for="delivery_date">Fecha de entrega:</label>
-        <input type="date" name="delivery_date" value="" class="form-control">
+      <legend>Información de entrega</legend>
+      <div class="col-sm-4">
+        <h1>Fecha de entrega:</h1>
+        <br />
+        <br />
+        <p class="input-group col-sm-9">
+          <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
       </div>
 
-      <div uib-timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
-      <pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre>
-      <div class="row">
-        <div class="col-xs-6">
-          Hours step is:
-          <select class="form-control" ng-model="hstep" ng-options="opt for opt in options.hstep"></select>
+      <div class="col-sm-7">
+        <h1 for="delivery_date">Horario sugerido para la entrega:</h1>
+        <div class="col-sm-1 label-time">
+          <label>Inicial: </label>
         </div>
-        <div class="col-xs-6">
-          Minutes step is:
-          <select class="form-control" ng-model="mstep" ng-options="opt for opt in options.mstep"></select>
+        <div class="col-sm-4">
+          <div uib-timepicker ng-model="timeInitial" name="initial_suggested_time" ng-change="changedInitial()" hour-step="hstep" minute-step="mstep" show-meridian=false></div>
         </div>
+        <div class="col-sm-1 label-time">
+          <label>Final:</label>
+        </div>
+        <div class="col-sm-4">
+          <div uib-timepicker ng-model="timeFinal" name="initial_suggested_time" ng-change="changedFinal()" hour-step="hstep" minute-step="mstep" show-meridian=false></div>
+        </div>
+
       </div>
 
-      <hr>
-      <button type="button" class="btn btn-info" ng-click="toggleMode()">12H / 24H</button>
-      <button type="button" class="btn btn-default" ng-click="update()">Set to 14:00</button>
-      <button type="button" class="btn btn-danger" ng-click="clear()">Clear</button>
-
-      <div class="form-group col-sm-4">
-        <label for="initial_suggested_time">Hora inicial:</label>
-        <input type="number" name="initial_suggested_time" value="" class="form-control">
+    </fieldset>
+    <br />
+    <fieldset>
+      <legend>Información adicional</legend>
+      <div class="form-group col-sm-7">
+        <label>Empleado habilitado para realizar el pedido:</label>
+        <select class="form-control" ng-model="placement.selected" ng-options="o as o for o in placement.options"></select>
       </div>
-      <div class="form-group col-sm-4">
-        <label for="final_suggested_time">Hora final:</label>
-        <input type="number" name="final_suggested_time" value="" class="form-control">
+      <div class="form-group col-sm-9">
+        <label for="additional_information">Comentario:</label>
+        <textarea placeholder="Aquí un placehoder" rows="4" cols="50" name="additional_information" value="" class="form-control" />
       </div>
     </fieldset>
-    <div class="form-group">
-      <label for="client_employee">Empleado que realiza el pedido:</label>
-      <input type="text" name="client_employee" value="" class="form-control">
-    </div>
-    <div class="form-group">
-      <label for="additional_information">Información adicional:</label>
-      <input type="text" name="additional_information" value="" class="form-control">
+    <br />
+    <div class="col-sm-5">
+      <button name="button" ui-sref="client.create.user" class="btn btn-md btn-sienna">Enviar</button>
     </div>
   </form>
-  <button type="button" name="button" ui-sref="client.create.user" class="btn btn-md btn-sienna">Enviar</button>
 </div>

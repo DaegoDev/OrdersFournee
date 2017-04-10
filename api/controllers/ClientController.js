@@ -208,18 +208,13 @@ module.exports = {
    */
   updatePassword: function(req, res) {
     // Se declara las variables necesarias para actualizar la contraseña de un cliente
-    var clientId = null;
+    var user = req.user;
     var currentPassword = req.param('currentPassword');
     var newPassword = req.param('newPassword');
 
-    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
-    clientId = parseInt(req.param('clientId'));
-    if (!clientId) {
-      return res.badRequest('Id del cliente vacio.');
-    }
     // valida si existe el cliente con el ese id, si existe cambia la contraseña de su usuario en false
     Client.findOne({
-        id: clientId
+        user: user.id
       })
       .populate('user')
       .then(function(client) {
@@ -391,10 +386,8 @@ module.exports = {
           return res.conflict();
         }
       }
-      sails.log.debug(client.id);
-      ClientEmployee.find({client: client.id})
+      ClientEmployee.find()
       .then(function(clientEmployees) {
-        sails.log.debug(clientEmployees);
         if(clientEmployees.length == 0){
           res.conflict();
         }
@@ -414,6 +407,7 @@ module.exports = {
     Client.find()
       .populate('billAddress')
       .populate('deliveryAddress')
+      .populate('clientEmployee')
       .then(function(clients) {
         return res.ok(clients);
       })

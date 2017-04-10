@@ -14,7 +14,7 @@ module.exports = {
   addClientEmployee: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
-    var clientId = null;
+    var user = req.user;
     var name = null;
     var state = null;
     var phonenumber = null;
@@ -36,11 +36,6 @@ module.exports = {
       return res.badRequest('Se debe ingresar un rol.');
     }
 
-    clientId = parseInt(req.param('clientId'));
-    if (!clientId) {
-      return res.badRequest('Id del cliente vacio.');
-    }
-
     // Organización de credenciales y cifrado de la contraseña del usuario.
     var clientEmployeeCredentials = {
       name: name,
@@ -51,7 +46,7 @@ module.exports = {
 
     // Se verifica que el usuario exista antes de la creación de los empleados, en caso de que no exista
     // se retorna un error. En caso de que exista se crea el regitro del usuario.
-    Client.findOne({id: clientId})
+    Client.findOne({user: user.id})
     .then(function(client) {
       sails.log.debug(client)
       if(client){
@@ -71,6 +66,26 @@ module.exports = {
       res.serverError(err);
     })
 
+  },
+  /**
+   * Funcion para obtener los empleados autorizados para los pedidos de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getEmployeesByClient: function(req, res) {
+    var user = req.user;
+
+    Client.find({ user: user.id})
+    .populate('clientEmployee')
+    .then(function(client) {
+      sails.log.debug(client);
+      res.ok({
+        employees: client[0].clientEmployee
+      })
+    })
+    .catch(function(err) {
+      res.serverError(err);
+    })
   }
 
 };

@@ -39,7 +39,8 @@ module.exports.policies = {
   },
 
   ClientEmployeeController: {
-    addClientEmployee: 'isClient'
+    addClientEmployee: 'isClient',
+    getEmployeesByClient: 'isClient'
   },
 
   EmployeeController: {

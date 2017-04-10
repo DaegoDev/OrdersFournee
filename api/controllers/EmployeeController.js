@@ -140,18 +140,13 @@ module.exports = {
    * @param  {Object} res Response object
    */
   updatePassword: function(req, res) {
-    var employeeId = null;
+    var user = req.user;
     var currentPassword = req.param('currentPassword');
     var newPassword = req.param('newPassword');
 
-    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
-    employeeId = parseInt(req.param('employeeId'));
-    if (!employeeId) {
-      return res.badRequest('Id del empleado vacio.');
-    }
     // valida si existe el empleado con el ese id, si existe cambia la contraseña de su usuario en false
     Employee.findOne({
-        id: employeeId
+        user: user.id
       })
       .populate('user')
       .then(function(employee) {

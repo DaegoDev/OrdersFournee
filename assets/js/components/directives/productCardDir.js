@@ -17,6 +17,10 @@
   fournee.controller('productCardCtrl', ['$scope', '$log', productCardCtrl]);
 
   function productCardCtrl($scope, $log) {
-
+    if ($scope.product.customName) {
+      $scope.actualName = $scope.product.customName;
+    } else {
+      $scope.actualName = $scope.product.shortName;      
+    }
   }
 }())

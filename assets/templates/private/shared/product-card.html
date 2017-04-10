@@ -1,14 +1,14 @@
 <div class="product-wrapper">
   <div class="product-header">
-    <h4>{{product.shortName }}</h4>
+    <h4>{{actualName}}</h4>
   </div>
   <div class="product-items">
-    <ul class="row">
-      <li ng-repeat="item in product.items">
-        <label class="col-sm-5 control-label" style="text-align:right">{{item.elementName | capitalize}}</label>
-        <label class="col-sm-6 control-label">{{item.value | capitalize}}</label>
-      </li>
-    </ul>
+    <table class="table table-hover">
+      <tr ng-repeat="item in product.items">
+        <td class="" style="text-align:right">{{item.elementName | capitalize}}</td>
+        <td >{{item.value | capitalize}}</td>
+      </tr>
+    </table>
   </div>
 
   <div class="amount-order">

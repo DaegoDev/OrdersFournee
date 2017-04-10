@@ -1,13 +1,15 @@
 <div class="page-sidebar">
   <div class="title-header">
-    <div class="logo">
-      <a ui-sref="home">La Fournee</a>
-    </div>
-    <div class="hamburger">
-      <a href="" ng-click="toggleSidebar()">
-        <i class="fa fa-bars"></i>
-      </a>
-    </div>
+    <ul>
+      <li class="logo">
+        <a ui-sref="home">La Fournee</a>
+      </li>
+      <li class="hamburger">
+        <a href="" ng-click="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </li>
+    </ul>
   </div>
 
   <div ng-transclude>
@@ -15,27 +17,27 @@
   </div>
 
   <div class="navigation">
-    <div class="item">
-      <a ui-sref="home">
-        <i class="fa fa-home col-sm-2"></i>
-        <span class="item-text col-sm-10">Inicio</span>
-      </a>
-    </div>
+    <ul>
+      <li class="item">
+        <a ui-sref="home">
+          <i class="fa fa-home col-sm-2"></i>
+          <span class="item-text col-sm-10">Inicio</span>
+        </a>
+      </li>
 
-    <div class="item">
-      <a ui-sref="product.list">
-        <i class="fa fa-coffee col-sm-2"></i>
-        <span class="item-text col-sm-10">Productos</span>
-      </a>
-    </div>
+      <li class="item">
+        <a ui-sref="product.list">
+          <i class="fa fa-coffee col-sm-2"></i>
+          <span class="item-text col-sm-10">Productos</span>
+        </a>
+      </li>
 
-
-    <div class="item">
-      <a ui-sref="client.create.user">
-        <i class="fa fa-user col-sm-2"></i>
-        <span class="item-text col-sm-10">Clientes</span>
-      </a>
-    </div>
-
+      <li class="item">
+        <a ui-sref="client.create.user">
+          <i class="fa fa-user col-sm-2"></i>
+          <span class="item-text col-sm-10">Clientes</span>
+        </a>
+      </li>
+    </ul>
   </div>
 </div>

@@ -1,6 +1,5 @@
 <div class="product-wrapper">
   <div class="product-header">
-    <!-- <h4>{{product.name}}</h4> -->
     <h4>{{product.shortName }}</h4>
   </div>
   <div class="product-items">
@@ -10,5 +9,14 @@
         <label class="col-sm-6 control-label">{{item.value | capitalize}}</label>
       </li>
     </ul>
+  </div>
+
+  <div class="amount-order">
+    <form class="form-inline">
+      <input type="submit" name="" value="Agregar" class="btn btn-sienna col-sm-5">
+      <div class="input-group col-sm-6 col-sm-offset-1">
+        <input type="text" ng-model="amount" class="form-control" placeholder="Cantidad">
+      </div>
+    </form>
   </div>
 </div>

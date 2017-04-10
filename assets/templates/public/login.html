@@ -1,13 +1,16 @@
 <div class="login-wrapper">
-  <div class="">
-    <a href="">
-      <i class="fa fa-sign-in col-sm-1" aria-hidden="true"></i>
-    </a>
-  </div>
-  <form class="" >
+  <ul class="login-nav">
+    <li>
+      <a href="" ng-click="focus()" for="testlog">
+        <i class="fa fa-sign-in" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+
+  <form  class="" >
     <div class="form-group">
       <label for="username" class="sr-only">label</label>
-      <input type="text" name="username" value="" placeholder="Nombre de usuario"
+      <input id="testlog" type="text" name="username" value="" placeholder="Nombre de usuario"
         class="form-control">
         <input type="text" name="password" value="" placeholder="Contraseña"
         class="form-control">

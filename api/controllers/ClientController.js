@@ -22,7 +22,7 @@ module.exports = {
     var managerPhonenumber = null;
     var businessPhonenumber = null;
     var clientAdditionalInformation = null;
-    var productsIds = [];
+    var productsCodes = [];
     var clientProductsCredentials = [];
     // var billCountry = null;
     // var billDepartment = null;
@@ -60,7 +60,7 @@ module.exports = {
     managerPhonenumber = req.param('managerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
-    productsIds = ['1A', '2A'];
+    productsCodes = ['1A', '2A'];
 
     // billCountry = req.param('billCountry');
     // billDepartment = req.param('billDepartment');
@@ -131,7 +131,7 @@ module.exports = {
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
-        productsIds.forEach(function(productId, i, productsIds) {
+        productsCodes.forEach(function(productId, i, productsCodes) {
           var clientProduct = {
             client: client.insertId,
             product: productId

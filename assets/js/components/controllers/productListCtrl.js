@@ -7,6 +7,11 @@
       .then(function (res) {
         $scope.products = res.data;
       });
+      $scope.lista = [];
+
+      $scope.selectProduct = function(product) {
+        $scope.lista.push(product);
+      }
   }
 
 }())

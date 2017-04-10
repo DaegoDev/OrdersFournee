@@ -3,14 +3,13 @@
     <h4>{{actualName}}</h4>
   </div>
   <div class="product-items">
-    <table class="table table-hover">
+    <table class="table table-hover table-condensed">
       <tr ng-repeat="item in product.items">
-        <td class="" style="text-align:right">{{item.elementName | capitalize}}</td>
+        <td >{{item.elementName | capitalize}}</td>
         <td >{{item.value | capitalize}}</td>
       </tr>
     </table>
   </div>
-
   <div class="amount-order">
     <form class="form-inline">
       <input type="submit" name="" value="Agregar" class="btn btn-sienna col-sm-5">

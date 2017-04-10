@@ -40,12 +40,16 @@ product-card {
 
   .product-items {
     flex-grow: 1;
-    word-wrap: break-word;
     padding: 5px;
     table {
       tr {
         td {
-          word-wrap: break-word;
+          font-size: 85%;
+        }
+        &:first-child {
+          td {
+            border-top: 0px;            
+          }
         }
       }
     }

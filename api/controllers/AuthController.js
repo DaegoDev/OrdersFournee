@@ -20,7 +20,6 @@ var passport = require('passport');
  *                               y la instancia de usuario encontrada.
  */
 function _onPassportAuth(req, res, err, user, info) {
-  sails.log.debug(user);
   if (err) {
     return res.serverError(err);
   }

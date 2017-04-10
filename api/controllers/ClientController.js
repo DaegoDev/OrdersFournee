@@ -22,18 +22,20 @@ module.exports = {
     var managerPhonenumber = null;
     var businessPhonenumber = null;
     var clientAdditionalInformation = null;
-    var billCountry = null;
-    var billDepartment = null;
-    var billCity = null;
-    var billNeighborhood = null;
-    var billNomenclature = null;
-    var billAddrAdditionalInformation = null;
-    var deliveryCountry = null;
-    var deliveryDepartment = null;
-    var deliveryCity = null;
-    var deliveryNeighborhood = null;
-    var deliveryNomenclature = null;
-    var delivAddrAdditionalInformation = null;
+    var productsIds = [];
+    var clientProductsCredentials = [];
+    // var billCountry = null;
+    // var billDepartment = null;
+    // var billCity = null;
+    // var billNeighborhood = null;
+    // var billNomenclature = null;
+    // var billAddrAdditionalInformation = null;
+    // var deliveryCountry = null;
+    // var deliveryDepartment = null;
+    // var deliveryCity = null;
+    // var deliveryNeighborhood = null;
+    // var deliveryNomenclature = null;
+    // var delivAddrAdditionalInformation = null;
     var role = null;
 
 
@@ -58,28 +60,32 @@ module.exports = {
     managerPhonenumber = req.param('managerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
-    billCountry = req.param('billCountry');
-    billDepartment = req.param('billDepartment');
-    billCity = req.param('billCity');
-    billNeighborhood = req.param('billNeighborhood');
-    billNomenclature = req.param('billNomenclature');
-    billAddrAdditionalInformation = req.param('billAddrAdditionalInformation');
-    deliveryCountry = req.param('deliveryCountry');
-    deliveryDepartment = req.param('deliveryDepartment');
-    deliveryCity = req.param('deliveryCity');
-    deliveryNeighborhood = req.param('deliveryNeighborhood');
-    deliveryNomenclature = req.param('deliveryNomenclature');
-    delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
+    productsIds = ['1A', '2A'];
+
+    // billCountry = req.param('billCountry');
+    // billDepartment = req.param('billDepartment');
+    // billCity = req.param('billCity');
+    // billNeighborhood = req.param('billNeighborhood');
+    // billNomenclature = req.param('billNomenclature');
+    // billAddrAdditionalInformation = req.param('billAddrAdditionalInformation');
+    // deliveryCountry = req.param('deliveryCountry');
+    // deliveryDepartment = req.param('deliveryDepartment');
+    // deliveryCity = req.param('deliveryCity');
+    // deliveryNeighborhood = req.param('deliveryNeighborhood');
+    // deliveryNomenclature = req.param('deliveryNomenclature');
+    // delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
 
     // Organización de credenciales y cifrado de la contraseña del usuario.
     var userCredentials = createUserCredentials(legalName, nit);
+
     // Organización de credenciales de la dirección de entrega.
-    var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
-      billNomenclature, billAddrAdditionalInformation);
+  //  var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
+  //    billNomenclature, billAddrAdditionalInformation);
     // Organización de credenciales de la dirección de facturación.
-    var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
-      deliveryNomenclature, delivAddrAdditionalInformation);
+  //  var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
+  //    deliveryNomenclature, delivAddrAdditionalInformation);
     // Organización de credenciales del cliente.
+
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
       businessPhonenumber, clientAdditionalInformation);
 
@@ -104,27 +110,37 @@ module.exports = {
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-        if (billAddressCredentials) {
-          return sql.insert('address', billAddressCredentials);
-        }
-        return null;
-      })
-      .then(function(insertedBillAddress) {
-        if (insertedBillAddress) {
-          clientCredentials.bill_address = insertedBillAddress.insertId;
-        }
-        if (deliveryAddressCredentials) {
-          return sql.insert('address', deliveryAddressCredentials);
-        }
-        return null;
-      })
-      .then(function(insertedDeliveryAddress) {
-        if (insertedDeliveryAddress) {
-          clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
-        }
+      //   if (billAddressCredentials) {
+      //     return sql.insert('address', billAddressCredentials);
+      //   }
+      //   return null;
+      // })
+      // .then(function(insertedBillAddress) {
+      //   if (insertedBillAddress) {
+      //     clientCredentials.bill_address = insertedBillAddress.insertId;
+      //   }
+      //   if (deliveryAddressCredentials) {
+      //     return sql.insert('address', deliveryAddressCredentials);
+      //   }
+      //   return null;
+      // })
+      // .then(function(insertedDeliveryAddress) {
+      //   if (insertedDeliveryAddress) {
+      //     clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
+      //   }
         return sql.insert('client', clientCredentials);
       })
-      .then(function(user) {
+      .then(function(client) {
+        productsIds.forEach(function(productId, i, productsIds) {
+          var clientProduct = {
+            client: client.insertId,
+            product: productId
+          }
+          clientProductsCredentials.push(clientProduct);
+        })
+        return sql.insert('client_product', clientProductsCredentials);
+      })
+      .then(function(clientProduct) {
         sql.commit();
         connectionConfig.connection.end(function(err) {
           if (err) {
@@ -132,7 +148,7 @@ module.exports = {
           }
         });
         res.created({
-          user: user
+          ClientProduct: clientProduct
         });
       })
       .catch(function(err) {

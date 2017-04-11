@@ -79,9 +79,7 @@ module.exports = {
     .populate('clientEmployee')
     .then(function(client) {
       sails.log.debug(client);
-      res.ok({
-        employees: client[0].clientEmployee
-      })
+      res.ok(client[0].clientEmployee);
     })
     .catch(function(err) {
       res.serverError(err);

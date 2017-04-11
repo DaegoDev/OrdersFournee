@@ -1,9 +1,9 @@
 (function() {
   var fournee = angular.module('fournee');
-  fournee.controller('orderCreateCtrl', ['$scope', '$log', orderCreateCtrl]);
+  fournee.controller('orderCreateCtrl', ['$scope', '$log', 'ClientSvc', orderCreateCtrl]);
 
   // Timepicker para el rango de hora sugerida
-  function orderCreateCtrl($scope, $log) {
+  function orderCreateCtrl($scope, $log, ClientSvc) {
     $scope.timeInitial = new Date();
     $scope.timeInitial.setHours(12);
     $scope.timeInitial.setMinutes(0);
@@ -101,13 +101,12 @@
     }
 
     // Dropdown para listar los empleados del cliente
-    $scope.placement = {
-      options: [
-        'Empleado 1',
-        'Empleado 2',
-        'Empleado 3'
-      ],
-      selected: 'Empleado 1'
-    };
+    ClientSvc.getClientEmployees()
+      .then(function(res) {
+        $scope.placement = {
+          options: res.data,
+          selected: res.data[0],
+        };
+      });
   }
 }())

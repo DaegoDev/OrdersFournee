@@ -10,6 +10,22 @@
           templateUrl: 'templates/public/home.html'
         })
 
+        /**
+        * RUTAS DE ACCESO DE UN ADMIN.
+        */
+        .state("admin", {
+          url: "/admin",
+          templateUrl: "templates/private/admin/index.html",
+          controller: "AdminController",
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+
         // Client creation routes.
         .state('client', {
           url: '/client',
@@ -58,12 +74,12 @@
         * RUTAS DE ACCESO DE UN CLIENTE.
         */
         .state("clientRole", {
-          url: "/client",
+          url: "/clientR",
           templateUrl: "templates/private/client/index.html",
           controller: "ClientController",
           data: {
             permissions: {
-              only: "CLIENT",
+              only: "CLIENTE",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -74,9 +90,9 @@
           url: '/order',
           templateUrl: 'templates/private/client/order.html'
         })
-        .state('order.list', {
+        .state('order.myList', {
           url: '/list',
-          templateUrl: 'templates/private/client/order-list.html'
+          templateUrl: 'templates/private/client/order-my-list.html'
         })
         .state('order.create', {
           url: '/create',

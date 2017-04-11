@@ -35,7 +35,7 @@
       <legend>Información adicional</legend>
       <div class="form-group col-sm-7">
         <label>Empleado habilitado para realizar el pedido:</label>
-        <select class="form-control" ng-model="placement.selected" ng-options="o as o for o in placement.options"></select>
+        <select class="form-control" ng-model="placement.selected" ng-options="option.name for option in placement.options"></select>
       </div>
       <div class="form-group col-sm-9">
         <label for="additional_information">Comentario:</label>

@@ -54,13 +54,13 @@
       AuthService.signinUser(credentials)
         .then(function(result) {
           role = AuthService.getRole().toUpperCase();
-
+          console.log(role);
           if (role === "ADMIN") {
             $state.go('admin');
           } else if (role === "DESPACHADOR") {
             $state.go('despachador');
           } else if (role === "CLIENTE") {
-            $state.go('clienteRole');
+            $state.go('clientRole');
           }
         })
         .catch(function(err) {

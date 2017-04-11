@@ -28,41 +28,42 @@ module.exports.policies = {
 
   '*': true,
 
-  // ClientController: {
-  //   updatePassword: 'isClient',
-  //   getProfile: 'isClient',
-  //   validateInformation: 'isClient',
-  //   // recuperarContrasena: 'isRecuperacionValida',
-  //   enableProduct: 'isAdmin',
-  //   disableProduct: 'isAdmin',
-  //   // signup: 'isAdmin'
-  // },
-  //
-  // ClientEmployeeController: {
-  //   addClientEmployee: 'isClient'
-  // },
-  //
-  // EmployeeController: {
-  //   signup: 'isAdmin',
-  //   delete: 'isAdmin',
-  //   updatePassword: 'isEmployee',
-  //   getProfile: 'isEmployee'
-  // },
-  //
-  // ItemController: {
-  //   create: 'isAdmin',
-  // },
-  //
-  // OrderController: {
-  //   create: 'isClient',
-  //   updateDeliveryDate: 'isEmployee',
-  //   changeState: 'isEmployee',
-  //   getByDeliveryDate: 'isEmployee'
-  // },
-  //
-  // ProductController: {
-  //   create: 'isAdmin'
-  // },
+  ClientController: {
+    updatePassword: 'isClient',
+    getProfile: 'isClient',
+    validateInformation: 'isClient',
+    // recuperarContrasena: 'isRecuperacionValida',
+    enableProduct: 'isAdmin',
+    disableProduct: 'isAdmin',
+    // signup: 'isAdmin'
+  },
+
+  ClientEmployeeController: {
+    addClientEmployee: 'isClient',
+    getEmployeesByClient: 'isClient'
+  },
+
+  EmployeeController: {
+    signup: 'isAdmin',
+    delete: 'isAdmin',
+    updatePassword: 'isEmployee',
+    getProfile: 'isEmployee'
+  },
+
+  ItemController: {
+    create: 'isAdmin',
+  },
+
+  OrderController: {
+    create: 'isClient',
+    updateDeliveryDate: 'isEmployee',
+    changeState: 'isEmployee',
+    getByDeliveryDate: 'isEmployee'
+  },
+
+  ProductController: {
+    create: 'isAdmin'
+  },
 
 
   /***************************************************************************

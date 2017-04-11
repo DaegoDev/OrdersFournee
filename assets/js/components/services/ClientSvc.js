@@ -9,6 +9,14 @@ function ($http) {
         method: 'GET',
       });
       return clients;
+    },
+    // Service to get the client employees
+    getClientEmployees: function() {
+      var clientEmployees = $http({
+        url: '/clientemployee/getEmployeesByClient',
+        method: 'GET',
+      });
+      return clientEmployees;
     }
   };
 }]);

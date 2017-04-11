@@ -22,7 +22,7 @@ module.exports = {
     var managerPhonenumber = null;
     var businessPhonenumber = null;
     var clientAdditionalInformation = null;
-    var productsIds = [];
+    var productsCodes = [];
     var clientProductsCredentials = [];
     // var billCountry = null;
     // var billDepartment = null;
@@ -60,7 +60,7 @@ module.exports = {
     managerPhonenumber = req.param('managerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
-    productsIds = ['1A', '2A'];
+    productsCodes = ['1A', '2A'];
 
     // billCountry = req.param('billCountry');
     // billDepartment = req.param('billDepartment');
@@ -131,10 +131,10 @@ module.exports = {
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
-        productsIds.forEach(function(productId, i, productsIds) {
+        productsCodes.forEach(function(productCode, i, productsCodes) {
           var clientProduct = {
             client: client.insertId,
-            product: productId
+            product: productCode
           }
           clientProductsCredentials.push(clientProduct);
         })
@@ -148,7 +148,8 @@ module.exports = {
           }
         });
         res.created({
-          ClientProduct: clientProduct
+          username: legalName,
+          password: nit
         });
       })
       .catch(function(err) {
@@ -207,18 +208,13 @@ module.exports = {
    */
   updatePassword: function(req, res) {
     // Se declara las variables necesarias para actualizar la contraseña de un cliente
-    var clientId = null;
+    var user = req.user;
     var currentPassword = req.param('currentPassword');
     var newPassword = req.param('newPassword');
 
-    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
-    clientId = parseInt(req.param('clientId'));
-    if (!clientId) {
-      return res.badRequest('Id del cliente vacio.');
-    }
     // valida si existe el cliente con el ese id, si existe cambia la contraseña de su usuario en false
     Client.findOne({
-        id: clientId
+        user: user.id
       })
       .populate('user')
       .then(function(client) {
@@ -387,10 +383,19 @@ module.exports = {
       var client = clients[0];
       for (var field in client) {
         if (!client[field]) {
-          return res.ok();
+          return res.conflict();
         }
       }
-      res.conflict();
+      ClientEmployee.find()
+      .then(function(clientEmployees) {
+        if(clientEmployees.length == 0){
+          res.conflict();
+        }
+        res.ok(client);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
     })
   },
   /**
@@ -402,6 +407,7 @@ module.exports = {
     Client.find()
       .populate('billAddress')
       .populate('deliveryAddress')
+      .populate('clientEmployee')
       .then(function(clients) {
         return res.ok(clients);
       })

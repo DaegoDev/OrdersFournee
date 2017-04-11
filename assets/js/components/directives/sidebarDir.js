@@ -13,9 +13,9 @@
     }
   })
 
-  fournee.controller('sidebarCtrl', ['$scope', '$cookieStore', '$log', sidebarCtrl]);
+  fournee.controller('sidebarCtrl', ['$scope', '$cookieStore', '$log', 'AuthService', sidebarCtrl]);
 
-  function sidebarCtrl($scope, $cookieStore, $log) {
+  function sidebarCtrl($scope, $cookieStore, $log, AuthService) {
     var viewport = 992;
     $scope.toggle = false;
 
@@ -35,5 +35,34 @@
     window.onresize = function() {
       $scope.$apply();
     }
+
+    $scope.role = AuthService.getRole();
+
+    $scope.$on('renovateRole', function(evt) {
+      $scope.role = AuthService.getRole();
+    });
+
+    $scope.isClient = function() {
+      return $scope.role === "CLIENTE";
+    };
+
+    $scope.isAdmin = function() {
+      return $scope.role === "ADMIN";
+    };
+
+    $scope.isDespachador = function() {
+      return $scope.role === "DESPACHADOR";
+    };
+
+    $scope.authenticated = AuthService.isAuthenticated();
+
+  	$scope.$on('renovateRole', function(evt) {
+  		$scope.authenticated = AuthService.isAuthenticated();
+  	});
+
+  	$scope.signout = function () {
+  		AuthService.signout();
+  	}
+
   }
 }())

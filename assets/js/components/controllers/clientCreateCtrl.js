@@ -1,11 +1,11 @@
 (function () {
   var fournee = angular.module('fournee');
   fournee.controller('clientCreateCtrl',
-    ['$scope', '$log', 'productSvc', 'SignupService', clientCreateCtrl]);
+    ['$scope', '$log', '$state', 'productSvc', 'SignupService', clientCreateCtrl]);
 
-  function clientCreateCtrl($scope, $log, productSvc, SignupService) {
+  function clientCreateCtrl($scope, $log, $state, productSvc, SignupService) {
     $scope.client = {};
-    $scope.productCodes = [];
+    $scope.productsCodes = [];
     $scope.productsSelected = [];
 
     productSvc.getProducts()
@@ -30,6 +30,10 @@
     }
 
     $scope.createClient = function () {
+      angular.forEach($scope.productsSelected, function (product, key) {
+        $scope.productsCodes.push(product.code);
+      })
+
       var clientCredentials = {
         legalName: $scope.client.legalName,
         nit: $scope.client.nit,
@@ -38,13 +42,22 @@
         managerPhonenumber: $scope.client.managerPhonenumber,
         businessPhonenumber: $scope.client.businessPhonenumber,
         clientAdditionalInformation: $scope.client.additionalInformation,
-        productCodes: $scope.productCodes
+        productCodes: $scope.productsCodes
       }
 
       SignupService.signupClient(clientCredentials)
         .then(function(res) {
-          console.log(res);
+          $scope.user = res.data;
+          $state.go('client.create.user')
         });
+    }
+
+    $scope.createNew = function () {
+      $scope.client = {};
+      $scope.productsCodes = [];
+      $scope.productsSelected = [];
+      $scope.user = {};
+      $state.go('client.create.info');
     }
   }
 

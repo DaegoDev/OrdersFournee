@@ -8,18 +8,20 @@ var storageType = 'session';
 		signinUser: function(credentials) {
 			var role = null;
 			var signin = $http({
-				url: '/auth/signin',
+				url: '/auth/signinUser',
 				method: 'POST',
 				params: credentials
 			});
 
-			signin.success(function(resultado) {
+			signin.then(function(res) {
+				console.log(res.data);
+				console.log(res);
 				// Creación de la sesión de un equipo cuando las credenciales son validas.
-				role = resultado.role.toUpperCase();
+				role = res.data.role.toUpperCase();
 				PermRoleStore.clearStore();
 				PermRoleStore.defineRole(role, function () {return true;});
 				PermRoleStore.defineRole('ANON', function () {return false;});
-				StorageService.set("auth_token", resultado.token, storageType);
+				StorageService.set("auth_token", res.data.token, storageType);
 				StorageService.set("role", role, storageType);
 				$rootScope.$broadcast('renovateRole');
 			});

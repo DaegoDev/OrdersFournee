@@ -7,7 +7,7 @@
     </li>
   </ul>
 
-  <form class="">
+  <form class="" ng-submit="signinUser()" name="signin" novalidate>
     <!-- NOMBRE DE USUARIO-->
     <div class="form-group">
       <div ng-class="{'has-error': signin.username.$invalid && (!signin.$pristine || signin.$submitted || signin.username.$touched),
@@ -41,8 +41,8 @@
     <div>
       <a ui-sref="recoverPassword">¿Olvidaste tu contraseña?</a>
     </div>
-
-    <button class="btn btn-success btn-lg btn-block" type="submit">
+    <br/>
+    <button class="btn btn-sienna btn-sm btn-block" type="submit">
       <span ng-show="!signing" >Confirmar </span>
       <span ng-show="signing">Ingresando <i class="glyphicon glyphicon-refresh gly-spin"></i></span>
     </button>

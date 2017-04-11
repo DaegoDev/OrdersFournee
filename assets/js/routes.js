@@ -13,16 +13,17 @@
         // Client creation routes.
         .state('client', {
           url: '/client',
-          templateUrl: 'templates/private/admin/client.html',
-          controller: 'clientCreateCtrl'
+          templateUrl: 'templates/private/admin/client.html'
         })
         .state('client.list', {
           url: '/list',
           templateUrl: 'templates/private/admin/client-list.html',
+          controller: 'ClientListCtrl'
         })
         .state('client.create', {
           url: '/create',
           templateUrl: 'templates/private/admin/client-create.html',
+          controller: 'clientCreateCtrl'
         })
         .state('client.create.user', {
           url: '/user',
@@ -53,6 +54,21 @@
           controller: 'productCreateCtrl'
         })
 
+        /**
+        * RUTAS DE ACCESO DE UN CLIENTE.
+        */
+        .state("clientRole", {
+          url: "/client",
+          templateUrl: "templates/private/client/index.html",
+          controller: "ClientController",
+          data: {
+            permissions: {
+              only: "CLIENT",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
         // Order routes.
         .state('order', {
           url: '/order',

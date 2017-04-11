@@ -1,10 +1,8 @@
 .client-create-wrapper {
   overflow: hidden;
-
   .section-header {
     background-color: @theme-nero;
     padding-left: 40px;
-
     h1 {
       font-size: 36px;
       color: @font-tussock;
@@ -105,7 +103,6 @@
         padding: 10px 15px;
         width: 100%;
         align-self: flex-start;
-        word-wrap: break-word;
       }
     }
     .selected-products {
@@ -116,6 +113,7 @@
       .title {
         background-color: @theme-nero;
         color: @font-tussock;
+        word-wrap: break-word;
         font-size: 130%;
         padding: 10px 15px;
         width: 100%;
@@ -152,6 +150,58 @@
     }
   }
 
+  .client-info {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+
+    .title {
+      background-color: @theme-nero;
+      color: @font-tussock;
+      font-size: 130%;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+    }
+    .form-group {
+      margin: 10px
+    }
+  }
+
+  .client-user {
+    width: 50%;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    .title {
+      background-color: @theme-nero;
+      color: @font-tussock;
+      font-size: 130%;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+    }
+
+    .margin-wrapper {
+      margin: 10px;
+      .form-group {
+        p {
+          background-color: @font-straw;
+          color: @theme-nero;
+          padding: 5px;
+        }
+      }
+    }
+  }
+
+  .button-nav {
+    margin: 10px 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    button {
+      margin-left: 10px;
+    }
+  }
+
   &.ng-enter,
   &.ng-leave {
     position: relative;
@@ -172,6 +222,36 @@
     animation: slideOutLeft 0.5s both ease;
   }
 }
+
+.client-list-wrapper {
+  .section-header {
+    background-color: @theme-nero;
+    padding-left: 40px;
+    h1 {
+      font-size: 36px;
+      color: @font-tussock;
+      padding: 15px;
+    }
+  }
+  .table-container {
+    padding: 10px;
+    table {
+      td {
+        span {
+          width: 100%;
+          text-align: center;
+          display: block;
+          padding: 10px;
+          margin: auto;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
 /* ANIMATIONS
 ============================================================================= */
 /* slide out to the left */

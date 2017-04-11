@@ -23,9 +23,10 @@
     } else {
       $scope.actualName = $scope.product.shortName;
     }
+
+    $scope.selectProduct = function () {
+      $scope.selectList.push(product);
+    }
   }
 
-  $scope.selectProduct = function () {
-    $scope.selectList.push(product);
-  }
 }())

@@ -1,23 +1,52 @@
-<div class="">
-  <div class="form-group">
-    <label for="legal_name">Razón social:</label>
-    <input type="text" name="legal_name" class="form-control" ng-model="client.legalName">
-    <label for="nit">NIT:</label>
-    <input type="text" name="nit" class="form-control" ng-model="client.nit">
-    <label for="trade-name">Nombre de la empresa:</label>
-    <input type="text" name="trade_name" class="form-control" ng-model="client.tradeName">
-    <label for="manager-name">Nombre del administrador:</label>
-    <input type="text" name="manager-name" class="form-control" ng-model="client.managerName">
-    <label for="manager-phonenumber">Telefono del administrador:</label>
-    <input type="text" name="manager-phonenumber" class="form-control" ng-model="client.managerPhonenumber">
-    <label for="bussines-phonenumber">Telefono de la empresa:</label>
-    <input type="text" name="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber">
-    <label for="additional-information">Información adicional:</label>
-    <input type="text" name="additional-information" class="form-control" ng-model="client.additionalInformation">
-
+<div>
+  <div class="client-info">
+    <div class="title">
+      Información del cliente
+    </div>
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label for="legal_name" class="control-label col-sm-2">Razón social:</label>
+        <div class="col-sm-4">
+          <input type="text" id="legal_name" class="form-control" ng-model="client.legalName">
+        </div>
+        <label for="nit" class="control-label col-sm-2">NIT:</label>
+        <div class="col-sm-4">
+          <input type="text" id="nit" class="form-control" ng-model="client.nit">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="trade-name" class="control-label col-sm-2">Nombre de la empresa:</label>
+        <div class="col-sm-4">
+          <input type="text" id="trade-name" class="form-control" ng-model="client.tradeName">
+        </div>
+        <label for="bussines-phonenumber" class="control-label col-sm-2">Telefono de la empresa:</label>
+        <div class="col-sm-4">
+          <input type="text" id="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="manager-name" class="control-label col-sm-2">Nombre del administrador:</label>
+        <div class="col-sm-4">
+          <input type="text" id="manager-name" class="form-control" ng-model="client.managerName">
+        </div>
+        <label for="manager-phonenumber" class="control-label col-sm-2">Telefono del administrador:</label>
+        <div class="col-sm-4">
+          <input type="text" id="manager-phonenumber" class="form-control" ng-model="client.managerPhonenumber">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="additional-information" class="control-label col-sm-2">Información adicional:</label>
+        <div class="col-sm-10">
+          <textarea id="additional-information" class="form-control" ng-model="client.additionalInformation">
+          </textarea>
+        </div>
+      </div>
+    </form>
+    <div class="button-nav">
+      <button type="button" name="notb-" ui-sref="client.create.products" class="btn btn-md btn-sienna">Siguiente</button>
+      <button type="button" name="btn" ui-sref="home" class="btn btn-md btn-sienna">Salir</button>
+    </div>
   </div>
-  <button type="button" name="button" ui-sref="client.create.user"
-    class="btn btn-md btn-sienna">Anterior</button>
-  <button type="button" name="button" ui-sref="client.create.products"
-    class="btn btn-md btn-sienna">Siguiente</button>
+
+
 </div>

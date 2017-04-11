@@ -60,7 +60,7 @@ module.exports = {
     managerPhonenumber = req.param('managerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
-    productsCodes = ['1A', '2A'];
+    productsCodes = req.param('productCodes');
 
     // billCountry = req.param('billCountry');
     // billDepartment = req.param('billDepartment');

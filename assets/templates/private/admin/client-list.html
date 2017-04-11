@@ -1,0 +1,33 @@
+<div class="client-list-wrapper">
+  <div class="section-header">
+    <h1>Lista de clientes</h1>
+  </div>
+  <div class="table-container">
+    <div class="table-responsive">
+
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <th>NIT</th>
+          <th>Razón social</th>
+          <th>Nombre de la empresa</th>
+          <th>Telefono empresa</th>
+          <th>Administrador</th>
+          <th>Telefono administrador</th>
+          <th>Detalles</th>
+        </thead>
+        <tbody>
+          <tr ng-repeat="client in clients">
+            <td>{{client.nit}}</td>
+            <td>{{client.legalName}}</td>
+            <td>{{client.tradeName}}</td>
+            <td>{{client.businessPhonenumber}}</td>
+            <td>{{client.managerName}}</td>
+            <td>{{client.managerPhonenumber}}</td>
+            <td><span class="fa fa-search"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

@@ -1,20 +1,19 @@
 <div class="">
   <div class="form-group">
-    <label for="legal_name">Legal name:</label>
-    <input type="text" name="legal_name" value=""
-      class="form-control">
+    <label for="legal_name">Razón social:</label>
+    <input type="text" name="legal_name" class="form-control" ng-model="client.legalName">
     <label for="nit">NIT:</label>
-    <input type="text" name="nit" value="" class="form-control">
-    <label for="trade-name">Trade name:</label>
-    <input type="text" name="trade_name" value="" class="form-control">
+    <input type="text" name="nit" class="form-control" ng-model="client.nit">
+    <label for="trade-name">Nombre de la empresa:</label>
+    <input type="text" name="trade_name" class="form-control" ng-model="client.tradeName">
     <label for="manager-name">Nombre del administrador:</label>
-    <input type="text" name="manager-name" value="" class="form-control">
+    <input type="text" name="manager-name" class="form-control" ng-model="client.managerName">
     <label for="manager-phonenumber">Telefono del administrador:</label>
-    <input type="text" name="manager-phonenumber" value="" class="form-control">
+    <input type="text" name="manager-phonenumber" class="form-control" ng-model="client.managerPhonenumber">
     <label for="bussines-phonenumber">Telefono de la empresa:</label>
-    <input type="text" name="bussines-phonenumber" value="" class="form-control">
+    <input type="text" name="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber">
     <label for="additional-information">Información adicional:</label>
-    <input type="text" name="additional-information" value="" class="form-control">
+    <input type="text" name="additional-information" class="form-control" ng-model="client.additionalInformation">
 
   </div>
   <button type="button" name="button" ui-sref="client.create.user"

@@ -1,4 +1,4 @@
-passwordangular.module('fournee')
+angular.module('fournee')
 .controller('signinCtrl', ['$scope', '$state', 'AuthService',
 function ($scope, $state, AuthService) {
 
@@ -25,15 +25,15 @@ function ($scope, $state, AuthService) {
 		}
 
 		//Inicialización de las credenciales de inicio de sesión.
-		credenciales = {
+		credentials = {
 			username: username,
 			password: password
 		};
 		$scope.signing = true;
 
 		//Llamado al servicio de signin de equipo.
-		AuthService.signinUser(credenciales)
-		.success(function(resultado) {
+		AuthService.signinUser(credentials)
+		.success(function(result) {
 			role = AuthService.getRole().toUpperCase();
 
 			if (role === "ADMIN") {
@@ -47,7 +47,7 @@ function ($scope, $state, AuthService) {
 		.error(function(err) {
 			$scope.signing = false;
 			$scope.loginError = true;
-			$scope.errorMensaje = "No se ha podido iniciar sesión, verifique su nombre de usuario o contraseña.";
+			$scope.errorMessage = "No se ha podido iniciar sesión, verifique su nombre de usuario o contraseña.";
 		});
 	};
 

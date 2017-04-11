@@ -1,10 +1,26 @@
 <div class="">
-  <div class="form-group">
-    <label for="products">Productos:</label>
-    <input type="text" name="products" value="" class="form-control">
+  <div class="product-selection">
+    <div class="products">
+      <div class="title">
+        Lista de productos
+      </div>
+      <product-card ng-repeat="product in products" product="product"
+        ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
+      </product-card>
+    </div>
+
+    <div class="selected-products">
+      <div class="title">
+        Seleccionados
+      </div>
+      <div ng-repeat="product in productsSelected" class="product"
+        ng-click="unSelectProduct(product)">
+        <span>{{product.shortName}}</span>
+        <span class="fa fa-trash"></span>
+      </div>
+    </div>
   </div>
-  <button type="button" name="button" ui-sref="client.create.info"
-    class="btn btn-md btn-sienna">Anterior</button>
-  <button type="button" name="button" ng-click="#"
-    class="btn btn-md btn-sienna">Confirmar</button>
+
+  <button type="button" name="button" ui-sref="client.create.info" class="btn btn-md btn-sienna">Anterior</button>
+  <button type="button" name="button" ng-click="createClient()" class="btn btn-md btn-sienna">Confirmar</button>
 </div>

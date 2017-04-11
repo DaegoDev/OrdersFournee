@@ -7,8 +7,8 @@
       templateUrl: 'templates/private/shared/product-card.html',
       scope : {
         product: '=',
-        options: '=?',
-        selectArray: '=?'
+        type: '@?',
+        selectList: '=?'
       },
       controller: 'productCardCtrl'
     }
@@ -17,10 +17,15 @@
   fournee.controller('productCardCtrl', ['$scope', '$log', productCardCtrl]);
 
   function productCardCtrl($scope, $log) {
+    var product = $scope.product;
     if ($scope.product.customName) {
       $scope.actualName = $scope.product.customName;
     } else {
-      $scope.actualName = $scope.product.shortName;      
+      $scope.actualName = $scope.product.shortName;
+    }
+    $scope.selectProduct = function () {
+      $scope.selectList.push(product);
     }
   }
+
 }())

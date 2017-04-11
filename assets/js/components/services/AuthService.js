@@ -21,7 +21,7 @@ var storageType = 'session';
 				PermRoleStore.defineRole('ANON', function () {return false;});
 				StorageService.set("auth_token", resultado.token, storageType);
 				StorageService.set("role", role, storageType);
-				$rootScope.$broadcast('renovarRol');
+				$rootScope.$broadcast('renovateRole');
 			});
 			return signin;
 		},
@@ -33,7 +33,7 @@ var storageType = 'session';
 			PermRoleStore.defineRole("ANON", function () {return true;})
 			StorageService.unset("auth_token", storageType);
 			StorageService.unset("role", storageType);
-			$rootScope.$broadcast('renovarRol');
+			$rootScope.$broadcast('renovateRole');
 		},
 
 		// Servicio para autenticar una sesión de usuario activa.
@@ -56,7 +56,7 @@ var storageType = 'session';
 	};
 }]);
 
-// Interceptor de peticiones para authorización de usuarios.
+//Interceptor de peticiones para authorización de usuarios.
 angular.module('fournee')
 .factory('AuthInterceptor', ['$q', '$injector', '$rootScope', function($q, $injector, $rootScope) {
 	var StorageService = $injector.get('StorageService');
@@ -82,7 +82,7 @@ angular.module('fournee')
 				StorageService.unset('role', storageType);
 				PermRoleStore.clearStore();
 				PermRoleStore.defineRole('ANON', function () {return true;});
-				$rootScope.$broadcast('renovarRol');
+				$rootScope.$broadcast('renovateRole');
 				$injector.get('$state').go('home');
 			}
 			return $q.reject(response);

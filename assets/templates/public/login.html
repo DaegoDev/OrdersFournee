@@ -7,15 +7,15 @@
     </li>
   </ul>
 
-  <form  class="" >
+  <form class="">
     <div class="form-group">
-      <label for="username" class="sr-only">label</label>
-      <input id="testlog" type="text" name="username" value="" placeholder="Nombre de usuario"
-        class="form-control">
-        <input type="text" name="password" value="" placeholder="Contraseña"
-        class="form-control">
+      <input type="text" name="username" id="testlog" value="" placeholder="Nombre de usuario"
+      ng-model="user.username" required class="form-control">
     </div>
-    <input type="submit" value="Iniciar sesión"
-      class="btn btn-md btn-block">
+    <div class="form-group">
+      <input type="password" name="password" value="" placeholder="Contraseña"
+      ng-model="user.password" required class="form-control">
+    </div>
+    <input type="submit" value="Iniciar sesión" class="btn btn-md btn-block">
   </form>
 </div>

@@ -72,7 +72,8 @@
         })
         .state('order.create.info', {
           url: '/info',
-          templateUrl: 'templates/private/client/order-create-info.html'
+          templateUrl: 'templates/private/client/order-create-info.html',
+          controller: 'orderCreateCtrl'
         })
     }]);
 }());

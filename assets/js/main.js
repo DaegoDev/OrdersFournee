@@ -2,7 +2,7 @@
 
 (function(){
   var fournee = angular.module('fournee',
-    ['ui.router', 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
+    ['ui.router','permission', 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
 
   // Angular filters
   fournee.filter('capitalize', function() {

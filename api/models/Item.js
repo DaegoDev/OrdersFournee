@@ -15,7 +15,6 @@ module.exports = {
       size: 64,
       notNull: true,
       required: true,
-      unique: true,
       columnName: 'value'
     },
     shortValue: {
@@ -23,7 +22,6 @@ module.exports = {
       size: 8,
       notNull: true,
       required: true,
-      unique : true,
       columnName: 'short_value'
     },
     // Añade una referencia a product

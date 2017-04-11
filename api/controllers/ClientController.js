@@ -22,21 +22,21 @@ module.exports = {
     var managerPhonenumber = null;
     var businessPhonenumber = null;
     var clientAdditionalInformation = null;
-    var billCountry = null;
-    var billDepartment = null;
-    var billCity = null;
-    var billNeighborhood = null;
-    var billNomenclature = null;
-    var billAddrAdditionalInformation = null;
-    var deliveryCountry = null;
-    var deliveryDepartment = null;
-    var deliveryCity = null;
-    var deliveryNeighborhood = null;
-    var deliveryNomenclature = null;
-    var delivAddrAdditionalInformation = null;
+    var productsIds = [];
+    var clientProductsCredentials = [];
+    // var billCountry = null;
+    // var billDepartment = null;
+    // var billCity = null;
+    // var billNeighborhood = null;
+    // var billNomenclature = null;
+    // var billAddrAdditionalInformation = null;
+    // var deliveryCountry = null;
+    // var deliveryDepartment = null;
+    // var deliveryCity = null;
+    // var deliveryNeighborhood = null;
+    // var deliveryNomenclature = null;
+    // var delivAddrAdditionalInformation = null;
     var role = null;
-    var username = null;
-    var password = null;
 
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
@@ -55,45 +55,39 @@ module.exports = {
       return res.badRequest('Se debe ingresar el nombre de la empresa.');
     }
 
-    username = req.param('username');
-    if (!username) {
-      return res.badRequest('Se debe ingresar un nombre de usuario.');
-    }
-
-    password = req.param('password');
-    if (!password) {
-      return res.badRequest('Se debe ingresar una contraseña.');
-    }
 
     managerName = req.param('managerName');
     managerPhonenumber = req.param('managerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
-    billCountry = req.param('billCountry');
-    billDepartment = req.param('billDepartment');
-    billCity = req.param('billCity');
-    billNeighborhood = req.param('billNeighborhood');
-    billNomenclature = req.param('billNomenclature');
-    billAddrAdditionalInformation = req.param('billAddrAdditionalInformation');
-    deliveryCountry = req.param('deliveryCountry');
-    deliveryDepartment = req.param('deliveryDepartment');
-    deliveryCity = req.param('deliveryCity');
-    deliveryNeighborhood = req.param('deliveryNeighborhood');
-    deliveryNomenclature = req.param('deliveryNomenclature');
-    delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
+    productsIds = ['1A', '2A'];
+
+    // billCountry = req.param('billCountry');
+    // billDepartment = req.param('billDepartment');
+    // billCity = req.param('billCity');
+    // billNeighborhood = req.param('billNeighborhood');
+    // billNomenclature = req.param('billNomenclature');
+    // billAddrAdditionalInformation = req.param('billAddrAdditionalInformation');
+    // deliveryCountry = req.param('deliveryCountry');
+    // deliveryDepartment = req.param('deliveryDepartment');
+    // deliveryCity = req.param('deliveryCity');
+    // deliveryNeighborhood = req.param('deliveryNeighborhood');
+    // deliveryNomenclature = req.param('deliveryNomenclature');
+    // delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
 
     // Organización de credenciales y cifrado de la contraseña del usuario.
-    var userCredentials = createUserCredentials(username, password);
+    var userCredentials = createUserCredentials(legalName, nit);
+
     // Organización de credenciales de la dirección de entrega.
-    var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
-      billNomenclature, billAddrAdditionalInformation);
+  //  var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
+  //    billNomenclature, billAddrAdditionalInformation);
     // Organización de credenciales de la dirección de facturación.
-    var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
-      deliveryNomenclature, delivAddrAdditionalInformation);
+  //  var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
+  //    deliveryNomenclature, delivAddrAdditionalInformation);
     // Organización de credenciales del cliente.
+
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
       businessPhonenumber, clientAdditionalInformation);
-    var arrayAddressCredentials = [billAddressCredentials, deliveryAddressCredentials];
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -105,7 +99,7 @@ module.exports = {
     sql.beginTransaction()
       .then(function() {
         return sql.select('user', {
-          username: username
+          username: legalName
         });
       })
       .then(function(user) {
@@ -116,15 +110,37 @@ module.exports = {
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-        sails.log.debug(arrayAddressCredentials);
-        return sql.insert('address', arrayAddressCredentials);
-      })
-      .then(function(insertedAddresses) {
-        clientCredentials.bill_address = insertedAddresses.insertId;
-        clientCredentials.delivery_address = insertedAddresses.insertId + 1;
+      //   if (billAddressCredentials) {
+      //     return sql.insert('address', billAddressCredentials);
+      //   }
+      //   return null;
+      // })
+      // .then(function(insertedBillAddress) {
+      //   if (insertedBillAddress) {
+      //     clientCredentials.bill_address = insertedBillAddress.insertId;
+      //   }
+      //   if (deliveryAddressCredentials) {
+      //     return sql.insert('address', deliveryAddressCredentials);
+      //   }
+      //   return null;
+      // })
+      // .then(function(insertedDeliveryAddress) {
+      //   if (insertedDeliveryAddress) {
+      //     clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
+      //   }
         return sql.insert('client', clientCredentials);
       })
-      .then(function(user) {
+      .then(function(client) {
+        productsIds.forEach(function(productId, i, productsIds) {
+          var clientProduct = {
+            client: client.insertId,
+            product: productId
+          }
+          clientProductsCredentials.push(clientProduct);
+        })
+        return sql.insert('client_product', clientProductsCredentials);
+      })
+      .then(function(clientProduct) {
         sql.commit();
         connectionConfig.connection.end(function(err) {
           if (err) {
@@ -132,7 +148,7 @@ module.exports = {
           }
         });
         res.created({
-          user: user
+          ClientProduct: clientProduct
         });
       })
       .catch(function(err) {
@@ -239,7 +255,7 @@ module.exports = {
     if (!clientId) {
       return res.badRequest('Id del cliente vacio.');
     }
-    products = ["1A", "2B", "4B"];
+    products = ["1A", "2A", "3A"];
 
     // Valida que el cliente si exista, en caso de que si añade los preductos habilitados para él,
     // en caso de que no, envia el mensaje de error
@@ -305,13 +321,14 @@ module.exports = {
    * @param  {Object} res Response object
    */
   getProfile: function(req, res) {
-    var client = req.user;
+    var user = req.user;
     Client.find({
-        id: client.id
+        user: user.id
       })
       .populate('billAddress')
       .populate('deliveryAddress')
       .then(function(client) {
+        // sails.log.debug(client);
         return res.ok(client[0]);
       })
       .catch(function(err) {
@@ -338,7 +355,9 @@ module.exports = {
     Client.findOne(clientId)
       .then(function(client) {
         if (client) {
-          return ClientProduct.find({client: clientId}).populate('product');
+          return ClientProduct.find({
+            client: clientId
+          }).populate('product');
         }
         return res.serverError();
       })
@@ -351,10 +370,52 @@ module.exports = {
         sails.log.debug(err);
         res.serverError();
       })
+  },
+  /**
+   * Funcion para obtener validar que el cliente tenga toda la información en la base de datos.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  validateInformation: function(req, res) {
+    // Obtiene el id del usuario desde la petición
+    var user = req.user;
+    // Obtiene el cliente dado el usuario y valida que todos los campos no sean nulos
+    Client.query('SELECT * FROM client WHERE client.user = ?', [user.id], function(err, clients) {
+      if (err) {
+        return res.serverError(err);
+      }
+      var client = clients[0];
+      for (var field in client) {
+        if (!client[field]) {
+          return res.ok();
+        }
+      }
+      res.conflict();
+    })
+  },
+  /**
+   * Funcion para obtener todos los clientes.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getAll: function(req, res) {
+    Client.find()
+      .populate('billAddress')
+      .populate('deliveryAddress')
+      .then(function(clients) {
+        return res.ok(clients);
+      })
+      .catch(function(err) {
+        res.serverError(err)
+      });
   }
+
 };
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {
+  if (!country || !department || !city || !neighborhood || !nomenclature) {
+    return null;
+  }
   var addressCredentials = {
     country: country,
     department: department,

@@ -271,6 +271,9 @@ module.exports = {
                    LEFT JOIN product ON client_product.product = product.code \
                    WHERE orders.delivery_date = ?', [deliveryDate],
       function(err, orders) {
+        if (err) {
+          return res.serverError(err);
+        }
         var arrayOrders = {};
         orders.forEach(function(order, index, orders) {
           var orderId = order.id.toString();
@@ -290,9 +293,6 @@ module.exports = {
             baked: baked
           });
         });
-        if (err) {
-          return res.serverError(err);
-        }
         res.ok(arrayOrders);
       })
   },

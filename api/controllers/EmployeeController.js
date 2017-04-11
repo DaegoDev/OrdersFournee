@@ -113,20 +113,26 @@ module.exports = {
       return res.badRequest('Id del empleado vacio.');
     }
     // valida si existe el empleado con el ese id, si existe cambia el estado de su usuario en false
-    Employee.findOne({id: employeeId})
-    .then(function(employee) {
-      if (employee) {
-        return User.update({id: employee.user}, {state: false});
-      }
-      return res.serverError();
-    })
-    .then(function(user) {
-				return res.ok();
-		})
-    .catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    })
+    Employee.findOne({
+        id: employeeId
+      })
+      .then(function(employee) {
+        if (employee) {
+          return User.update({
+            id: employee.user
+          }, {
+            state: false
+          });
+        }
+        return res.serverError();
+      })
+      .then(function(user) {
+        return res.ok();
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
   },
   /**
    * Funcion para actualizar la contraseña.
@@ -136,7 +142,7 @@ module.exports = {
   updatePassword: function(req, res) {
     var employeeId = null;
     var currentPassword = req.param('currentPassword');
-		var newPassword = req.param('newPassword');
+    var newPassword = req.param('newPassword');
 
     // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
     employeeId = parseInt(req.param('employeeId'));
@@ -144,35 +150,44 @@ module.exports = {
       return res.badRequest('Id del empleado vacio.');
     }
     // valida si existe el empleado con el ese id, si existe cambia la contraseña de su usuario en false
-    Employee.findOne({id: employeeId})
-    .populate('user')
-		.then(function(employee) {
-			if (CriptoService.compararHash(currentPassword, employee.user.password)) {
-				newPassword = CriptoService.hashValor(newPassword);
-				return User.update({id: employee.user.id}, {password: newPassword});
-			}
-		})
-		.then(function(user) {
-				return res.ok();
-		})
-		.catch(function(err) {
-      sails.log.debug(err);
-      res.serverError();
-    });
+    Employee.findOne({
+        id: employeeId
+      })
+      .populate('user')
+      .then(function(employee) {
+        if (CriptoService.compararHash(currentPassword, employee.user.password)) {
+          newPassword = CriptoService.hashValor(newPassword);
+          return User.update({
+            id: employee.user.id
+          }, {
+            password: newPassword
+          });
+        }
+      })
+      .then(function(user) {
+        return res.ok();
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      });
   },
   /**
    * Funcion para obtener el perfil de un empleado.
    * @param  {Object} req Request object
    * @param  {Object} res Response object
    */
-   getProfile: function(req, res) {
-    var employee = req.user;
-    Employee.find({id: employee.id})
-    .then(function(employee) {
-      return res.ok(employee[0]);
-    })
-    .catch(function(err) {
-      res.serverError(err)
-    });
+  getProfile: function(req, res) {
+    sails.log.debug(req.user);
+    var user = req.user;
+    Employee.find({
+        user: user.id
+      })
+      .then(function(employee) {
+        return res.ok(employee[0]);
+      })
+      .catch(function(err) {
+        res.serverError(err)
+      });
   },
 };

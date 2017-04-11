@@ -79,7 +79,7 @@
 
 #client-create-form {
   width: 100%;
-  margin: 20px;
+  padding: 10px;
   overflow: hidden;
   .products {
     display: flex;
@@ -87,9 +87,70 @@
     product-card {
       &:hover {
         cursor: pointer;
-      }      
+      }
     }
   }
+
+  .product-selection {
+    display: flex;
+    .products {
+      border: 1px solid black;
+      border-radius: 5px;
+      margin: 5px;
+      width: 80%;
+      .title {
+        background-color: @theme-nero;
+        color: @font-tussock;
+        font-size: 130%;
+        padding: 10px 15px;
+        width: 100%;
+        align-self: flex-start;
+      }
+    }
+    .selected-products {
+      border: 1px solid black;
+      border-radius: 5px;
+      margin: 5px;
+      width: 20%;
+      .title {
+        background-color: @theme-nero;
+        color: @font-tussock;
+        font-size: 130%;
+        padding: 10px 15px;
+        width: 100%;
+      }
+      .product {
+        border-radius: 5px;
+        display: flex;
+        margin: 10px;
+        background-color: @theme-nero;
+        color: @font-tussock;
+        span:first-child {
+          flex-grow: 1;
+          padding: 5px 10px;
+        }
+        span:last-child {
+          display: none;
+        }
+        &:hover {
+          span:first-child {
+            display: none;
+          }
+          span:last-child {
+            background-color: @btn-sunset-orange;
+            color: @font-white;
+            text-align: center;
+            border-radius: 5px;
+            display: block;
+            flex-grow: 1;
+            padding: 10px 10px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
   &.ng-enter,
   &.ng-leave {
     position: relative;

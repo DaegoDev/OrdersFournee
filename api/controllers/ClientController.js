@@ -251,7 +251,7 @@ module.exports = {
     if (!clientId) {
       return res.badRequest('Id del cliente vacio.');
     }
-    products = ["1A", "2A", "3A"];
+    products = req.param('products');
 
     // Valida que el cliente si exista, en caso de que si añade los preductos habilitados para él,
     // en caso de que no, envia el mensaje de error
@@ -408,7 +408,11 @@ module.exports = {
       .populate('billAddress')
       .populate('deliveryAddress')
       .populate('clientEmployee')
+      .populate('user')
       .then(function(clients) {
+        clients.forEach(function (client, i) {
+          delete clients[i].user.password
+        });
         return res.ok(clients);
       })
       .catch(function(err) {

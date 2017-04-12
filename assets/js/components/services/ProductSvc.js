@@ -2,7 +2,7 @@ angular.module('fournee')
 .factory('productSvc', ['$http', '$rootScope',
 function ($http, $rootScope) {
   return {
-    // Servicio para crear un producto.
+    // Service to create a product.
     createProduct: function(credentials) {
       var create = $http({
         url: '/product/create',
@@ -11,13 +11,13 @@ function ($http, $rootScope) {
       });
       return create;
     },
-    getProducts: function(items) {
-      var create = $http({
+    // Service to get all existing products.
+    getProducts: function() {
+      var products = $http({
         url: '/product/getAll',
-        method: 'GET',
-        params: items
+        method: 'GET'
       });
-      return create;
+      return products;
     },
   };
 }]);

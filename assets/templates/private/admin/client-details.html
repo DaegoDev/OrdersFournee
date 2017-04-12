@@ -1,0 +1,122 @@
+<div class="client-details-wrapper">
+  <div class="section-header">
+    <h1>Detalles del cliente: {{client.legalName}}</h1>
+  </div>
+
+  <div class="client-info" ng-hide="enablingProduct">
+
+  <fieldset class="general-info form-horizontal">
+    <legend>Información general</legend>
+    <div class="form-group">
+      <label for="" class="control-label col-sm-2">Razón social</label>
+      <div class="col-sm-4">
+        <p class="form-control">{{client.legalName}}</p>
+      </div>
+      <label for="" class="control-label col-sm-2">NIT</label>
+      <div class="col-sm-4">
+        <p class="form-control">{{client.nit}}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="" class="control-label col-sm-2">Nombre de la empresa</label>
+      <div class="col-sm-4">
+        <p class="form-control">{{client.tradeName}}</p>
+      </div>
+      <label for="" class="control-label col-sm-2">Telefono de la empresa</label>
+      <div class="col-sm-4">
+        <p class="form-control">{{client.businessPhonenumber}}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="" class="control-label col-sm-2">Nombre del administrador</label>
+        <div class="col-sm-4">
+          <p class="form-control">{{client.managerName}}</p>
+        </div>
+        <label for="" class="control-label col-sm-2">Telefono del administrador</label>
+        <div class="col-sm-4">
+          <p class="form-control">{{client.managerPhonenumber}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="control-label col-sm-2">Información adicional</label>
+      <div class="col-sm-10">
+        <textarea class="form-control additional-info" rows="5" disabled>{{client.additionalInformation}}
+        </textarea>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="employee-list">
+    <legend>Lista de empleados</legend>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Telefono</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="employee in client.clientEmployee">
+          <td>{{employee.name}}</td>
+          <td>{{employee.phonenumber}}</td>
+          <td>{{employee.role}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+
+  <fieldset class="product-list">
+    <legend>Lista de productos</legend>
+    <ul>
+      <li ng-repeat="clientProduct in client.products">
+        {{clientProduct.product.name}}
+      </li>
+    </ul>
+  </fieldset>
+
+  <div class="button-list" ng-show="client.user.state == 1">
+    <button type="button" name="button" class="btn btn-sienna" ng-click="showProducts()">
+      Habilitar productos
+    </button>
+    <button type="button" name="button" class="btn btn-sienna" ng-click="disableClient()">
+      Deshabilitar cliente
+    </button>
+  </div>
+</div>
+
+  <div class="product-enabler" ng-show="enablingProduct">
+    <div class="product-selection">
+      <div class="products">
+        <div class="title">
+          Productos habilitados
+        </div>
+        <product-card ng-repeat="product in products" product="product"
+          ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
+        </product-card>
+      </div>
+
+      <div class="selected-products">
+        <div class="title">
+          Seleccionados
+        </div>
+        <div ng-repeat="product in selectedProducts" class="product"
+          ng-click="deselectProduct(product)">
+          <span>{{product.shortName}}</span>
+          <span class="fa fa-trash"></span>
+        </div>
+      </div>
+    </div>
+    <div class="button-list">
+      <button type="button" name="button" class="btn btn-sienna" ng-click="enableProducts()">
+        Confirmar
+      </button>
+      <button type="button" name="button" class="btn btn-sienna" ng-click="hideProducts()">
+        salir
+      </button>
+    </div>
+  </div>
+
+</div>

@@ -20,6 +20,14 @@
           templateUrl: 'templates/private/admin/client-list.html',
           controller: 'ClientListCtrl'
         })
+        .state('client.details', {
+          url: '/details',
+          templateUrl: 'templates/private/admin/client-details.html',
+          controller: 'ClientDetailsCtrl',
+          params: {
+            client: null
+          }
+        })
         .state('client.create', {
           url: '/create',
           templateUrl: 'templates/private/admin/client-create.html',

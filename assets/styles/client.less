@@ -1,8 +1,10 @@
 .client-create-wrapper {
   overflow: hidden;
+
   .section-header {
     background-color: @theme-nero;
     padding-left: 40px;
+
     h1 {
       font-size: 36px;
       color: @font-tussock;
@@ -18,6 +20,7 @@
     font: 18px Sans-Serif;
     margin-top: 20px;
     margin-bottom: 20px;
+
     li {
       // float: left;
       display: inline;
@@ -34,6 +37,7 @@
 
         &:hover {
           background-color: @theme-nero-hover;
+
           &::after {
             border-left: 20px solid @theme-nero-hover;
           }
@@ -79,76 +83,6 @@
   width: 100%;
   padding: 10px;
   overflow: hidden;
-  .products {
-    display: flex;
-    flex-wrap: wrap;
-    product-card {
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-
-  .product-selection {
-    display: flex;
-    .products {
-      border: 1px solid black;
-      border-radius: 5px;
-      margin: 5px;
-      width: 80%;
-      .title {
-        background-color: @theme-nero;
-        color: @font-tussock;
-        font-size: 130%;
-        padding: 10px 15px;
-        width: 100%;
-        align-self: flex-start;
-      }
-    }
-    .selected-products {
-      border: 1px solid black;
-      border-radius: 5px;
-      margin: 5px;
-      width: 20%;
-      .title {
-        background-color: @theme-nero;
-        color: @font-tussock;
-        word-wrap: break-word;
-        font-size: 130%;
-        padding: 10px 15px;
-        width: 100%;
-      }
-      .product {
-        border-radius: 5px;
-        display: flex;
-        margin: 10px;
-        background-color: @theme-nero;
-        color: @font-tussock;
-        span:first-child {
-          flex-grow: 1;
-          padding: 5px 10px;
-        }
-        span:last-child {
-          display: none;
-        }
-        &:hover {
-          span:first-child {
-            display: none;
-          }
-          span:last-child {
-            background-color: @btn-sunset-orange;
-            color: @font-white;
-            text-align: center;
-            border-radius: 5px;
-            display: block;
-            flex-grow: 1;
-            padding: 10px 10px;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-  }
 
   .client-info {
     border: 1px solid black;
@@ -162,8 +96,9 @@
       padding: 10px 15px;
       margin-bottom: 10px;
     }
+
     .form-group {
-      margin: 10px
+      margin: 10px;
     }
   }
 
@@ -183,6 +118,7 @@
 
     .margin-wrapper {
       margin: 10px;
+
       .form-group {
         p {
           background-color: @font-straw;
@@ -194,9 +130,10 @@
   }
 
   .button-nav {
-    margin: 10px 10px;
+    margin: 10px;
     display: flex;
     flex-direction: row-reverse;
+
     button {
       margin-left: 10px;
     }
@@ -227,25 +164,189 @@
   .section-header {
     background-color: @theme-nero;
     padding-left: 40px;
+
     h1 {
       font-size: 36px;
       color: @font-tussock;
       padding: 15px;
     }
   }
+
   .table-container {
     padding: 10px;
+
     table {
+      th {
+        font-size: 100%;
+        text-align: center;
+        font-weight: bold;
+        background-color: @theme-nero;
+        color: @font-tussock;
+        padding: 10px 1px;
+
+        &:hover {
+          color: @font-white;
+        }
+      }
+
       td {
+        font-size: 90%;
+
+        &:last-child {
+          background-color: @theme-nero;
+          color: @font-tussock;
+
+          &:hover {
+            color: @font-white;
+          }
+        }
+
         span {
           width: 100%;
           text-align: center;
           display: block;
           padding: 10px;
           margin: auto;
+
           &:hover {
             cursor: pointer;
           }
+        }
+      }
+    }
+  }
+}
+
+.client-details-wrapper {
+  .section-header {
+    background-color: @theme-nero;
+    padding-left: 40px;
+
+    h1 {
+      font-size: 36px;
+      color: @font-tussock;
+      padding: 15px;
+    }
+  }
+
+  fieldset {
+    margin: 15px;
+  }
+
+  .general-info {
+    .additional-info {
+      cursor: default;
+      resize: none;
+    }
+  }
+
+  .employee-list {
+    th {
+      font-weight: bold;
+    }
+  }
+
+  .product-list {
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px;
+        max-width: 200px;
+        background-color: @theme-nero;
+        color: @font-tussock;
+      }
+    }
+  }
+
+  .button-list {
+    display: flex;
+    margin: 15px;
+    flex-direction: row-reverse;
+    button {
+      margin: 0px 5px;
+    }
+  }
+
+  .product-enabler {
+    margin: 15px;
+  }
+}
+
+// Css style for the module of product selection
+.product-selection {
+  display: flex;
+
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 5px;
+    width: 80%;
+
+    .title {
+      background-color: @theme-nero;
+      color: @font-tussock;
+      font-size: 130%;
+      padding: 10px 15px;
+      width: 100%;
+      align-self: flex-start;
+    }
+    product-card {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .selected-products {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 5px;
+    width: 20%;
+
+    .title {
+      background-color: @theme-nero;
+      color: @font-tussock;
+      word-wrap: break-word;
+      font-size: 130%;
+      padding: 10px 15px;
+      width: 100%;
+    }
+
+    .product {
+      border-radius: 5px;
+      display: flex;
+      margin: 10px;
+      background-color: @theme-nero;
+      color: @font-tussock;
+
+      span:first-child {
+        flex-grow: 1;
+        padding: 5px 10px;
+      }
+
+      span:last-child {
+        display: none;
+      }
+
+      &:hover {
+        span:first-child {
+          display: none;
+        }
+
+        span:last-child {
+          background-color: @btn-sunset-orange;
+          color: @font-white;
+          text-align: center;
+          border-radius: 5px;
+          display: block;
+          flex-grow: 1;
+          padding: 10px;
+          cursor: pointer;
         }
       }
     }

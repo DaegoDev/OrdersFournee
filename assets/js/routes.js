@@ -25,7 +25,6 @@
             }
           }
         })
-
         // Client creation routes.
         .state('client', {
           url: '/client',

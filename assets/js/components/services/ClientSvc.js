@@ -10,6 +10,8 @@ function ($http) {
       });
       return clients;
     },
+
+    //service to disable a client.
     disableClient: function(client) {
       var msg = $http({
         url: '/client/delete',
@@ -18,6 +20,8 @@ function ($http) {
       });
       return msg;
     },
+
+    // service to get all de products available to a client.
     getProductsClient: function(client) {
       var products = $http({
         url: '/client/getProductsEnabled',
@@ -26,6 +30,8 @@ function ($http) {
       });
       return products;
     },
+
+    // service to enable a list of products to a client.
     enableProducts: function(clientProducts) {
       var client = $http({
         url: '/client/enableProduct',
@@ -33,6 +39,14 @@ function ($http) {
         params: clientProducts
       });
       return client;
+    },
+    // Service to get the client employees.
+    getClientEmployees: function() {
+      var clientEmployees = $http({
+        url: '/clientemployee/getEmployeesByClient',
+        method: 'GET',
+      });
+      return clientEmployees;
     }
   };
 }]);

@@ -1,21 +1,33 @@
 (function() {
   var fournee = angular.module('fournee');
-  fournee.controller('orderCreateCtrl', ['$scope', '$log', orderCreateCtrl]);
+  fournee.controller('orderCreateCtrl', ['$scope', '$log', 'ClientSvc', orderCreateCtrl]);
 
   // Timepicker para el rango de hora sugerida
-  function orderCreateCtrl($scope, $log) {
+  function orderCreateCtrl($scope, $log, ClientSvc) {
     $scope.timeInitial = new Date();
-    $scope.timeFinal = new Date();
+    $scope.timeInitial.setHours(12);
+    $scope.timeInitial.setMinutes(0);
+    $scope.timeFinal = $scope.timeInitial;
 
     $scope.hstep = 1;
     $scope.mstep = 10;
+    $scope.minTimeFinal = $scope.timeInitial;
+    $scope.minTimeInitial = new Date();
+    $scope.minTimeInitial.setHours(9);
+    $scope.minTimeInitial.setMinutes(0);
+    $scope.maxTimeInitial = new Date();
+    $scope.maxTimeInitial.setHours(18);
+    $scope.maxTimeInitial.setMinutes(0);
+    $scope.maxTimeFinal = $scope.maxTimeInitial;
 
     $scope.changedInitial = function() {
-      $log.log('Time changed to: ' + $scope.timeInitial);
+      // $log.log('Time changed to: ' + $scope.timeInitial);
+      $scope.timeFinal = $scope.timeInitial;
+      $scope.minTimeFinal = $scope.timeInitial;
     };
 
     $scope.changedFinal = function() {
-      $log.log('Time changed to: ' + $scope.timeFinal);
+      // $log.log('Time changed to: ' + $scope.timeFinal);
     };
 
     // Datepicker para la fecha de entrega
@@ -89,13 +101,12 @@
     }
 
     // Dropdown para listar los empleados del cliente
-    $scope.placement = {
-      options: [
-        'Empleado 1',
-        'Empleado 2',
-        'Empleado 3'
-      ],
-      selected: 'Empleado 1'
-    };
+    ClientSvc.getClientEmployees()
+      .then(function(res) {
+        $scope.placement = {
+          options: res.data,
+          selected: res.data[0],
+        };
+      });
   }
 }())

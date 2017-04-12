@@ -7,15 +7,45 @@
     </li>
   </ul>
 
-  <form  class="" >
+  <form class="" ng-submit="signinUser()" name="signin" novalidate>
+    <!-- NOMBRE DE USUARIO-->
     <div class="form-group">
-      <label for="username" class="sr-only">label</label>
-      <input id="testlog" type="text" name="username" value="" placeholder="Nombre de usuario"
-        class="form-control">
-        <input type="text" name="password" value="" placeholder="Contraseña"
-        class="form-control">
+      <div ng-class="{'has-error': signin.username.$invalid && (!signin.$pristine || signin.$submitted || signin.username.$touched),
+      'has-success': signin.username.$valid}">
+        <input type="text" name="username" id="testlog" value="" placeholder="Nombre de usuario" ng-model="user.username" required class="form-control">
+
+        <!-- VALIDACIONES DE NOMBRE DE USUARIO -->
+        <div ng-messages="signin.username.$error" ng-if="signin.username.$touched || signin.$submitted" ng-messages-multiple>
+          <p ng-message="required" class="help-block"><b>Debe ingresar un nombre de usuario.</b></p>
+        </div>
+      </div>
     </div>
-    <input type="submit" value="Iniciar sesión"
-      class="btn btn-md btn-block">
+
+    <!-- CONTRASEÑA -->
+    <div class="form-group">
+      <div ng-class="{'has-error': signin.password.$invalid && (!signin.$pristine || signin.$submitted || signin.password.$touched),
+      'has-success': signin.password.$valid}">
+        <input type="password" name="password" value="" placeholder="Contraseña" ng-model="user.password" required class="form-control">
+
+        <!-- VALIDACIONES DE CONTRASEÑA -->
+        <div ng-messages="signin.password.$error" ng-if="signin.password.$touched || signin.$submitted" ng-messages-multiple>
+          <p ng-message="required" class="help-block"><b>Debe ingresar una contraseña.</b></p>
+        </div>
+      </div>
+    </div>
+    <!-- INFORMACIÓN DE ERRORES -->
+    <div class="alert" ng-class="{'alert-success': !loginError, 'alert-danger': loginError}" ng-show="loginError">
+      <button type="button" class="close" ng-click="switchError('loginError')">×</button>
+      <strong> {{errorMessage}} </strong>
+    </div>
+    <div>
+      <a ui-sref="recoverPassword">¿Olvidaste tu contraseña?</a>
+    </div>
+    <br/>
+    <button class="btn btn-sienna btn-sm btn-block" type="submit">
+      <span ng-show="!signing" >Confirmar </span>
+      <span ng-show="signing">Ingresando <i class="glyphicon glyphicon-refresh gly-spin"></i></span>
+    </button>
   </form>
+
 </div>

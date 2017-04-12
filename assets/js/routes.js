@@ -10,6 +10,22 @@
           templateUrl: 'templates/public/home.html'
         })
 
+        /**
+        * RUTAS DE ACCESO DE UN ADMIN.
+        */
+        .state("admin", {
+          url: "/admin",
+          templateUrl: "templates/private/admin/index.html",
+          controller: "AdminController",
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+
         // Client creation routes.
         .state('client', {
           url: '/client',
@@ -62,14 +78,29 @@
           controller: 'productCreateCtrl'
         })
 
+        /**
+        * RUTAS DE ACCESO DE UN CLIENTE.
+        */
+        .state("clientRole", {
+          url: "/clientR",
+          templateUrl: "templates/private/client/index.html",
+          controller: "ClientController",
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
         // Order routes.
         .state('order', {
           url: '/order',
           templateUrl: 'templates/private/client/order.html'
         })
-        .state('order.list', {
+        .state('order.myList', {
           url: '/list',
-          templateUrl: 'templates/private/client/order-list.html'
+          templateUrl: 'templates/private/client/order-my-list.html'
         })
         .state('order.create', {
           url: '/create',
@@ -81,7 +112,8 @@
         })
         .state('order.create.info', {
           url: '/info',
-          templateUrl: 'templates/private/client/order-create-info.html'
+          templateUrl: 'templates/private/client/order-create-info.html',
+          controller: 'orderCreateCtrl'
         })
     }]);
 }());

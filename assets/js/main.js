@@ -1,5 +1,7 @@
 'use stric';
-var fournee = angular.module('fournee', ['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword', 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
+var fournee = angular.module('fournee',
+['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword',
+  'ngAnimate', 'ui.bootstrap', 'ngCookies']);
 
 // Inicializacion de la configuracion principal al ingresar al dominio.
 fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',

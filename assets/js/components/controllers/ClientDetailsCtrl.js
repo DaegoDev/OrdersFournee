@@ -33,6 +33,22 @@
         });;
     }
 
+    $scope.disableProduct = function(customProduct) {
+      var client = {
+        clientId: $scope.client.id,
+        product: customProduct.product.code
+      }
+      $log.debug(client);
+      ClientSvc.disableProduct(client)
+        .then(function (res) {
+          getClientProducts();
+          $log.debug('The client\'s product has been disabled');
+        })
+        .catch(function (err) {
+          $log.error('The client\'s product has not been disabled');
+        });
+    }
+
     // Function to disable/delete the current client.
     $scope.disableClient = function () {
       ClientSvc.disableClient({clientId: $scope.client.id})

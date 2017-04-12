@@ -3,10 +3,11 @@
 
   .section-header {
     background-color: @theme-nero;
-    padding-left: 40px;
-
+    padding-left: 30px;
+    word-wrap: break-word;
     h1 {
-      font-size: 36px;
+      font-weight: bold;
+      font-size: 150%;
       color: @font-tussock;
       padding: 15px;
     }
@@ -163,10 +164,12 @@
 .client-list-wrapper {
   .section-header {
     background-color: @theme-nero;
-    padding-left: 40px;
+    padding-left: 30px;
+    font-weight: bold;
+    word-wrap: break-word;
 
     h1 {
-      font-size: 36px;
+      font-size: 150%;
       color: @font-tussock;
       padding: 15px;
     }
@@ -191,25 +194,22 @@
 
       td {
         font-size: 90%;
-
+        word-wrap: break-word;
+        max-width: 250px;
         &:last-child {
           background-color: @theme-nero;
           color: @font-tussock;
-
+          span {
+            width: 100%;
+            text-align: center;
+            display: block;
+            padding: 10px;
+            margin: auto;
+          }
           &:hover {
             color: @font-white;
-          }
-        }
-
-        span {
-          width: 100%;
-          text-align: center;
-          display: block;
-          padding: 10px;
-          margin: auto;
-
-          &:hover {
             cursor: pointer;
+
           }
         }
       }
@@ -220,10 +220,11 @@
 .client-details-wrapper {
   .section-header {
     background-color: @theme-nero;
-    padding-left: 40px;
+    padding-left: 30px;
+    word-wrap: break-word;
 
     h1 {
-      font-size: 36px;
+      font-size: 150%;
       color: @font-tussock;
       padding: 15px;
     }
@@ -234,7 +235,13 @@
   }
 
   .general-info {
-    .additional-info {
+    input {
+      cursor: default;
+      background-color: white;
+    }
+
+    textarea {
+      background-color: white;
       cursor: default;
       resize: none;
     }
@@ -251,12 +258,47 @@
       display: flex;
       flex-wrap: wrap;
       li {
+        position: relative;
+        width: 150px;
         border-radius: 5px;
         padding: 10px;
         margin: 5px;
-        max-width: 200px;
         background-color: @theme-nero;
         color: @font-tussock;
+        p {
+
+        }
+        div {
+          border-radius: 5px;
+          position: absolute;
+          visibility: hidden;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-color: @btn-sunset-orange;
+          color: @font-white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          span {
+            display: block;
+            vertical-align: middle;
+            text-align: center;
+            background-color: @btn-sunset-orange;
+          }
+        }
+
+        &:hover {
+          cursor: pointer;
+          visibility: hidden;
+          p {
+            visibility: hidden;
+          }
+          div {
+            visibility: visible;
+          }
+        }
       }
     }
   }
@@ -318,35 +360,43 @@
     }
 
     .product {
+      position: relative;
       border-radius: 5px;
       display: flex;
       margin: 10px;
       background-color: @theme-nero;
       color: @font-tussock;
 
-      span:first-child {
+      .product-name {
         flex-grow: 1;
         padding: 5px 10px;
       }
 
-      span:last-child {
-        display: none;
+      .hover-trash {
+        border-radius: 5px;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: @btn-sunset-orange;
+        color: @font-white;
+        span {
+          text-align: center;
+        }
       }
 
       &:hover {
-        span:first-child {
-          display: none;
+        cursor: pointer;
+        .product-name {
+          visibility: hidden;
         }
-
-        span:last-child {
-          background-color: @btn-sunset-orange;
-          color: @font-white;
-          text-align: center;
-          border-radius: 5px;
-          display: block;
-          flex-grow: 1;
-          padding: 10px;
-          cursor: pointer;
+        .hover-trash {
+          visibility: visible;
         }
       }
     }

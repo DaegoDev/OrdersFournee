@@ -288,14 +288,14 @@ module.exports = {
     if (!clientId) {
       return res.badRequest('Id del cliente vacio.');
     }
-    products = ["1A"];
+    product = req.param('product');
 
     // Valida que el cliente si exista, en caso de que si añade los preductos habilitados para él,
     // en caso de que no, envia el mensaje de error
     Client.findOne(clientId)
       .then(function(client) {
         if (client) {
-          client.products.remove(products);
+          client.products.remove(product);
           return client.save();
         }
         return res.serverError();

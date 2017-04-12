@@ -10,40 +10,39 @@
     <div class="form-group">
       <label for="" class="control-label col-sm-2">Razón social</label>
       <div class="col-sm-4">
-        <p class="form-control">{{client.legalName}}</p>
+        <input type="text" disabled class="form-control" value="{{client.legalName}}">
       </div>
       <label for="" class="control-label col-sm-2">NIT</label>
       <div class="col-sm-4">
-        <p class="form-control">{{client.nit}}</p>
+        <input type="text" disabled class="form-control" value="{{client.nit}}">
       </div>
     </div>
 
     <div class="form-group">
       <label for="" class="control-label col-sm-2">Nombre de la empresa</label>
       <div class="col-sm-4">
-        <p class="form-control">{{client.tradeName}}</p>
+        <input type="text" disabled class="form-control" value="{{client.tradeName}}">
       </div>
       <label for="" class="control-label col-sm-2">Telefono de la empresa</label>
       <div class="col-sm-4">
-        <p class="form-control">{{client.businessPhonenumber}}</p>
+        <input type="text" disabled class="form-control" value="{{client.businessPhonenumber}}">
       </div>
     </div>
 
     <div class="form-group">
       <label for="" class="control-label col-sm-2">Nombre del administrador</label>
         <div class="col-sm-4">
-          <p class="form-control">{{client.managerName}}</p>
+          <input type="text" disabled class="form-control" value="{{client.managerName}}">
         </div>
         <label for="" class="control-label col-sm-2">Telefono del administrador</label>
         <div class="col-sm-4">
-          <p class="form-control">{{client.managerPhonenumber}}</p>
+          <input type="text" disabled class="form-control" value="{{client.managerPhonenumber}}">
         </div>
     </div>
     <div class="form-group">
       <label for="" class="control-label col-sm-2">Información adicional</label>
       <div class="col-sm-10">
-        <textarea class="form-control additional-info" rows="5" disabled>{{client.additionalInformation}}
-        </textarea>
+        <textarea class="form-control" rows="5" disabled>{{client.additionalInformation}}</textarea>
       </div>
     </div>
   </fieldset>
@@ -69,10 +68,13 @@
   </fieldset>
 
   <fieldset class="product-list">
-    <legend>Lista de productos</legend>
+    <legend>Productos habilitados</legend>
     <ul>
       <li ng-repeat="clientProduct in client.products">
-        {{clientProduct.product.name}}
+        <p>{{clientProduct.product.name}}</p>
+        <div ng-click="disableProduct(clientProduct)">
+          <span class="fa fa-trash"></span>
+        </div>
       </li>
     </ul>
   </fieldset>
@@ -91,7 +93,7 @@
     <div class="product-selection">
       <div class="products">
         <div class="title">
-          Productos habilitados
+          Productos disponibles
         </div>
         <product-card ng-repeat="product in products" product="product"
           ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
@@ -104,8 +106,10 @@
         </div>
         <div ng-repeat="product in selectedProducts" class="product"
           ng-click="deselectProduct(product)">
-          <span>{{product.shortName}}</span>
-          <span class="fa fa-trash"></span>
+          <span class="product-name">{{product.shortName}}</span>
+          <div class="hover-trash">
+            <span class="fa fa-trash"></span>
+          </div>
         </div>
       </div>
     </div>

@@ -40,6 +40,15 @@ function ($http) {
       });
       return client;
     },
+    // service to disable a product to a client.
+    disableProduct: function(clientProduct) {
+      var client = $http({
+        url: '/client/disableProduct',
+        method: 'PUT',
+        params: clientProduct
+      });
+      return client;
+    },
     // Service to get the client employees.
     getClientEmployees: function() {
       var clientEmployees = $http({

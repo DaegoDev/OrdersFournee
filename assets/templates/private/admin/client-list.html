@@ -4,7 +4,6 @@
   </div>
   <div class="table-container">
     <div class="table-responsive">
-
       <table class="table table-hover table-bordered table-condensed">
         <thead>
           <tr>
@@ -25,7 +24,9 @@
             <td>{{client.businessPhonenumber}}</td>
             <td>{{client.managerName}}</td>
             <td>{{client.managerPhonenumber}}</td>
-            <td><span class="fa fa-search" ng-click="showDetails(client)"></span></td>
+            <td ng-click="showDetails(client)">
+              <span class="fa fa-search"></span>
+            </td>
           </tr>
         </tbody>
       </table>

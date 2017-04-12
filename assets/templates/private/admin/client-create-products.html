@@ -15,8 +15,10 @@
       </div>
       <div ng-repeat="product in productsSelected" class="product"
         ng-click="unSelectProduct(product)">
-        <span>{{product.shortName}}</span>
-        <span class="fa fa-trash"></span>
+        <span class="product-name">{{product.shortName}}</span>
+        <div class="hover-trash">
+          <span class="fa fa-trash"></span>
+        </div>
       </div>
     </div>
   </div>

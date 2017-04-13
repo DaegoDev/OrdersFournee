@@ -36,6 +36,8 @@ module.exports = {
       return res.badRequest('Se debe ingresar el valor abreviado.');
     }
 
+    value = value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
+    shortValue = shortValue.toUpperCase();
     // Organización de credenciales de un item.
     var itemCredentials = {
       value: value,
@@ -116,6 +118,7 @@ module.exports = {
    * @param  {Object} res Response object
    * @return {Object}
    */
+
   createElement: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -129,6 +132,8 @@ module.exports = {
       return res.badRequest('Se debe ingresar un nombre.');
     }
 
+    //
+    name = name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
     // Organización de credenciales de un elemento.
     var elementCredentials = {
       name: name,

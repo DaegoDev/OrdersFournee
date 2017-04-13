@@ -1,6 +1,6 @@
 <div class="product-wrapper">
   <div class="product-header">
-    <h4>{{actualName}}</h4>
+    <h4>{{name}}</h4>
   </div>
 
   <div class="product-items">
@@ -13,10 +13,17 @@
   </div>
 
   <div class="amount-order" ng-show="type == 'orderProduct'">
-    <form class="form-horizontal" ng-submit="addProduct()">
-      <input type="submit" name="" value="Agregar" class="btn btn-sienna col-sm-6">
-      <div class="input-group col-sm-4 col-sm-offset-2">
+    <form class="" ng-submit="addProduct()">
+      <div class="input-group input-group-sm">
+        <div class="input-group-addon">
+          <span class="fa fa-hashtag"></span>
+        </div>
         <input type="number" ng-model="amount" class="form-control">
+      </div>
+      <div class="input-group">
+        <button type="submit" name="button" class="btn btn-sienna btn-sm">
+          <span class="fa fa-plus"></span>
+        </button>
       </div>
     </form>
   </div>

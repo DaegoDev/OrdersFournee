@@ -29,7 +29,8 @@
     "font-awesome": "fontawesome#^4.7.0",
     "angular-permission": "~5.2.2",
     "angular-password": "~1.0.3",
-    "angular-messages": "~1.6.3"
+    "angular-messages": "~1.6.3",
+    "angular-confirm": "angular1-confirm#^1.1.0"
   },
   "resolutions": {
     "angular": "1.6.4"

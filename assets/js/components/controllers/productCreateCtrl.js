@@ -1,10 +1,12 @@
 (function() {
     var fournee = angular.module('fournee');
-    fournee.controller('productCreateCtrl', ['$scope', '$log', 'productItemSvc','productSvc', productCreateCtrl]);
+    fournee.controller('productCreateCtrl',
+    ['$scope', '$log', 'productItemSvc','productSvc', productCreateCtrl]);
 
     function productCreateCtrl($scope, $log, productItemSvc, productSvc) {
       $scope.product = {};
       $scope.selectedItems = {};
+      $scope.isCreatingElement = false;
 
       $scope.createProduct = function () {
         var items = [];
@@ -20,14 +22,18 @@
           });
       }
 
+      $scope.toggleCreatingElement = function () {
+        $scope.isCreatingElement = !$scope.isCreatingElement;
+      }
+
       $scope.createElement = function () {
         productItemSvc.createElement({name: $scope.elementName})
         .then(function(res) {
-          $scope.items.push(res.data)
-          $log.warn($scope.items)
+          $scope.items.push(res.data);
+          $scope.isCreatingElement = false;
         })
         .catch(function(err) {
-
+          $log.err('The element has not been created.');
         });
       }
 

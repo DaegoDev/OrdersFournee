@@ -4,29 +4,36 @@
   </div>
   <div class="section-content">
     <div class="product-info">
-      <form class="form-horizontal">
+      <div class="form-horizontal">
         <div class="form-group">
           <label for="name" class="col-sm-2 control-label">Nombre:</label>
           <div class="col-sm-10">
-            <input id="name" type="text" class="form-control" disabled value="{{product.name}}">
+            <input type="text" class="form-control" readonly value="{{product.name}}">
           </div>
         </div>
         <div class="form-group">
           <label for="short-name" class="col-sm-2 control-label">Nombre abreviado:</label>
           <div class="col-sm-10">
-            <input id="short-name" type="text" class="form-control" disabled value="{{product.shortName}}">
+            <input type="text" class="form-control" readonly value="{{product.shortName}}">
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <input type="button" value="Añadir elemento" ng-show="!isElementCreate"
-            ng-click="isElementCreate = true" class="btn btn-sienna">
-            <input type="button" value="Crear elemento" ng-show="isElementCreate"
-            ng-click="createElement(); isElementCreate = false" class="btn btn-sienna">
-            <input type="text" name="" ng-show="isElementCreate" ng-model="elementName">
-            <input type="button" value="Crear producto" ng-click="createProduct()" class="btn btn-sienna"> </div>
+          <div class="col-sm-offset-2 col-sm-10 control-create">
+            <input type="button" value="Añadir elemento" ng-show="!isCreatingElement"
+            ng-click="toggleCreatingElement()" class="btn btn-sienna">
+
+            <div class="create-element" ng-show="isCreatingElement">
+              <form class="form-inline" ng-submit="createElement()">
+                <input type="text" class="form-control" ng-model="elementName">
+                <input type="button" value="Cancelar" ng-click="toggleCreatingElement()" class="btn btn-sienna">
+                <input type="submit" value="Crear elemento" class="btn btn-sienna">
+              </form>
+            </div>
+            <input type="button" value="Crear producto" ng-click="createProduct()"
+            class="btn btn-sienna">
+          </div>
         </div>
-      </form>
+      </div>
       <div class="product-items">
         <item-card ng-repeat="item in items" item="item" selected-item="selectedItems"></item-card>
       </div>

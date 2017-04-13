@@ -1,22 +1,24 @@
 <div class="" >
-  <div class="card-header" ng-click="toggle = !toggle">
-    <h1>{{item.name | capitalize}}: {{currentItem.value}}</h1>
-    <h1>{{item.values.length}}</h1>
+  <div class="card-header" ng-click="toggleCollapse()">
+    <p>{{item.name | capitalize}}:</p>
+    <p>{{currentItem.value || 'Seleccione un valor'}}</p>
+    <span>#{{item.items.length}}</span>
   </div>
 
-  <div class="items-content" ng-hide="toggle">
+  <div class="items-content" ng-hide="isCollapsed">
     <ul class="items">
-      <li ng-repeat="jsonValue in item.items" ng-click="selectItem(jsonValue)">
+      <li ng-repeat="jsonValue in item.items" ng-class="{selected: jsonValue.isSelected}"
+        ng-click="selectItem(jsonValue)">
         <h2>{{jsonValue.value}}</h2>
         <h3>{{jsonValue.shortValue}}</h3>
       </li>
     </ul>
   </div>
 
-  <div class="card-footer" ng-hide="toggle">
+  <div class="card-footer" ng-hide="isCollapsed">
     <div class="footer">
-      <form class="form-inline">
-        <button type="button" name="button" ng-click="createItem()" class="btn btn-sienna">
+      <form class="form-inline" ng-submit="createItem()">
+        <button type="submit" name="button" class="btn btn-sienna">
           <h1 style="display:inline-block">Añadir</h1>
           <span class="fa fa-plus" aria-hidden="true"></span>
         </button>

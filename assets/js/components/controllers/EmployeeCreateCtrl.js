@@ -1,8 +1,8 @@
 (function() {
   var fournee = angular.module('fournee');
-  fournee.controller('EmployeeCreateCtrl', ['$scope', '$log','$state', 'SignupService', employeeCreateCtrl]);
+  fournee.controller('EmployeeCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'SignupService', employeeCreateCtrl]);
 
-  function employeeCreateCtrl($scope, $log, $state, SignupService) {
+  function employeeCreateCtrl($scope, $log, $state, $ngConfirm, SignupService) {
     $scope.employee = {};
 
     // Dropdown para listar los tipos de empleados
@@ -22,8 +22,8 @@
       var rePassword = null;
 
       if (!$scope.employee) {
-  			return;
-  		}
+        return;
+      }
 
       name = $scope.employee.name;
       role = $scope.placement.selected.toLowerCase();
@@ -32,17 +32,17 @@
       rePassword = $scope.employee.rePassword;
 
       // Validación de los campos del formulario de registro del empleado.
-  		if (!name || !username || !role || !password) {
-  			return;
-  		}
+      if (!name || !username || !role || !password) {
+        return;
+      }
 
-  		if (name.length > 50) {
-  			return;
-  		}
+      if (name.length > 50) {
+        return;
+      }
 
-  		if (password.length < 6 || password !== rePassword) {
-  			return;
-  		}
+      if (password.length < 6 || password !== rePassword) {
+        return;
+      }
 
       var employeeCredentials = {
         name: name,
@@ -54,30 +54,58 @@
       $scope.signinup = true;
       SignupService.signupEmployee(employeeCredentials)
         .then(function(res) {
-          $scope.alertMessage = "Empleado creado!";
-    			$scope.signingUp = false;
-    			$scope.signupError = false;
-    			$scope.showAlert = true;
+          // $scope.alertMessage = "Empleado creado!";
+          $scope.signingUp = false;
+          $scope.signupError = false;
+          // $scope.showAlert = true;
           $scope.signup.$setPristine();
-    			$scope.signup.$setUntouched();
-          // $state.go('employee.list');
+          $scope.signup.$setUntouched();
+
+          $ngConfirm({
+            console.log(name);
+            title: 'Empleado guardado correctamente!',
+            content: 'Notifiquele las credenciales de autenticación asignadas.\
+            <br\>\
+            <strong>Nombre de usuario: </strong>{{employee.username}}\
+            <br\>\
+            <strong>Contraseña: </strong>{{employee.password}}',
+            type: 'green',
+            typeAnimated: true,
+            columnClass: 'medium',
+            buttons: {
+              showEmployees: {
+                text: 'Mostrar empleados',
+                btnClass: 'btn-blue',
+                action: function() {
+                  $state.go('employee.list');
+                }
+              },
+              addEmployee: {
+                text: 'Nuevo empleado',
+                btnClass: 'btn-green',
+                action: function() {
+                  $scope.employee= {};
+                }
+              }
+            }
+          });
         })
         .catch(function(err) {
-          if( status === 409) {
-    				$scope.alertMessage = "Error, el nombre de usuario ya está registrado."
-    			} else {
-    				$scope.alertMessage = "No se ha podido crear el empleado.";
-    			}
-    			$scope.signingUp = false;
-    			$scope.signupError = true;
-    			$scope.showAlert = true;
+          if (err.status === 409) {
+            $scope.alertMessage = "Error, el nombre de usuario ya está registrado."
+          } else {
+            $scope.alertMessage = "No se ha podido crear el empleado.";
+          }
+          $scope.signingUp = false;
+          $scope.signupError = true;
+          $scope.showAlert = true;
         })
     }
 
     // switch flag
-  	$scope.switchAlert = function (value) {
-  		$scope[value] = !$scope[value];
-  	};
+    $scope.switchAlert = function(value) {
+      $scope[value] = !$scope[value];
+    };
 
   }
 }())

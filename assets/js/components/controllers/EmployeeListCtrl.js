@@ -13,7 +13,7 @@
       $ngConfirm({
         title: '¿Realmente desea desactivar el empleado?',
         useBootstrap: true,
-        content: 'Este dialogo eligirá la opción cancelar automaticamente en 6 segundo si no respondes.',
+        content: 'Este dialogo eligirá la opción cancelar automaticamente en 6 segundo si no responde.',
         autoClose: 'cancel|8000',
         buttons: {
           deleteUser: {
@@ -31,11 +31,15 @@
     }
 
     $scope.disableEmployee = function(employeeId) {
-      console.log(employeeId);
       EmployeeSvc.deleteEmployee({
           employeeId: employeeId
         })
         .then(function(res) {
+          angular.forEach($scope.employees, function (employee, key) {
+            if(employee.id == res.data.id){
+              employee.state = 'Inactivo';
+            }
+          })
           $ngConfirm('Usuario desactivado.');
           $state.go('employee.list')
         })

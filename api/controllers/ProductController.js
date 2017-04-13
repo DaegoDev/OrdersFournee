@@ -197,7 +197,7 @@ module.exports = {
   },
 
   /**
-   * Funcion para obtener los productos de un cliente.
+   * Funcion para obtener todos los productos.
    * @param  {Object} req Request object
    * @param  {Object} res Response object
    * @return {Object}
@@ -246,7 +246,6 @@ module.exports = {
             product = null;
           }
         })
-
         return res.ok(products)
       });
   },

@@ -119,7 +119,7 @@
       })
       .catch(function (err) {
         $log.error('Cant\' get the client products.');
-      });;
+      });
     }
   }
 }())

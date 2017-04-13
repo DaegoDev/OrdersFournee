@@ -85,9 +85,7 @@ module.exports = {
             sails.log.debug(err);
           }
         });
-        res.created({
-          user: user
-        });
+        res.created(user);
       })
       .catch(function(err) {
         sql.rollback(function(err) {
@@ -173,7 +171,6 @@ module.exports = {
    * @param  {Object} res Response object
    */
   getProfile: function(req, res) {
-    sails.log.debug(req.user);
     var user = req.user;
     Employee.find({
         user: user.id
@@ -185,4 +182,36 @@ module.exports = {
         res.serverError(err)
       });
   },
+  /**
+   * Funcion para obtener todos los empleados.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getAll: function(req, res) {
+    Employee.find()
+      .populate('user')
+      .then(function(employees) {
+        var employeesArray = [];
+        employees.forEach(function(employee, i, employees) {
+          var state = null;
+          if (employee.user.state) {
+            state = "Activo";
+          } else {
+            state = "Inactivo";
+          }
+          var response = {
+            id: employee.id,
+            name: employee.name,
+            username: employee.user.username,
+            role: employee.user.role,
+            state: state
+          }
+          employeesArray.push(response);
+        })
+        res.ok(employeesArray);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  }
 };

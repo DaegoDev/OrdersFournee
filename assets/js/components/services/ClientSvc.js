@@ -56,6 +56,14 @@ function ($http) {
         method: 'GET',
       });
       return clientEmployees;
+    },
+    // Service to validate the information the a client.
+    validateInformation: function() {
+      var validatedInformation = $http({
+        url: '/client/validateInformation',
+        method: 'GET',
+      });
+      return validatedInformation;
     }
   };
 }]);

@@ -77,6 +77,23 @@
           controller: 'productCreateCtrl'
         })
 
+        // Employee routes
+        .state('employee',{
+          url: '/employee',
+          templateUrl: 'templates/private/admin/employee.html'
+        })
+        .state('employee.create', {
+          url: '/create',
+          templateUrl: 'templates/private/admin/employee-create.html',
+          controller: 'EmployeeCreateCtrl'
+        })
+        .state('employee.list', {
+          url: '/list',
+          templateUrl: 'templates/private/admin/employee-list.html',
+          controller: 'EmployeeListCtrl'
+        })
+
+
         /**
         * RUTAS DE ACCESO DE UN CLIENTE.
         */
@@ -95,7 +112,8 @@
         // Order routes.
         .state('order', {
           url: '/order',
-          templateUrl: 'templates/private/client/order.html'
+          templateUrl: 'templates/private/client/order.html',
+          controller: 'OrderCtrl'
         })
         .state('order.myList', {
           url: '/list',

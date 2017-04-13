@@ -383,15 +383,15 @@ module.exports = {
       var client = clients[0];
       for (var field in client) {
         if (!client[field]) {
-          return res.conflict();
+          return res.ok(false);
         }
       }
       ClientEmployee.find()
       .then(function(clientEmployees) {
         if(clientEmployees.length == 0){
-          res.conflict();
+          res.ok(false);
         }
-        res.ok(client);
+        res.ok(true);
       })
       .catch(function(err) {
         res.serverError(err);

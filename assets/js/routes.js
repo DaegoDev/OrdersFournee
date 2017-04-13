@@ -132,5 +132,12 @@
           templateUrl: 'templates/private/client/order-create-info.html',
           controller: 'orderCreateCtrl'
         })
+
+
+        /**
+        * RUTAS DE ACCESO DE UN EMPLEADO.
+        */
+
+        // 
     }]);
 }());

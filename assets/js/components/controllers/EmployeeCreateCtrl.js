@@ -19,6 +19,7 @@
       var role = null;
       var username = null;
       var password = null;
+      var rePassword = null;
 
       if (!$scope.employee) {
   			return;
@@ -28,13 +29,13 @@
       role = $scope.placement.selected.toLowerCase();
       username = $scope.employee.username;
       password = $scope.employee.password;
+      rePassword = $scope.employee.rePassword;
 
       // Validación de los campos del formulario de registro del empleado.
   		if (!name || !username || !role || !password) {
   			return;
   		}
 
-      console.log("paso...")
   		if (name.length > 50) {
   			return;
   		}
@@ -59,7 +60,7 @@
     			$scope.showAlert = true;
           $scope.signup.$setPristine();
     			$scope.signup.$setUntouched();
-          $state.go('employee.list');
+          // $state.go('employee.list');
         })
         .catch(function(err) {
           if( status === 409) {

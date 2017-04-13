@@ -1,30 +1,35 @@
 <div class="container-fluid " style="margin-top: 15px;">
-  <form name="signup" novalidate>
+  <form class="" ng-submit="createEmployee()" name="signup" novalidate>
     <fieldset>
       <legend>Información de usuario</legend>
       <div class="col-sm-8">
+
         <!-- NOMBRE DE USUARIO -->
         <div class="form-group">
           <div ng-class="{'has-error': signup.username.$invalid && (!signup.username.$pristine || signup.$submitted || signup.username.$touched),
           'has-success': signup.username.$valid}">
-          <label for="username">Nombre de usuario</label>
-          <input type="text" name="username" id="username" ng-model="employee.username" class="form-control" required/>
+            <label for="username">Nombre de usuario</label>
+            <input type="text" name="username" id="username" ng-model="employee.username" class="form-control" required/>
 
-          <!-- VALIDACIONES DE NOMBRE DE USUARIO-->
-          <div ng-messages="signup.username.$error" ng-if="signup.username.$touched || signup.$submitted" ng-messages-multiple>
+            <!-- VALIDACIONES DE NOMBRE DE USUARIO-->
+            <div ng-messages="signup.username.$error" ng-if="signup.username.$touched || signup.$submitted" ng-messages-multiple>
               <p ng-message="required" class="help-block"><b>El campo nombre de usuario es obligatorio.</b></p>
             </div>
           </div>
         </div>
-        <!-- CONTRASEÑA -->
+      </div>
+
+      <!-- CONTRASEÑA -->
+      <div class="col-sm-6">
+
         <div class="form-group">
           <div ng-class="{'has-error': signup.password.$invalid && (!signup.password.$pristine || signup.$submitted || signup.password.$touched),
           'has-success': signup.password.$valid}">
-          <label for="password">Contraseña</label>
-          <input type="password" name="password" id="password" ng-model="employee.password" class="form-control" required/>
+            <label for="password">Contraseña</label>
+            <input type="password" name="password" id="password" ng-model="employee.password" class="form-control" required/>
 
-          <!-- VALIDACIONES DE CONTRASEÑA -->
-          <div ng-messages="signup.password.$error" ng-if="signup.password.$touched || signup.$submitted" ng-messages-multiple>
+            <!-- VALIDACIONES DE CONTRASEÑA -->
+            <div ng-messages="signup.password.$error" ng-if="signup.password.$touched || signup.$submitted" ng-messages-multiple>
               <p ng-message="required" class="help-block"><b>El campo de contraseña es obligatorio.</b></p>
               <p ng-message="minlength" class="help-block"><b>La contraseña debe tener por lo menos 6 carácteres.</b></p>
             </div>
@@ -35,49 +40,52 @@
         <div class="form-group">
           <div ng-class="{'has-error': signup.rePassword.$invalid && (!signup.rePassword.$pristine || signup.$submitted || signup.rePassword.$touched),
         'has-success': signup.rePassword.$valid}">
-          <label for="rePassword">Confirmar contraseña</label>
-          <input type="password" name="rePassword" id="rePassword" ng-model="employee.rePassword" class="form-control" required/>
+            <label for="rePassword">Confirmar contraseña</label>
+            <input type="password" name="rePassword" id="rePassword" ng-model="employee.rePassword" class="form-control" match-password="password" required/>
 
-          <!-- VALIDACIONES DE CONTRASEÑA -->
-          <div ng-messages="signup.rePassword.$error" ng-if="signup.rePassword.$touched || signup.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo de contraseña es obligatorio.</b></p>
-            <p ng-message="minlength" class="help-block"><b>La contraseña debe tener por lo menos 6 carácteres.</b></p>
+            <!-- VALIDACIONES DE CONTRASEÑA -->
+            <div ng-messages="signup.rePassword.$error" ng-if="signup.rePassword.$touched || signup.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo de confirmar contraseña es obligatorio.</b></p>
+              <p ng-message="passwordMatch" class="help-block"><b>Las contraseñas deben ser iguales.</b></p>
+            </div>
           </div>
         </div>
-        </div>
       </div>
-
     </fieldset>
     <br />
+
     <fieldset>
       <legend>Información general</legend>
-      <div class="col-sm-8">
-        <!-- NOMBRE -->
-        <div class="form-group">
-          <div ng-class="{'has-error': signup.name.$invalid && (!signup.name.$pristine || signup.$submitted || signup.name.$touched),
+
+
+      <!-- NOMBRE -->
+      <div class="form-group">
+        <div ng-class="{'has-error': signup.name.$invalid && (!signup.name.$pristine || signup.$submitted || signup.name.$touched),
           'has-success': signup.name.$valid}">
           <label for="name">Nombre del empleado</label>
           <input type="text" name="name" id="name" ng-model="employee.name" class="form-control" required/>
 
           <!-- VALIDACIONES DE NOMBRE -->
           <div ng-messages="signup.name.$error" ng-if="signup.name.$touched || signup.$submitted" ng-messages-multiple>
-          <p ng-message="required" class="help-block"><b>El campo de nombre es obligatorio.</b></p>
-        </div>
-      </div>
-        </div>
-        <!-- TIPO DE EMPLEADO -->
-        <div class="form-group">
-          <div ng-class="{'has-error': signup.role.$invalid && (!signup.role.$pristine || signup.$submitted || signup.role.$touched),
-          'has-success': signup.role.$valid}">
-          <label for="roles">Tipo de empleado</label>
-          <select class="form-control" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
-          <!-- VALIDACIONES DE TIPO DE EMPLEADO -->
-          <div ng-messages="signup.role.$error" ng-if="signup.role.$touched || signup.$submitted" ng-messages-multiple>
-          <p ng-message="required" class="help-block"><b>El campo tipo de empleado es obligatorio.</b></p>
-        </div>
+            <p ng-message="required" class="help-block"><b>El campo de nombre es obligatorio.</b></p>
           </div>
         </div>
       </div>
+
+      <!-- TIPO DE EMPLEADO -->
+      <div class="form-group">
+        <div ng-class="{'has-error': signup.role.$invalid && (!signup.role.$pristine || signup.$submitted || signup.role.$touched),
+          'has-success': signup.role.$valid}">
+          <label for="roles">Tipo de empleado</label>
+          <select class="form-control" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
+
+          <!-- VALIDACIONES DE TIPO DE EMPLEADO -->
+          <div ng-messages="signup.role.$error" ng-if="signup.role.$touched || signup.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo tipo de empleado es obligatorio.</b></p>
+          </div>
+        </div>
+      </div>
+
     </fieldset>
     <br />
     <!-- PANEL DE ALERTA DE ERRORES -->
@@ -85,8 +93,8 @@
       <button type="button" class="close" ng-click="switchAlert('showAlert')">×</button>
       <strong> {{alertMessage}}</strong>
     </div>
-    <div class="button-nav">
-      <button type="button" name="button" ng-click="createEmployee()" class="btn btn-md btn-sienna ">Enviar</button>
+    <div class="col-md-4 " style="padding-left: 40px;">
+      <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Enviar</button>
     </div>
     <br />
   </form>

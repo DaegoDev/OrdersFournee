@@ -133,11 +133,17 @@
           controller: 'orderCreateCtrl'
         })
 
+        // Perfil routes
+        .state('clientProfile', {
+          url: '/clientProfile',
+          templateUrl: 'templates/private/client/client-profile.html',
+          controller: 'ClientProfileCtrl'
+        })
 
         /**
         * RUTAS DE ACCESO DE UN EMPLEADO.
         */
 
-        // 
+        //
     }]);
 }());

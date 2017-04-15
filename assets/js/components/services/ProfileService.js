@@ -38,6 +38,6 @@ angular.module('fournee')
 				params: credentials
 			});
 			return changePsw;
-		}
+		},
 	};
 }]);

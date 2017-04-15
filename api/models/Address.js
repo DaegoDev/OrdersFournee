@@ -7,6 +7,7 @@
  */
 
 module.exports = {
+  // migrate: 'drop',
   tableName: 'address',
   attributes: {
     country: {
@@ -40,7 +41,6 @@ module.exports = {
     nomenclature: {
       type: 'string',
       size: 64,
-      unique: true,
       notNull: true,
       required: true,
       columnName: 'nomenclature'

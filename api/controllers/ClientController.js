@@ -225,6 +225,8 @@ module.exports = {
           }, {
             password: newPassword
           });
+        }else {
+          throw 'Error con contraseña actual';
         }
       })
       .then(function(user) {
@@ -301,7 +303,6 @@ module.exports = {
         return res.serverError();
       })
       .then(function(client) {
-        sails.log.debug(client);
         res.ok({
           client: client
         })
@@ -323,9 +324,11 @@ module.exports = {
       })
       .populate('billAddress')
       .populate('deliveryAddress')
+      .populate('clientEmployee')
       .then(function(client) {
-        // sails.log.debug(client);
-        return res.ok(client[0]);
+        var profile = client[0];
+        delete profile.additionalInformation;
+        return res.ok(profile);
       })
       .catch(function(err) {
         res.serverError(err)
@@ -386,8 +389,9 @@ module.exports = {
           return res.ok(false);
         }
       }
-      ClientEmployee.find()
+      ClientEmployee.find({client: client.id})
       .then(function(clientEmployees) {
+        sails.log.debug(clientEmployees);
         if(clientEmployees.length == 0){
           res.ok(false);
         }
@@ -418,6 +422,280 @@ module.exports = {
       .catch(function(err) {
         res.serverError(err)
       });
+  },
+  /**
+   * Funcion para actualizar la información general de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  updateGeneralInfo: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = null;
+    var legalName = null;
+    var nit = null;
+    var tradeName = null;
+    var managerName = null;
+    var managerPhonenumber = null;
+    var businessPhonenumber = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    legalName = req.param('legalName');
+    if (!legalName) {
+      return res.badRequest('Se debe ingresar una razon social.');
+    }
+
+    nit = req.param('nit');
+    if (!nit) {
+      return res.badRequest('Se debe ingresar un nit.');
+    }
+
+    tradeName = req.param('tradeName');
+    if (!tradeName) {
+      return res.badRequest('Se debe ingresar el nombre de la empresa.');
+    }
+
+    managerName = req.param('managerName');
+    if (!managerName) {
+      return res.badRequest('Se debe ingresar el nombre del administrador.');
+    }
+
+    managerPhonenumber = req.param('managerPhonenumber');
+    if (!managerPhonenumber) {
+      return res.badRequest('Se debe ingresar el telefono del administrador.');
+    }
+
+    businessPhonenumber = req.param('businessPhonenumber');
+    if (!businessPhonenumber) {
+      return res.badRequest('Se debe ingresar el telefono de la empresa.');
+    }
+
+    var clientCredentials = {
+      legalName: legalName,
+      nit: nit,
+      tradeName: tradeName,
+      managerName: managerName,
+      managerPhonenumber: managerPhonenumber,
+      businessPhonenumber: businessPhonenumber
+    }
+    user = req.user;
+    Client.update({user: user.id}, clientCredentials)
+    .then(function(userUpdated) {
+      res.ok(userUpdated[0]);
+    })
+    .catch(function(err) {
+      res.serverError(err);
+    })
+  },
+  /**
+   * Funcion para crear o actualizar la dirección de facturación de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  updateBillAddress: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = null;
+    var billCountry = null;
+    var billDepartment = null;
+    var billCity = null;
+    var billNeighborhood = null;
+    var billNomenclature = null;
+    var billAddrAdditionalInformation = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    billCountry = req.param('billCountry');
+    if (!billCountry) {
+      return res.badRequest('Se debe ingresar el pais.');
+    }
+
+    billDepartment = req.param('billDepartment');
+    if (!billDepartment) {
+      return res.badRequest('Se debe ingresar el departamento.');
+    }
+
+    billCity = req.param('billCity');
+    if (!billCity) {
+      return res.badRequest('Se debe ingresar la cuidad.');
+    }
+
+    billNeighborhood = req.param('billNeighborhood');
+    if (!billNeighborhood) {
+      return res.badRequest('Se debe ingresar el barrio.');
+    }
+
+    billNomenclature = req.param('billNomenclature');
+    if (!billNomenclature) {
+      return res.badRequest('Se debe ingresar la nomenclatura.');
+    }
+
+    billAdditionalInformation = req.param('billAdditionalInformation');
+    if (!billAdditionalInformation) {
+      return res.badRequest('Se debe ingresar un punto de referencia.');
+    }
+
+    addressCredentials = {
+      country: billCountry,
+      department: billDepartment,
+      city: billCity,
+      neighborhood: billNeighborhood,
+      nomenclature: billNomenclature,
+      additionalInformation: billAdditionalInformation,
+    }
+
+    user = req.user;
+    Client.findOne({user: user.id})
+    .then(function(client) {
+      var billAddress = client.billAddress;
+      if(billAddress == null){
+        return Address.create(addressCredentials);
+      }else {
+        return Address.update({id: billAddress},addressCredentials);
+      }
+    })
+    .then(function(result) {
+      if(result.country){
+        return Client.update({user: user.id},{ billAddress: result.id});
+      }
+      res.ok();
+    })
+    .then(function(client) {
+      res.ok();
+    })
+    .catch(function (err) {
+      res.serverError(err);
+    })
+  },
+  /**
+   * Funcion para crear o actualizar la dirección de entrega de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  updateDeliveryAddress: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = null;
+    var deliveryCountry = null;
+    var deliveryDepartment = null;
+    var deliveryCity = null;
+    var deliveryNeighborhood = null;
+    var deliveryNomenclature = null;
+    var deliveryAdditionalInformation = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    deliveryCountry = req.param('deliveryCountry');
+    if (!deliveryCountry) {
+      return res.badRequest('Se debe ingresar el pais.');
+    }
+
+    deliveryDepartment = req.param('deliveryDepartment');
+    if (!deliveryDepartment) {
+      return res.badRequest('Se debe ingresar el departamento.');
+    }
+
+    deliveryCity = req.param('deliveryCity');
+    if (!deliveryCity) {
+      return res.badRequest('Se debe ingresar la cuidad.');
+    }
+
+    deliveryNeighborhood = req.param('deliveryNeighborhood');
+    if (!deliveryNeighborhood) {
+      return res.badRequest('Se debe ingresar el barrio.');
+    }
+
+    deliveryNomenclature = req.param('deliveryNomenclature');
+    if (!deliveryNomenclature) {
+      return res.badRequest('Se debe ingresar la nomenclatura.');
+    }
+
+    deliveryAdditionalInformation = req.param('deliveryAdditionalInformation');
+    if (!deliveryAdditionalInformation) {
+      return res.badRequest('Se debe ingresar un punto de referencia.');
+    }
+
+    addressCredentials = {
+      country: deliveryCountry,
+      department: deliveryDepartment,
+      city: deliveryCity,
+      neighborhood: deliveryNeighborhood,
+      nomenclature: deliveryNomenclature,
+      additionalInformation: deliveryAdditionalInformation,
+    }
+
+    user = req.user;
+    Client.findOne({user: user.id})
+    .then(function(client) {
+      var deliveryAddress = client.deliveryAddress;
+      if(deliveryAddress == null){
+        return Address.create(addressCredentials);
+      }else {
+        return Address.update({id: deliveryAddress},addressCredentials);
+      }
+    })
+    .then(function(result) {
+      sails.log.debug(result);
+      if(result.country){
+        return Client.update({user: user.id},{ deliveryAddress: result.id});
+      }
+      return res.ok();
+    })
+    .then(function(client) {
+      res.ok();
+    })
+    .catch(function (err) {
+      res.serverError(err);
+    })
+  },
+  /**
+   * Funcion para crear un empleado de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  createClientEmployee: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = req.user;
+    var name = null;
+    var phonenumber = null;
+    var role = null;
+
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    name = req.param('name');
+    if (!name) {
+      return res.badRequest('Se debe ingresar un nombre.');
+    }
+
+    phonenumber = req.param('phonenumber');
+    if (!phonenumber) {
+      return res.badRequest('Se debe ingresar un número de telefono.');
+    }
+
+    role = req.param('role');
+    if (!role) {
+      return res.badRequest('Se debe ingresar un rol.');
+    }
+
+    // Organización de credenciales.
+    var clientEmployeeCredentials = {
+      name: name,
+      phonenumber: phonenumber,
+      state: true,
+      role: role,
+    };
+
+    Client.findOne({user: user.id})
+    .then(function (client) {
+      clientEmployeeCredentials.client = client.id;
+      return ClientEmployee.create(clientEmployeeCredentials)
+    })
+    .then(function(clientEmployee) {
+      sails.log.debug(clientEmployee);
+      res.created(clientEmployee);
+    })
+    .catch(function(err) {
+      res.serverError(err);
+    })
   }
 
 };

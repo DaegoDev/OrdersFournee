@@ -14,7 +14,6 @@
     };
 
     $scope.createEmployee = function() {
-      console.log("creando...")
       var name = null;
       var role = null;
       var username = null;
@@ -62,13 +61,12 @@
           $scope.signup.$setUntouched();
 
           $ngConfirm({
-            console.log(name);
             title: 'Empleado guardado correctamente!',
             content: 'Notifiquele las credenciales de autenticación asignadas.\
             <br\>\
-            <strong>Nombre de usuario: </strong>{{employee.username}}\
+            <strong>Nombre de usuario: </strong>' + username +'\
             <br\>\
-            <strong>Contraseña: </strong>{{employee.password}}',
+            <strong>Contraseña: </strong>' + password ,
             type: 'green',
             typeAnimated: true,
             columnClass: 'medium',
@@ -85,6 +83,7 @@
                 btnClass: 'btn-green',
                 action: function() {
                   $scope.employee= {};
+                  $scope.$apply();
                 }
               }
             }

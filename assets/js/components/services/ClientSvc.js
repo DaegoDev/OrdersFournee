@@ -57,13 +57,49 @@ function ($http) {
       });
       return clientEmployees;
     },
-    // Service to validate the information the a client.
+    // Service to validate the information of a client.
     validateInformation: function() {
       var validatedInformation = $http({
         url: '/client/validateInformation',
         method: 'GET',
       });
       return validatedInformation;
-    }
+    },
+    // Service to update the general information of a client.
+    updateGeneralInfo: function(credentials) {
+      var clientUpdated = $http({
+        url: '/client/updateGeneralInfo',
+        method: 'PUT',
+        params: credentials
+      });
+      return clientUpdated;
+    },
+    // Service to update the bill address of a client.
+    updateBillAddress: function(credentials) {
+      var addressUpdated = $http({
+        url: '/client/updateBillAddress',
+        method: 'PUT',
+        params: credentials
+      });
+      return addressUpdated;
+    },
+    // Service to update the delivery address of a client.
+    updateDeliveryAddress: function(credentials) {
+      var addressUpdated = $http({
+        url: '/client/updateDeliveryAddress',
+        method: 'PUT',
+        params: credentials
+      });
+      return addressUpdated;
+    },
+    // Servicio para crear un empleado del cliente.
+    createClientEmployee: function(credentials) {
+      var create = $http({
+        url: '/client/createClientEmployee',
+        method: 'POST',
+        params: credentials
+      });
+      return create;
+    },
   };
 }]);

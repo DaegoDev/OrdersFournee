@@ -19,7 +19,7 @@
                 text: 'Ir al perfil',
                 btnClass: 'btn-red',
                 action: function() {
-                  $state.go('home');
+                  $state.go('clientProfile');
                 }
               }
             }

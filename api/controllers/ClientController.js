@@ -79,11 +79,11 @@ module.exports = {
     var userCredentials = createUserCredentials(legalName, nit);
 
     // Organización de credenciales de la dirección de entrega.
-  //  var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
-  //    billNomenclature, billAddrAdditionalInformation);
+    //  var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
+    //    billNomenclature, billAddrAdditionalInformation);
     // Organización de credenciales de la dirección de facturación.
-  //  var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
-  //    deliveryNomenclature, delivAddrAdditionalInformation);
+    //  var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
+    //    deliveryNomenclature, delivAddrAdditionalInformation);
     // Organización de credenciales del cliente.
 
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
@@ -110,24 +110,24 @@ module.exports = {
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-      //   if (billAddressCredentials) {
-      //     return sql.insert('address', billAddressCredentials);
-      //   }
-      //   return null;
-      // })
-      // .then(function(insertedBillAddress) {
-      //   if (insertedBillAddress) {
-      //     clientCredentials.bill_address = insertedBillAddress.insertId;
-      //   }
-      //   if (deliveryAddressCredentials) {
-      //     return sql.insert('address', deliveryAddressCredentials);
-      //   }
-      //   return null;
-      // })
-      // .then(function(insertedDeliveryAddress) {
-      //   if (insertedDeliveryAddress) {
-      //     clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
-      //   }
+        //   if (billAddressCredentials) {
+        //     return sql.insert('address', billAddressCredentials);
+        //   }
+        //   return null;
+        // })
+        // .then(function(insertedBillAddress) {
+        //   if (insertedBillAddress) {
+        //     clientCredentials.bill_address = insertedBillAddress.insertId;
+        //   }
+        //   if (deliveryAddressCredentials) {
+        //     return sql.insert('address', deliveryAddressCredentials);
+        //   }
+        //   return null;
+        // })
+        // .then(function(insertedDeliveryAddress) {
+        //   if (insertedDeliveryAddress) {
+        //     clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
+        //   }
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
@@ -137,8 +137,7 @@ module.exports = {
               client: client.insertId,
               product: productsCodes
             };
-          }
-          else {
+          } else {
             productsCodes.forEach(function(productCode, i, productsCodes) {
               var clientProduct = {
                 client: client.insertId,
@@ -237,7 +236,7 @@ module.exports = {
           }, {
             password: newPassword
           });
-        }else {
+        } else {
           throw 'Error con contraseña actual';
         }
       })
@@ -396,22 +395,26 @@ module.exports = {
         return res.serverError(err);
       }
       var client = clients[0];
+      sails.log.debug(client);
+      delete client.additional_information;
       for (var field in client) {
         if (!client[field]) {
           return res.ok(false);
         }
       }
-      ClientEmployee.find({client: client.id})
-      .then(function(clientEmployees) {
-        sails.log.debug(clientEmployees);
-        if(clientEmployees.length == 0){
-          res.ok(false);
-        }
-        res.ok(true);
-      })
-      .catch(function(err) {
-        res.serverError(err);
-      })
+      ClientEmployee.find({
+          client: client.id
+        })
+        .then(function(clientEmployees) {
+          sails.log.debug(clientEmployees);
+          if (clientEmployees.length == 0) {
+            res.ok(false);
+          }
+          res.ok(true);
+        })
+        .catch(function(err) {
+          res.serverError(err);
+        })
     })
   },
   /**
@@ -426,9 +429,10 @@ module.exports = {
       .populate('clientEmployee')
       .populate('user')
       .then(function(clients) {
-        clients.forEach(function (client, i) {
-          delete clients[i].user.password
-        });
+        sails.log.debug(clients);
+        // clients.forEach(function (client, i) {
+        //   delete clients[i].user.password
+        // });
         return res.ok(clients);
       })
       .catch(function(err) {
@@ -491,13 +495,15 @@ module.exports = {
       businessPhonenumber: businessPhonenumber
     }
     user = req.user;
-    Client.update({user: user.id}, clientCredentials)
-    .then(function(userUpdated) {
-      res.ok(userUpdated[0]);
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+    Client.update({
+        user: user.id
+      }, clientCredentials)
+      .then(function(userUpdated) {
+        res.ok(userUpdated[0]);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
    * Funcion para crear o actualizar la dirección de facturación de un cliente.
@@ -556,27 +562,35 @@ module.exports = {
     }
 
     user = req.user;
-    Client.findOne({user: user.id})
-    .then(function(client) {
-      var billAddress = client.billAddress;
-      if(billAddress == null){
-        return Address.create(addressCredentials);
-      }else {
-        return Address.update({id: billAddress},addressCredentials);
-      }
-    })
-    .then(function(result) {
-      if(result.country){
-        return Client.update({user: user.id},{ billAddress: result.id});
-      }
-      res.ok();
-    })
-    .then(function(client) {
-      res.ok();
-    })
-    .catch(function (err) {
-      res.serverError(err);
-    })
+    Client.findOne({
+        user: user.id
+      })
+      .then(function(client) {
+        var billAddress = client.billAddress;
+        if (billAddress == null) {
+          return Address.create(addressCredentials);
+        } else {
+          return Address.update({
+            id: billAddress
+          }, addressCredentials);
+        }
+      })
+      .then(function(result) {
+        if (result.country) {
+          return Client.update({
+            user: user.id
+          }, {
+            billAddress: result.id
+          });
+        }
+        res.ok();
+      })
+      .then(function(client) {
+        res.ok();
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
    * Funcion para crear o actualizar la dirección de entrega de un cliente.
@@ -635,28 +649,36 @@ module.exports = {
     }
 
     user = req.user;
-    Client.findOne({user: user.id})
-    .then(function(client) {
-      var deliveryAddress = client.deliveryAddress;
-      if(deliveryAddress == null){
-        return Address.create(addressCredentials);
-      }else {
-        return Address.update({id: deliveryAddress},addressCredentials);
-      }
-    })
-    .then(function(result) {
-      sails.log.debug(result);
-      if(result.country){
-        return Client.update({user: user.id},{ deliveryAddress: result.id});
-      }
-      return res.ok();
-    })
-    .then(function(client) {
-      res.ok();
-    })
-    .catch(function (err) {
-      res.serverError(err);
-    })
+    Client.findOne({
+        user: user.id
+      })
+      .then(function(client) {
+        var deliveryAddress = client.deliveryAddress;
+        if (deliveryAddress == null) {
+          return Address.create(addressCredentials);
+        } else {
+          return Address.update({
+            id: deliveryAddress
+          }, addressCredentials);
+        }
+      })
+      .then(function(result) {
+        sails.log.debug(result);
+        if (result.country) {
+          return Client.update({
+            user: user.id
+          }, {
+            deliveryAddress: result.id
+          });
+        }
+        return res.ok();
+      })
+      .then(function(client) {
+        res.ok();
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
    * Funcion para crear un empleado de un cliente.
@@ -696,18 +718,65 @@ module.exports = {
       role: role,
     };
 
-    Client.findOne({user: user.id})
-    .then(function (client) {
-      clientEmployeeCredentials.client = client.id;
-      return ClientEmployee.create(clientEmployeeCredentials)
-    })
-    .then(function(clientEmployee) {
-      sails.log.debug(clientEmployee);
-      res.created(clientEmployee);
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+    Client.findOne({
+        user: user.id
+      })
+      .then(function(client) {
+        clientEmployeeCredentials.client = client.id;
+        return ClientEmployee.create(clientEmployeeCredentials)
+      })
+      .then(function(clientEmployee) {
+        sails.log.debug(clientEmployee);
+        res.created(clientEmployee);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
+  /**
+   * Funcion para verificar si un cliente existe.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  validateClient: function(req, res) {
+    // Se declara las variables necesarias
+    var legalName = null;
+    var nit = null;
+    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
+    legalName = req.param('legalName');
+    if (!legalName) {
+      return res.badRequest('Razón social vacio.');
+    }
+    nit = parseInt(req.param('nit'));
+    if (!nit) {
+      return res.badRequest('NIT vacio.');
+    }
+    sails.log.debug(legalName);
+    sails.log.debug(nit);
+    // valida si existe el cliente con el ese id, si existe cambia el estado de su usuario en false
+    Client.findOne({
+        legalName: legalName
+      })
+      .then(function(client) {
+        if (client) {
+          res.ok(false);
+        } else {
+          return Client.findOne({
+            nit: nit
+          });
+        }
+      })
+      .then(function(client) {
+        if (client) {
+          res.ok(false);
+        } else {
+          res.ok(true)
+        }
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        res.serverError();
+      })
   }
 
 };

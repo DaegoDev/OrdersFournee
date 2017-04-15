@@ -28,12 +28,26 @@
         // Client creation routes.
         .state('client', {
           url: '/client',
-          templateUrl: 'templates/private/admin/client.html'
+          templateUrl: 'templates/private/admin/client.html',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('client.list', {
           url: '/list',
           templateUrl: 'templates/private/admin/client-list.html',
-          controller: 'ClientListCtrl'
+          controller: 'ClientListCtrl',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('client.details', {
           url: '/details',
@@ -41,56 +55,126 @@
           controller: 'ClientDetailsCtrl',
           params: {
             client: null
+          },
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
           }
         })
         .state('client.create', {
           url: '/create',
           templateUrl: 'templates/private/admin/client-create.html',
-          controller: 'clientCreateCtrl'
+          controller: 'clientCreateCtrl',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('client.create.user', {
           url: '/user',
-          templateUrl: 'templates/private/admin/client-create-user.html'
+          templateUrl: 'templates/private/admin/client-create-user.html',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('client.create.info', {
           url: '/info',
-          templateUrl: 'templates/private/admin/client-create-info.html'
+          templateUrl: 'templates/private/admin/client-create-info.html',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('client.create.products', {
           url: '/products',
-          templateUrl: 'templates/private/admin/client-create-products.html'
+          templateUrl: 'templates/private/admin/client-create-products.html',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
 
         // Product routes.
         .state('product', {
           url: '/product',
-          templateUrl: 'templates/private/shared/product.html'
+          templateUrl: 'templates/private/shared/product.html',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('product.list', {
           url: '/list',
           templateUrl: 'templates/private/shared/product-list.html',
-          controller: 'productListCtrl'
+          controller: 'productListCtrl',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('product.create', {
           url: '/create',
           templateUrl: 'templates/private/shared/product-create.html',
-          controller: 'productCreateCtrl'
+          controller: 'productCreateCtrl',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
 
         // Employee routes
         .state('employee',{
           url: '/employee',
-          templateUrl: 'templates/private/admin/employee.html'
+          templateUrl: 'templates/private/admin/employee.html',
         })
         .state('employee.create', {
           url: '/create',
           templateUrl: 'templates/private/admin/employee-create.html',
-          controller: 'EmployeeCreateCtrl'
+          controller: 'EmployeeCreateCtrl',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('employee.list', {
           url: '/list',
           templateUrl: 'templates/private/admin/employee-list.html',
-          controller: 'EmployeeListCtrl'
+          controller: 'EmployeeListCtrl',
+          data: {
+            permissions: {
+              only: "ADMIN",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
 
 
@@ -117,27 +201,62 @@
         })
         .state('order.myList', {
           url: '/list',
-          templateUrl: 'templates/private/client/order-my-list.html'
+          templateUrl: 'templates/private/client/order-my-list.html',
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('order.create', {
           url: '/create',
-          templateUrl: 'templates/private/client/order-create.html'
+          templateUrl: 'templates/private/client/order-create.html',
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('order.create.shoppingCart', {
           url: '/shoppingCart',
-          templateUrl: 'templates/private/client/order-create-shoppingCart.html'
+          templateUrl: 'templates/private/client/order-create-shoppingCart.html',
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
         .state('order.create.info', {
           url: '/info',
           templateUrl: 'templates/private/client/order-create-info.html',
-          controller: 'orderCreateCtrl'
+          controller: 'orderCreateCtrl',
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
 
         // Perfil routes
         .state('clientProfile', {
           url: '/clientProfile',
           templateUrl: 'templates/private/client/client-profile.html',
-          controller: 'ClientProfileCtrl'
+          controller: 'ClientProfileCtrl',
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
 
         /**
@@ -148,7 +267,14 @@
         .state('employeeProfile', {
           url: '/employeeProfile',
           templateUrl: 'templates/private/employee/employee-profile.html',
-          controller: 'EmployeeProfileCtrl'
+          controller: 'EmployeeProfileCtrl',
+          data: {
+            permissions: {
+              only: ["ADMIN", "DESPACHADOR"],
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
         })
     }]);
 }());

@@ -53,16 +53,5 @@
     $scope.isDespachador = function() {
       return $scope.role === "DESPACHADOR";
     };
-
-    $scope.authenticated = AuthService.isAuthenticated();
-
-  	$scope.$on('renovateRole', function(evt) {
-  		$scope.authenticated = AuthService.isAuthenticated();
-  	});
-
-  	$scope.signout = function () {
-  		AuthService.signout();
-  	}
-
   }
 }())

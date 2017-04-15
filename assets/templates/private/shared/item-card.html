@@ -1,34 +1,32 @@
-<div class="" >
+<div class="">
   <div class="card-header" ng-click="toggleCollapse()">
     <p>{{item.name | capitalize}}:</p>
     <p>{{currentItem.value || 'Seleccione un valor'}}</p>
     <span>#{{item.items.length}}</span>
   </div>
+  <div class="main-content" ng-hide="isCollapsed">
+    <div class="items-content">
+      <ul class="items">
+        <li ng-repeat="jsonValue in item.items" ng-class="{selected: jsonValue.isSelected}" ng-click="selectItem(jsonValue)">
+          <h2>{{jsonValue.value}}</h2>
+          <h3>{{jsonValue.shortValue}}</h3>
+        </li>
+      </ul>
+    </div>
 
-  <div class="items-content" ng-hide="isCollapsed">
-    <ul class="items">
-      <li ng-repeat="jsonValue in item.items" ng-class="{selected: jsonValue.isSelected}"
-        ng-click="selectItem(jsonValue)">
-        <h2>{{jsonValue.value}}</h2>
-        <h3>{{jsonValue.shortValue}}</h3>
-      </li>
-    </ul>
-  </div>
-
-  <div class="card-footer" ng-hide="isCollapsed">
-    <div class="footer">
-      <form class="form-inline" ng-submit="createItem()">
-        <button type="submit" name="button" class="btn btn-sienna">
-          <h1 style="display:inline-block">Añadir</h1>
-          <span class="fa fa-plus" aria-hidden="true"></span>
-        </button>
-        <label for="" class="sr-only">Valor:</label>
-        <input type="text" name="" placeholder="Valor" ng-model="itemValue"
-        class="form-control">
-        <label for="" class="sr-only">Abreviación:</label>
-        <input type="text" name="" placeholder="Abreviación" ng-model="itemShortValue"
-        class="form-control">
-      </form>
+    <div class="card-footer">
+      <div class="footer">
+        <form class="form-inline" ng-submit="createItem()">
+          <button type="submit" name="button" class="btn btn-sienna">
+        <h1 style="display:inline-block">Añadir</h1>
+        <span class="fa fa-plus" aria-hidden="true"></span>
+      </button>
+          <label for="" class="sr-only">Valor:</label>
+          <input type="text" name="" placeholder="Valor" ng-model="itemValue" class="form-control">
+          <label for="" class="sr-only">Abreviación:</label>
+          <input type="text" name="" placeholder="Abreviación" ng-model="itemShortValue" class="form-control">
+        </form>
+      </div>
     </div>
   </div>
 </div>

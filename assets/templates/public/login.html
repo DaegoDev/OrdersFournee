@@ -1,18 +1,25 @@
 <div class="login-wrapper">
   <ul class="login-nav">
-    <li>
-      <a href="" ng-click="focus()" for="testlog">
-        <i class="fa fa-sign-in" aria-hidden="true"></i>
+    <li ng-if="!authenticated" class="sign-in">
+      <a href="" ng-click="focus()">
+        <i class="fa fa-sign-in col-sm-2" aria-hidden="true"></i>
+      </a>
+    </li>
+
+    <li ng-if="authenticated" class="sign-out">
+      <a ui-sref="home" ng-click="signout()">
+        <i class="fa fa-sign-out col-sm-2"></i>
+        <span class="item-text col-sm-10">Cerrar sesión</span>
       </a>
     </li>
   </ul>
 
-  <form class="" ng-submit="signinUser()" name="signin" novalidate>
+  <form ng-submit="signinUser()" name="signin" ng-if="!authenticated" novalidate>
     <!-- NOMBRE DE USUARIO-->
     <div class="form-group">
       <div ng-class="{'has-error': signin.username.$invalid && (!signin.$pristine || signin.$submitted || signin.username.$touched),
       'has-success': signin.username.$valid}">
-        <input type="text" name="username" id="testlog" value="" placeholder="Nombre de usuario" ng-model="user.username" required class="form-control">
+        <input type="text" name="username" value="" placeholder="Nombre de usuario" ng-model="user.username" required class="form-control">
 
         <!-- VALIDACIONES DE NOMBRE DE USUARIO -->
         <div ng-messages="signin.username.$error" ng-if="signin.username.$touched || signin.$submitted" ng-messages-multiple>

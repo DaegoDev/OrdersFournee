@@ -125,10 +125,13 @@ module.exports = {
         return res.serverError();
       })
       .then(function(user) {
-        return res.ok();
+        var userDeleted = user[0];
+        return Employee.findOne({user: userDeleted.id});
+      })
+      .then(function(employee) {
+        return res.ok(employee);
       })
       .catch(function(err) {
-        sails.log.debug(err);
         res.serverError();
       })
   },

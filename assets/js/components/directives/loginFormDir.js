@@ -16,11 +16,21 @@
   fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStore', '$log', loginCtrl]);
 
   function loginCtrl($scope, $state, AuthService, $cookieStore, $log) {
+    $scope.user = {};
+    $scope.authenticated = AuthService.isAuthenticated();
+
+    $scope.$on('renovateRole', function(evt) {
+      $scope.authenticated = AuthService.isAuthenticated();
+    });
+
     $scope.focus = function() {
       $scope.toggleSidebar();
-      console.log(document.getElementById('testlog'))
-      document.getElementById('testlog').focus();
     }
+
+    $scope.signout = function () {
+      AuthService.signout();
+    }
+
     // Función para el inicio de sesión de un usuario.
     $scope.signinUser = function() {
       //Definición de variables.
@@ -32,6 +42,7 @@
       if (!$scope.user) {
         return;
       }
+      console.log('log');
 
       username = $scope.user.username;
       if (!username) {
@@ -42,7 +53,7 @@
       if (!password) {
         return;
       }
-
+console.log('log');
       //Inicialización de las credenciales de inicio de sesión.
       credentials = {
         username: username,
@@ -64,7 +75,6 @@
           }
         })
         .catch(function(err) {
-          console.log(err);
           $scope.signing = false;
           $scope.loginError = true;
           $scope.errorMessage = "No se ha podido iniciar sesión, verifique su nombre de usuario o contraseña.";

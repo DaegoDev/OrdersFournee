@@ -37,3 +37,12 @@ fournee.filter('capitalize', function() {
     return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
   }
 });
+
+fournee.filter('stateFilter', function() {
+  return function(input) {
+    if (input) {
+      return 'Activo';
+    }
+    return 'Inactivo';
+  }
+});

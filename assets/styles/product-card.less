@@ -3,17 +3,19 @@ product-card {
   margin: 10px;
   border: 1px solid;
   border-radius: 5px;
-
   &:hover {
-    .product-header {
-      background-color: @theme-nero-hover;
-
-      h4 {
-        color: @font-white;
+    .product-wrapper {
+      &.list, &.select {
+        cursor: pointer;
+      }
+      .product-header {
+        background-color: @theme-nero-hover;
+        h4 {
+          color: @font-white;
+        }
       }
     }
   }
-
   .product-wrapper {
     display: flex;
     flex-direction: column;

@@ -40,8 +40,19 @@ item-card {
     }
   }
 
+  .main-content {
+    &.ng-hide {
+      .animation(collapseItem 1s);
+    }
+    &.ng-hide-remove {
+      .animation(expandItem 2s);
+    }
+  }
+
 .items-content{
   padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
   .items {
     li {
       cursor: pointer;
@@ -83,3 +94,23 @@ item-card {
     }
   }
 }
+
+.keyframes(collapseItem; {
+  from {
+    max-height: 2400px;
+  }
+  to {
+    display: none;
+    max-height: 0px;
+  }
+});
+
+.keyframes(expandItem; {
+  from {
+    max-height: 0px;
+  }
+  to {
+    display: none;
+    max-height: 2400px;
+  }
+});

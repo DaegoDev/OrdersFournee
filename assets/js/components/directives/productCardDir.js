@@ -42,6 +42,7 @@
     }
 
     else if ($scope.type == 'list') {
+      $scope.class = ['list'];
       $scope.dirProduct = $scope.product;
       $scope.name = $scope.product.shortName;
     }

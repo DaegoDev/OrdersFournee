@@ -11,29 +11,16 @@
       </li>
     </ul>
   </div>
-  <div ng-if="!authenticated">
-    <div ng-transclude>
-      <!-- Content for login  -->
-    </div>
-  </div>
 
+  <div ng-transclude>
+      <!-- Content for login  -->
+  </div>
 
   <div class="navigation">
     <ul>
-      <div ng-if="authenticated">
-        <li class="item">
-          <a ui-sref="home" ng-click="signout()">
-            <i class="fa fa-sign-out col-sm-2"></i>
-            <span class="item-text col-sm-10">Cerrar sesión</span>
-          </a>
-        </li>
-        <br />
-        <br />
-        <br />
-      </div>
       <!-- Menu de acceso global -->
       <div>
-        <li class="item">
+        <li >
           <a ui-sref="home">
             <i class="fa fa-home col-sm-2"></i>
             <span class="item-text col-sm-10">Inicio</span>
@@ -43,20 +30,20 @@
 
       <!-- Menu de admin -->
       <div ng-if="isAdmin()">
-        <li class="item">
+        <li>
           <a ui-sref="product.list">
             <i class="fa fa-coffee col-sm-2"></i>
             <span class="item-text col-sm-10">Productos</span>
           </a>
         </li>
-        <li class="item">
-          <a ui-sref="client.create.info">
+        <li>
+          <a ui-sref="client.list">
             <i class="fa fa-user col-sm-2"></i>
             <span class="item-text col-sm-10">Clientes</span>
           </a>
         </li>
-        <li class="item">
-          <a ui-sref="employee.create">
+        <li>
+          <a ui-sref="employee.list">
             <i class="fa fa-black-tie col-sm-2"></i>
             <span class="item-text col-sm-10">Empleados</span>
           </a>
@@ -65,7 +52,7 @@
 
       <!-- Menu de clientes -->
       <div ng-if="isClient()">
-        <li class="item">
+        <li >
           <a ui-sref="order">
             <i class="fa fa-shopping-cart col-sm-2"></i>
             <span class="item-text col-sm-10">Pedidos</span>

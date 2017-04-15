@@ -51,7 +51,8 @@ module.exports.policies = {
     signup: 'isAdmin',
     delete: 'isAdmin',
     updatePassword: 'isEmployee',
-    getProfile: 'isEmployee'
+    getProfile: 'isEmployee',
+    updateInformation: 'isEmployee'
   },
 
   ItemController: {

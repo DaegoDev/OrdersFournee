@@ -1,18 +1,6 @@
 .client-create-wrapper {
   overflow: hidden;
 
-  .section-header {
-    background-color: @theme-nero;
-    padding-left: 30px;
-    word-wrap: break-word;
-    h1 {
-      font-weight: bold;
-      font-size: 150%;
-      color: @font-tussock;
-      padding: 15px;
-    }
-  }
-
   .client-breadcrumb {
     display: table;
     margin: 0 auto;
@@ -162,22 +150,8 @@
 }
 
 .client-list-wrapper {
-  .section-header {
-    background-color: @theme-nero;
-    padding-left: 30px;
-    font-weight: bold;
-    word-wrap: break-word;
-
-    h1 {
-      font-size: 150%;
-      color: @font-tussock;
-      padding: 15px;
-    }
-  }
-
   .table-container {
     padding: 10px;
-
     table {
       th {
         font-size: 100%;
@@ -209,7 +183,6 @@
           &:hover {
             color: @font-white;
             cursor: pointer;
-
           }
         }
       }
@@ -265,14 +238,15 @@
         margin: 5px;
         background-color: @theme-nero;
         color: @font-tussock;
+
         p {
 
         }
         div {
+          overflow: hidden;
           border-radius: 5px;
           position: absolute;
-          visibility: hidden;
-          width: 100%;
+          width: 0;
           height: 100%;
           top: 0;
           left: 0;
@@ -281,6 +255,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          transition: width 0.5s ease;
           span {
             display: block;
             vertical-align: middle;
@@ -291,12 +266,15 @@
 
         &:hover {
           cursor: pointer;
-          visibility: hidden;
           p {
             visibility: hidden;
           }
           div {
             visibility: visible;
+            width: 100%;
+            transition: width 0.5s ease;
+            span {
+            }
           }
         }
       }
@@ -374,17 +352,19 @@
 
       .hover-trash {
         border-radius: 5px;
-        visibility: hidden;
+        overflow: hidden;
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 0%;
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: @btn-sunset-orange;
         color: @font-white;
+
+        transition: width 0.5s ease;
         span {
           text-align: center;
         }
@@ -396,7 +376,8 @@
           visibility: hidden;
         }
         .hover-trash {
-          visibility: visible;
+          transition: width 0.5s ease;
+          width: 100%;
         }
       }
     }
@@ -405,6 +386,25 @@
 
 /* ANIMATIONS
 ============================================================================= */
+.keyframes(trashColorIn; {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+  });
+
+  .keyframes(trashColorOut; {
+    0% {
+      width: 100%;
+    }
+    100% {
+      visibility: hidden;
+      width: 0;
+    }
+    });
+
 /* slide out to the left */
 @keyframes slideOutLeft {
   to {

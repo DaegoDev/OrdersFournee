@@ -59,8 +59,8 @@
           $scope.signingUp = false;
           $scope.signupError = false;
           $scope.showAlertGeneral = true;
-          $scope.signup.$setPristine();
-          $scope.signup.$setUntouched();
+          $scope.update.$setPristine();
+          $scope.update.$setUntouched();
         })
         .catch(function(err) {
           $scope.alertMessageGeneral = "No se ha podido actualizar la información.";
@@ -98,8 +98,8 @@
           $scope.signingUp = false;
           $scope.signupError = false;
           $scope.showAlertBill = true;
-          $scope.signup.$setPristine();
-          $scope.signup.$setUntouched();
+          $scope.billAddressUpdate.$setPristine();
+          $scope.billAddressUpdate.$setUntouched();
         })
         .catch(function(err) {
           $scope.alertMessageBillAddress = "No se ha podido actualizar la dirección.";
@@ -137,8 +137,8 @@
           $scope.signingUp = false;
           $scope.signupError = false;
           $scope.showAlertDelivery = true;
-          $scope.signup.$setPristine();
-          $scope.signup.$setUntouched();
+          $scope.deliveryAddressUpdate.$setPristine();
+          $scope.deliveryAddressUpdate.$setUntouched();
         })
         .catch(function(err) {
           $scope.alertMessageDeliveryAddress = "No se ha podido actualizar la dirección.";
@@ -179,8 +179,8 @@
           $scope.signingUp = false;
           $scope.signupError = false;
           $scope.showAlertEmployee = true;
-          $scope.signup.$setPristine();
-          $scope.signup.$setUntouched();
+          $scope.register.$setPristine();
+          $scope.register.$setUntouched();
           $scope.employee = {};
           $scope.$apply();
         })

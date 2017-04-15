@@ -1,0 +1,108 @@
+<div class="client-details-wrapper container-fluid">
+  <div class="section-header">
+    <h1>Perfil: {{employee.name}}</h1>
+  </div>
+  <form class="form-horizontal" ng-submit="updateEmployee()" name="update" novalidate>
+    <fieldset>
+      <legend>Información general</legend>
+      <div class="form-group">
+        <div ng-class="{'has-error': update.name.$invalid && (!update.name.$pristine || update.$submitted || update.name.$touched),
+            'has-success': update.name.$valid}">
+          <label for="name" class="control-label col-sm-offset-2 col-sm-2">Nombre</label>
+          <div class="col-sm-4">
+            <input type="text" id="name" name="name" class="form-control" ng-model="employee.name" required>
+          </div>
+          <!-- VALIDACIONES DE RAZÓN SOCIAL-->
+          <div ng-messages="update.name.$error" ng-if="update.name.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
+          </div>
+        </div>
+      </div>
+      <!-- PANEL DE ALERTA DE ERRORES -->
+      <div class="alert col-sm-offset-4 col-sm-4" ng-class="{'alert-success': !error, 'alert-danger': error}" ng-show="showAlertEmployee">
+        <button type="button" class="close" ng-click="switchAlert('showAlertEmployee')">×</button>
+        <strong> {{alertMessageEmployee}}</strong>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-5 col-sm-2">
+          <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+  <form class="form-horizontal" ng-submit="updatePassword()" name="pswForm" novalidate>
+    <fieldset>
+      <legend>Cambiar contraseña</legend>
+      <div class="row container-fluid">
+        <strong>En esta sección podrá cambiar la contraseña que se le asignó.</strong>
+        <hr />
+      </div>
+      <!-- CONTRASEÑA ACTUAL -->
+      <div class="control-group form-group col-sm-12">
+        <div ng-class="{'has-error': pswForm.currentPassword.$inalid && (!pswForm.currentPassword.$pristine || pswForm.$submitted || pswForm.currentPassword.$touched),
+          'has-success': pswForm.currentPassword.$valid}">
+          <label for="currentPassword" class="control-label col-sm-offset-2 col-sm-2">Contraseña actual</label>
+          <div class="col-sm-4">
+            <input name="currentPassword" type="password" placeholder="Ingrese su contraseña actual." class="form-control" ng-model="user.currentPassword" required>
+          </div>
+
+          <!-- VALIDACIONES DE CONTRASEÑA ACTUAL-->
+          <div ng-messages="pswForm.currentPassword.$error" ng-if="pswForm.currentPassword.$touched || pswForm.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo de contraseña actual es obligatorio.</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTRASEÑA NUEVA-->
+      <div class="control-group form-group col-sm-12">
+        <div ng-class="{'has-error': pswForm.newPassword.$invalid && (!pswForm.newPassword.$pristine || pswForm.$submitted || pswForm.newPassword.$touched),
+          'has-success': pswForm.newPassword.$valid}">
+          <label for="newPassword" class="control-label col-sm-offset-2 col-sm-2">Contraseña nueva*</label>
+          <div class="col-sm-4">
+            <input name="newPassword" type="password" placeholder="Ingrese su contraseña nueva." class="form-control" ng-model="user.newPassword" ng-minlength="6" required>
+          </div>
+
+          <!-- VALIDACIONES DE CONTRASEÑA NUEVA-->
+          <div ng-messages="pswForm.newPassword.$error" ng-if="pswForm.newPassword.$touched || pswForm.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo de contraseña nueva es obligatorio.</b></p>
+            <p ng-message="minlength" class="help-block"><b>La contraseña debe tener por lo menos 6 carácteres.</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMFIRMAR CONTRASEÑA -->
+      <div class="control-group form-group col-sm-12">
+        <div ng-class="{'has-error': pswForm.rePassword.$invalid && (!pswForm.rePassword.$pristine || pswForm.$submitted || pswForm.rePassword.$touched),
+          'has-success': pswForm.rePassword.$valid}">
+          <label for="rePassword" class="control-label col-sm-offset-2 col-sm-2">Repetir contraseña*</label>
+          <div class="col-sm-4">
+            <input name="rePassword" type="password" placeholder="Vuelve a escribir la contraseña nueva." class="form-control" ng-model="user.rePassword" match-password="newPassword" required>
+          </div>
+
+          <!-- VALIDACIONES DE LA CONFIRMACIÓN DE CONTRASEÑA -->
+          <div ng-messages="pswForm.rePassword.$error" ng-if="pswForm.rePassword.$touched || pswForm.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo repetir contraseña es obligatorio.</b></p>
+            <p ng-message="passwordMatch" class="help-block"><b>Las contraseñas deben ser iguales.</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL DE ALERTA DE ERRORES -->
+      <div class="alert col-sm-offset-4 col-sm-3" ng-class="{'alert-success': !error, 'alert-danger': error}" ng-show="showAlertPassword">
+        <button type="button" class="close" ng-click="switchAlert('showAlertPassword')">×</button>
+        <strong> {{alertMessagePassword}}</strong>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-3">
+          <button class="btn btn-sienna btn-md btn-block" type="submit">
+          <span ng-show="!processing">Cambiar contraseña </span>
+          <span ng-show="processing">procesando <i class="glyphicon glyphicon-refresh gly-spin"></i></span>
+        </button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+</div>

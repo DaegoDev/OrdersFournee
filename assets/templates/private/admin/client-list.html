@@ -11,8 +11,7 @@
             <th>Razón social</th>
             <th>Nombre de la empresa</th>
             <th>Telefono empresa</th>
-            <th>Administrador</th>
-            <th>Telefono administrador</th>
+            <th>Estado</th>
             <th>Detalles</th>
           </tr>
         </thead>
@@ -22,8 +21,7 @@
             <td>{{client.legalName}}</td>
             <td>{{client.tradeName}}</td>
             <td>{{client.businessPhonenumber}}</td>
-            <td>{{client.managerName}}</td>
-            <td>{{client.managerPhonenumber}}</td>
+            <td>{{client.user.state | stateFilter}}</td>
             <td ng-click="showDetails(client)">
               <span class="fa fa-search"></span>
             </td>

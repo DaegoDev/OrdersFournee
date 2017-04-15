@@ -18,6 +18,16 @@ function ($http) {
         params: employee
       });
       return deleteEmployee;
-    }
+    },
+    // Service to deactivate employees.
+    updateInformation: function(credentials) {
+      var updateEmployee = $http({
+        url: '/employee/updateInformation',
+        method: 'PUT',
+        params: credentials
+      });
+      return updateEmployee;
+    },
+
   };
 }]);

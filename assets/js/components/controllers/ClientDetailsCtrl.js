@@ -1,9 +1,9 @@
 (function() {
   var fournee = angular.module('fournee');
   fournee.controller('ClientDetailsCtrl',
-  ['$scope', '$log','$state' ,'$stateParams', 'ClientSvc', 'productSvc', clientDetailsCtrl]);
+  ['$scope', '$log','$state' ,'$stateParams','$ngConfirm', 'ClientSvc', 'productSvc', clientDetailsCtrl]);
 
-  function clientDetailsCtrl($scope, $log, $state, $stateParams, ClientSvc, productSvc) {
+  function clientDetailsCtrl($scope, $log, $state, $stateParams, $ngConfirm, ClientSvc, productSvc) {
     $scope.client = $stateParams.client;
     $scope.selectedProducts = [];
 
@@ -34,31 +34,70 @@
     }
 
     $scope.disableProduct = function(customProduct) {
-      var client = {
-        clientId: $scope.client.id,
-        product: customProduct.product.code
-      }
-      $log.debug(client);
-      ClientSvc.disableProduct(client)
-        .then(function (res) {
-          getClientProducts();
-          $log.debug('The client\'s product has been disabled');
-        })
-        .catch(function (err) {
-          $log.error('The client\'s product has not been disabled');
-        });
+      $ngConfirm({
+        title: 'Alerta!!',
+        content: 'Está seguro que desea eliminar el producto <b>' + customProduct.product.name +'</b>?',
+        buttons: {
+          exit: {
+            text: 'Salir',
+            btnClass: 'btn-sienna',
+            action: function () {
+            }
+          },
+          confirm: {
+            text: 'Confirmar',
+            btnClass: 'btn-sienna',
+            action: function () {
+              var client = {
+                clientId: $scope.client.id,
+                product: customProduct.product.code
+              }
+              ClientSvc.disableProduct(client)
+                .then(function (res) {
+                  getClientProducts();
+                  $log.debug('The client\'s product has been disabled');
+                })
+                .catch(function (err) {
+                  $ngConfirm('El producto no se ha podido deshabilitar.', 'Error.')
+                  $log.error('The client\'s product has not been disabled');
+                });
+            }
+          }
+        }
+      });
     }
 
     // Function to disable/delete the current client.
     $scope.disableClient = function () {
-      ClientSvc.disableClient({clientId: $scope.client.id})
-        .then(function (res) {
-          $scope.client.user.state = 0;
-          $log.debug(res);
-        })
-        .catch(function (err) {
-          $log.error('The client has not been disabled.');
-        });
+      $ngConfirm({
+        title: 'Alerta!!',
+        content: 'Está a punto de deshabilitar al cliente <b>' + $scope.client.legalName +'</b>',
+        backgroundDismiss: true,
+        buttons: {
+          exit: {
+            text: 'Salir',
+            btnClass: 'btn-sienna',
+            action: function () {
+            }
+          },
+          confirm: {
+            text: 'Confirmar',
+            btnClass: 'btn-sienna',
+            action: function () {
+              ClientSvc.disableClient({clientId: $scope.client.id})
+                .then(function (res) {
+                  $ngConfirm('El cliente ha sido deshabilitado.', 'Cliente deshabilitado.')
+                  $scope.client.user.state = 0;
+                  $log.debug(res);
+                })
+                .catch(function (err) {
+                  $log.error('The client has not been disabled.');
+                });
+            }
+          }
+        }
+      });
+
     }
 
     // Function to show the module of product list to enable products.

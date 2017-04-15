@@ -14,30 +14,45 @@ item-card {
     border-bottom: 1px solid;
     border-radius: 5px 5px 0px 0px;
     background-color: @theme-nero;
-    float: left;
+    color: @font-tussock;
+    overflow: hidden;
 
-    &:hover {
-      background-color: @theme-nero-hover;
-      h1 {
-        color: @font-white;
+     p {
+      display: inline-block;
+      padding: 10px;
+      float: left;
+      font-size: 130%;
+      &:first-child {
+        font-weight: bold;
       }
     }
 
-    h1 {
-      display: inline-block;
+    span {
       padding: 10px;
-      color: @font-tussock;
-      float: left;
-      font-size: 24px;
+      float: right;
       font-weight: bold;
-      &:last-child {
-        float: right;
-      }
+      font-size: 130%;
+    }
+
+    &:hover {
+      background-color: @theme-nero-hover;
+      color: @font-white;
+    }
+  }
+
+  .main-content {
+    &.ng-hide {
+      .animation(collapseItem 1s);
+    }
+    &.ng-hide-remove {
+      .animation(expandItem 2s);
     }
   }
 
 .items-content{
   padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
   .items {
     li {
       cursor: pointer;
@@ -50,10 +65,13 @@ item-card {
       transition: 0.2s;
 
       &:hover {
-        background-color: #BBB;
-        box-shadow: 0px 0px 10px @theme-nero
+        background-color: @theme-nero-hover;
+        color: @font-white;
       }
-
+      &.selected {
+        background-color: @theme-nero;
+        color: @font-tussock;
+      }
       h2 {
         font-size: 18px;
         font-weight: bold;
@@ -68,10 +86,31 @@ item-card {
 
   .card-footer {
     margin-top: 15px;
-    border-top: 1px solid;
+    border-top: 2px outset;
+    margin: 0px 5px;
     border-radius: 1px;
     .footer {
       margin: 10px;
     }
   }
 }
+
+.keyframes(collapseItem; {
+  from {
+    max-height: 2400px;
+  }
+  to {
+    display: none;
+    max-height: 0px;
+  }
+});
+
+.keyframes(expandItem; {
+  from {
+    max-height: 0px;
+  }
+  to {
+    display: none;
+    max-height: 2400px;
+  }
+});

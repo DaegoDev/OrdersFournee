@@ -158,6 +158,8 @@ module.exports = {
           }, {
             password: newPassword
           });
+        }else {
+          throw 'No se cambio la contraseña';
         }
       })
       .then(function(user) {
@@ -216,5 +218,33 @@ module.exports = {
       .catch(function(err) {
         res.serverError(err);
       })
+  },
+  /**
+   * Funcion para actualizar los datos de un empleado.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  updateInformation: function (req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = null;
+    var name = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    name = req.param('name');
+    if (!name) {
+      return res.badRequest('Se debe ingresar un nombre.');
+    }
+    var employeeCredentials = {
+      name: name,
+    }
+    user = req.user;
+    Employee.update({user: user.id}, employeeCredentials)
+    .then(function(userUpdated) {
+      res.ok(userUpdated[0]);
+    })
+    .catch(function(err) {
+      res.serverError(err);
+    })
   }
 };

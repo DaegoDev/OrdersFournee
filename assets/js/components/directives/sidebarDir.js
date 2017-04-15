@@ -50,19 +50,16 @@
       return $scope.role === "ADMIN";
     };
 
+    $scope.isEmployee = function() {
+      if($scope.role === "DESPACHADOR" || $scope.role === "ADMIN"){
+        return true;
+      }else {
+        return false;
+      }
+    };
+
     $scope.isDespachador = function() {
       return $scope.role === "DESPACHADOR";
     };
-
-    $scope.authenticated = AuthService.isAuthenticated();
-
-  	$scope.$on('renovateRole', function(evt) {
-  		$scope.authenticated = AuthService.isAuthenticated();
-  	});
-
-  	$scope.signout = function () {
-  		AuthService.signout();
-  	}
-
   }
 }())

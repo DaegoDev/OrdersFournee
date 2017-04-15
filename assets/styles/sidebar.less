@@ -22,11 +22,13 @@
   .title-header {
     ul {
       display: flex;
+
       li {
         &:first-child {
           flex-grow: 1;
           text-align: center;
         }
+
         a {
           display: block;
           padding: 15px 16px;
@@ -38,8 +40,26 @@
   }
 
   .login-wrapper {
+    display: block;
+    overflow: hidden;
     .login-nav {
-      display: none;
+      display: flex;
+      flex-direction: column;
+      li {
+        a {
+          display: flex;
+          padding: 10px;
+          &:hover {
+            padding-left: 30px;
+          }
+        }
+      }
+      .sign-in {
+        display: none;
+      }
+    }
+    form {
+      padding: 5%;
     }
   }
 
@@ -52,7 +72,6 @@
         a {
           display: flex;
           padding: 10px;
-
           &:hover {
             padding-left: 30px;
           }
@@ -67,6 +86,7 @@
     a {
       font-size: 125%;
     }
+
     .title-header {
       .logo {
         display: none;
@@ -78,17 +98,19 @@
     }
 
     .login-wrapper {
-      padding: 0px;
-      margin: 0px;
-     .login-nav {
+      .login-nav {
         display: block;
         li {
+          &:first-child {
+            display: block;
+          }
           a {
             text-align: center;
-            display: block;
-            padding: 15px 0px;
+            padding: 15px 0;
             border-bottom: 1px solid @theme-nero-hover;
-
+            span {
+              display: none;
+            }
           }
         }
       }
@@ -101,12 +123,8 @@
       ul {
         li {
           a {
+            padding: 15px 0;
             border-bottom: 1px solid @theme-nero-hover;
-            padding: 15px 0px;
-
-            &:hover {
-              padding: 15px 0px;
-            }
             span {
               display: none;
             }

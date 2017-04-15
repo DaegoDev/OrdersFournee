@@ -144,6 +144,11 @@
         * RUTAS DE ACCESO DE UN EMPLEADO.
         */
 
-        //
+        // Perfil routes
+        .state('employeeProfile', {
+          url: '/employeeProfile',
+          templateUrl: 'templates/private/employee/employee-profile.html',
+          controller: 'EmployeeProfileCtrl'
+        })
     }]);
 }());

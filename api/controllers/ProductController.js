@@ -126,6 +126,19 @@ module.exports = {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var clientId = null;
+    var product = null;
+    var tmpProduct = null;
+    var products = [];
+    var item = null;
+    var clientProductQueryStr =
+    'SELECT ' +
+    'cp.id, cp.client, cp.custom_name, cp.product, ' +
+    'p.name, p.short_name, ' +
+    'i.value, i.short_value, ' +
+    'e.name AS element_name ' +
+    'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
+    'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+    'ORDER BY cp.product; ';
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     clientId = parseInt(req.param('clientId'));
@@ -135,24 +148,52 @@ module.exports = {
 
     // Se verifica que el cliente exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
-    Client.findOne({
-        id: clientId
-      })
-      .then(function(client) {
-        if (client) {
-          return ClientProduct.find({
-              client: clientId
-            })
-            .populate('product');
+    Product.query(clientProductQueryStr, clientId,
+      function(err, rawData) {
+        if(err) {
+          sails.log.debug(err);
+          return res.serverError();
         }
-        throw "El cliente no existe";
-      })
-      .then(function(products) {
-        res.ok(products);
-      })
-      .catch(function(err) {
-        res.serverError(err);
-      })
+        rawData.forEach(function(data, i, dataArray) {
+          if (tmpProduct == null) {
+            tmpProduct = {
+              code: data.product,
+              name: data.name,
+              shortName: data.short_name,
+              items: []
+            }
+          }
+
+          item = {
+            elementName: data.element_name,
+            value: data.value,
+            shortValue: data.short_value
+          },
+
+          tmpProduct.items.push(item);
+
+          if (!dataArray[i+1]) {
+            product = {
+              id: data.id,
+              clientId: data.client,
+              customName: data.custom_name,
+              product: tmpProduct
+            }
+            products.push(product);
+          } else if (dataArray[i+1].product != tmpProduct.code) {
+            product = {
+              id: data.id,
+              clientId: data.client,
+              customName: data.custom_name,
+              product: tmpProduct
+            }
+            products.push(product);
+            tmpProduct = null;
+          }
+        })
+
+        return res.ok(products)
+      });
   },
 
   /**
@@ -193,7 +234,7 @@ module.exports = {
             itemId: data.item_id,
             elementName: data.element_name,
             value: data.value,
-            short_value: data.short_value
+            shortValue: data.short_value
           },
 
           product.items.push(item);

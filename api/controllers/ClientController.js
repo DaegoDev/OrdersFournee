@@ -131,13 +131,25 @@ module.exports = {
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
-        productsCodes.forEach(function(productCode, i, productsCodes) {
-          var clientProduct = {
-            client: client.insertId,
-            product: productCode
+        if (productsCodes) {
+          if (typeof productsCodes == 'string') {
+            var clientProduct = {
+              client: client.insertId,
+              product: productsCodes
+            };
+          }
+          else {
+            productsCodes.forEach(function(productCode, i, productsCodes) {
+              var clientProduct = {
+                client: client.insertId,
+                product: productCode
+              }
+            });
           }
           clientProductsCredentials.push(clientProduct);
-        })
+        } else {
+          return sql;
+        }
         return sql.insert('client_product', clientProductsCredentials);
       })
       .then(function(clientProduct) {

@@ -1,0 +1,12 @@
+<div ng-show="options.showMessage"
+  ng-class="{
+    'alert': options.type,
+    'alert-success': options.type == 'success',
+    'alert-danger': options.type == 'error',
+    'alert-info': options.type == 'info',
+    'alert-warning': options.type == 'warning',
+  }" >
+  <span class="fa fa-close" ng-click="close()"></span>
+  <h1>{{options.title}}</h1>
+  <p> {{options.message}}</p>
+</div>

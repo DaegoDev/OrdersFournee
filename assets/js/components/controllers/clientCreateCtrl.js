@@ -1,17 +1,63 @@
-(function () {
+(function() {
   var fournee = angular.module('fournee');
-  fournee.controller('clientCreateCtrl',
-    ['$scope', '$log', '$state', 'productSvc', 'SignupService', clientCreateCtrl]);
+  fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc', 'SignupService', clientCreateCtrl]);
 
   function clientCreateCtrl($scope, $log, $state, productSvc, SignupService) {
     $scope.client = {};
     $scope.productsCodes = [];
     $scope.productsSelected = [];
 
+    // Error control variables.
+    $scope.infoMsgOptions = {
+      showMessage: false,
+      message: '',
+      type: 'error',
+      title: ''
+    }
+
+    $scope.infoErrorMsg = '';
+
     productSvc.getProducts()
-      .then(function (res) {
+      .then(function(res) {
         $scope.products = res.data;
       })
+
+    // Function to validate client information.
+    $scope.validateInfo = function () {
+      if (!$scope.client.legalName) {
+        $scope.infoMsgOptions.message = 'Debe ingresar el nombre de la razón social.'
+        $scope.infoMsgOptions.showMessage = true;
+        return;
+      }
+      if (!$scope.client.nit) {
+        $scope.infoMsgOptions.message = 'Debe ingresar el nit de la empresa.';
+        $scope.infoMsgOptions.showMessage = true;
+        return;
+      }
+      if (!$scope.client.tradeName) {
+        $scope.infoMsgOptions.message = 'Debe ingresar el nombre de la empresa.';
+        $scope.infoMsgOptions.showMessage = true;
+        return;
+      }
+      if (!$scope.client.businessPhonenumber) {
+        $scope.infoMsgOptions.message = 'Debe ingresar el número telefonico de la empresa.';
+        $scope.infoMsgOptions.showMessage = true;
+        return;
+      }
+      if (!$scope.client.managerName) {
+        $scope.infoMsgOptions.message = 'Debe ingresar el nombre del administrador de la empresa.';
+        $scope.infoMsgOptions.showMessage = true;
+        return;
+      }
+      if (!$scope.client.managerPhonenumber) {
+        $scope.infoMsgOptions.message = 'Debe ingresar el número telefonico del administrador.';
+        $scope.infoMsgOptions.showMessage = true;
+        return;
+      }
+      $scope.infoMsgOptions.message = '';
+      $scope.infoMsgOptions.showMessage = false;
+      $state.go('client.create.products');
+    }
 
     $scope.selectProduct = function(product) {
       var index = $scope.productsSelected.indexOf(product);
@@ -21,16 +67,16 @@
       }
     }
 
-    $scope.unSelectProduct = function (product) {
+    $scope.unSelectProduct = function(product) {
       var index = $scope.productsSelected.indexOf(product);
       if (index != -1) {
-        $scope.productsSelected.splice(index,1);
+        $scope.productsSelected.splice(index, 1);
         product.hide = false;
       }
     }
 
-    $scope.createClient = function () {
-      angular.forEach($scope.productsSelected, function (product, key) {
+    $scope.createClient = function() {
+      angular.forEach($scope.productsSelected, function(product, key) {
         $scope.productsCodes.push(product.code);
       })
 
@@ -52,7 +98,7 @@
         });
     }
 
-    $scope.createNew = function () {
+    $scope.createNew = function() {
       $scope.client = {};
       $scope.productsCodes = [];
       $scope.productsSelected = [];

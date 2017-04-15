@@ -4,99 +4,99 @@
   </div>
 
   <div class="client-info">
-    <form class="form-horizontal" ng-submit="updateGeneralInfo()" name="update" novalidate>
-      <fieldset>
-        <legend>Información general</legend>
-        <div class="form-group">
-          <div ng-class="{'has-error': update.legalName.$invalid && (!update.legalName.$pristine || update.$submitted || update.legalName.$touched),
+  <form class="form-horizontal" ng-submit="updateGeneralInfo()" name="update" novalidate>
+    <fieldset>
+      <legend>Información general</legend>
+      <div class="form-group">
+        <div ng-class="{'has-error': update.legalName.$invalid && (!update.legalName.$pristine || update.$submitted || update.legalName.$touched),
             'has-success': update.legalName.$valid}">
-            <label for="legalName" class="control-label col-sm-2">Razón social</label>
-            <div class="col-sm-4">
-              <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required>
-            </div>
-            <!-- VALIDACIONES DE RAZÓN SOCIAL-->
-            <div ng-messages="update.legalName.$error" ng-if="update.legalName.$touched || update.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
-            </div>
+          <label for="legalName" class="control-label col-sm-2">Razón social</label>
+          <div class="col-sm-4">
+            <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required>
           </div>
+          <!-- VALIDACIONES DE RAZÓN SOCIAL-->
+          <div ng-messages="update.legalName.$error" ng-if="update.legalName.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
+          </div>
+        </div>
 
-          <div ng-class="{'has-error': update.nit.$invalid && (!update.nit.$pristine || update.$submitted || update.nit.$touched),
+        <div ng-class="{'has-error': update.nit.$invalid && (!update.nit.$pristine || update.$submitted || update.nit.$touched),
             'has-success': update.nit.$valid}">
-            <label for="nit" class="control-label col-sm-2">NIT</label>
-            <div class="col-sm-4">
-              <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required>
-            </div>
-            <!-- VALIDACIONES NIR-->
-            <div ng-messages="update.nit.$error" ng-if="update.nit.$touched || update.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo NIT es obligatorio.</b></p>
-            </div>
+          <label for="nit" class="control-label col-sm-2">NIT</label>
+          <div class="col-sm-4">
+            <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required>
+          </div>
+          <!-- VALIDACIONES NIR-->
+          <div ng-messages="update.nit.$error" ng-if="update.nit.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo NIT es obligatorio.</b></p>
           </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <div ng-class="{'has-error': update.tradeName.$invalid && (!update.tradeName.$pristine || update.$submitted || update.tradeName.$touched),
+      <div class="form-group">
+        <div ng-class="{'has-error': update.tradeName.$invalid && (!update.tradeName.$pristine || update.$submitted || update.tradeName.$touched),
             'has-success': update.tradeName.$valid}">
-            <label for="tradeName" class="control-label col-sm-2">Nombre de la empresa</label>
-            <div class="col-sm-4">
-              <input type="text" id="tradeName" name="tradeName" class="form-control" ng-model="client.tradeName" required>
-            </div>
-            <!-- VALIDACIONES DE NOMBRE DE LA EMPRESA-->
-            <div ng-messages="update.tradeName.$error" ng-if="update.tradeName.$touched || update.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo nombre de la empresa es obligatorio.</b></p>
-            </div>
+          <label for="tradeName" class="control-label col-sm-2">Nombre de la empresa</label>
+          <div class="col-sm-4">
+            <input type="text" id="tradeName" name="tradeName" class="form-control" ng-model="client.tradeName" required>
           </div>
+          <!-- VALIDACIONES DE NOMBRE DE LA EMPRESA-->
+          <div ng-messages="update.tradeName.$error" ng-if="update.tradeName.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo nombre de la empresa es obligatorio.</b></p>
+          </div>
+        </div>
 
-          <div ng-class="{'has-error': update.businessPhonenumber.$invalid && (!update.businessPhonenumber.$pristine || update.$submitted || update.businessPhonenumber.$touched),
+        <div ng-class="{'has-error': update.businessPhonenumber.$invalid && (!update.businessPhonenumber.$pristine || update.$submitted || update.businessPhonenumber.$touched),
             'has-success': update.businessPhonenumber.$valid}">
-            <label for="businessPhonenumber" class="control-label col-sm-2">Telefono de la empresa</label>
-            <div class="col-sm-4">
-              <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required>
-            </div>
-            <!-- VALIDACIONES DE TELEFONO DE LA EMPRESA-->
-            <div ng-messages="update.businessPhonenumber.$error" ng-if="update.businessPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo telefono de la empresa es obligatorio.</b></p>
-            </div>
+          <label for="businessPhonenumber" class="control-label col-sm-2">Telefono de la empresa</label>
+          <div class="col-sm-4">
+            <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required>
+          </div>
+          <!-- VALIDACIONES DE TELEFONO DE LA EMPRESA-->
+          <div ng-messages="update.businessPhonenumber.$error" ng-if="update.businessPhonenumber.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo telefono de la empresa es obligatorio.</b></p>
           </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <div ng-class="{'has-error': update.managerName.$invalid && (!update.managerName.$pristine || update.$submitted || update.managerName.$touched),
+      <div class="form-group">
+        <div ng-class="{'has-error': update.managerName.$invalid && (!update.managerName.$pristine || update.$submitted || update.managerName.$touched),
             'has-success': update.managerName.$valid}">
-            <label for="managerName" class="control-label col-sm-2">Nombre del administrador</label>
-            <div class="col-sm-4">
-              <input type="text" id="managerName" name="managerName" class="form-control" ng-model="client.managerName" required>
-            </div>
-            <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
-            <div ng-messages="update.managerName.$error" ng-if="update.managerName.$touched || update.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
-            </div>
+          <label for="managerName" class="control-label col-sm-2">Nombre del administrador</label>
+          <div class="col-sm-4">
+            <input type="text" id="managerName" name="managerName" class="form-control" ng-model="client.managerName" required>
           </div>
+          <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
+          <div ng-messages="update.managerName.$error" ng-if="update.managerName.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
+          </div>
+        </div>
 
-          <div ng-class="{'has-error': update.managerPhonenumber.$invalid && (!update.managerPhonenumber.$pristine || update.$submitted || update.managerPhonenumber.$touched),
+        <div ng-class="{'has-error': update.managerPhonenumber.$invalid && (!update.managerPhonenumber.$pristine || update.$submitted || update.managerPhonenumber.$touched),
             'has-success': update.managerPhonenumber.$valid}">
-            <label for="managerPhonenumber" class="control-label col-sm-2">Telefono del administrador</label>
-            <div class="col-sm-4">
-              <input type="text" id="managerPhonenumber" name="managerPhonenumber" class="form-control" ng-model="client.managerPhonenumber" required>
-            </div>
-            <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
-            <div ng-messages="update.managerPhonenumber.$error" ng-if="update.managerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
-            </div>
+          <label for="managerPhonenumber" class="control-label col-sm-2">Telefono del administrador</label>
+          <div class="col-sm-4">
+            <input type="text" id="managerPhonenumber" name="managerPhonenumber" class="form-control" ng-model="client.managerPhonenumber" required>
+          </div>
+          <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
+          <div ng-messages="update.managerPhonenumber.$error" ng-if="update.managerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
           </div>
         </div>
-        <!-- PANEL DE ALERTA PARA INGO GENERAL -->
-        <div class="alert col-sm-12" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertGeneral">
-          <button type="button" class="close" ng-click="switchAlert('showAlertGeneral')">×</button>
-          <strong> {{alertMessageGeneral}}</strong>
+      </div>
+      <!-- PANEL DE ALERTA PARA INGO GENERAL -->
+      <div class="alert col-sm-12" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertGeneral">
+        <button type="button" class="close" ng-click="switchAlert('showAlertGeneral')">×</button>
+        <strong> {{alertMessageGeneral}}</strong>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-10 col-sm-2">
+          <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
         </div>
-        <div class="form-group">
-          <div class="col-sm-offset-10 col-sm-2">
-            <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
-          </div>
-        </div>
+      </div>
 
-      </fieldset>
-    </form>
+    </fieldset>
+  </form>
 
     <form class="form-horizontal" ng-submit="updateBillAddress()" name="billAddressUpdate" novalidate>
       <fieldset>
@@ -433,7 +433,7 @@
 
         <!-- PANEL DE ALERTA DE ERRORES -->
         <div class="alert col-sm-offset-5 col-sm-3" ng-class="{'alert-success': !error, 'alert-danger': error}" ng-show="showAlertPassword">
-          <button type="button" class="close" ng-click="switchAlerta('showAlertPassword')">×</button>
+          <button type="button" class="close" ng-click="switchAlert('showAlertPassword')">×</button>
           <strong> {{alertMessagePassword}}</strong>
         </div>
 

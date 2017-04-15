@@ -2,10 +2,8 @@
   <div class="section-header">
     <h1>Lista de productos</h1>
   </div>
-  {{lista}}
   <div class="products">
-    <product-card ng-repeat="product in products"
-      type="orderProduct" product="product" select-list="lista">
+    <product-card ng-repeat="product in products" product="product" type="list">
     </product-card>
   </div>
 </div>

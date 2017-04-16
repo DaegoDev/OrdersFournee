@@ -1,38 +1,63 @@
-.main {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  min-height: 100%;
-  margin-left: @sidebar-width;
+html {
   background-color: @bg-straw;
-  transition: 0.5s;
+}
 
+.main {
+  position: absolute;
+  overflow-x: hidden;
+  min-height: 100%;
+  min-width: 100%;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  padding-left: @sidebar-width;
+  transition: all 0.5s ease;
   &.toggle {
-    margin-left: @sidebar-width-toggle;
+    padding-left: @sidebar-width-toggle;
+  }
+
+  &.ng-enter {
+    opacity: 0;
+    left: 100%;
+    right: -100%;
+  }
+
+  &.ng-enter-active {
+    opacity: 1;
+    left: 0;
+    right: 0;
+  }
+
+  &.ng-leave {
+    opacity: 1;
+    left: 0;
+    right: 0;
+  }
+
+  &.ng-leave-active {
+    opacity: 0;
+    left: -100%;
+    right: 100%;
   }
 }
 
 .main-wrapper {
-    position: absolute;
-    height: 100%;
-    min-height: 100%;
-    width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  background-color: @bg-straw;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
 }
 
 .basic-wrapper {
   position: relative;
-  width: 100%;
-  min-height: 100%;
   overflow: hidden;
-}
-
-.content-wrapper {
   background-color: @bg-white;
   border: 1px solid;
   border-radius: 5px 5px 20px 20px;
   box-shadow: 5px 5px 10px black;
-  margin: auto;
-  margin-top: 10px;
-  padding: 0px;
+  margin: 10px auto auto;
+  padding: 0;
   &.sm {
     width: 50%;
   }
@@ -42,12 +67,60 @@
   &.lg {
     width: 90%;
   }
+  fieldset {
+    margin: 15px;
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
+  overflow: hidden;
+  background-color: @bg-white;
+  border: 1px solid;
+  border-radius: 5px 5px 20px 20px;
+  box-shadow: 5px 5px 10px black;
+  margin: 10px auto auto;
+  padding: 0;
+
+  &.sm {
+    width: 50%;
+  }
+  &.md {
+    width: 70%;
+  }
+  &.lg {
+    width: 90%;
+  }
+
+  .tab-animate {
+
+    &.ng-enter, &.ng-leave {
+      transition:all 0.5s ease;
+    }
+    &.ng-enter {
+      opacity: 0;
+      transition-delay: 0.5s;
+    }
+    &.ng-enter-active {
+      opacity: 1;
+    }
+    &.ng-leave {
+      top: 0;
+      opacity: 1;
+    }
+    &.ng-leave-active {
+      opacity: 0;
+    }
+  }
 }
 
 .section-header {
   background-color: @theme-nero;
   padding-left: 30px;
   word-wrap: break-word;
+
   h1 {
     font-weight: bold;
     font-size: 150%;
@@ -57,8 +130,7 @@
 }
 
 .nav-step {
-  margin: auto;
-  margin-bottom: 15px;
+  margin: auto auto 15px;
   background-color: @theme-nero;
   border-radius: 10px 10px 5px 5px;
   box-shadow: 5px 5px 10px black;
@@ -68,9 +140,11 @@
   &.sm {
     width: 50%;
   }
+
   &.md {
     width: 70%;
   }
+
   &.lg {
     width: 90%;
   }
@@ -78,24 +152,29 @@
   li {
     display: table-cell;
     text-align: center;
+
     a {
       font-size: 130%;
       text-decoration: none;
       display: block;
       width: auto;
-      padding: 10px 10px;
+      padding: 10px;
       background-color: @theme-nero;
       color: @font-tussock;
+
       &.first {
-        border-radius: 8px 0px 0px 4px;
+        border-radius: 8px 0 0 4px;
       }
+
       &.last {
-        border-radius: 0px 8px 4px 0px;
+        border-radius: 0 8px 4px 0;
       }
+
       &:hover:not(.active) {
         background-color: @theme-nero;
         color: @font-white;
       }
+
       &.active {
         background-color: @theme-nero-hover;
         color: @font-white;
@@ -103,18 +182,25 @@
     }
   }
 }
- .help-block {
-   word-wrap: break-word;
- }
+
+.help-block {
+  word-wrap: break-word;
+}
 
 .keyframes(@name; @arguments) {
-	@-moz-keyframes @name { @arguments(); }
-	@-webkit-keyframes @name { @arguments(); }
-	@keyframes @name { @arguments(); }
+  @-moz-keyframes @name {
+     @arguments();
+  }
+  @-webkit-keyframes @name {
+     @arguments();
+  }
+  @keyframes @name {
+     @arguments();
+  }
 }
 
 .animation(@arguments) {
-	-webkit-animation: @arguments;
-	-moz-animation: @arguments;
-	animation: @arguments;
+  -webkit-animation: @arguments;
+  -moz-animation: @arguments;
+  animation: @arguments;
 }

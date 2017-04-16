@@ -14,6 +14,16 @@ function ($http, $rootScope) {
       return signup;
     },
 
+    // Service to validate if a client already exits.
+    validateClient: function (clientInfo) {
+      var client = $http({
+        url: '/client/validateClient',
+        method: 'GET',
+        params: clientInfo
+      });
+      return client;
+    },
+
     // Servicio para registrar un empleado.
     signupEmployee: function(credentials) {
       var signup = $http({

@@ -748,6 +748,7 @@ module.exports = {
       return res.badRequest('Razón social vacio.');
     }
     nit = parseInt(req.param('nit'));
+    sails.log.debug(nit);
     if (!nit) {
       return res.badRequest('NIT vacio.');
     }

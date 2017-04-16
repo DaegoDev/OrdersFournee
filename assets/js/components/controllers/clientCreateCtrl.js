@@ -54,9 +54,28 @@
         $scope.infoMsgOptions.showMessage = true;
         return;
       }
-      $scope.infoMsgOptions.message = '';
-      $scope.infoMsgOptions.showMessage = false;
-      $state.go('client.create.products');
+
+      var clientInfo = {
+        legalName: $scope.client.legalName,
+        nit: $scope.client.nit
+      }
+      console.log(clientInfo);
+      SignupService.validateClient(clientInfo)
+        .then(function (res) {
+          if (res.data) {
+            $scope.infoMsgOptions.message = '';
+            $scope.infoMsgOptions.showMessage = false;
+            $state.go('client.create.products');
+          } else {
+            $scope.infoMsgOptions.message = 'El cliente que desea crear ya existe, verifique el nombre de razón social y el NIT ingresado.';
+            $scope.infoMsgOptions.showMessage = true;
+          }
+        })
+        .catch(function (err) {
+          $scope.infoMsgOptions.message = 'Error, se ha presentado un error interno.';
+          $scope.infoMsgOptions.showMessage = true;
+        });
+
     }
 
     $scope.selectProduct = function(product) {

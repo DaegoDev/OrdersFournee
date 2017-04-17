@@ -56,17 +56,20 @@
         ClientSvc.makeOrder(orderCredentials)
           .then(function (res) {
             $ngConfirm({
-              title: 'Pedido',
+              title: 'Pedido realizado.',
               content: 'El pedido ha sido realizado con exito.',
+              type: 'green',
               buttons: {
                 new: {
                   text: 'Nuevo pedido',
+                  btnClass: 'btn-sienna',
                   action: function (scope, buttons) {
                     $state.go('order.create.shoppingCart')
                   }
                 },
                 exit: {
                   text: 'Salir',
+                  btnClass: 'btn-sienna',
                   action: function (scope, buttons) {
                     $state.go('order.myList');
                   }
@@ -86,6 +89,12 @@
         return;
       }
       $state.go('order.create.info');
+    }
+
+    // Function to delete a product from the order list.
+    $scope.unSelectProduct = function (product) {
+      var index = $scope.orderList.indexOf(product);
+      $scope.orderList.splice(index, 1);
     }
 
     $scope.changedInitial = function() {

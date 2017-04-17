@@ -137,15 +137,16 @@ module.exports = {
               client: client.insertId,
               product: productsCodes
             };
+            clientProductsCredentials.push(clientProduct);
           } else {
             productsCodes.forEach(function(productCode, i, productsCodes) {
               var clientProduct = {
                 client: client.insertId,
                 product: productCode
               }
+              clientProductsCredentials.push(clientProduct);
             });
           }
-          clientProductsCredentials.push(clientProduct);
         } else {
           return sql;
         }

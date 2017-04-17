@@ -60,10 +60,11 @@ module.exports.policies = {
   },
 
   OrderController: {
-    create: 'isClient',
+    // create: 'isClient',
     updateDeliveryDate: 'isEmployee',
     changeState: 'isEmployee',
-    getByDeliveryDate: 'isEmployee'
+    // getByDeliveryDate: 'isEmployee',
+    getByClient: 'isClient'
   },
 
   ProductController: {

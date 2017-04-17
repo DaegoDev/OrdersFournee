@@ -65,20 +65,20 @@ module.exports = {
 
     // Arreglo de productos para registrar con la pedido
     productsToOrder = [{
-        client_product: 1,
-        amount: 10,
+        client_product: 33,
+        amount: 15,
+        baked: false
+      },
+      {
+        client_product: 34,
+        amount: 20,
         baked: true
       },
-      {
-        client_product: 2,
-        amount: 12,
-        baked: false
-      },
-      {
-        client_product: 3,
-        amount: 20,
-        baked: false
-      }
+      // {
+      //   client_product: 32,
+      //   amount: 20,
+      //   baked: false
+      // }
     ];
 
     //Obtengo la conección para realizar transacciones
@@ -119,7 +119,7 @@ module.exports = {
           //    return res.serverError();
           //  });
         });
-        sails.log.debug(productsToOrder);
+        // sails.log.debug(productsToOrder);
         return sql.insert('order_product', productsToOrder);
       })
       .then(function(orderProduct) {
@@ -201,39 +201,42 @@ module.exports = {
   changeState: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
-    var orderId = null;
+    var orderIds = null;
     var newState = null;
     var states = ["confirmado", "pendiente de confirmacion", "alistado", "despachado"];
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
-    orderId = parseInt(req.param('orderId'));
-    if (!orderId) {
-      return res.badRequest('Id de la orden vacio.');
+    orderIds = req.param('orderIds');
+    if (orderIds.length == 0) {
+      return res.badRequest('Ids de los pedidos vacio.');
     }
-    newState = req.param("state");
+    newState = req.param("newState");
     if (!newState) {
-      return res.badRequest('Se debe ingresar la el nuevo estado.');
+      return res.badRequest('Se debe ingresar el nuevo estado.');
     }
-    sails.log.debug(states.indexOf(newState.toLowerCase()));
+    // sails.log.debug(states.indexOf(newState.toLowerCase()));
     if (states.indexOf(newState.toLowerCase()) == -1) {
       return res.badRequest("El estado no existe");
     }
+    orderIds.forEach(function (orderId, i, orderIds) {
+      orderId = parseInt(orderId);
+    })
+    sails.log.debug(orderIds);
     //Verifica que la orden exista. Si existe cambia el campo estado con el nuevo valor enviado
     Order.findOne({
-        id: orderId
+        id: orderIds
       })
-      .then(function(order) {
-        if (!order) {
-          throw "La orden no existe";
-        }
-        return Order.update({
-          id: orderId
-        }, {
+      .then(function(orders) {
+        // sails.log.debug(orders);
+        // if (orders.length != orderIds.length) {
+        //   throw "Una de las ordenes no existe";
+        // }
+        return Order.update(orderIds, {
           state: newState
         });
       })
-      .then(function(order) {
-        res.ok()
+      .then(function(orders) {
+        res.ok(orders);
       })
       .catch(function(err) {
         res.serverError(err);
@@ -271,6 +274,7 @@ module.exports = {
                    LEFT JOIN product ON client_product.product = product.code \
                    WHERE orders.delivery_date = ?', [deliveryDate],
       function(err, orders) {
+        // sails.log.debug(orders);
         if (err) {
           return res.serverError(err);
         }
@@ -330,7 +334,30 @@ module.exports = {
         res.serverError(err);
       })
   },
+  /**
+   * Funcion para obtener los pedidos por cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+   getByClient: function (req,res) {
+     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+     // de la solicitud.
+     var user = req.user;
 
+     Client.findOne({
+         user: user.id
+       })
+       .then(function(client) {
+         return Order.find({client: client.id}).sort('createdAt DESC');
+       })
+       .then(function(order) {
+         res.ok(order);
+       })
+       .catch(function (err) {
+         res.serverError();
+       })
+   }
 };
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {

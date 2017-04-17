@@ -5,7 +5,7 @@
   function orderCtrl($scope, $log, $state, ClientSvc, $ngConfirm) {
     ClientSvc.validateInformation()
       .then(function(res) {
-        console.log(res.data);
+        // console.log(res.data);
         var isCompletedInformation = res.data;
         if (isCompletedInformation) {
           $state.go('.create.shoppingCart');

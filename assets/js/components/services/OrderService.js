@@ -1,5 +1,5 @@
 angular.module('fournee')
-.factory('SignupService', ['$http', '$rootScope',
+.factory('OrderService', ['$http', '$rootScope',
 function ($http, $rootScope) {
   return {
     // Servicio para crear un pedido.
@@ -38,6 +38,14 @@ function ($http, $rootScope) {
       });
       return change;
     },
+    // Servicio para obtener los pedidos de un cliente
+    getOrdersByClient: function () {
+      var getByClient = $http({
+        url: '/order/getByClient',
+        method: 'GET'
+      });
+      return getByClient;
+    }
 
   };
 }]);

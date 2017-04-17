@@ -49,8 +49,10 @@ module.exports = {
         var arrayObjectsItems = elementItems[0].items;
         arrayObjectsItems.forEach(function(itemObject, i, arrayObjectsItems) {
           // Array que contiene los valores de las masas
-          arrayDough.push(itemObject.value);
+          var value = itemObject.value;
+          arrayDough.push(value.toLowerCase());
         });
+        sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
         items.forEach(function(item, i, items) {
           if (item.name == 'masa') {
@@ -64,8 +66,9 @@ module.exports = {
       })
       .then(function(items) {
         var products = items[0].products;
-        if (products == 0) {
-          doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
+        sails.log.debug(products.length);
+        if (products.length == 0) {
+          var doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
           numberCode = arrayDough.indexOf(doughNameArray) + 1;
           productCredentials.code = numberCode.toString() + "A";
         } else {

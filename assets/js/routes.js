@@ -202,6 +202,7 @@
         .state('order.myList', {
           url: '/list',
           templateUrl: 'templates/private/client/order-my-list.html',
+          controller: 'OrderMyListCtrl',
           data: {
             permissions: {
               only: "CLIENTE",
@@ -263,11 +264,25 @@
         * RUTAS DE ACCESO DE UN EMPLEADO.
         */
 
-        // Perfil routes
+        // Profile routes
         .state('employeeProfile', {
           url: '/employeeProfile',
           templateUrl: 'templates/private/employee/employee-profile.html',
           controller: 'EmployeeProfileCtrl',
+          data: {
+            permissions: {
+              only: ["ADMIN", "DESPACHADOR"],
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+
+        // Order routes
+        .state('ordersList', {
+          url: '/ordersList',
+          templateUrl: 'templates/private/employee/orders-list.html',
+          controller: 'OrdersListCtrl',
           data: {
             permissions: {
               only: ["ADMIN", "DESPACHADOR"],

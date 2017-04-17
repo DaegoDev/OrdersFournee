@@ -1,0 +1,60 @@
+<div class="basic-wrapper lg">
+  <h1>Fecha:</h1>
+  <p class="input-group col-sm-4">
+    <input type="text" ng-change="getOrdersByDeliveryDate()" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
+    />
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </p>
+  <hr />
+  <div class="section-header">
+    <h1>Lista de pedidos</h1>
+  </div>
+  <div >
+    <div class="col-sm-2">
+      <input type="checkbox" ng-model="all">Seleccionar todo<br><br>
+    </div>
+    <div class="col-sm-1">
+      <label for="states">Estados:</label>
+    </div>
+    <div class="col-sm-3">
+      <select class="form-control" id="states" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
+    </div>
+    <div>
+      <button ng-click="changeState()" class="btn btn-sm btn-sienna">Cambiar estado</button>
+    </div>
+  </div>
+  <hr />
+  <div class="table-container">
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Empleado</th>
+            <th>Telefono empresa</th>
+            <th>Hora sugerida inicial</th>
+            <th>Hora sugerida final</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="order in orders" ng-click="showDetails(order.id)">
+            <td><input type="checkbox" ng-checked="all" ng-model="checkboxObj[order.id]"></td>
+            <td>{{order.id}}</td>
+            <td>{{order.trade_name}}</td>
+            <td>{{order.employeeName}}</td>
+            <td>{{order.business_phonenumber}}</td>
+            <td>{{order.initial_suggested_time}}</td>
+            <td>{{order.final_suggested_time}}</td>
+            <td>{{order.state}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

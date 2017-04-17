@@ -353,33 +353,82 @@ module.exports = {
   getProductsEnabled: function(req, res) {
     // Declaración de variables
     var clientId = null;
+    var product = null;
+    var tmpProduct = null;
+    var products = [];
+    var item = null;
+    var clientProductQueryStr =
+    'SELECT ' +
+    'cp.id, cp.client, cp.custom_name, cp.product, ' +
+    'p.name, p.short_name, ' +
+    'i.value, i.short_value, ' +
+    'e.name AS element_name ' +
+    'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
+    'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+    'ORDER BY cp.product; ';
 
-    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
-    clientId = parseInt(req.param('clientId'));
-    if (!clientId) {
-      return res.badRequest('Id del cliente vacio.');
+    // Se obtiene el id del cliente que ejecuta la petición.
+    userId = req.user.id;
+    if (!userId) {
+      return res.badRequest('El usuario no es valido.');
     }
 
-    // Valida que el cliente si exista, en caso de que si, obtiene los preductos habilitados para él,
-    // en caso de que no, envia el mensaje de error
-    Client.findOne(clientId)
-      .then(function(client) {
-        if (client) {
-          return ClientProduct.find({
-            client: clientId
-          }).populate('product');
+    // Se verifica que el cliente exista, en caso de que no exista
+    // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
+    Client.findOne({user: userId})
+      .then(function (client) {
+        Product.query(clientProductQueryStr, client.id,
+          function(err, rawData) {
+            if(err) {
+              sails.log.debug(err);
+              throw {code: 1, msg: 'Query error.'};
+            }
+            rawData.forEach(function(data, i, dataArray) {
+              if (tmpProduct == null) {
+                tmpProduct = {
+                  code: data.product,
+                  name: data.name,
+                  shortName: data.short_name,
+                  items: []
+                }
+              }
+
+              item = {
+                elementName: data.element_name,
+                value: data.value,
+                shortValue: data.short_value
+              },
+
+              tmpProduct.items.push(item);
+
+              if (!dataArray[i+1]) {
+                product = {
+                  id: data.id,
+                  clientId: data.client,
+                  customName: data.custom_name,
+                  product: tmpProduct
+                }
+                products.push(product);
+              } else if (dataArray[i+1].product != tmpProduct.code) {
+                product = {
+                  id: data.id,
+                  clientId: data.client,
+                  customName: data.custom_name,
+                  product: tmpProduct
+                }
+                products.push(product);
+                tmpProduct = null;
+              }
+            })
+            return res.ok(products)
+          });
+      })
+      .catch(function (err) {
+        if (err.code == 1) {
+          return res.serverError();
         }
-        return res.serverError();
-      })
-      .then(function(clientProducts) {
-        res.ok({
-          clientProducts: clientProducts
-        })
-      })
-      .catch(function(err) {
-        sails.log.debug(err);
-        res.serverError();
-      })
+      });;
+
   },
   /**
    * Funcion para obtener validar que el cliente tenga toda la información en la base de datos.
@@ -395,7 +444,6 @@ module.exports = {
         return res.serverError(err);
       }
       var client = clients[0];
-      sails.log.debug(client);
       delete client.additional_information;
       for (var field in client) {
         if (!client[field]) {
@@ -406,7 +454,6 @@ module.exports = {
           client: client.id
         })
         .then(function(clientEmployees) {
-          sails.log.debug(clientEmployees);
           if (clientEmployees.length == 0) {
             res.ok(false);
           }
@@ -429,10 +476,6 @@ module.exports = {
       .populate('clientEmployee')
       .populate('user')
       .then(function(clients) {
-        sails.log.debug(clients);
-        // clients.forEach(function (client, i) {
-        //   delete clients[i].user.password
-        // });
         return res.ok(clients);
       })
       .catch(function(err) {
@@ -663,7 +706,6 @@ module.exports = {
         }
       })
       .then(function(result) {
-        sails.log.debug(result);
         if (result.country) {
           return Client.update({
             user: user.id
@@ -726,7 +768,6 @@ module.exports = {
         return ClientEmployee.create(clientEmployeeCredentials)
       })
       .then(function(clientEmployee) {
-        sails.log.debug(clientEmployee);
         res.created(clientEmployee);
       })
       .catch(function(err) {
@@ -748,12 +789,9 @@ module.exports = {
       return res.badRequest('Razón social vacio.');
     }
     nit = parseInt(req.param('nit'));
-    sails.log.debug(nit);
     if (!nit) {
       return res.badRequest('NIT vacio.');
     }
-    sails.log.debug(legalName);
-    sails.log.debug(nit);
     // valida si existe el cliente con el ese id, si existe cambia el estado de su usuario en false
     Client.findOne({
         legalName: legalName

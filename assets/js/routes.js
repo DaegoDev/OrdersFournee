@@ -213,6 +213,7 @@
         .state('order.create', {
           url: '/create',
           templateUrl: 'templates/private/client/order-create.html',
+          controller: 'orderCreateCtrl',
           data: {
             permissions: {
               only: "CLIENTE",
@@ -235,7 +236,6 @@
         .state('order.create.info', {
           url: '/info',
           templateUrl: 'templates/private/client/order-create-info.html',
-          controller: 'orderCreateCtrl',
           data: {
             permissions: {
               only: "CLIENTE",

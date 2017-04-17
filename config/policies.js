@@ -39,7 +39,8 @@ module.exports.policies = {
     // recuperarContrasena: 'isRecuperacionValida',
     enableProduct: 'isAdmin',
     disableProduct: 'isAdmin',
-    // signup: 'isAdmin'
+    // signup: 'isAdmin',
+    getProductsEnabled: 'isClient'
   },
 
   ClientEmployeeController: {

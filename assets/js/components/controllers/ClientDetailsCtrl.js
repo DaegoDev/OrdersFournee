@@ -150,11 +150,11 @@
     // Function to get all products enabled for a client, it is not linked to $scope.
     function getClientProducts() {
       $scope.client.products = null;
-      ClientSvc.getProductsClient({
+      productSvc.getProductsByClient({
         clientId: $scope.client.id
       })
       .then(function(res) {
-        $scope.client.products = res.data.clientProducts;
+        $scope.client.products = res.data;
       })
       .catch(function (err) {
         $log.error('Cant\' get the client products.');

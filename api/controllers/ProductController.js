@@ -53,7 +53,7 @@ module.exports = {
         });
         // Construye la parte númerica del codigo del producto
         items.forEach(function(item, i, items) {
-          if (item.name == 'masa') {
+          if (item.name.toLowerCase() == 'masa') {
             doughName = item.value;
           }
         })
@@ -64,7 +64,7 @@ module.exports = {
       })
       .then(function(items) {
         var products = items[0].products;
-        if (products == 0) {
+        if (products.length == 0) {
           doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
           numberCode = arrayDough.indexOf(doughNameArray) + 1;
           productCredentials.code = numberCode.toString() + "A";

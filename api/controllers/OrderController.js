@@ -25,17 +25,14 @@ module.exports = {
     var productsToOrder = [];
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    var userId = req.user.id;
+
     var deliveryDateString = req.param('deliveryDate');
     if (!deliveryDateString) {
       return res.badRequest('Se debe ingresar la fecha de entrega.');
     }
     var dataDate = deliveryDateString.split("-", 3);
     deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
-
-    client = parseInt(req.param('client'));
-    if (!client) {
-      return res.badRequest('Id del cliente vacio.');
-    }
 
     clientEmployee = parseInt(req.param('clientEmployee'));
     if (!clientEmployee) {
@@ -64,39 +61,29 @@ module.exports = {
     };
 
     // Arreglo de productos para registrar con la pedido
-    productsToOrder = [{
-        client_product: 1,
-        amount: 10,
-        baked: true
-      },
-      {
-        client_product: 2,
-        amount: 12,
-        baked: false
-      },
-      {
-        client_product: 3,
-        amount: 20,
-        baked: false
-      }
-    ];
+    productsToOrder = req.param('productsToOrder');
+
+    if (typeof productsToOrder == 'string') {
+      productsToOrder = [JSON.parse(productsToOrder)];
+    } else {
+      productsToOrder.forEach(function (product, index, productList) {
+        productList[index] = JSON.parse(product);
+      });
+    }
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
     var sql = connectionConfig.sql;
 
+
     sql.beginTransaction()
       .then(function() {
-        return Client.findOne({
-          id: client
-        });
+        return Client.findOne({user: userId});
       })
       .then(function(client) {
         if (client) {
           orderCredentials.client = client.id;
-          return ClientEmployee.findOne({
-            id: clientEmployee
-          });
+          return ClientEmployee.findOne({id: clientEmployee});
         }
         throw "El cliente no existe";
       })
@@ -109,17 +96,8 @@ module.exports = {
       })
       .then(function(order) {
         productsToOrder.forEach(function(product, i, productsToOrder) {
-          //ClientProduct.findOne({
-          //    id: product.client_product
-          //  })
-          //  .then(function(clientProduct) {
-          //    if (clientProduct) {
           product.order_id = order.insertId;
-          //    }
-          //    return res.serverError();
-          //  });
         });
-        sails.log.debug(productsToOrder);
         return sql.insert('order_product', productsToOrder);
       })
       .then(function(orderProduct) {

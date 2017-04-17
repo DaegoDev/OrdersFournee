@@ -46,3 +46,12 @@ fournee.filter('stateFilter', function() {
     return 'Inactivo';
   }
 });
+
+fournee.filter('bakedFilter', function() {
+  return function(input) {
+    if (input) {
+      return 'Horneado';
+    }
+    return 'Crudo';
+  }
+});

@@ -7,11 +7,13 @@
         <br />
         <br />
         <p class="input-group col-sm-9">
-          <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" readonly/>
+          <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="order.dt" is-open="popup1.opened"
+          datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" readonly/>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
         </p>
+        {{dt}}
       </div>
 
       <div class="col-sm-7">
@@ -20,13 +22,15 @@
           <label>Inicial: </label>
         </div>
         <div class="col-sm-4">
-          <div uib-timepicker ng-model="timeInitial" name="initial_suggested_time" ng-change="changedInitial()" hour-step="hstep" minute-step="mstep" min="minTimeInitial" max="maxTimeInitial" show-meridian=false></div>
+          <div uib-timepicker ng-model="order.timeInitial" name="initial_suggested_time" ng-change="changedInitial()" hour-step="order.hstep"
+          minute-step="order.mstep" min="order.minTimeInitial" max="order.maxTimeInitial" show-meridian=false></div>
         </div>
         <div class="col-sm-1 label-time">
           <label>Final:</label>
         </div>
         <div class="col-sm-4">
-          <div uib-timepicker ng-model="timeFinal" name="initial_suggested_time" ng-change="changedFinal()" hour-step="hstep" minute-step="mstep" min="minTimeFinal" max="maxTimeFinal" show-meridian=false></div>
+          <div uib-timepicker ng-model="order.timeFinal" name="initial_suggested_time" ng-change="changedFinal()" hour-step="order.hstep"
+          minute-step="order.mstep" min="order.minTimeFinal" max="order.maxTimeFinal" show-meridian=false></div>
         </div>
       </div>
     </fieldset>

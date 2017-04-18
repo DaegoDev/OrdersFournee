@@ -112,7 +112,41 @@
         $ngConfirm('Debe seleccionar una orden.');
         return;
       }
+      console.log(checkedOrders);
+      var credentials = {
+        orderIds: checkedOrders,
+        newState: $scope.placement.selected,
+      }
+      // console.log(credentials.orderIds);
+      // console.log(credentials.newState);
+      OrderService.changeState(credentials)
+      .then(function (res) {
+        // console.log(res.data);
+        var updatedOrders = res.data;
+        angular.forEach(updatedOrders, function(order, index) {
+          $scope.orders[order.id].state = order.state;
+        })
+      })
+    }
 
+    $scope.openFormDeliveryDate = function() {
+      $scope.newDeliveryDate = null;
+      $ngConfirm({
+        title: 'Nueva fecha de entrega',
+        contentUrl: 'templates/private/employee/order-details.html',
+        scope: $scope,
+        theme: 'light',
+        columnClass: 'medium'
+      })
+    }
+
+    $scope.changeDeliveryDate = function () {
+      var checkedOrders = getCheckedOrders();
+      if(checkedOrders.length == 0){
+        $ngConfirm('Debe seleccionar una orden.');
+        return;
+      }
+      console.log(checkedOrders);
       var credentials = {
         orderIds: checkedOrders,
         newState: $scope.placement.selected,

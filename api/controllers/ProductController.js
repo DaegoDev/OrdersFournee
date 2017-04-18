@@ -55,7 +55,7 @@ module.exports = {
         sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
         items.forEach(function(item, i, items) {
-          if (item.name == 'masa') {
+          if (item.name.toLowerCase() == 'masa') {
             doughName = item.value;
           }
         })
@@ -66,7 +66,6 @@ module.exports = {
       })
       .then(function(items) {
         var products = items[0].products;
-        sails.log.debug(products.length);
         if (products.length == 0) {
           var doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
           numberCode = arrayDough.indexOf(doughNameArray) + 1;

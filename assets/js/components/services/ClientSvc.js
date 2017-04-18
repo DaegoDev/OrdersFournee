@@ -22,11 +22,10 @@ function ($http) {
     },
 
     // service to get all de products available to a client.
-    getProductsClient: function(client) {
+    getProductsClient: function() {
       var products = $http({
         url: '/client/getProductsEnabled',
-        method: 'GET',
-        params: client
+        method: 'GET'
       });
       return products;
     },
@@ -101,5 +100,13 @@ function ($http) {
       });
       return create;
     },
+    makeOrder: function (orderCredentials) {
+      var order = $http({
+        url: '/order/create',
+        methot: 'POST',
+        params: orderCredentials
+      });
+      return order;
+    }
   };
 }]);

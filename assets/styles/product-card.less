@@ -1,5 +1,8 @@
 product-card {
+  position: static;
+  display: inline-block;
   width: 175px;
+  max-width: 175px;
   margin: 10px;
   border: 1px solid;
   border-radius: 5px;
@@ -45,7 +48,6 @@ product-card {
 
       table {
         margin-bottom: 0;
-
         tr {
           td {
             font-size: 85%;
@@ -61,13 +63,54 @@ product-card {
     }
 
     .amount-order {
+      padding: 5px;
+      border-top: 1px outset;
       form {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin: 5px;
-        .input-group:first-child {
+        .form-group {
+          display: inline-block;
+          vertical-align: top;
+          margin: 0;
+          padding: 0;
+        }
+        input[type="number"] {
           width: 125px;
+          height: 30px;
+        }
+        input[type="checkbox"] {
+          width: 35px;
+          height: 30px;
+          display: inline-block;
+          visibility: hidden;
+          position: absolute;
+          & + span {
+            border-radius: 4px;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            width: 33px;
+            height: 30px;
+            background-color: @btn-sienna;
+            color: @font-white;
+            &:hover {
+              cursor: pointer;
+              background-color: @btn-sunset-orange;
+            }
+          }
+        }
+        label{
+          padding: 0;
+        }
+        input[type="checkbox"]:checked {
+          & + span {
+            box-shadow: inset 0px 0px 0px black;
+            background-color: #9c1c07;
+          }
+          & + span::before {
+            content: "\f00c";
+          }
+        }
+        input[type="submit"] {
+          width: 165px;
         }
       }
     }

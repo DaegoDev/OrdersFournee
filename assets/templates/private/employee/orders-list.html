@@ -21,8 +21,11 @@
     <div class="col-sm-3">
       <select class="form-control" id="states" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
     </div>
-    <div>
+    <div class="col-sm-2">
       <button ng-click="changeState()" class="btn btn-sm btn-sienna">Cambiar estado</button>
+    </div>
+    <div class="col-sm-3">
+      <button ng-click="changeDeliveryDate()" class="btn btn-sm btn-sienna">Cambiar fecha de entrega</button>
     </div>
   </div>
   <hr />

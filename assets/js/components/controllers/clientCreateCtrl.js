@@ -59,7 +59,7 @@
         legalName: $scope.client.legalName,
         nit: $scope.client.nit
       }
-      console.log(clientInfo);
+
       SignupService.validateClient(clientInfo)
         .then(function (res) {
           if (res.data) {
@@ -109,7 +109,7 @@
         clientAdditionalInformation: $scope.client.additionalInformation,
         productCodes: $scope.productsCodes
       }
-
+      $log.info(clientCredentials);
       SignupService.signupClient(clientCredentials)
         .then(function(res) {
           $scope.user = res.data;

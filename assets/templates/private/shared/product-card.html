@@ -5,27 +5,27 @@
 
   <div class="product-items">
     <table class="table table-hover table-condensed">
-      <tr ng-repeat="item in product.items">
-        <td >{{item.elementName | capitalize}}</td>
-        <td >{{item.value | capitalize}}</td>
+      <tr ng-repeat="item in dirProduct.items">
+        <td>{{item.elementName | capitalize}}</td>
+        <td>{{item.value | capitalize}}</td>
       </tr>
     </table>
   </div>
 
   <div class="amount-order" ng-show="type == 'orderProduct'">
-    <form class="" ng-submit="addProduct()">
-      <div class="input-group input-group-sm">
-        <div class="input-group-addon">
-          <span class="fa fa-hashtag"></span>
-        </div>
-        <input type="number" ng-model="amount" class="form-control">
+    <form class="form-inline" ng-submit="addProduct()">
+      <div class="form-group">
+        <input type="number" ng-model="amount" class="form-control" placeholder="Cantidad">
       </div>
-      <div class="input-group">
-        <button type="submit" name="button" class="btn btn-sienna btn-sm">
-          <span class="fa fa-plus"></span>
-        </button>
+
+      <div class="form-group" tooltips tooltip-template="Horneado">
+        <label >
+          <input type="checkbox" ng-model="baked"><span class="fa fa-fire"></span>
+        </label>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="btn btn-sienna btn-sm" value="Agregar">
       </div>
     </form>
   </div>
-
 </div>

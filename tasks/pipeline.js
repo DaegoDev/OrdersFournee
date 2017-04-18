@@ -20,6 +20,7 @@ var cssFilesToInject = [
   'bower_components/bootstrap/dist/css/bootstrap.min.css',
   'bower_components/font-awesome/css/font-awesome.min.css',
   'bower_components/angular-confirm/css/angular-confirm.css',
+  'bower_components/angular-tooltips/dist/angular-tooltips.min.css',
   'styles/**/*.css'
 ];
 
@@ -47,6 +48,7 @@ var jsFilesToInject = [
   'bower_components/angular-messages/angular-messages.js',
   'bower_components/angular-password/angular-password.js',
   'bower_components/angular-confirm/dist/angular-confirm.min.js',
+  'bower_components/angular-tooltips/dist/angular-tooltips.min.js',
 
   // Angular files are here.
   'js/main.js',

@@ -39,7 +39,8 @@ module.exports.policies = {
     // recuperarContrasena: 'isRecuperacionValida',
     enableProduct: 'isAdmin',
     disableProduct: 'isAdmin',
-    // signup: 'isAdmin'
+    signup: 'isAdmin',
+    getProductsEnabled: 'isClient'
   },
 
   ClientEmployeeController: {
@@ -60,10 +61,10 @@ module.exports.policies = {
   },
 
   OrderController: {
-    // create: 'isClient',
+    create: 'isClient',
     updateDeliveryDate: 'isEmployee',
     changeState: 'isEmployee',
-    // getByDeliveryDate: 'isEmployee',
+    getByDeliveryDate: 'isEmployee',
     getByClient: 'isClient'
   },
 

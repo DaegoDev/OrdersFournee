@@ -19,5 +19,13 @@ function ($http, $rootScope) {
       });
       return products;
     },
+    getProductsByClient: function (client) {
+      var products = $http({
+        url: '/product/getProductsByClient',
+        method: 'GET',
+        params: client
+      });
+      return products;      
+    }
   };
 }]);

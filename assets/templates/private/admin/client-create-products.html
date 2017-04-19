@@ -4,7 +4,21 @@
       <div class="title">
         Lista de productos
       </div>
-      <product-card ng-repeat="product in products" product="product"
+      <div class="row">
+            <div class="col-sm-12">
+                <div>
+                    <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchText.shortName">
+                        <span class="input-group-addon">
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+      </div>
+      <product-card ng-repeat="product in products | filter:searchText" product="product"
         ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
       </product-card>
     </div>

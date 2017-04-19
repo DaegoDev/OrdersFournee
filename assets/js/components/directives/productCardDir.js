@@ -8,9 +8,10 @@
       scope : {
         product: '=',
         type: '@',
-        selectList: '=?'
+        selectList: '=?',
+        control: '=?'
       },
-      controller: 'productCardCtrl'
+      controller: 'productCardCtrl',
     }
   })
 
@@ -18,7 +19,7 @@
 
   function productCardCtrl($scope, $log) {
     // Control variables to manage the behaviour of the directive base on the type value.
-    $scope.dirProduct = null;
+    $scope.dirControl = null;
     $scope.clientProduct = null;
     $scope.name = '';
 
@@ -28,8 +29,14 @@
     var rawProduct = null;
     var bakedProduct = null;
 
+    if (!$scope.control) {
+      $scope.control = {};
+    }
+    $scope.dirControl = $scope.control;
+
     // Check which type of directive is used, then set the corresponding values.
     if ($scope.type == 'orderProduct') {
+
       $scope.dirProduct = $scope.product.product;
       $scope.clientProduct = {
         clientId: $scope.clientId,
@@ -52,38 +59,74 @@
       $scope.name = $scope.product.shortName;
     }
 
-    // Function to change the product's name of a client.
-    $scope.changeName = function () {
 
+    // API functions exposed.
+    // Function to get the current amount of items.
+    $scope.dirControl.getAmount = function () {
+      return $scope.amount;
+    }
+
+    // Function to get the current type of product (Baked = true, Raw = false).
+    $scope.dirControl.getBaked = function () {
+      return $scope.baked;
+    }
+
+    // Function to get the configured product with name, amount and type.
+    $scope.dirControl.getProduct = function () {
+      return buildProduct();
+    }
+
+    // function to remove a product saved in the selectList.
+    $scope.dirControl.removeProduct = function (product) {
+      var index = $scope.selectList.indexOf(product);
+      if (index != -1) {
+        $scope.selectList.splice(index,1);
+      }
+      if (rawProduct == product) {
+        rawProduct = null;
+      } else if (bakedProduct == product) {
+        bakedProduct = null;
+      }
+    }
+
+    // Function to reset directive to default values
+    $scope.dirControl.reset = function () {
+      $scope.baked = false;
+      $scope.amount = 0;
+      rawProduct = null;
+      bakedProduct = null;
     }
 
     // Function to add a product to the list passed as attribute.
-    $scope.addProduct = function () {
-      var currentProduct = null;
-      var name = null;
-      if ($scope.amount == 0) {
-        return;
+    $scope.addProductToList = function () {
+      var product = buildProduct();
+      if (product) {
+        var index = $scope.selectList.indexOf(product);
+        if (index == -1) {
+          $scope.selectList.push(product);
+        }
       }
+    }
 
-      if ($scope.product.customName) {
-        name = $scope.product.customName;
-      } else {
-        name = $scope.product.product.shortName;
+    // Function to build current product selected.
+    function buildProduct () {
+      var currentProduct = null;
+      if ($scope.amount == 0) {
+        return ;
       }
 
       if (!$scope.baked && !rawProduct) {
-
         rawProduct = {
           client_product: $scope.product.id,
-          name: name,
-          amount: $scope.amount,
+          name: $scope.name,
+          amount: 0,
           baked: false
         }
       } else if ($scope.baked && !bakedProduct) {
         bakedProduct = {
           client_product: $scope.product.id,
-          name: name,
-          amount: $scope.amount,
+          name: $scope.name,
+          amount: 0,
           baked: true
         }
       }
@@ -93,23 +136,8 @@
       } else {
         currentProduct = rawProduct;
       }
-
-      var index = $scope.selectList.indexOf(currentProduct);
-
-      if (index == -1) {
-        $scope.selectList.push(currentProduct);
-      } else {
-        currentProduct.amount += $scope.amount;
-      }
-    }
-
-    // Function to remove a whole product insterted in the list passed as attribute.
-    $scope.removeProduct = function () {
-      var index = $scope.selectList.indexOf($scope.product);
-      if (index != -1) {
-        $scope.selectList.splice(index,1);
-      }
+      currentProduct.amount += $scope.amount;
+      return currentProduct;
     }
   }
-
 }())

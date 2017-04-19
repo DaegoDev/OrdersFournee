@@ -4,6 +4,7 @@
     ['$scope', '$log', '$state', 'ClientSvc', clientListCtrl]);
 
   function clientListCtrl($scope, $log, $state, ClientSvc) {
+    $scope.orderbyProperty = 'state';
     ClientSvc.getClients()
       .then(function (res) {
         $scope.clients = res.data;
@@ -15,6 +16,11 @@
 
       $scope.showDetails = function (client) {
         $state.go('client.details', {client: client});
+      }
+
+      $scope.sortBy = function (name) {
+        $scope.sortByProperty = name;
+        $scope.sortReversed = ($scope.sortByProperty === name) ? !$scope.sortReversed : false;
       }
   }
 }())

@@ -7,7 +7,8 @@
       templateUrl: 'templates/private/shared/item-card.html',
       scope : {
         item: '=',
-        selectedItem: '='
+        selectedItem: '=',
+        control: '='
       },
       controller: 'itemCard',
     }
@@ -15,8 +16,14 @@
 
   fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc', itemCard]);
   function itemCard($scope, $log, productItemSvc) {
+    $scope.currentItem = null;
     $scope.isCollapsed = false;
-    var currentSelected = null;
+    $scope.dirControl = null;
+
+    if (!$scope.control) {
+      $scope.control = {}
+    }
+    $scope.dirControl = $scope.control;
 
     $scope.createItem = function () {
       var item = {
@@ -50,27 +57,43 @@
     }
 
     $scope.selectItem = function (item) {
+      var index = -1;
+      item.name = $scope.item.name;
       if ($scope.currentItem != item) {
         if ($scope.currentItem) {
           $scope.currentItem.isSelected = false;
+          index = $scope.selectedItem.indexOf($scope.currentItem);
+          $scope.selectedItem.splice(index,1);
         }
         $scope.currentItem = item;
         $scope.currentItem.isSelected = true;
-
-        if (!$scope.selectedItem[$scope.item.name]) {
-          $scope.selectedItem[$scope.item.name] = {name: $scope.item.name};
-        }
-
-        $scope.selectedItem[$scope.item.name].id = item.id;
-        $scope.selectedItem[$scope.item.name].value = item.value;
-        $scope.selectedItem[$scope.item.name].shortValue = item.shortValue;
+        $scope.selectedItem.push(item);
         $scope.isCollapsed = true;
 
       } else {
         $scope.currentItem.isSelected = false;
+        index = $scope.selectedItem.indexOf($scope.currentItem);
+        $scope.selectedItem.splice(index,1);
         $scope.currentItem = null;
-        delete $scope.selectedItem[$scope.item.name];
       }
+    }
+
+    // API functions of directive exposed.
+    // function to reset directive to default.
+    $scope.dirControl.reset = function () {
+      if ($scope.currentItem) {
+        var index = $scope.selectedItem.indexOf($scope.currentItem);
+        if (index != -1) {
+          $scope.selectedItem.splice(index,1);
+        }
+        $scope.currentItem.isSelected = false;
+      }
+      $scope.currentItem = null;
+      $scope.isCollapsed = false;
+    }
+    // Function to get current item.
+    $scope.dirControl.getCurrentItem = function () {
+      return $scope.currentItem;
     }
   }
 }())

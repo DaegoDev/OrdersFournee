@@ -1,12 +1,13 @@
 (function() {
   var fournee = angular.module('fournee');
-  fournee.controller('productCreateCtrl', ['$scope', '$log', '$ngConfirm', 'productItemSvc', 'productSvc', productCreateCtrl]);
+  fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'productItemSvc', 'productSvc', productCreateCtrl]);
 
-  function productCreateCtrl($scope, $log, $ngConfirm, productItemSvc, productSvc) {
+  function productCreateCtrl($scope, $log, $state, $ngConfirm, productItemSvc, productSvc) {
     $scope.product = {};
-    $scope.selectedItems = {};
-    $scope.isCreatingElement = false;
-
+    $scope.selectedItems = [];
+    $scope.items = null;
+    $scope.product.name = '';
+    $scope.product.shortName = '';
     // Message options configuration to further error messages.
     $scope.messageOptions = {
       showMessage: false,
@@ -15,15 +16,46 @@
       title: ''
     }
 
+    productItemSvc.getAll()
+      .then(function(res) {
+        $scope.items = res.data
+      });
+
     $scope.createProduct = function() {
       var items = [];
-      for (var i in $scope.selectedItems) {
-        items.push($scope.selectedItems[i])
-      }
-      productSvc.createProduct({
-          items: items
-        })
+      $scope.selectedItems.forEach(function (item, index, itemList) {
+        items.push({
+          id: item.id,
+          name: item.name,
+          value: item.value,
+          shortValue: item.shortValue
+        });
+      });
+      productSvc.createProduct({items: items})
         .then(function(res) {
+          $ngConfirm({
+            title: 'Producto creado.',
+            content: 'El producto ha sido creado con exito.',
+            type: 'green',
+            buttons: {
+              new: {
+                text: 'Crear nuevo',
+                btnClass: 'btn-sienna',
+                action: function (scope, buttons) {
+                  $scope.reset();
+                  $scope.$apply();
+                  $state.go('product.create');
+                }
+              },
+              exit: {
+                text: 'Ver lista',
+                btnClass: 'btn-sienna',
+                action: function (scope, buttons) {
+                  $state.go('product.list')
+                }
+              }
+            }
+          });
           $log.warn(res.data);
         })
         .catch(function(err) {
@@ -122,6 +154,12 @@
         });
     }
 
+    $scope.reset = function () {
+      $scope.items.forEach(function (item , index, items) {
+        item.control.reset();
+      });
+    }
+
     $scope.$watch('selectedItems', function functionName(newValue, oldValue, scope) {
       if (newValue != oldValue) {
         var name = '';
@@ -134,9 +172,7 @@
         $scope.product.shortName = shortName.trim();
       }
     }, true);
-    productItemSvc.getAll()
-      .then(function(res) {
-        $scope.items = res.data
-      });
+
+
   }
 }())

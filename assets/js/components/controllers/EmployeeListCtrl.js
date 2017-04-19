@@ -47,5 +47,10 @@
           $ngConfirm('No se pudo desactivar el usuario.');
         })
     }
+
+    $scope.sortBy = function (name) {
+      $scope.sortByProperty = name;
+      $scope.sortReversed = ($scope.sortByProperty === name) ? !$scope.sortReversed : false;
+    }
   }
 }())

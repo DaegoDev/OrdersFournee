@@ -143,15 +143,18 @@ module.exports = {
     var dataDate = deliveryDateString.split("-", 3);
     deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
 
-    orderIds = parseInt(req.param('orderIds'));
+    orderIds = req.param('orderIds');
     if (orderIds.length == 0) {
       return res.badRequest('Ids de los pedidos vacio.');
     }
+    sails.log.debug(orderIds);
     if(Array.isArray(orderIds)){
       orderIds.forEach(function (orderId, i, orderIds) {
         orderId = parseInt(orderId);
       })
     }
+
+    sails.log.debug(deliveryDate);
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
         id: orderIds
@@ -160,17 +163,15 @@ module.exports = {
         // if (!order) {
         //   throw "La orden no existe";
         // } else
-        if (!isCorrectDeliveryDate(order.deliveryDate, deliveryDate)) {
-          throw "La nueva fecha de entrega no es correcta";
-        }
-        return Order.update({
-          id: orderIds
-        }, {
+        // if (!isCorrectDeliveryDate(order.deliveryDate, deliveryDate)) {
+        //   throw "La nueva fecha de entrega no es correcta";
+        // }
+        return Order.update(orderIds, {
           deliveryDate: deliveryDate
         });
       })
-      .then(function(order) {
-        res.ok()
+      .then(function(orders) {
+        res.ok(orders)
       })
       .catch(function(err) {
         res.serverError(err);
@@ -209,7 +210,7 @@ module.exports = {
       })
     }
     //Verifica que la orden exista. Si existe cambia el campo estado con el nuevo valor enviado
-    Order.findOne({
+    Order.find({
         id: orderIds
       })
       .then(function(orders) {

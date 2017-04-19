@@ -9,17 +9,18 @@
     };
     $scope.today();
 
-    // $scope.inlineOptions = {
-    //   customClass: getDayClass,
-    //   minDate: new Date(),
-    //   showWeeks: true
-    // };
-
     $scope.dateOptions = {
       dateDisabled: disabled,
       formatYear: 'yy',
       maxDate: new Date(2020, 5, 22),
       // minDate: new Date(),
+      startingDay: 1
+    };
+    $scope.optionsDeliveryDate = {
+      dateDisabled: disabled,
+      formatYear: 'yy',
+      maxDate: new Date(2020, 5, 22),
+      minDate: new Date(),
       startingDay: 1
     };
 
@@ -59,6 +60,25 @@
       return '';
     }
 
+    // Datepicker para cambiar la fecha de entrega
+    $scope.today2 = function() {
+      $scope.dt2 = new Date();
+    };
+    $scope.today2();
+
+    $scope.open2 = function() {
+      var checkedOrders = getCheckedOrders();
+      if (checkedOrders.length == 0) {
+        $ngConfirm('Debe seleccionar una orden.');
+        return;
+      }
+      $scope.popup2.opened = true;
+    };
+
+    $scope.popup2 = {
+      opened: false
+    };
+
     // Dropdown para listar los estados de un pedido;
     $scope.placement = {
       options: ['Confirmado',
@@ -89,7 +109,7 @@
       angular.forEach($scope.orders, function(order, key) {
         $scope.checkboxObj[order.id] = false;
       })
-      console.log($scope.checkboxObj);
+      // console.log($scope.checkboxObj);
     }
 
     // Obtiene todas los pedidos con una fecha de entrega
@@ -106,64 +126,98 @@
       return checkedOrders;
     }
 
+    $scope.checkAllOrders = function() {
+      console.log($scope.all);
+      angular.forEach($scope.checkboxObj, function(checkbox, index) {
+        if ($scope.all && !checkbox) {
+          $scope.checkboxObj[index] = !checkbox;
+        } else if (!$scope.all && checkbox) {
+          $scope.checkboxObj[index] = !checkbox;
+        }
+      })
+      console.log($scope.checkboxObj);
+    }
+
+    $scope.checkSelectAll = function(order) {
+      var isCheckedAll = true
+      angular.forEach($scope.checkboxObj, function(checkbox, index) {
+        if (isCheckedAll) {
+          if (!checkbox) {
+            isCheckedAll = false;
+          }
+        }
+      })
+      if (isCheckedAll) {
+        $scope.all = true;
+      }
+      // else if (!$scope.checkboxObj[order]) {
+      //   $scope.all = false;
+      // }
+      // console.log($scope.checkboxObj);
+    }
+
     $scope.changeState = function() {
       var checkedOrders = getCheckedOrders();
-      if(checkedOrders.length == 0){
+      if (checkedOrders.length == 0) {
         $ngConfirm('Debe seleccionar una orden.');
         return;
       }
-      console.log(checkedOrders);
+      // console.log(checkedOrders);
       var credentials = {
         orderIds: checkedOrders,
         newState: $scope.placement.selected,
       }
-      // console.log(credentials.orderIds);
-      // console.log(credentials.newState);
       OrderService.changeState(credentials)
-      .then(function (res) {
-        // console.log(res.data);
-        var updatedOrders = res.data;
-        angular.forEach(updatedOrders, function(order, index) {
-          $scope.orders[order.id].state = order.state;
+        .then(function(res) {
+          // console.log(res.data);
+          var updatedOrders = res.data;
+          angular.forEach(updatedOrders, function(order, index) {
+            $scope.orders[order.id].state = order.state;
+          })
         })
-      })
     }
 
-    $scope.openFormDeliveryDate = function() {
-      $scope.newDeliveryDate = null;
+    $scope.showConfirmation = function() {
+      $scope.ordersConfirmed = getCheckedOrders();
       $ngConfirm({
-        title: 'Nueva fecha de entrega',
-        contentUrl: 'templates/private/employee/order-details.html',
+        title: 'Cambio de fecha de entrega',
+        contentUrl: 'templates/private/employee/confirm-change-deliveryDate.html',
         scope: $scope,
         theme: 'light',
-        columnClass: 'medium'
-      })
+        columnClass: 'medium',
+        buttons: {
+          confirmButton: {
+            text: 'Confirmar',
+            btnClass: 'btn-green',
+            action: function() {
+              changeDeliveryDate();
+            }
+          },
+          close: function() {}
+        }
+      });
+
     }
 
-    $scope.changeDeliveryDate = function () {
+    function changeDeliveryDate() {
       var checkedOrders = getCheckedOrders();
-      if(checkedOrders.length == 0){
-        $ngConfirm('Debe seleccionar una orden.');
-        return;
-      }
-      console.log(checkedOrders);
+      var newDeliveryDate = ($scope.dt2.getYear() + 1900) + "-" + $scope.dt2.getMonth() + "-" + $scope.dt2.getDate();
+      // console.log(checkedOrders);
       var credentials = {
         orderIds: checkedOrders,
-        newState: $scope.placement.selected,
+        deliveryDate: newDeliveryDate,
       }
+      // console.log("va a cambiar fecha...");
       // console.log(credentials.orderIds);
-      // console.log(credentials.newState);
-      OrderService.changeState(credentials)
-      .then(function (res) {
-        // console.log(res.data);
-        var updatedOrders = res.data;
-        angular.forEach(updatedOrders, function(order, index) {
-          $scope.orders[order.id].state = order.state;
+      OrderService.changeDeliveryDate(credentials)
+        .then(function(res) {
+          // console.log(res.data);
+          var updatedOrders = res.data;
+          angular.forEach(updatedOrders, function(order, index) {
+            delete $scope.orders[order.id];
+          })
         })
-      })
     }
-
-
 
     $scope.showDetails = function(order) {
       $scope.orderId = order;

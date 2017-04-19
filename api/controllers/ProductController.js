@@ -25,12 +25,19 @@ module.exports = {
     items = req.param('items');
 
     // Se genera el nombre y el nombre abreviado de un producto de acuerdo a los items
-    items.forEach(function(item, i, items) {
-      item = JSON.parse(item)
-      items[i] = item;
-      name = name + " " + item.value;
-      shortName = shortName + " " + item.shortValue;
-    });
+    if (typeof items == 'string') {
+      items = JSON.parse(items)
+      name = items.value;
+      shortName = items.shortValue;
+    }
+    else {
+      items.forEach(function(item, i, items) {
+        item = JSON.parse(item)
+        items[i] = item;
+        name = name + " " + item.value;
+        shortName = shortName + " " + item.shortValue;
+      });
+    }
     // Organización de credenciales de un producto.
     var productCredentials = {
       name: name,
@@ -41,10 +48,7 @@ module.exports = {
     var connectionConfig = AlternativeConnectionService.getConnection();
     var sql = connectionConfig.sql;
 
-    Element.find({
-        name: 'masa'
-      })
-      .populate('items')
+    Element.find({name: 'masa'}).populate('items')
       .then(function(elementItems) {
         var arrayObjectsItems = elementItems[0].items;
         arrayObjectsItems.forEach(function(itemObject, i, arrayObjectsItems) {
@@ -54,15 +58,17 @@ module.exports = {
         });
         sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
-        items.forEach(function(item, i, items) {
-          if (item.name.toLowerCase() == 'masa') {
-            doughName = item.value;
-          }
-        })
+        if (items.constructor == [].constructor) {
+          items.forEach(function(item, i, items) {
+            if (item.name.toLowerCase() == 'masa') {
+              doughName = item.value;
+            }
+          })
+        } else {
+          doughName = items.value;
+        }
         // Construye la letra del codigo del producto
-        return Item.find({
-          value: doughName
-        }).populate('products')
+        return Item.find({value: doughName}).populate('products')
       })
       .then(function(items) {
         var products = items[0].products;
@@ -86,12 +92,20 @@ module.exports = {
       })
       .then(function(newProduct) {
         var itemProductCredentials = [];
-        items.forEach(function(item, i, items) {
-          itemProductCredentials[i] = {
+
+        if (items.constructor == [].constructor) {
+          items.forEach(function(item, i, items) {
+            itemProductCredentials[i] = {
+              product_code: productCredentials.code,
+              item_id: item.id
+            };
+          });
+        } else {
+          itemProductCredentials = {
             product_code: productCredentials.code,
-            item_id: item.id
+            item_id: items.id
           };
-        });
+        }
         return sql.insert('item_product', itemProductCredentials)
       })
       .then(function(itemProduct) {

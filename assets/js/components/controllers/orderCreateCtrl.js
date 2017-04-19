@@ -41,82 +41,83 @@
         $log.error('Server error on get products.');
       });
 
-      // Function to make a order.
-      $scope.makeOrder = function () {
-        var productsToOrder = [];
-        var product = null;
-        var tmpDeliveryDate = null;
-        var tmpClientEmployee = null;
-        var tmpInitialTime = null;
-        var tmpFinalTime = null;
-        var tmpInformation = null;
+    // Function to make a order.
+    $scope.makeOrder = function() {
+      var productsToOrder = [];
+      var product = null;
+      var tmpDeliveryDate = null;
+      var tmpClientEmployee = null;
+      var tmpInitialTime = null;
+      var tmpFinalTime = null;
+      var tmpInformation = null;
 
-        $scope.orderList.forEach(function (product) {
-          product = {
-            client_product: product.client_product,
-            amount: product.amount,
-            baked: product.baked,
-          }
-          productsToOrder.push(product);
-        });
-
-        tmpDeliveryDate = $scope.order.dt.getFullYear() + '-' + $scope.order.dt.getMonth() + '-' + $scope.order.dt.getDate();
-        tmpClientEmployee = $scope.placement.selected.id;
-
-        if ($scope.order.timeInitial.getMinutes() <= 9) {
-          tmpInitialTime = $scope.order.timeInitial.getHours() + ':0' + $scope.order.timeInitial.getMinutes();
-        } else {
-          tmpInitialTime = $scope.order.timeInitial.getHours() + ':' + $scope.order.timeInitial.getMinutes();
+      $scope.orderList.forEach(function(product) {
+        product = {
+          client_product: product.client_product,
+          amount: product.amount,
+          baked: product.baked,
         }
+        productsToOrder.push(product);
+      });
 
-        if ($scope.order.timeFinal.getMinutes() <= 9) {
-          tmpFinalTime = $scope.order.timeFinal.getHours() + ':0' + $scope.order.timeFinal.getMinutes();
-        } else {
-          tmpFinalTime = $scope.order.timeFinal.getHours() + ':' + $scope.order.timeFinal.getMinutes();
-        }
+      tmpDeliveryDate = $scope.order.dt.getFullYear() + '-' + $scope.order.dt.getMonth() + '-' + $scope.order.dt.getDate();
+      tmpClientEmployee = $scope.placement.selected.id;
 
-        tmpInformation = $scope.order.additionalInformation;
-
-        var orderCredentials = {
-          deliveryDate: tmpDeliveryDate,
-          clientEmployee: tmpClientEmployee,
-          initialSuggestedTime: tmpInitialTime,
-          finalSuggestedTime: tmpFinalTime,
-          additionalInformation: tmpInformation,
-          productsToOrder: productsToOrder
-        }
-        ClientSvc.makeOrder(orderCredentials)
-          .then(function (res) {
-            $ngConfirm({
-              title: 'Pedido realizado.',
-              content: 'El pedido ha sido realizado con exito.',
-              type: 'green',
-              buttons: {
-                new: {
-                  text: 'Nuevo pedido',
-                  btnClass: 'btn-sienna',
-                  action: function (scope, buttons) {
-                    $state.go('order.create.shoppingCart')
-                  }
-                },
-                exit: {
-                  text: 'Salir',
-                  btnClass: 'btn-sienna',
-                  action: function (scope, buttons) {
-                    $state.go('order.myList');
-                  }
-                }
-              }
-            });
-            $log.info(res.data);
-          })
-          .catch(function (err) {
-            $ngConfirm('El pedido no ha sido creado, verifique la fecha de entrega.');
-            $log.error(err);
-          });
+      if ($scope.order.timeInitial.getMinutes() <= 9) {
+        tmpInitialTime = $scope.order.timeInitial.getHours() + ':0' + $scope.order.timeInitial.getMinutes();
+      } else {
+        tmpInitialTime = $scope.order.timeInitial.getHours() + ':' + $scope.order.timeInitial.getMinutes();
       }
 
-      // Function to validate products selected to make an order.
+      if ($scope.order.timeFinal.getMinutes() <= 9) {
+        tmpFinalTime = $scope.order.timeFinal.getHours() + ':0' + $scope.order.timeFinal.getMinutes();
+      } else {
+        tmpFinalTime = $scope.order.timeFinal.getHours() + ':' + $scope.order.timeFinal.getMinutes();
+      }
+
+      tmpInformation = $scope.order.additionalInformation;
+
+      var orderCredentials = {
+        deliveryDate: tmpDeliveryDate,
+        clientEmployee: tmpClientEmployee,
+        initialSuggestedTime: tmpInitialTime,
+        finalSuggestedTime: tmpFinalTime,
+        additionalInformation: tmpInformation,
+        productsToOrder: productsToOrder
+      }
+      ClientSvc.makeOrder(orderCredentials)
+        .then(function(res) {
+          $ngConfirm({
+            title: 'Pedido realizado.',
+            content: 'El pedido ha sido realizado con exito.',
+            type: 'green',
+            buttons: {
+              new: {
+                text: 'Nuevo pedido',
+                btnClass: 'btn-sienna',
+                action: function(scope, buttons) {
+                  $scope.reset();
+                  $state.go('order.create.shoppingCart');
+                }
+              },
+              exit: {
+                text: 'Salir',
+                btnClass: 'btn-sienna',
+                action: function(scope, buttons) {
+                  $state.go('order.myList');
+                }
+              }
+            }
+          });
+          $log.info(res.data);
+        })
+        .catch(function(err) {
+          $ngConfirm('El pedido no ha sido creado, verifique la fecha de entrega.');
+          $log.error(err);
+        });
+    }
+
+    // Function to validate products selected to make an order.
     $scope.validateProducts = function() {
       if ($scope.orderList.length == 0) {
         return;
@@ -125,9 +126,24 @@
     }
 
     // Function to delete a product from the order list.
-    $scope.unSelectProduct = function (product) {
+    $scope.deselectProduct = function(product) {
       var index = $scope.orderList.indexOf(product);
       $scope.orderList.splice(index, 1);
+      product.amount = 0;
+    }
+
+    // Function to reset product creation values.
+    $scope.reset = function () {
+      $scope.products.forEach(function (product, index, products) {
+        product.control.reset();
+      });
+      $scope.orderList = [];
+      $scope.order.timeInitial = new Date();
+      $scope.order.timeInitial.setHours(12);
+      $scope.order.timeInitial.setMinutes(0);
+      $scope.order.timeFinal = $scope.order.timeInitial;
+      $scope.today();
+      $scope.$apply();
     }
 
     $scope.changedInitial = function() {

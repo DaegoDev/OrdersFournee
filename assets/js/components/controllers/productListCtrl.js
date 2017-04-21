@@ -1,17 +1,20 @@
-(function () {
+(function() {
   var fournee = angular.module('fournee');
-  fournee.controller('productListCtrl', ['$scope', '$log','productSvc', clientCreateCtrl]);
+  fournee.controller('productListCtrl', ['$scope', '$log', 'productSvc', clientCreateCtrl]);
 
   function clientCreateCtrl($scope, $log, productSvc) {
     productSvc.getProducts()
-      .then(function (res) {
+      .then(function(res) {
         $scope.products = res.data;
-      });
-      $scope.lista = [];
+        console.log($scope.products);
 
-      $scope.selectProduct = function(product) {
-        $scope.lista.push(product);
-      }
+      });
+    $scope.lista = [];
+
+    $scope.selectProduct = function(product) {
+      $scope.lista.push(product);
+    }
+    
   }
 
 }())

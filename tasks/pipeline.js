@@ -49,6 +49,7 @@ var jsFilesToInject = [
   'bower_components/angular-password/angular-password.js',
   'bower_components/angular-confirm/dist/angular-confirm.min.js',
   'bower_components/angular-tooltips/dist/angular-tooltips.min.js',
+  'bower_components/color-hash/dist/color-hash.js',
 
   // Angular files are here.
   'js/main.js',

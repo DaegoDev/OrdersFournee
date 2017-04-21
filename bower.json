@@ -31,7 +31,8 @@
     "angular-password": "~1.0.3",
     "angular-messages": "~1.6.3",
     "angular-confirm": "angular1-confirm#^1.1.0",
-    "angular-tooltips": "~1.1.10"
+    "angular-tooltips": "~1.1.10",
+    "color-hash": "^1.0.3"
   },
   "resolutions": {
     "angular": "1.6.4"

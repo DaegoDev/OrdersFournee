@@ -1,11 +1,11 @@
-(function(){
+(function() {
   var fournee = angular.module('fournee');
 
-  fournee.directive('productCard', function () {
+  fournee.directive('productCard', function() {
     return {
       restric: 'E',
       templateUrl: 'templates/private/shared/product-card.html',
-      scope : {
+      scope: {
         product: '=',
         type: '@',
         selectList: '=?',
@@ -47,40 +47,41 @@
       } else {
         $scope.name = $scope.dirProduct.shortName;
       }
-    }
-    else if ($scope.type == 'select') {
+    } else if ($scope.type == 'select') {
       $scope.class = ['select'];
       $scope.dirProduct = $scope.product;
       $scope.name = $scope.product.shortName;
-    }
-    else if ($scope.type == 'list') {
+    } else if ($scope.type == 'list') {
       $scope.class = ['list'];
       $scope.dirProduct = $scope.product;
       $scope.name = $scope.product.shortName;
     }
 
+    $scope.toggleCollapse = function() {
+      $scope.collapsed = !$scope.collapsed;
+    }
 
     // API functions exposed.
     // Function to get the current amount of items.
-    $scope.dirControl.getAmount = function () {
+    $scope.dirControl.getAmount = function() {
       return $scope.amount;
     }
 
     // Function to get the current type of product (Baked = true, Raw = false).
-    $scope.dirControl.getBaked = function () {
+    $scope.dirControl.getBaked = function() {
       return $scope.baked;
     }
 
     // Function to get the configured product with name, amount and type.
-    $scope.dirControl.getProduct = function () {
+    $scope.dirControl.getProduct = function() {
       return buildProduct();
     }
 
     // function to remove a product saved in the selectList.
-    $scope.dirControl.removeProduct = function (product) {
+    $scope.dirControl.removeProduct = function(product) {
       var index = $scope.selectList.indexOf(product);
       if (index != -1) {
-        $scope.selectList.splice(index,1);
+        $scope.selectList.splice(index, 1);
       }
       if (rawProduct == product) {
         rawProduct = null;
@@ -90,7 +91,7 @@
     }
 
     // Function to reset directive to default values
-    $scope.dirControl.reset = function () {
+    $scope.dirControl.reset = function() {
       $scope.baked = false;
       $scope.amount = 0;
       rawProduct = null;
@@ -98,7 +99,7 @@
     }
 
     // Function to add a product to the list passed as attribute.
-    $scope.addProductToList = function () {
+    $scope.addProductToList = function() {
       var product = buildProduct();
       if (product) {
         var index = $scope.selectList.indexOf(product);
@@ -109,10 +110,10 @@
     }
 
     // Function to build current product selected.
-    function buildProduct () {
+    function buildProduct() {
       var currentProduct = null;
       if ($scope.amount == 0) {
-        return ;
+        return;
       }
 
       if (!$scope.baked && !rawProduct) {
@@ -139,5 +140,17 @@
       currentProduct.amount += $scope.amount;
       return currentProduct;
     }
+
+    $scope.getTitleColor = function(product) {
+      var dough = null
+      var colorHash = new ColorHash({lightness: [0.35, 0.3, 0.25]});
+      product.items.forEach(function(item, i, items) {
+        if (item.elementName.toLowerCase() == "masa") {
+          dough = item.value;
+        }
+      });
+      return {'background-color': colorHash.hex(dough)}
+    }
+
   }
 }())

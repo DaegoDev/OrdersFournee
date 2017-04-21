@@ -1,14 +1,5 @@
 <div class="">
   <fieldset>
-    <legend>Dirección de la entrega</legend><br />
-    <strong>{{orderDetails.country}}</strong><br />
-    <strong>{{orderDetails.department}}</strong><br />
-    <strong>{{orderDetails.city}}</strong><br />
-    <strong>{{orderDetails.neighborhood}}</strong><br />
-    <strong>{{orderDetails.nomenclature}}</strong><br />
-    <strong>{{orderDetails.referencia}}</strong><br />
-  </fieldset>
-  <fieldset>
     <legend>Productos</legend>
     <div class="table-container">
       <div class="table-responsive">
@@ -30,5 +21,20 @@
         </table>
       </div>
     </div>
+  </fieldset>
+  <fieldset>
+    <legend>Dirección de la entrega</legend>
+    <strong>Departamento: {{orderDetails.department}}</strong><br />
+    <strong>Ciudad: {{orderDetails.city}}</strong><br />
+    <strong>Barrio: {{orderDetails.neighborhood}}</strong><br />
+    <strong>Nomenclatura: {{orderDetails.nomenclature}}</strong><br />
+    <strong>Referencia: {{orderDetails.referencia}}</strong><br />
+  </fieldset>
+  <fieldset>
+    <legend>Información adicional</legend>
+      <label>Comentario:</label>
+      <input type="text" class="form-control" readonly value="{{orderDetails.additional_information}}" /><br />
+      <label>Fecha de creación del pedido:</label>
+      <input type="text" class="form-control" readonly value="{{orderDetails.created_at | date:'fullDate' | capitalize}}" />
   </fieldset>
 </div>

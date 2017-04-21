@@ -1,7 +1,7 @@
 <div class="basic-wrapper lg client-list-wrapper">
-  <div class="section">
-    <label class="control-label col-sm-3" for="date">Fecha:</label>
-    <p class="input-group col-sm-5">
+  <div class="section-deliveryDate">
+    <label class="control-label col-sm-1" for="date">Fecha:</label>
+    <p class="input-group col-sm-3">
       <input type="text" id="date" ng-change="getOrdersByDeliveryDate()" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
       />
       <span class="input-group-btn">
@@ -49,15 +49,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="order in orders" ng-click="showDetails(order.id)">
+          <tr ng-repeat="order in orders">
             <td><input type="checkbox" ng-click="checkSelectAll(order.id)" ng-checked="all" ng-model="checkboxObj[order.id]"></td>
             <!-- <div> -->
-            <td>{{order.id}}</td>
-            <td>{{order.trade_name}}</td>
-            <td>{{order.employeeName}}</td>
-            <td>{{order.business_phonenumber}}</td>
-            <td>{{order.initial_suggested_time}}</td>
-            <td>{{order.final_suggested_time}}</td>
+            <td ng-click="showDetails(order.id)">{{order.id}}</td>
+            <td ng-click="showDetails(order.id)">{{order.trade_name}}</td>
+            <td ng-click="showDetails(order.id)">{{order.employeeName}}</td>
+            <td ng-click="showDetails(order.id)">{{order.business_phonenumber}}</td>
+            <td ng-click="showDetails(order.id)">{{order.initial_suggested_time}}</td>
+            <td ng-click="showDetails(order.id)">{{order.final_suggested_time}}</td>
             <td>{{order.state}}</td>
             <!-- </div> -->
           </tr>

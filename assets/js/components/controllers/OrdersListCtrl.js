@@ -174,6 +174,8 @@
           angular.forEach(updatedOrders, function(order, index) {
             $scope.orders[order.id].state = order.state;
           })
+          $scope.all=false;
+          $scope.setCheckboxObj();
         })
     }
 
@@ -193,7 +195,9 @@
               changeDeliveryDate();
             }
           },
-          close: function() {}
+          close: function() {
+            $scope.today2();
+          }
         }
       });
 
@@ -207,7 +211,6 @@
         orderIds: checkedOrders,
         deliveryDate: newDeliveryDate,
       }
-      // console.log("va a cambiar fecha...");
       // console.log(credentials.orderIds);
       OrderService.changeDeliveryDate(credentials)
         .then(function(res) {
@@ -216,6 +219,7 @@
           angular.forEach(updatedOrders, function(order, index) {
             delete $scope.orders[order.id];
           })
+          $scope.all=false;
         })
     }
 
@@ -223,6 +227,7 @@
       $scope.orderId = order;
       var orderId = order.toString();
       $scope.orderDetails = $scope.orders[orderId];
+      console.log($scope.orderDetails);
       $ngConfirm({
         title: 'Detalles del pedido',
         contentUrl: 'templates/private/employee/order-details.html',

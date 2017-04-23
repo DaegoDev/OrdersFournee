@@ -21,11 +21,14 @@
       .then(function(res) {
         $scope.products = res.data;
       })
+      .catch(function (err) {
+
+      });
 
     // Function to validate client information.
     $scope.validateInfo = function () {
       if (!$scope.client.legalName) {
-        $scope.infoMsgOptions.message = 'Debe ingresar el nombre de la razón social.'
+        $scope.infoMsgOptions.message = 'Debe ingresar el nombre de la razón social.';
         $scope.infoMsgOptions.showMessage = true;
         return;
       }
@@ -97,7 +100,7 @@
     $scope.createClient = function() {
       angular.forEach($scope.productsSelected, function(product, key) {
         $scope.productsCodes.push(product.code);
-      })
+      });
 
       var clientCredentials = {
         legalName: $scope.client.legalName,
@@ -109,7 +112,7 @@
         clientAdditionalInformation: $scope.client.additionalInformation,
         productCodes: $scope.productsCodes
       }
-      $log.info(clientCredentials);
+      // $log.info(clientCredentials);
       SignupService.signupClient(clientCredentials)
         .then(function(res) {
           $scope.user = res.data;

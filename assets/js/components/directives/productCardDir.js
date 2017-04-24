@@ -23,8 +23,15 @@
     $scope.clientProduct = null;
     $scope.name = '';
 
+    // Tooltip popover options
+    $scope.tooltip = {
+      content: "",
+      templateUrl: '/templates/private/shared/product-card-tooltip.html',
+      tittle: 'Elementos'
+    }
+
     // Control variables to manage the two type of order products (raw or baked).
-    $scope.baked = false;
+    $scope.baked = "";
     $scope.amount = 0;
     var rawProduct = null;
     var bakedProduct = null;
@@ -77,6 +84,10 @@
       return buildProduct();
     }
 
+    $scope.dirControl.selectProduct = function () {
+      return $scope.product;
+    }
+
     // function to remove a product saved in the selectList.
     $scope.dirControl.removeProduct = function(product) {
       var index = $scope.selectList.indexOf(product);
@@ -116,25 +127,27 @@
         return;
       }
 
-      if (!$scope.baked && !rawProduct) {
+      if ($scope.state == 'frozen' && !rawProduct) {
         rawProduct = {
           client_product: $scope.product.id,
           name: $scope.name,
           amount: 0,
           baked: false
         }
-      } else if ($scope.baked && !bakedProduct) {
+      } else if ($scope.state == 'baked' && !bakedProduct) {
         bakedProduct = {
           client_product: $scope.product.id,
           name: $scope.name,
           amount: 0,
           baked: true
         }
+      } else if (!$scope.state) {
+        return;
       }
 
-      if ($scope.baked) {
+      if ($scope.state == 'baked') {
         currentProduct = bakedProduct;
-      } else {
+      } else if ($scope.state == 'frozen') {
         currentProduct = rawProduct;
       }
       currentProduct.amount += $scope.amount;

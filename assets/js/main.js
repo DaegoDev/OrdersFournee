@@ -1,7 +1,7 @@
 'use stric';
-var fournee = angular.module('fournee',
-['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword',
-  'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips']);
+var fournee = angular.module('fournee', ['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword',
+  'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips'
+]);
 
 // Inicializacion de la configuracion principal al ingresar al dominio.
 fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
@@ -30,10 +30,16 @@ fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
     });
 
     $rootScope.$on('$stateChangeSuccess', function() {
-   document.body.scrollTop = document.documentElement.scrollTop = 0;
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
   }
 ]);
+
+fournee.config(['$compileProvider', function($compileProvider) {
+  $compileProvider.debugInfoEnabled(false);
+  $compileProvider.commentDirectivesEnabled(false);
+  $compileProvider.cssClassDirectivesEnabled(false);
+}]);
 
 // Angular filters
 fournee.filter('capitalize', function() {

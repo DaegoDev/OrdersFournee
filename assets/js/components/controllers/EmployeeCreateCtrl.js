@@ -1,8 +1,5 @@
-(function() {
   var fournee = angular.module('fournee');
-  fournee.controller('EmployeeCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'SignupService', employeeCreateCtrl]);
-
-  function employeeCreateCtrl($scope, $log, $state, $ngConfirm, SignupService) {
+  fournee.controller('EmployeeCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'SignupService', function($scope, $log, $state, $ngConfirm, SignupService) {
     $scope.employee = {};
 
     // Dropdown para listar los tipos de empleados
@@ -107,5 +104,4 @@
       $scope[value] = !$scope[value];
     };
 
-  }
-}())
+  }]);

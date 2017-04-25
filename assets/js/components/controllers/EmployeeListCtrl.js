@@ -1,8 +1,5 @@
-(function() {
   var fournee = angular.module('fournee');
-  fournee.controller('EmployeeListCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'EmployeeSvc', employeeListCtrl]);
-
-  function employeeListCtrl($scope, $log, $state, $ngConfirm, EmployeeSvc) {
+  fournee.controller('EmployeeListCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'EmployeeSvc', function($scope, $log, $state, $ngConfirm, EmployeeSvc) {
 
     EmployeeSvc.getEmployees()
       .then(function(res) {
@@ -52,5 +49,4 @@
       $scope.sortByProperty = name;
       $scope.sortReversed = ($scope.sortByProperty === name) ? !$scope.sortReversed : false;
     }
-  }
-}())
+  }]);

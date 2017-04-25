@@ -1,5 +1,4 @@
-(function() {
-  var fournee = angular.module('fournee');
+var fournee = angular.module('fournee');
 
   fournee.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
@@ -16,7 +15,7 @@
         .state("admin", {
           url: "/admin",
           templateUrl: "templates/private/admin/index.html",
-          controller: "AdminController",
+          // controller: "AdminController",
           data: {
             permissions: {
               only: "ADMIN",
@@ -292,4 +291,3 @@
           }
         })
     }]);
-}());

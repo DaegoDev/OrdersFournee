@@ -1,9 +1,6 @@
-(function() {
   var fournee = angular.module('fournee');
-  fournee.controller('orderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', orderCreateCtrl]);
-
-  // Timepicker para el rango de hora sugerida
-  function orderCreateCtrl($scope, $log, $state, $ngConfirm, ClientSvc) {
+  fournee.controller('orderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', function($scope, $log, $state, $ngConfirm, ClientSvc) {
+    // Timepicker para el rango de hora sugerida
     $scope.order = {};
     $scope.order.timeInitial = new Date();
     $scope.order.timeInitial.setHours(12);
@@ -133,8 +130,8 @@
     }
 
     // Function to reset product creation values.
-    $scope.reset = function () {
-      $scope.products.forEach(function (product, index, products) {
+    $scope.reset = function() {
+      $scope.products.forEach(function(product, index, products) {
         product.control.reset();
       });
       $scope.orderList = [];
@@ -225,5 +222,4 @@
       }
       return '';
     }
-  }
-}())
+  }]);

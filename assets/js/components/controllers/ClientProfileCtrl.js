@@ -1,8 +1,5 @@
-(function() {
   var fournee = angular.module('fournee');
-  fournee.controller('ClientProfileCtrl', ['$scope', '$log', '$state', '$stateParams', 'ProfileService', 'ClientSvc', '$ngConfirm', clientProfileCtrl]);
-
-  function clientProfileCtrl($scope, $log, $state, $stateParams, ProfileService, ClientSvc, $ngConfirm) {
+  fournee.controller('ClientProfileCtrl', ['$scope', '$log', '$state', '$stateParams', 'ProfileService', 'ClientSvc', '$ngConfirm', function($scope, $log, $state, $stateParams, ProfileService, ClientSvc, $ngConfirm) {
     $scope.employee = {};
     $scope.user = {};
 
@@ -84,7 +81,7 @@
         billCity: city,
         billNeighborhood: neighborhood,
         billNomenclature: nomenclature,
-        billAdditionalInformation: additionalInformation
+        billAdditionalInformation: additionalInformation,
       }
 
       // Validación de los campos del formulario de actualización de info general de un cliente.
@@ -265,7 +262,4 @@
     $scope.switchAlert = function(value) {
       $scope[value] = !$scope[value];
     };
-
-
-  }
-}())
+  }]);

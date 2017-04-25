@@ -1,5 +1,4 @@
-(function() {
-  var fournee = angular.module('fournee');
+var fournee = angular.module('fournee');
 
   fournee.factory('productItemSvc', ['$http', '$log',
     function($http, $log) {
@@ -40,4 +39,3 @@
       }
     }
   ]);
-}())

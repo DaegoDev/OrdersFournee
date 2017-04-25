@@ -1,8 +1,6 @@
-(function() {
-  var fournee = angular.module('fournee');
-  fournee.controller('OrdersListCtrl', ['$scope', '$log', 'OrderService', '$ngConfirm', ordersListCtrl]);
 
-  function ordersListCtrl($scope, $log, OrderService, $ngConfirm) {
+  var fournee = angular.module('fournee');
+  fournee.controller('OrdersListCtrl', ['$scope', '$log', 'OrderService', '$ngConfirm', function($scope, $log, OrderService, $ngConfirm) {
     // Datepicker para la fecha de entrega
     $scope.today = function() {
       $scope.dt = new Date();
@@ -237,5 +235,4 @@
       })
     }
 
-  }
-}())
+  }]);

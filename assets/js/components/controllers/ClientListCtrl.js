@@ -1,9 +1,6 @@
-(function () {
-  var fournee = angular.module('fournee');
+var fournee = angular.module('fournee');
   fournee.controller('ClientListCtrl',
-    ['$scope', '$log', '$state', 'ClientSvc', clientListCtrl]);
-
-  function clientListCtrl($scope, $log, $state, ClientSvc) {
+    ['$scope', '$log', '$state', 'ClientSvc', function($scope, $log, $state, ClientSvc) {
     $scope.orderbyProperty = 'state';
     ClientSvc.getClients()
       .then(function (res) {
@@ -22,5 +19,4 @@
         $scope.sortByProperty = name;
         $scope.sortReversed = ($scope.sortByProperty === name) ? !$scope.sortReversed : false;
       }
-  }
-}())
+  }]);

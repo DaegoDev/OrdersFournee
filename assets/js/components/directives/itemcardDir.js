@@ -1,5 +1,4 @@
-(function(){
-  var fournee = angular.module('fournee');
+var fournee = angular.module('fournee');
 
   fournee.directive('itemCard', function () {
     return {
@@ -14,8 +13,7 @@
     }
   })
 
-  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc', itemCard]);
-  function itemCard($scope, $log, productItemSvc) {
+  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc',function($scope, $log, productItemSvc) {
     $scope.currentItem = null;
     $scope.isCollapsed = false;
     $scope.dirControl = null;
@@ -95,5 +93,4 @@
     $scope.dirControl.getCurrentItem = function () {
       return $scope.currentItem;
     }
-  }
-}())
+  }]);

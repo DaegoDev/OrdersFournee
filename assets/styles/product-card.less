@@ -1,61 +1,52 @@
 product-card {
-  position: static;
   display: inline-block;
   width: 175px;
   max-width: 175px;
   margin: 10px;
   border: 1px solid;
   border-radius: 5px;
+  line-height: 0;
   &:hover {
     .product-wrapper {
       &.list, &.select {
         cursor: pointer;
       }
+
       .product-header {
         background-color: @theme-nero-hover;
+
         h4 {
           color: @font-white;
         }
       }
     }
   }
-  .product-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
 
+  .product-wrapper {
     .product-header {
-      width: auto;
+      line-height: 12px;
+      display: inline-block;
+      width: 100%;
       text-align: center;
       padding: 5px;
       border-radius: 5px 5px 0 0;
-      height: 40px;
+      height: 50px;
       overflow: auto;
 
       h4 {
-        font-size: 2vh;
+        font-size: 80%;
         color: @font-white;
-      }
-
-      h5 {
-        font-size: 14px;
-        color: @font-tussock;
       }
     }
 
     .product-items {
-      flex-grow: 1;
-      height: 125px;
-      overflow: auto;
-      padding: 5px;
-
+      max-width: 175px;
       table {
         margin-bottom: 0;
         tr {
           td {
             font-size: 85%;
           }
-
           &:first-child {
             td {
               border-top: 0;
@@ -68,6 +59,8 @@ product-card {
     .amount-order {
       padding: 5px;
       border-top: 1px outset;
+      line-height: 12px;
+
       form {
         .form-group {
           display: inline-block;
@@ -75,16 +68,19 @@ product-card {
           margin: 0;
           padding: 0;
         }
+
         input[type="number"] {
-          width: 125px;
+          width: 87px;
           height: 30px;
         }
-        input[type="checkbox"] {
+
+        input[type="radio"] {
           width: 35px;
           height: 30px;
           display: inline-block;
           visibility: hidden;
           position: absolute;
+
           & + span {
             border-radius: 4px;
             display: table-cell;
@@ -94,24 +90,25 @@ product-card {
             height: 30px;
             background-color: @btn-sienna;
             color: @font-white;
+
             &:hover {
               cursor: pointer;
               background-color: @btn-sunset-orange;
             }
           }
         }
-        label{
+
+        label {
           padding: 0;
         }
-        input[type="checkbox"]:checked {
+
+        input[type="radio"]:checked {
           & + span {
-            box-shadow: inset 0px 0px 0px black;
+            box-shadow: inset 0 0 0 black;
             background-color: #9c1c07;
           }
-          & + span::before {
-            content: "\f00c";
-          }
         }
+
         input[type="submit"] {
           width: 165px;
         }

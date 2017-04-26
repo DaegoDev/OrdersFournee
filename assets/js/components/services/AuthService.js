@@ -14,8 +14,8 @@ var storageType = 'session';
 			});
 
 			signin.then(function(res) {
-				console.log(res.data);
-				console.log(res);
+				// console.log(res.data);
+				// console.log(res);
 				// Creación de la sesión de un equipo cuando las credenciales son validas.
 				role = res.data.role.toUpperCase();
 				PermRoleStore.clearStore();

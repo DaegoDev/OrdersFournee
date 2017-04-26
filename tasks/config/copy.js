@@ -37,6 +37,22 @@ module.exports = function(grunt) {
         src: ['**/*'],
         dest: 'www'
       }]
+    },
+    fonts: {
+      files: [{
+        expand: true,
+        flatten: true,
+        src: ['.tmp/public/bower_components/font-awesome/fonts/*'],
+        dest: '.tmp/public/fonts'
+      }]
+    },
+    glyphicons: {
+      files: [{
+        expand: true,
+        flatten: true,
+        src: ['.tmp/public/bower_components/bootstrap/fonts/*'],
+        dest: '.tmp/public/fonts'
+      }]
     }
   });
 

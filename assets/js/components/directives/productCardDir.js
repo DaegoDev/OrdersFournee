@@ -161,7 +161,7 @@ var fournee = angular.module('fournee');
           dough = item.value;
         }
       });
-      console.log(dough + " - " + colorHash.hex(dough));
+      // console.log(dough + " - " + colorHash.hex(dough));
       return {'background-color': colorHash.hex(dough)}
     }
 

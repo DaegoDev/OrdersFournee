@@ -17,6 +17,8 @@ module.exports = function(grunt) {
     'concat',
     'uglify',
     'cssmin',
+    'copy:fonts',
+    'copy:glyphicons',
     'sails-linker:prodJs',
     'sails-linker:prodStyles',
     'sails-linker:devTpl',

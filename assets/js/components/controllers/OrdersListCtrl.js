@@ -125,7 +125,7 @@
     }
 
     $scope.checkAllOrders = function() {
-      console.log($scope.all);
+      // console.log($scope.all);
       angular.forEach($scope.checkboxObj, function(checkbox, index) {
         if ($scope.all && !checkbox) {
           $scope.checkboxObj[index] = !checkbox;
@@ -133,7 +133,7 @@
           $scope.checkboxObj[index] = !checkbox;
         }
       })
-      console.log($scope.checkboxObj);
+      // console.log($scope.checkboxObj);
     }
 
     $scope.checkSelectAll = function(order) {
@@ -225,7 +225,7 @@
       $scope.orderId = order;
       var orderId = order.toString();
       $scope.orderDetails = $scope.orders[orderId];
-      console.log($scope.orderDetails);
+      // console.log($scope.orderDetails);
       $ngConfirm({
         title: 'Detalles del pedido',
         contentUrl: 'templates/private/employee/order-details.html',

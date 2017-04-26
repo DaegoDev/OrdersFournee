@@ -5,7 +5,7 @@
 
     ProfileService.getProfileEmployee()
       .then(function(res) {
-        console.log(res.data);
+        // console.log(res.data);
         $scope.employee = res.data;
       })
       .catch(function(err) {

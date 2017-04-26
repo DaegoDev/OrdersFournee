@@ -3,7 +3,7 @@
     productSvc.getProducts()
       .then(function(res) {
         $scope.products = res.data;
-        console.log($scope.products);
+        // console.log($scope.products);
 
       });
     $scope.lista = [];

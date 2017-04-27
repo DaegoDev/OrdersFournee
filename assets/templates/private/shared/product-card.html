@@ -4,20 +4,19 @@
     <h4>{{name}}</h4>
   </div>
 
-  <div class="amount-order" ng-show="type == 'orderProduct'" ng-show="collapsed">
+  <div class="amount-order" ng-if="type == 'orderProduct'">
     <form class="form-inline" ng-submit="addProductToList()">
       <div class="form-group">
-        <input type="number" ng-model="amount" min="0" class="form-control" placeholder="Cantidad">
+        <input type="number" ng-model="currentSettings.amount" min="0" class="form-control" placeholder="Cantidad">
       </div>
-
       <div class="form-group" tooltips tooltip-template="Horneado">
         <label>
-          <input type="radio" ng-model="state" value="baked"><span class="glyphicon glyphicon glyphicon-fire"></span>
+          <input type="radio" ng-model="currentSettings.state" value="baked"><span class="glyphicon glyphicon glyphicon-fire"></span>
         </label>
       </div>
       <div class="form-group" tooltips tooltip-template="Congelado">
         <label>
-          <input type="radio" ng-model="state" value="frozen"><span class="glyphicon glyphicon-ice-lolly"></span>
+          <input type="radio" ng-model="currentSettings.state" value="frozen"><span class="glyphicon glyphicon-ice-lolly"></span>
         </label>
       </div>
 

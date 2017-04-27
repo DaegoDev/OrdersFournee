@@ -1,10 +1,10 @@
 <div class=" basic-wrapper lg">
   <div class="section-header">
-    <h1>Perfil: {{employee.name}}</h1>
+    <h1 style="color:white">Perfil: {{employee.name}}</h1>
   </div>
-  <form class="form-horizontal" ng-submit="updateEmployee()" name="update" novalidate>
-    <fieldset>
-      <legend>Información general</legend>
+  <fieldset>
+    <legend>Información general</legend>
+    <form class="form-horizontal" ng-submit="updateEmployee()" name="update" novalidate>
       <div class="form-group">
         <div ng-class="{'has-error': update.name.$invalid && (!update.name.$pristine || update.$submitted || update.name.$touched),
             'has-success': update.name.$valid}">
@@ -24,23 +24,21 @@
         <strong> {{alertMessageEmployee}}</strong>
       </div>
       <div class="form-group">
-        <div class="col-sm-offset-5 col-sm-2">
-          <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
-        </div>
+        <button type="submit" name="button" class="btn btn-sienna btn-md" style="margin: 0 auto; display: block">Guardar información</button>
       </div>
-    </fieldset>
-  </form>
+    </form>
+  </fieldset>
 
-  <form class="form-horizontal" ng-submit="updatePassword()" name="pswForm" novalidate>
-    <fieldset>
-      <legend>Cambiar contraseña</legend>
+  <fieldset>
+    <legend>Cambiar contraseña</legend>
+    <form class="form-horizontal" ng-submit="updatePassword()" name="pswForm" novalidate>
       <div class="row container-fluid">
         <strong>En esta sección podrá cambiar la contraseña que se le asignó.</strong>
         <hr />
       </div>
-      <!-- CONTRASEÑA ACTUAL -->
+      <!-- CONTRASEÑA ACTUAL --> 
       <div class="control-group form-group col-sm-12">
-        <div ng-class="{'has-error': pswForm.currentPassword.$inalid && (!pswForm.currentPassword.$pristine || pswForm.$submitted || pswForm.currentPassword.$touched),
+        <div ng-class="{'has-error': pswForm.currentPassword.$invalid && (!pswForm.currentPassword.$pristine || pswForm.$submitted || pswForm.currentPassword.$touched),
           'has-success': pswForm.currentPassword.$valid}">
           <label for="currentPassword" class="control-label col-sm-offset-2 col-sm-2">Contraseña actual</label>
           <div class="col-sm-4">
@@ -95,14 +93,12 @@
       </div>
 
       <div class="form-group">
-        <div class="col-sm-offset-4 col-sm-3">
-          <button class="btn btn-sienna btn-md btn-block" type="submit">
+        <button class="btn btn-sienna btn-md" type="submit" style="margin: 0 auto; display: block">
           <span ng-show="!processing">Cambiar contraseña </span>
           <span ng-show="processing">procesando <i class="glyphicon glyphicon-refresh gly-spin"></i></span>
         </button>
-        </div>
       </div>
-    </fieldset>
-  </form>
+    </form>
+  </fieldset>
 
 </div>

@@ -14,15 +14,14 @@
 
     $scope.updateEmployee = function() {
       var name = $scope.employee.name;
-
-      var employeeCredentials = {
-        name: name,
-      }
-
       // Validación de los campos del formulario de actualización de un empleado.
       if (!name) {
         return;
       }
+
+      var employeeCredentials = {
+        name: name,
+      }  
 
       EmployeeSvc.updateInformation(employeeCredentials)
         .then(function(res) {

@@ -30,6 +30,7 @@ var fournee = angular.module('fournee');
     }
 
     // Control variables to manage the two type of order products (raw or baked).
+    $scope.currentSettings = {baked: "", amount: 0}
     $scope.baked = "";
     $scope.amount = 0;
     var rawProduct = null;
@@ -102,14 +103,14 @@ var fournee = angular.module('fournee');
 
     // Function to reset directive to default values
     $scope.dirControl.reset = function() {
-      $scope.baked = false;
-      $scope.amount = 0;
+      $scope.currentSettings.baked = false;
+      $scope.currentSettings.amount = 0;
       rawProduct = null;
       bakedProduct = null;
     }
 
     // Function to add a product to the list passed as attribute.
-    $scope.addProductToList = function() {
+    $scope.addProductToList = function() {;
       var product = buildProduct();
       if (product) {
         var index = $scope.selectList.indexOf(product);
@@ -123,46 +124,38 @@ var fournee = angular.module('fournee');
     function buildProduct() {
       var currentProduct = null;
       if ($scope.amount == 0) {
-        return;
+        // return;
       }
-
-      if ($scope.state == 'frozen' && !rawProduct) {
+      if ($scope.currentSettings.state == 'frozen' && !rawProduct) {
         rawProduct = {
           client_product: $scope.product.id,
           name: $scope.name,
           amount: 0,
           baked: false
         }
-      } else if ($scope.state == 'baked' && !bakedProduct) {
+      } else if ($scope.currentSettings.state == 'baked' && !bakedProduct) {
         bakedProduct = {
           client_product: $scope.product.id,
           name: $scope.name,
           amount: 0,
           baked: true
         }
-      } else if (!$scope.state) {
+      } else if (!$scope.currentSettings.state) {
         return;
       }
 
-      if ($scope.state == 'baked') {
+      if ($scope.currentSettings.state == 'baked') {
         currentProduct = bakedProduct;
-      } else if ($scope.state == 'frozen') {
+      } else if ($scope.currentSettings.state == 'frozen') {
         currentProduct = rawProduct;
       }
-      currentProduct.amount += $scope.amount;
+      currentProduct.amount += $scope.currentSettings.amount;
       return currentProduct;
     }
 
     $scope.getTitleColor = function(product) {
-      var dough = null
+      var dough = product.shortName.trim().split(" ")[0];
       var colorHash = new ColorHash({lightness: [0.35, 0.3, 0.25]});
-      product.items.forEach(function(item, i, items) {
-        if (item.elementName.toLowerCase() == "masa") {
-          dough = item.value;
-        }
-      });
-      // console.log(dough + " - " + colorHash.hex(dough));
       return {'background-color': colorHash.hex(dough)}
     }
-
   }

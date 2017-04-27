@@ -60,3 +60,66 @@ label {
     padding-top: 7px;
   }
 }
+
+.orderList {
+  td {
+    cursor: pointer;
+    &:first-child {
+      cursor: default;
+    }
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+  }
+}
+
+.order-details {
+  .group {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .date-label {
+    display: inline-block;
+    width: 25%;
+  }
+  .date-text {
+    display: inline-block;
+    width: 74%;
+    input {
+      height: 25px;
+    }
+  }
+  .label-item {
+    display: inline-block;
+    width: 25%;
+  }
+  .text-item {
+    display: inline-block;
+    width: 23.5%;
+    input {
+      height: 25px;
+    }
+  }
+  .label-reference {
+    display: inline-block;
+    width: 25%;
+  }
+  .text-reference {
+    display: inline-block;
+    width: 74%;
+    input {
+      height: 25px;
+    }
+  }
+
+  .label-comment {
+    display: block;
+    width: 99%;
+  }
+  .textarea-comment {
+    display: block;
+    width: 99%;
+    resize: none;
+    height: 100px;
+  }
+}

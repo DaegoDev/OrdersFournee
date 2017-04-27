@@ -1,14 +1,55 @@
-<div class="">
+<div class="order-details">
+  <fieldset>
+    <legend>Dirección de la entrega</legend>
+    <div class="group">
+      <label class="date-label">Fecha de creación:</label>
+      <div class="date-text">
+        <input type="text" class="form-control" value="{{orderDetails.created_at | date:'fullDate' | capitalize}}">
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-item">Departamento:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{orderDetails.department}}">
+      </div>
+      <label class="label-item">Ciudad:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{orderDetails.city}}">
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-item">Barrio:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{orderDetails.neighborhood}}">
+      </div>
+      <label class="label-item">Nomenclatura:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{orderDetails.nomenclature}}">
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-reference">Referencia:</label>
+      <div class="text-reference">
+        <input type="text" class="form-control" value="{{orderDetails.referencia}}">
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-comment">Comentario:</label>
+      <textarea class="form-control textarea-comment" readonly>{{orderDetails.additional_information}}</textarea>
+    </div>
+
+
+  </fieldset>
   <fieldset>
     <legend>Productos</legend>
     <div class="table-container">
       <div class="table-responsive">
-        <table class="table table-hover table-bordered table-condensed">
+        <table class="table table-hover table-striped table-condensed">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Cantidad</th>
-              <th>Horneado/Congelado</th>
+              <th style="font-weight:bold">Nombre</th>
+              <th style="font-weight:bold">Cantidad</th>
+              <th style="font-weight:bold">Estado</th>
             </tr>
           </thead>
           <tbody>
@@ -21,20 +62,5 @@
         </table>
       </div>
     </div>
-  </fieldset>
-  <fieldset>
-    <legend>Dirección de la entrega</legend>
-    <strong>Departamento: {{orderDetails.department}}</strong><br />
-    <strong>Ciudad: {{orderDetails.city}}</strong><br />
-    <strong>Barrio: {{orderDetails.neighborhood}}</strong><br />
-    <strong>Nomenclatura: {{orderDetails.nomenclature}}</strong><br />
-    <strong>Referencia: {{orderDetails.referencia}}</strong><br />
-  </fieldset>
-  <fieldset>
-    <legend>Información adicional</legend>
-      <label>Comentario:</label>
-      <input type="text" class="form-control" readonly value="{{orderDetails.additional_information}}" /><br />
-      <label>Fecha de creación del pedido:</label>
-      <input type="text" class="form-control" readonly value="{{orderDetails.created_at | date:'fullDate' | capitalize}}" />
   </fieldset>
 </div>

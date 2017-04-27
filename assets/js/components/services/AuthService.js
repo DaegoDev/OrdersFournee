@@ -14,13 +14,14 @@ var storageType = 'session';
 			});
 
 			signin.then(function(res) {
-				// console.log(res.data);
-				// console.log(res);
 				// Creación de la sesión de un equipo cuando las credenciales son validas.
 				role = res.data.role.toUpperCase();
 				PermRoleStore.clearStore();
-				PermRoleStore.defineRole(role, function () {return true;});
 				PermRoleStore.defineRole('ANON', function () {return false;});
+				PermRoleStore.defineRole('ADMIN', function () {return false;});
+				PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
+				PermRoleStore.defineRole('CLIENTE', function () {return false;});
+				PermRoleStore.defineRole(role, function () {return true;});
 				StorageService.set("auth_token", res.data.token, storageType);
 				StorageService.set("role", role, storageType);
 				$rootScope.$broadcast('renovateRole');
@@ -33,6 +34,9 @@ var storageType = 'session';
 			// Terminación de la sesión de un usuario.
 			PermRoleStore.clearStore();
 			PermRoleStore.defineRole("ANON", function () {return true;})
+			PermRoleStore.defineRole('ADMIN', function () {return false;});
+			PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
+			PermRoleStore.defineRole('CLIENTE', function () {return false;});
 			StorageService.unset("auth_token", storageType);
 			StorageService.unset("role", storageType);
 			$rootScope.$broadcast('renovateRole');

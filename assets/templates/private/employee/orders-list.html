@@ -1,4 +1,8 @@
 <div class="basic-wrapper lg client-list-wrapper">
+  <div class="section-header">
+    <h1 style="color: white">Lista de pedidos: {{dt | date:'fullDate' | capitalize}}</h1>
+  </div>
+
   <div class="section-deliveryDate">
     <label class="control-label col-sm-1" for="date">Fecha:</label>
     <p class="input-group col-sm-3">
@@ -9,60 +13,62 @@
       </span>
     </p>
   </div>
-  <div class="section-header">
-    <h1>Lista de pedidos: {{dt | date:'fullDate' | capitalize}}</h1>
-  </div>
-  <div class="toolbar-listOrder">
-    <div class="col-sm-6">
-      <label class="control-label col-sm-2" for="states">Estados:</label>
-      <p class="input-group col-sm-8">
-        <select class="form-control" id="states" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
-        <span class="input-group-btn">
-          <button type="button" ng-click="changeState()" class="btn btn-md btn-sienna">Cambiar estado</button>
-        </span>
-      </p>
-    </div>
-    <div class="col-sm-6">
-      <label class="control-label col-sm-4" for="inputDate">Cambiar fecha:</label>
-      <p class="input-group col-sm-5">
-        <input type="text" id="inputDate" ng-change="showConfirmation()" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="popup2.opened" datepicker-options="optionsDeliveryDate" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
-        />
-        <span class="input-group-btn">
+
+  <div class="" style="padding: 5px">
+    <div class="toolbar-listOrder">
+      <div class="col-sm-6">
+        <label class="control-label col-sm-2" for="states">Estados:</label>
+        <p class="input-group col-sm-8">
+          <select class="form-control" id="states" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
+          <span class="input-group-btn">
+            <button type="button" ng-click="changeState()" class="btn btn-md btn-sienna">Cambiar estado</button>
+          </span>
+        </p>
+      </div>
+      <div class="col-sm-6">
+        <label class="control-label col-sm-4" for="inputDate">Cambiar fecha:</label>
+        <p class="input-group col-sm-5">
+          <input type="text" id="inputDate" ng-change="showConfirmation()" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="popup2.opened" datepicker-options="optionsDeliveryDate" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
+          />
+          <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-      </p>
+          </span>
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="table-container">
-    <div class="table-responsive">
-      <table class="table table-hover table-bordered table-condensed">
-        <thead>
-          <tr>
-            <th><input type="checkbox" ng-click="checkAllOrders()" ng-model="all"> Todo</th>
-            <th>Código</th>
-            <th>Cliente</th>
-            <th>Empleado</th>
-            <th>Telefono empresa</th>
-            <th>Hora sugerida inicial</th>
-            <th>Hora sugerida final</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="order in orders">
-            <td><input type="checkbox" ng-click="checkSelectAll(order.id)" ng-checked="all" ng-model="checkboxObj[order.id]"></td>
-            <!-- <div> -->
-            <td ng-click="showDetails(order.id)">{{order.id}}</td>
-            <td ng-click="showDetails(order.id)">{{order.trade_name}}</td>
-            <td ng-click="showDetails(order.id)">{{order.employeeName}}</td>
-            <td ng-click="showDetails(order.id)">{{order.business_phonenumber}}</td>
-            <td ng-click="showDetails(order.id)">{{order.initial_suggested_time}}</td>
-            <td ng-click="showDetails(order.id)">{{order.final_suggested_time}}</td>
-            <td>{{order.state}}</td>
-            <!-- </div> -->
-          </tr>
-        </tbody>
-      </table>
+    <div class="table-container">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th style="width: 70px">
+                <input type="checkbox" ng-click="checkAllOrders()" ng-model="all" style="cursor:pointer"> Todo
+              </th>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Empleado</th>
+              <th>Telefono empresa</th>
+              <th>Hora deseada</th>
+              <th style="width: 100px">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="order in orders" class="orderList">
+              <td style="text-align: center">
+                <input type="checkbox" ng-click="checkSelectAll(order.id)" ng-model="checkboxObj[order.id]">
+              </td>
+              <div style="background-color: red">
+              <td ng-click="showDetails(order.id)">{{order.id}}</td>
+              <td ng-click="showDetails(order.id)">{{order.trade_name}}</td>
+              <td ng-click="showDetails(order.id)">{{order.employeeName}}</td>
+              <td ng-click="showDetails(order.id)">{{order.business_phonenumber}}</td>
+              <td ng-click="showDetails(order.id)">{{order.initial_suggested_time + '-' + order.final_suggested_time}}</td>
+              <td>{{order.state}}</td>
+            </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

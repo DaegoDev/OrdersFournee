@@ -6,6 +6,8 @@ product-card {
   border: 1px solid;
   border-radius: 5px;
   line-height: 0;
+vertical-align: top;
+
   &:hover {
     .product-wrapper {
       &.list, &.select {
@@ -25,15 +27,17 @@ product-card {
   .product-wrapper {
     .product-header {
       line-height: 12px;
-      display: inline-block;
+      display: inline-table;
       width: 100%;
       text-align: center;
       padding: 5px;
       border-radius: 5px 5px 0 0;
       height: 50px;
       overflow: auto;
-
+      vertical-align: middle;
       h4 {
+        display: table-cell;
+        vertical-align: middle;
         font-size: 80%;
         color: @font-white;
       }

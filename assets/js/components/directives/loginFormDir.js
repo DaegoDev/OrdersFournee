@@ -39,7 +39,6 @@ fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStor
     if (!$scope.user) {
       return;
     }
-    console.log('log');
 
     username = $scope.user.username;
     if (!username) {
@@ -50,7 +49,6 @@ fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStor
     if (!password) {
       return;
     }
-    console.log('log');
     //Inicialización de las credenciales de inicio de sesión.
     credentials = {
       username: username,
@@ -61,8 +59,8 @@ fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStor
     //Llamado al servicio de signin de usuario.
     AuthService.signinUser(credentials)
       .then(function(result) {
+        $scope.signing = false;
         role = AuthService.getRole().toUpperCase();
-        console.log(role);
         if (role === "ADMIN") {
           $state.go('admin');
         } else if (role === "DESPACHADOR") {

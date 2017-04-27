@@ -3,21 +3,18 @@
     <h1>Lista de productos</h1>
   </div>
   <div class="products">
-    <div class="row">
-          <div class="col-sm-12">
-              <div>
-                  <div class="input-group stylish-input-group" style="margin: 10px">
-                      <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchText.shortName">
-                      <span class="input-group-addon">
-                          <button type="submit">
-                              <span class="glyphicon glyphicon-search"></span>
-                          </button>
-                      </span>
-                  </div>
-              </div>
-          </div>
+    <div class="col-sm-12">
+      <div>
+        <div class="input-group stylish-input-group" style="margin: 10px">
+          <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchText.shortName">
+          <span class="input-group-addon">
+            <button type="submit">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+        </div>
+      </div>
     </div>
     <product-card ng-repeat="product in products | filter:searchText" product="product" type="list"></product-card>
   </div>
-</div>
 </div>

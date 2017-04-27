@@ -125,7 +125,6 @@
     }
 
     $scope.checkAllOrders = function() {
-      // console.log($scope.all);
       angular.forEach($scope.checkboxObj, function(checkbox, index) {
         if ($scope.all && !checkbox) {
           $scope.checkboxObj[index] = !checkbox;
@@ -133,11 +132,10 @@
           $scope.checkboxObj[index] = !checkbox;
         }
       })
-      // console.log($scope.checkboxObj);
     }
 
     $scope.checkSelectAll = function(order) {
-      var isCheckedAll = true
+      var isCheckedAll = true;
       angular.forEach($scope.checkboxObj, function(checkbox, index) {
         if (isCheckedAll) {
           if (!checkbox) {
@@ -147,11 +145,9 @@
       })
       if (isCheckedAll) {
         $scope.all = true;
+      } else {
+        $scope.all = false;
       }
-      // else if (!$scope.checkboxObj[order]) {
-      //   $scope.all = false;
-      // }
-      // console.log($scope.checkboxObj);
     }
 
     $scope.changeState = function() {

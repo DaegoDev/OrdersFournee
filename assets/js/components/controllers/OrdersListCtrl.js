@@ -228,9 +228,7 @@
     }
 
     $scope.showDetails = function(order) {
-      $scope.orderId = order;
-      var orderId = order.toString();
-      $scope.orderDetails = $scope.orders[orderId];
+      $scope.orderDetails = order;
       $ngConfirm({
         title: 'Detalles del pedido',
         contentUrl: 'templates/private/employee/order-details.html',

@@ -18,6 +18,11 @@ var fournee = angular.module('fournee');
     $scope.isCollapsed = false;
     $scope.dirControl = null;
 
+    // If item is not an object return;
+    if ( typeof $scope.item == 'string') {
+      return;
+    }
+
     if (!$scope.control) {
       $scope.control = {}
     }

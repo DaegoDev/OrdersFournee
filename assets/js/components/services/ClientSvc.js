@@ -107,6 +107,14 @@ function ($http) {
         params: orderCredentials
       });
       return order;
+    },
+    changeProductName: function (productCredentials) {
+      var product = $http({
+        url: '/client/changeProductName',
+        methot: 'POST',
+        params: productCredentials
+      });
+      return product;
     }
   };
 }]);

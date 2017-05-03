@@ -10,7 +10,7 @@ module.exports = function (req, res, next) {
     } else if (!user) {
       return res.unauthorized(null, info && info.code, info && info.message);
     }
-    if (user.role.toLowerCase() === 'admin') {
+    if (user.role.toLowerCase() === 'administrador') {
       req.user = user;
       next();
     } else {

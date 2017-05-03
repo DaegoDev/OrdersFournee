@@ -127,7 +127,7 @@ module.exports = {
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     name = req.param('name');
     sails.log.debug(req.param)
-      sails.log.debug(req.param('name'))
+    sails.log.debug(req.param('name'))
     if (!name) {
       return res.badRequest('Se debe ingresar un nombre.');
     }
@@ -149,4 +149,27 @@ module.exports = {
         res.serverError();
       });
   },
+
+  /**
+   * Funcion para crear un element.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getProductPriority: function(req, res) {
+    var priorities = {};
+    Element.find().sort('id ASC')
+      .then(function(data) {
+        priorities.mandatory = ['MASA', 'FORMA', 'GRAMAJE CRUDO'];
+        priorities.order = [];
+        data.forEach(function(element, i, elements) {
+          priorities.order.push(element.name.toUpperCase().trim());
+        });
+        return res.ok(priorities);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        return res.serverError();
+      });
+  }
 };

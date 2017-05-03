@@ -14,7 +14,7 @@ module.exports = function (req, res, next) {
     }
 
     role = user.role;
-    if (role.toLowerCase() === 'despachador' || role.toLowerCase() === 'admin') {
+    if (role.toLowerCase() === 'despachador' || role.toLowerCase() === 'administrador') {
       req.user = user;
       next();
     } else {

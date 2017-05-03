@@ -10,7 +10,7 @@ var fournee = angular.module('fournee');
         })
 
         /**
-        * RUTAS DE ACCESO DE UN ADMIN.
+        * RUTAS DE ACCESO DE UN ADMINISTRADOR.
         */
         .state("admin", {
           url: "/admin",
@@ -18,7 +18,7 @@ var fournee = angular.module('fournee');
           // controller: "AdminController",
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -30,7 +30,7 @@ var fournee = angular.module('fournee');
           templateUrl: 'templates/private/admin/client.html',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -42,7 +42,7 @@ var fournee = angular.module('fournee');
           controller: 'ClientListCtrl',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -57,7 +57,7 @@ var fournee = angular.module('fournee');
           },
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -69,7 +69,7 @@ var fournee = angular.module('fournee');
           controller: 'clientCreateCtrl',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -80,7 +80,7 @@ var fournee = angular.module('fournee');
           templateUrl: 'templates/private/admin/client-create-user.html',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -91,7 +91,7 @@ var fournee = angular.module('fournee');
           templateUrl: 'templates/private/admin/client-create-info.html',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -102,7 +102,7 @@ var fournee = angular.module('fournee');
           templateUrl: 'templates/private/admin/client-create-products.html',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -115,7 +115,7 @@ var fournee = angular.module('fournee');
           templateUrl: 'templates/private/shared/product.html',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -127,7 +127,7 @@ var fournee = angular.module('fournee');
           controller: 'productListCtrl',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -139,7 +139,7 @@ var fournee = angular.module('fournee');
           controller: 'productCreateCtrl',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -157,7 +157,7 @@ var fournee = angular.module('fournee');
           controller: 'EmployeeCreateCtrl',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -169,7 +169,7 @@ var fournee = angular.module('fournee');
           controller: 'EmployeeListCtrl',
           data: {
             permissions: {
-              only: "ADMIN",
+              only: "ADMINISTRADOR",
               except: "ANON",
               redirectTo: 'home'
             }
@@ -183,7 +183,6 @@ var fournee = angular.module('fournee');
         .state("clientRole", {
           url: "/clientR",
           templateUrl: "templates/private/client/index.html",
-          controller: "ClientController",
           data: {
             permissions: {
               only: "CLIENTE",
@@ -270,7 +269,7 @@ var fournee = angular.module('fournee');
           controller: 'EmployeeProfileCtrl',
           data: {
             permissions: {
-              only: ["ADMIN", "DESPACHADOR"],
+              only: ["ADMINISTRADOR", "DESPACHADOR"],
               except: "ANON",
               redirectTo: 'home'
             }
@@ -284,7 +283,7 @@ var fournee = angular.module('fournee');
           controller: 'OrdersListCtrl',
           data: {
             permissions: {
-              only: ["ADMIN", "DESPACHADOR"],
+              only: ["ADMINISTRADOR", "DESPACHADOR"],
               except: "ANON",
               redirectTo: 'home'
             }

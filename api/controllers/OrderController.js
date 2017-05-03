@@ -259,30 +259,38 @@ module.exports = {
                    LEFT JOIN order_product ON order_product.order_id = orders.id \
                    LEFT JOIN client_product ON order_product.client_product = client_product.id \
                    LEFT JOIN product ON client_product.product = product.code \
-                   WHERE orders.delivery_date = ?', [deliveryDate],
+                   WHERE orders.delivery_date = ? order by orders.id', [deliveryDate],
       function(err, orders) {
         // sails.log.debug(orders);
         if (err) {
           return res.serverError(err);
         }
-        var arrayOrders = {};
+        var arrayOrders = [];
+        var orderTmp = null;
         orders.forEach(function(order, index, orders) {
           var orderId = order.id.toString();
           var short_name = order.short_name;
           var amount = order.amount;
           var baked = order.baked;
-          if (typeof arrayOrders[orderId] == "undefined") {
-            order["products"] = [];
-            delete order.short_name;
-            delete order.amount;
-            delete order.baked;
-            arrayOrders[orderId] = order;
+          delete order.short_name;
+          delete order.amount;
+          delete order.baked;
+
+          if (!orderTmp) {
+            orderTmp = order;
+            orderTmp.products = [];
+            arrayOrders.push(orderTmp);
           }
-          arrayOrders[orderId]["products"].push({
+
+          orderTmp.products.push({
             short_name: short_name,
             amount: amount,
             baked: baked
           });
+
+          if (orders[index + 1] && orders[index + 1].id.toString() != orderId) {
+            orderTmp = null;
+          }
         });
         res.ok(arrayOrders);
       })

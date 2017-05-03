@@ -12,11 +12,11 @@
             'has-success': update.legalName.$valid}">
           <label for="legalName" class="control-label col-sm-2">Razón social</label>
           <div class="col-sm-4">
-            <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required>
-          </div>
-          <!-- VALIDACIONES DE RAZÓN SOCIAL-->
-          <div ng-messages="update.legalName.$error" ng-if="update.legalName.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
+            <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required readonly placeholder="La Fournee SAS">
+            <!-- VALIDACIONES DE RAZÓN SOCIAL-->
+            <div ng-messages="update.legalName.$error" ng-if="update.legalName.$touched || update.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
+            </div>
           </div>
         </div>
 
@@ -24,11 +24,11 @@
             'has-success': update.nit.$valid}">
           <label for="nit" class="control-label col-sm-2">NIT</label>
           <div class="col-sm-4">
-            <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required>
-          </div>
-          <!-- VALIDACIONES NIR-->
-          <div ng-messages="update.nit.$error" ng-if="update.nit.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo NIT es obligatorio.</b></p>
+            <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required readonly placeholder="900649114-2">
+            <!-- VALIDACIONES NIR-->
+            <div ng-messages="update.nit.$error" ng-if="update.nit.$touched || update.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo NIT es obligatorio.</b></p>
+            </div>
           </div>
         </div>
       </div>
@@ -38,11 +38,11 @@
             'has-success': update.tradeName.$valid}">
           <label for="tradeName" class="control-label col-sm-2">Nombre de la empresa</label>
           <div class="col-sm-4">
-            <input type="text" id="tradeName" name="tradeName" class="form-control" ng-model="client.tradeName" required>
-          </div>
-          <!-- VALIDACIONES DE NOMBRE DE LA EMPRESA-->
-          <div ng-messages="update.tradeName.$error" ng-if="update.tradeName.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo nombre de la empresa es obligatorio.</b></p>
+            <input type="text" id="tradeName" name="tradeName" class="form-control" ng-model="client.tradeName" required placeholder="La Fournee">
+            <!-- VALIDACIONES DE NOMBRE DE LA EMPRESA-->
+            <div ng-messages="update.tradeName.$error" ng-if="update.tradeName.$touched || update.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo nombre de la empresa es obligatorio.</b></p>
+            </div>
           </div>
         </div>
 
@@ -50,11 +50,11 @@
             'has-success': update.businessPhonenumber.$valid}">
           <label for="businessPhonenumber" class="control-label col-sm-2">Telefono de la empresa</label>
           <div class="col-sm-4">
-            <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required>
-          </div>
-          <!-- VALIDACIONES DE TELEFONO DE LA EMPRESA-->
-          <div ng-messages="update.businessPhonenumber.$error" ng-if="update.businessPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo telefono de la empresa es obligatorio.</b></p>
+            <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required placeholder="4483480">
+            <!-- VALIDACIONES DE TELEFONO DE LA EMPRESA-->
+            <div ng-messages="update.businessPhonenumber.$error" ng-if="update.businessPhonenumber.$touched || update.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo telefono de la empresa es obligatorio.</b></p>
+            </div>
           </div>
         </div>
       </div>
@@ -64,11 +64,11 @@
             'has-success': update.managerName.$valid}">
           <label for="managerName" class="control-label col-sm-2">Nombre del administrador</label>
           <div class="col-sm-4">
-            <input type="text" id="managerName" name="managerName" class="form-control" ng-model="client.managerName" required>
-          </div>
-          <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
-          <div ng-messages="update.managerName.$error" ng-if="update.managerName.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
+            <input type="text" id="managerName" name="managerName" class="form-control" ng-model="client.managerName" required placeholder="Karim Chohra">
+            <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
+            <div ng-messages="update.managerName.$error" ng-if="update.managerName.$touched || update.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
+            </div>
           </div>
         </div>
 
@@ -76,11 +76,11 @@
             'has-success': update.managerPhonenumber.$valid}">
           <label for="managerPhonenumber" class="control-label col-sm-2">Telefono del administrador</label>
           <div class="col-sm-4">
-            <input type="text" id="managerPhonenumber" name="managerPhonenumber" class="form-control" ng-model="client.managerPhonenumber" required>
-          </div>
-          <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
-          <div ng-messages="update.managerPhonenumber.$error" ng-if="update.managerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
+            <input type="text" id="managerPhonenumber" name="managerPhonenumber" class="form-control" ng-model="client.managerPhonenumber" required placeholder="4483480">
+            <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
+            <div ng-messages="update.managerPhonenumber.$error" ng-if="update.managerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
+              <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
+            </div>
           </div>
         </div>
       </div>
@@ -89,12 +89,9 @@
         <button type="button" class="close" ng-click="switchAlert('showAlertGeneral')">×</button>
         <strong> {{alertMessageGeneral}}</strong>
       </div>
-      <div class="form-group">
-        <div class="col-sm-offset-10 col-sm-2">
-          <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
-        </div>
+      <div class="button-nav">
+          <button type="submit" name="button" class="btn btn-sienna btn-md">Guardar información</button>
       </div>
-
     </fieldset>
   </form>
 
@@ -106,12 +103,11 @@
             'has-success': billAddressUpdate.country.$valid}">
             <label for="country" class="control-label col-sm-2">País</label>
             <div class="col-sm-4">
-              <input type="text" id="country" name="country" class="form-control" ng-model="client.billAddress.country" required>
-            </div>
-
-            <!-- VALIDACIONES DE PAIS-->
-            <div ng-messages="billAddressUpdate.country.$error" ng-if="billAddressUpdate.country.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo pais es obligatorio.</b></p>
+              <input type="text" id="country" name="country" class="form-control" ng-model="client.billAddress.country" required placeholder="Colombia">
+              <!-- VALIDACIONES DE PAIS-->
+              <div ng-messages="billAddressUpdate.country.$error" ng-if="billAddressUpdate.country.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo pais es obligatorio.</b></p>
+              </div>
             </div>
           </div>
 
@@ -119,12 +115,11 @@
             'has-success': billAddressUpdate.department.$valid}">
             <label for="department" class="control-label col-sm-2">Despartamento</label>
             <div class="col-sm-4">
-              <input type="text" id="department" name="department" class="form-control" ng-model="client.billAddress.department" required>
-            </div>
-
-            <!-- VALIDACIONES DE DEPARTAMENTO-->
-            <div ng-messages="billAddressUpdate.department.$error" ng-if="billAddressUpdate.department.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo departamento es obligatorio.</b></p>
+              <input type="text" id="department" name="department" class="form-control" ng-model="client.billAddress.department" required placeholder="Antioquia">
+              <!-- VALIDACIONES DE DEPARTAMENTO-->
+              <div ng-messages="billAddressUpdate.department.$error" ng-if="billAddressUpdate.department.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo departamento es obligatorio.</b></p>
+              </div>
             </div>
           </div>
 
@@ -134,11 +129,11 @@
             'has-success': billAddressUpdate.city.$valid}">
             <label for="city" class="control-label col-sm-2">Ciudad</label>
             <div class="col-sm-4">
-              <input type="text" id="city" name="city" class="form-control" ng-model="client.billAddress.city" required>
-            </div>
-            <!-- VALIDACIONES DE CIUDAD-->
-            <div ng-messages="billAddressUpdate.city.$error" ng-if="billAddressUpdate.city.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo ciudad es obligatorio.</b></p>
+              <input type="text" id="city" name="city" class="form-control" ng-model="client.billAddress.city" required placeholder="Medellín">
+              <!-- VALIDACIONES DE CIUDAD-->
+              <div ng-messages="billAddressUpdate.city.$error" ng-if="billAddressUpdate.city.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo ciudad es obligatorio.</b></p>
+              </div>
             </div>
           </div>
 
@@ -146,11 +141,11 @@
           'has-success': billAddressUpdate.neighborhood.$valid}">
             <label for="neighborhood" class="control-label col-sm-2">Barrio</label>
             <div class="col-sm-4">
-              <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.billAddress.neighborhood" required>
-            </div>
-            <!-- VALIDACIONES DE BARRIO-->
-            <div ng-messages="billAddressUpdate.neighborhood.$error" ng-if="billAddressUpdate.neighborhood.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo barrio es obligatorio.</b></p>
+              <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.billAddress.neighborhood" required placeholder="Colon">
+              <!-- VALIDACIONES DE BARRIO-->
+              <div ng-messages="billAddressUpdate.neighborhood.$error" ng-if="billAddressUpdate.neighborhood.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo barrio es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -159,11 +154,11 @@
             'has-success': billAddressUpdate.nomenclature.$valid}">
             <label for="nomenclature" class="control-label col-sm-2">Nomenclatura</label>
             <div class="col-sm-4">
-              <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.billAddress.nomenclature" required>
-            </div>
-            <!-- VALIDACIONES DE NOMENCLATURA-->
-            <div ng-messages="billAddressUpdate.nomenclature.$error" ng-if="billAddressUpdate.nomenclature.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo nomenclatura es obligatorio.</b></p>
+              <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.billAddress.nomenclature" required placeholder="KR 46#42-43">
+              <!-- VALIDACIONES DE NOMENCLATURA-->
+              <div ng-messages="billAddressUpdate.nomenclature.$error" ng-if="billAddressUpdate.nomenclature.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo nomenclatura es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -172,11 +167,11 @@
             'has-success': billAddressUpdate.additionalInformation.$valid}">
             <label for="" class="control-label col-sm-2">Punto de referencia</label>
             <div class="col-sm-8">
-              <textarea rows="5" id="additionalInformation" name="additionalInformation" class="form-control" ng-model="client.billAddress.additionalInformation" required></textarea>
-            </div>
-            <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
-            <div ng-messages="billAddressUpdate.additionalInformation.$error" ng-if="billAddressUpdate.additionalInformation.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo punto de referencia es obligatorio.</b></p>
+              <textarea rows="5" id="additionalInformation" name="additionalInformation" class="form-control" ng-model="client.billAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de facturación."></textarea>
+              <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
+              <div ng-messages="billAddressUpdate.additionalInformation.$error" ng-if="billAddressUpdate.additionalInformation.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo punto de referencia es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -185,10 +180,8 @@
           <button type="button" class="close" ng-click="switchAlert('showAlertBill')">×</button>
           <strong> {{alertMessageBillAddress}}</strong>
         </div>
-        <div class="form-group">
-          <div class="col-sm-offset-10 col-sm-2">
-            <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
-          </div>
+        <div class="button-nav">
+            <button type="submit" name="button" class="btn btn-sienna btn-md">Guardar información</button>
         </div>
       </fieldset>
     </form>
@@ -197,21 +190,15 @@
       <fieldset>
         <legend>Dirección de entrega</legend>
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">
-            <button type="button" name="clone" ng-click="cloneAddress()" class="btn btn-sienna btn-md btn-block">Utilizar la misma de facturación</button>
-          </div>
-        </div>
-        <div class="form-group">
           <div ng-class="{'has-error': deliveryAddressUpdate.country.$invalid && (!deliveryAddressUpdate.country.$pristine || deliveryAddressUpdate.$submitted || deliveryAddressUpdate.country.$touched),
             'has-success': deliveryAddressUpdate.country.$valid}">
             <label for="country" class="control-label col-sm-2">País</label>
             <div class="col-sm-4">
-              <input type="text" id="country" name="country" class="form-control" ng-model="client.deliveryAddress.country" required>
-            </div>
-
-            <!-- VALIDACIONES DE PAIS-->
-            <div ng-messages="deliveryAddressUpdate.country.$error" ng-if="deliveryAddressUpdate.country.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo pais es obligatorio.</b></p>
+              <input type="text" id="country" name="country" class="form-control" ng-model="client.deliveryAddress.country" required placeholder="Colombia">
+              <!-- VALIDACIONES DE PAIS-->
+              <div ng-messages="deliveryAddressUpdate.country.$error" ng-if="deliveryAddressUpdate.country.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo pais es obligatorio.</b></p>
+              </div>
             </div>
           </div>
 
@@ -219,12 +206,11 @@
             'has-success': deliveryAddressUpdate.department.$valid}">
             <label for="department" class="control-label col-sm-2">Despartamento</label>
             <div class="col-sm-4">
-              <input type="text" id="department" name="department" class="form-control" ng-model="client.deliveryAddress.department" required>
-            </div>
-
-            <!-- VALIDACIONES DE DEPARTAMENTO-->
-            <div ng-messages="deliveryAddressUpdate.department.$error" ng-if="deliveryAddressUpdate.department.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo departamento es obligatorio.</b></p>
+              <input type="text" id="department" name="department" class="form-control" ng-model="client.deliveryAddress.department" required placeholder="Antioquia">
+              <!-- VALIDACIONES DE DEPARTAMENTO-->
+              <div ng-messages="deliveryAddressUpdate.department.$error" ng-if="deliveryAddressUpdate.department.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo departamento es obligatorio.</b></p>
+              </div>
             </div>
           </div>
 
@@ -234,11 +220,11 @@
             'has-success': deliveryAddressUpdate.city.$valid}">
             <label for="city" class="control-label col-sm-2">Ciudad</label>
             <div class="col-sm-4">
-              <input type="text" id="city" name="city" class="form-control" ng-model="client.deliveryAddress.city" required>
-            </div>
-            <!-- VALIDACIONES DE CIUDAD-->
-            <div ng-messages="deliveryAddressUpdate.city.$error" ng-if="deliveryAddressUpdate.city.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo ciudad es obligatorio.</b></p>
+              <input type="text" id="city" name="city" class="form-control" ng-model="client.deliveryAddress.city" required placeholder="Medellín">
+              <!-- VALIDACIONES DE CIUDAD-->
+              <div ng-messages="deliveryAddressUpdate.city.$error" ng-if="deliveryAddressUpdate.city.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo ciudad es obligatorio.</b></p>
+              </div>
             </div>
           </div>
 
@@ -246,11 +232,11 @@
           'has-success': deliveryAddressUpdate.neighborhood.$valid}">
             <label for="neighborhood" class="control-label col-sm-2">Barrio</label>
             <div class="col-sm-4">
-              <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.deliveryAddress.neighborhood" required>
-            </div>
-            <!-- VALIDACIONES DE BARRIO-->
-            <div ng-messages="deliveryAddressUpdate.neighborhood.$error" ng-if="deliveryAddressUpdate.neighborhood.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo barrio es obligatorio.</b></p>
+              <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.deliveryAddress.neighborhood" required placeholder="Colon">
+              <!-- VALIDACIONES DE BARRIO-->
+              <div ng-messages="deliveryAddressUpdate.neighborhood.$error" ng-if="deliveryAddressUpdate.neighborhood.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo barrio es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -259,11 +245,11 @@
             'has-success': deliveryAddressUpdate.nomenclature.$valid}">
             <label for="nomenclature" class="control-label col-sm-2">Nomenclatura</label>
             <div class="col-sm-4">
-              <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.deliveryAddress.nomenclature" required>
-            </div>
-            <!-- VALIDACIONES DE NOMENCLATURA-->
-            <div ng-messages="deliveryAddressUpdate.nomenclature.$error" ng-if="deliveryAddressUpdate.nomenclature.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo nomenclatura es obligatorio.</b></p>
+              <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.deliveryAddress.nomenclature" required placeholder="Cra 46#42-43">
+              <!-- VALIDACIONES DE NOMENCLATURA-->
+              <div ng-messages="deliveryAddressUpdate.nomenclature.$error" ng-if="deliveryAddressUpdate.nomenclature.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo nomenclatura es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -272,11 +258,11 @@
             'has-success': deliveryAddressUpdate.additionalInformation.$valid}">
             <label for="" class="control-label col-sm-2">Punto de referencia</label>
             <div class="col-sm-8">
-              <textarea rows="5" id="additionalInformation" name="additionalInformation" class="form-control" ng-model="client.deliveryAddress.additionalInformation" required></textarea>
-            </div>
-            <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
-            <div ng-messages="deliveryAddressUpdate.additionalInformation.$error" ng-if="deliveryAddressUpdate.additionalInformation.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo punto de referencia es obligatorio.</b></p>
+              <textarea rows="5" id="additionalInformation" name="additionalInformation" class="form-control" ng-model="client.deliveryAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de entrega."></textarea>
+              <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
+              <div ng-messages="deliveryAddressUpdate.additionalInformation.$error" ng-if="deliveryAddressUpdate.additionalInformation.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo punto de referencia es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -285,10 +271,9 @@
           <button type="button" class="close" ng-click="switchAlert('showAlertDelivery')">×</button>
           <strong> {{alertMessageDeliveryAddress}}</strong>
         </div>
-        <div class="form-group">
-          <div class="col-sm-offset-10 col-sm-2">
-            <button type="submit" name="button" class="btn btn-sienna btn-md btn-block">Guardar información</button>
-          </div>
+        <div class="button-nav">
+          <button type="submit" name="button" class="btn btn-sienna btn-md">Guardar información</button>
+          <button type="button" name="clone" ng-click="cloneAddress()" class="btn btn-sienna btn-md">Utilizar la misma de facturación</button>
         </div>
       </fieldset>
     </form>
@@ -308,10 +293,10 @@
                 <label for="name" class="control-label col-sm-4">Nombre</label>
                 <div class="col-sm-8">
                   <input type="text" id="name" name="name" class="form-control" ng-model="employee.name" required>
-                </div>
-                <!-- VALIDACIONES DE NOMBRE-->
-                <div ng-messages="register.name.$error" ng-if="register.name.$touched || register.$submitted" ng-messages-multiple>
-                  <p ng-message="required" class="help-block"><b>El campo nombre es obligatorio.</b></p>
+                  <!-- VALIDACIONES DE NOMBRE-->
+                  <div ng-messages="register.name.$error" ng-if="register.name.$touched || register.$submitted" ng-messages-multiple>
+                    <p ng-message="required" class="help-block"><b>El campo nombre es obligatorio.</b></p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -321,10 +306,10 @@
                 <label for="phonenumber" class="control-label col-sm-4">Número de telefono</label>
                 <div class="col-sm-8">
                   <input type="text" id="phonenumber" name="phonenumber" class="form-control" ng-model="employee.phonenumber" required>
-                </div>
-                <!-- VALIDACIONES DE NÚMERO DE TELEFONO-->
-                <div ng-messages="register.phonenumber.$error" ng-if="register.phonenumber.$touched || register.$submitted" ng-messages-multiple>
-                  <p ng-message="required" class="help-block"><b>El campo número de telefono es obligatorio.</b></p>
+                  <!-- VALIDACIONES DE NÚMERO DE TELEFONO-->
+                  <div ng-messages="register.phonenumber.$error" ng-if="register.phonenumber.$touched || register.$submitted" ng-messages-multiple>
+                    <p ng-message="required" class="help-block"><b>El campo número de telefono es obligatorio.</b></p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -334,10 +319,10 @@
                 <label for="role" class="control-label col-sm-4">Área del empleado</label>
                 <div class="col-sm-8">
                   <select class="form-control" id="role" name="role" ng-model="placement.selected" ng-options="option for option in placement.options" required></select>
-                </div>
-                <!-- VALIDACIONES DE TIPO DE EMPLEADO-->
-                <div ng-messages="register.role.$error" ng-if="register.role.$touched || register.$submitted" ng-messages-multiple>
-                  <p ng-message="required" class="help-block"><b>El campo área del empleado es obligatorio.</b></p>
+                  <!-- VALIDACIONES DE TIPO DE EMPLEADO-->
+                  <div ng-messages="register.role.$error" ng-if="register.role.$touched || register.$submitted" ng-messages-multiple>
+                    <p ng-message="required" class="help-block"><b>El campo área del empleado es obligatorio.</b></p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -383,16 +368,15 @@
         </div>
         <!-- CONTRASEÑA ACTUAL -->
         <div class="control-group form-group col-sm-12">
-          <div ng-class="{'has-error': pswForm.currentPassword.$inalid && (!pswForm.currentPassword.$pristine || pswForm.$submitted || pswForm.currentPassword.$touched),
+          <div ng-class="{'has-error': pswForm.currentPassword.$invalid && (!pswForm.currentPassword.$pristine || pswForm.$submitted || pswForm.currentPassword.$touched),
           'has-success': pswForm.currentPassword.$valid}">
             <label for="currentPassword" class="control-label col-sm-offset-3 col-sm-2">Contraseña actual</label>
             <div class="col-sm-4">
               <input name="currentPassword" type="password" placeholder="Ingrese su contraseña actual." class="form-control" ng-model="user.currentPassword" required>
-            </div>
-
-            <!-- VALIDACIONES DE CONTRASEÑA ACTUAL-->
-            <div ng-messages="pswForm.currentPassword.$error" ng-if="pswForm.currentPassword.$touched || pswForm.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo de contraseña actual es obligatorio.</b></p>
+              <!-- VALIDACIONES DE CONTRASEÑA ACTUAL-->
+              <div ng-messages="pswForm.currentPassword.$error" ng-if="pswForm.currentPassword.$touched || pswForm.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo de contraseña actual es obligatorio.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -404,12 +388,11 @@
             <label for="newPassword" class="control-label col-sm-offset-3 col-sm-2">Contraseña nueva*</label>
             <div class="col-sm-4">
               <input name="newPassword" type="password" placeholder="Ingrese su contraseña nueva." class="form-control" ng-model="user.newPassword" ng-minlength="6" required>
-            </div>
-
-            <!-- VALIDACIONES DE CONTRASEÑA NUEVA-->
-            <div ng-messages="pswForm.newPassword.$error" ng-if="pswForm.newPassword.$touched || pswForm.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo de contraseña nueva es obligatorio.</b></p>
-              <p ng-message="minlength" class="help-block"><b>La contraseña debe tener por lo menos 6 carácteres.</b></p>
+              <!-- VALIDACIONES DE CONTRASEÑA NUEVA-->
+              <div ng-messages="pswForm.newPassword.$error" ng-if="pswForm.newPassword.$touched || pswForm.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo de contraseña nueva es obligatorio.</b></p>
+                <p ng-message="minlength" class="help-block"><b>La contraseña debe tener por lo menos 6 carácteres.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -421,12 +404,11 @@
             <label for="rePassword" class="control-label col-sm-offset-3 col-sm-2">Repetir contraseña*</label>
             <div class="col-sm-4">
               <input name="rePassword" type="password" placeholder="Vuelve a escribir la contraseña nueva." class="form-control" ng-model="user.rePassword" match-password="newPassword" required>
-            </div>
-
-            <!-- VALIDACIONES DE LA CONFIRMACIÓN DE CONTRASEÑA -->
-            <div ng-messages="pswForm.rePassword.$error" ng-if="pswForm.rePassword.$touched || pswForm.$submitted" ng-messages-multiple>
-              <p ng-message="required" class="help-block"><b>El campo repetir contraseña es obligatorio.</b></p>
-              <p ng-message="passwordMatch" class="help-block"><b>Las contraseñas deben ser iguales.</b></p>
+              <!-- VALIDACIONES DE LA CONFIRMACIÓN DE CONTRASEÑA -->
+              <div ng-messages="pswForm.rePassword.$error" ng-if="pswForm.rePassword.$touched || pswForm.$submitted" ng-messages-multiple>
+                <p ng-message="required" class="help-block"><b>El campo repetir contraseña es obligatorio.</b></p>
+                <p ng-message="passwordMatch" class="help-block"><b>Las contraseñas deben ser iguales.</b></p>
+              </div>
             </div>
           </div>
         </div>
@@ -438,8 +420,8 @@
         </div>
 
         <div class="form-group">
-          <div class="col-sm-offset-5 col-sm-3">
-            <button class="btn btn-sienna btn-md btn-block" type="submit">
+          <div class="col-sm-offset-5">
+            <button class="btn btn-sienna btn-md" type="submit">
           <span ng-show="!processing">Cambiar contraseña </span>
           <span ng-show="processing">procesando <i class="glyphicon glyphicon-refresh gly-spin"></i></span>
         </button>

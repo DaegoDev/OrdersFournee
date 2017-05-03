@@ -24,20 +24,7 @@ module.exports = {
     var clientAdditionalInformation = null;
     var productsCodes = [];
     var clientProductsCredentials = [];
-    // var billCountry = null;
-    // var billDepartment = null;
-    // var billCity = null;
-    // var billNeighborhood = null;
-    // var billNomenclature = null;
-    // var billAddrAdditionalInformation = null;
-    // var deliveryCountry = null;
-    // var deliveryDepartment = null;
-    // var deliveryCity = null;
-    // var deliveryNeighborhood = null;
-    // var deliveryNomenclature = null;
-    // var delivAddrAdditionalInformation = null;
     var role = null;
-
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     legalName = req.param('legalName');
@@ -62,29 +49,8 @@ module.exports = {
     clientAdditionalInformation = req.param('clientAdditionalInformation');
     productsCodes = req.param('productCodes');
 
-    // billCountry = req.param('billCountry');
-    // billDepartment = req.param('billDepartment');
-    // billCity = req.param('billCity');
-    // billNeighborhood = req.param('billNeighborhood');
-    // billNomenclature = req.param('billNomenclature');
-    // billAddrAdditionalInformation = req.param('billAddrAdditionalInformation');
-    // deliveryCountry = req.param('deliveryCountry');
-    // deliveryDepartment = req.param('deliveryDepartment');
-    // deliveryCity = req.param('deliveryCity');
-    // deliveryNeighborhood = req.param('deliveryNeighborhood');
-    // deliveryNomenclature = req.param('deliveryNomenclature');
-    // delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
-
     // Organización de credenciales y cifrado de la contraseña del usuario.
     var userCredentials = createUserCredentials(legalName, nit);
-
-    // Organización de credenciales de la dirección de entrega.
-    //  var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
-    //    billNomenclature, billAddrAdditionalInformation);
-    // Organización de credenciales de la dirección de facturación.
-    //  var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
-    //    deliveryNomenclature, delivAddrAdditionalInformation);
-    // Organización de credenciales del cliente.
 
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
       businessPhonenumber, clientAdditionalInformation);
@@ -110,24 +76,6 @@ module.exports = {
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-        //   if (billAddressCredentials) {
-        //     return sql.insert('address', billAddressCredentials);
-        //   }
-        //   return null;
-        // })
-        // .then(function(insertedBillAddress) {
-        //   if (insertedBillAddress) {
-        //     clientCredentials.bill_address = insertedBillAddress.insertId;
-        //   }
-        //   if (deliveryAddressCredentials) {
-        //     return sql.insert('address', deliveryAddressCredentials);
-        //   }
-        //   return null;
-        // })
-        // .then(function(insertedDeliveryAddress) {
-        //   if (insertedDeliveryAddress) {
-        //     clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
-        //   }
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
@@ -359,14 +307,14 @@ module.exports = {
     var products = [];
     var item = null;
     var clientProductQueryStr =
-    'SELECT ' +
-    'cp.id, cp.client, cp.custom_name, cp.product, ' +
-    'p.name, p.short_name, ' +
-    'i.value, i.short_value, ' +
-    'e.name AS element_name ' +
-    'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
-    'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
-    'ORDER BY cp.product; ';
+      'SELECT ' +
+      'cp.id, cp.client, cp.custom_name, cp.product, ' +
+      'p.name, p.short_name, ' +
+      'i.value, i.short_value, ' +
+      'e.name AS element_name ' +
+      'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
+      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+      'ORDER BY cp.product; ';
 
     // Se obtiene el id del cliente que ejecuta la petición.
     userId = req.user.id;
@@ -376,13 +324,18 @@ module.exports = {
 
     // Se verifica que el cliente exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
-    Client.findOne({user: userId})
-      .then(function (client) {
+    Client.findOne({
+        user: userId
+      })
+      .then(function(client) {
         Product.query(clientProductQueryStr, client.id,
           function(err, rawData) {
-            if(err) {
+            if (err) {
               sails.log.debug(err);
-              throw {code: 1, msg: 'Query error.'};
+              throw {
+                code: 1,
+                msg: 'Query error.'
+              };
             }
             rawData.forEach(function(data, i, dataArray) {
               if (tmpProduct == null) {
@@ -395,14 +348,14 @@ module.exports = {
               }
 
               item = {
-                elementName: data.element_name,
-                value: data.value,
-                shortValue: data.short_value
-              },
+                  elementName: data.element_name,
+                  value: data.value,
+                  shortValue: data.short_value
+                },
 
-              tmpProduct.items.push(item);
+                tmpProduct.items.push(item);
 
-              if (!dataArray[i+1]) {
+              if (!dataArray[i + 1]) {
                 product = {
                   id: data.id,
                   clientId: data.client,
@@ -410,7 +363,7 @@ module.exports = {
                   product: tmpProduct
                 }
                 products.push(product);
-              } else if (dataArray[i+1].product != tmpProduct.code) {
+              } else if (dataArray[i + 1].product != tmpProduct.code) {
                 product = {
                   id: data.id,
                   clientId: data.client,
@@ -424,7 +377,7 @@ module.exports = {
             return res.ok(products)
           });
       })
-      .catch(function (err) {
+      .catch(function(err) {
         if (err.code == 1) {
           return res.serverError();
         }
@@ -492,23 +445,12 @@ module.exports = {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var user = null;
-    var legalName = null;
-    var nit = null;
     var tradeName = null;
     var managerName = null;
     var managerPhonenumber = null;
     var businessPhonenumber = null;
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
-    legalName = req.param('legalName');
-    if (!legalName) {
-      return res.badRequest('Se debe ingresar una razon social.');
-    }
-
-    nit = req.param('nit');
-    if (!nit) {
-      return res.badRequest('Se debe ingresar un nit.');
-    }
 
     tradeName = req.param('tradeName');
     if (!tradeName) {
@@ -531,8 +473,6 @@ module.exports = {
     }
 
     var clientCredentials = {
-      legalName: legalName,
-      nit: nit,
       tradeName: tradeName,
       managerName: managerName,
       managerPhonenumber: managerPhonenumber,
@@ -817,8 +757,51 @@ module.exports = {
         sails.log.debug(err);
         res.serverError();
       })
-  }
+  },
 
+  changeProductName: function(req, res) {
+    var customName = null;
+    var productCode = null;
+    var user = req.user;
+
+    customName = req.param('customName');
+    productCode = req.param('productCode');
+
+    Client.find({
+        user: user.id
+      })
+      .then(function(clientData) {
+        if (!clientData) {
+          throw {
+            code: 1,
+            msg: 'No client found'
+          };
+        }
+        return ClientProduct.update({
+          client: clientData[0].id,
+          product: productCode
+        }, {
+          customName: customName
+        });
+      })
+      .then(function(productData) {
+        if (!productData) {
+          throw {
+            code: 2,
+            msg: 'No product found'
+          };
+        }
+        return res.ok(productData);
+      })
+      .catch(function(err) {
+        if (err.code && err.code == 1) {
+          return res.serverError(err);
+        }
+        if (err.code && err.code == 2) {
+          return res.badRequest();
+        }
+      });
+  }
 };
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {

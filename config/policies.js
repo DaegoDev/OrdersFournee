@@ -40,7 +40,8 @@ module.exports.policies = {
     enableProduct: 'isAdmin',
     disableProduct: 'isAdmin',
     signup: 'isAdmin',
-    getProductsEnabled: 'isClient'
+    getProductsEnabled: 'isClient',
+    changeProductName: 'isClient'
   },
 
   ClientEmployeeController: {

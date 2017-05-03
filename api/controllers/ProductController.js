@@ -16,47 +16,97 @@ module.exports = {
   create: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
-    var name = "";
-    var shortName = "";
+    var shortNameStr = '';
+    var nameStr = '';
     var items = [];
     var doughName = null;
     var arrayDough = [];
     var numberCode = null;
+    var mandatoryItems = ['MASA', 'FORMA', 'GRAMAJE CRUDO'];
+    var checkedMandatory = [false, false, false];
+    var isValid = true;
+    var addedItems = [];
+
     items = req.param('items');
 
     // Se genera el nombre y el nombre abreviado de un producto de acuerdo a los items
     if (typeof items == 'string') {
-      items = JSON.parse(items)
-      name = items.value;
-      shortName = items.shortValue;
-    }
-    else {
+      return res.badRequest({
+        code: 1,
+        msg: 'There are no enough items'
+      });
+    } else {
       items.forEach(function(item, i, items) {
         item = JSON.parse(item)
         items[i] = item;
-        name = name + " " + item.value;
-        shortName = shortName + " " + item.shortValue;
-      });
+        indexMandatory = mandatoryItems.indexOf(items[i].name.toUpperCase().trim());
+        if (indexMandatory != -1) {
+          checkedMandatory[indexMandatory] = true;
+        }
+        index = addedItems.indexOf(items[i].name.toUpperCase().trim());
+        if (index != -1) {
+          return res.badRequest({code:2, msg: 'There are repeated elements.'})
+        } else {
+          addedItems.push(items[i].name.toUpperCase().trim());
+        }
+      })
     }
+
+    // Lets check if all mandatory items have been send in request.
+    checkedMandatory.forEach(function(mandatoryItem, index, data) {
+      if (mandatoryItem == false) {
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      return res.badRequest({
+        code: 3,
+        msg: 'There are mandatory items missing.'
+      })
+    }
+
     // Organización de credenciales de un producto.
-    var productCredentials = {
-      name: name,
-      short_name: shortName
-    };
+    var productCredentials = {};
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
     var sql = connectionConfig.sql;
+    Element.find().sort('id ASC')
+      .then(function(data) {
+        // Lets build the string container sorted by id element, each element is pre-fixed and post-fixed with &
+        data.forEach(function(element, index, data) {
+          shortNameStr = shortNameStr + '&' + element.name.toUpperCase() +'&';
+          nameStr = nameStr + '&' + element.name.toUpperCase()+ '&';
+        });
+        shortNameStr = shortNameStr.trim();
+        nameStr = nameStr.trim();
 
-    Element.find({name: 'masa'}).populate('items')
+        items.forEach(function(item, i, items) {
+          shortNameStr = shortNameStr.replace('&'+items[i].name.trim().toUpperCase()+'&', items[i].shortValue.trim().toUpperCase()+' ');
+          nameStr = nameStr.replace('&'+items[i].name.trim().toUpperCase()+'&', items[i].value.trim() +' ');
+        });
+        data.forEach(function(element, index, data) {
+          shortNameStr = shortNameStr.replace('&'+element.name.toUpperCase()+'&', '');
+          nameStr = nameStr.replace('&'+element.name.toUpperCase()+'&', '');
+        });
+        shortNameStr = shortNameStr.trim();
+        nameStr = nameStr.trim();
+
+        productCredentials.name = nameStr,
+        productCredentials.short_name = shortNameStr
+
+        return Element.find({
+          name: 'masa'
+        }).populate('items');
+      })
       .then(function(elementItems) {
         var arrayObjectsItems = elementItems[0].items;
         arrayObjectsItems.forEach(function(itemObject, i, arrayObjectsItems) {
           // Array que contiene los valores de las masas
           var value = itemObject.value;
-          arrayDough.push(value.toLowerCase());
+          arrayDough.push(value.toLowerCase().trim());
         });
-        sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
         if (items.constructor == [].constructor) {
           items.forEach(function(item, i, items) {
@@ -68,12 +118,14 @@ module.exports = {
           doughName = items.value;
         }
         // Construye la letra del codigo del producto
-        return Item.find({value: doughName}).populate('products')
+        return Item.find({
+          value: doughName
+        }).populate('products')
       })
-      .then(function(items) {
-        var products = items[0].products;
+      .then(function(itemsBd) {
+        var products = itemsBd[0].products;
         if (products.length == 0) {
-          var doughNameArray = doughName.replace(/\s/g, '').toLowerCase();
+          var doughNameArray = doughName.toLowerCase();
           numberCode = arrayDough.indexOf(doughNameArray) + 1;
           productCredentials.code = numberCode.toString() + "A";
         } else {
@@ -121,14 +173,18 @@ module.exports = {
       })
       .catch(function(err) {
         sails.log.debug(err);
-        return sql.rollback(function(err) {
+        sql.rollback(function(err) {
           connectionConfig.connection.end(function(err) {
             if (err) {
               sails.log.debug(err);
             }
           });
         });
-        res.serverError();
+        if (err.code == 'ER_DUP_ENTRY') {
+          return res.badRequest({code:4, msg: 'Product already exists'});
+        } else {
+          return res.serverError();
+        }
       });
   },
 
@@ -147,14 +203,14 @@ module.exports = {
     var products = [];
     var item = null;
     var clientProductQueryStr =
-    'SELECT ' +
-    'cp.id, cp.client, cp.custom_name, cp.product, ' +
-    'p.name, p.short_name, ' +
-    'i.value, i.short_value, ' +
-    'e.name AS element_name ' +
-    'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
-    'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
-    'ORDER BY cp.product; ';
+      'SELECT ' +
+      'cp.id, cp.client, cp.custom_name, cp.product, ' +
+      'p.name, p.short_name, ' +
+      'i.value, i.short_value, ' +
+      'e.name AS element_name ' +
+      'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
+      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+      'ORDER BY cp.product; ';
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     clientId = parseInt(req.param('clientId'));
@@ -166,7 +222,7 @@ module.exports = {
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
     Product.query(clientProductQueryStr, clientId,
       function(err, rawData) {
-        if(err) {
+        if (err) {
           sails.log.debug(err);
           return res.serverError();
         }
@@ -181,14 +237,14 @@ module.exports = {
           }
 
           item = {
-            elementName: data.element_name,
-            value: data.value,
-            shortValue: data.short_value
-          },
+              elementName: data.element_name,
+              value: data.value,
+              shortValue: data.short_value
+            },
 
-          tmpProduct.items.push(item);
+            tmpProduct.items.push(item);
 
-          if (!dataArray[i+1]) {
+          if (!dataArray[i + 1]) {
             product = {
               id: data.id,
               clientId: data.client,
@@ -196,7 +252,7 @@ module.exports = {
               product: tmpProduct
             }
             products.push(product);
-          } else if (dataArray[i+1].product != tmpProduct.code) {
+          } else if (dataArray[i + 1].product != tmpProduct.code) {
             product = {
               id: data.id,
               clientId: data.client,
@@ -222,7 +278,7 @@ module.exports = {
     var product = null;
     var products = [];
     var item = null;
-    var productQueryStr= 'SELECT ' +
+    var productQueryStr = 'SELECT ' +
       'p.code, p.name, p.short_name, ' +
       'e.name as element_name, ' +
       'i.id as item_id, i.value, i.short_value ' +
@@ -232,7 +288,7 @@ module.exports = {
 
     Product.query(productQueryStr,
       function(err, rawData) {
-        if(err) {
+        if (err) {
           sails.log.debug(err);
           return res.serverError();
         }
@@ -247,17 +303,17 @@ module.exports = {
           }
 
           item = {
-            itemId: data.item_id,
-            elementName: data.element_name,
-            value: data.value,
-            shortValue: data.short_value
-          },
+              itemId: data.item_id,
+              elementName: data.element_name,
+              value: data.value,
+              shortValue: data.short_value
+            },
 
-          product.items.push(item);
+            product.items.push(item);
 
-          if (!dataArray[i+1]) {
+          if (!dataArray[i + 1]) {
             products.push(product);
-          } else if (dataArray[i+1].code != product.code) {
+          } else if (dataArray[i + 1].code != product.code) {
             products.push(product);
             product = null;
           }
@@ -265,6 +321,14 @@ module.exports = {
         return res.ok(products)
       });
   },
+  test: function (req, res) {
+    Element.find({
+      name: 'masa'
+    }).populate('items')
+    .then(function (data) {
+      return res.ok(data)
+    });
+  }
 };
 
 // Retorna la letra siguiente de acuerdo al alfabeto de la letra ingresada

@@ -44,11 +44,11 @@ fournee.controller('sidebarCtrl', ['$scope', '$cookieStore', '$log', 'AuthServic
   };
 
   $scope.isAdmin = function() {
-    return $scope.role === "ADMIN";
+    return $scope.role === "ADMINISTRADOR";
   };
 
   $scope.isEmployee = function() {
-    if ($scope.role === "DESPACHADOR" || $scope.role === "ADMIN") {
+    if ($scope.role === "DESPACHADOR" || $scope.role === "ADMINISTRADOR") {
       return true;
     } else {
       return false;

@@ -12,7 +12,7 @@ fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
           role = StorageService.get("role", "session");
           if (role) {
             PermRoleStore.defineRole('ANON', function () {return false;});
-            PermRoleStore.defineRole('ADMIN', function () {return false;});
+            PermRoleStore.defineRole('ADMINISTRADOR', function () {return false;});
             PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
             PermRoleStore.defineRole('CLIENTE', function () {return false;});
             PermRoleStore.defineRole(role.toUpperCase(), function() {return true;});
@@ -20,7 +20,7 @@ fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
           }
         } else {
           PermRoleStore.clearStore();
-          PermRoleStore.defineRole('ADMIN', function () {return false;});
+          PermRoleStore.defineRole('ADMINISTRADOR', function () {return false;});
           PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
           PermRoleStore.defineRole('CLIENTE', function () {return false;});
           PermRoleStore.defineRole("ANON", function() {return true;});

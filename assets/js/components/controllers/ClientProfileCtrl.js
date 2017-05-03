@@ -22,16 +22,12 @@
       })
 
     $scope.updateGeneralInfo = function() {
-      var legalName = $scope.client.legalName;
-      var nit = $scope.client.nit;
       var tradeName = $scope.client.tradeName;
       var managerName = $scope.client.managerName;
       var managerPhonenumber = $scope.client.managerPhonenumber;
       var businessPhonenumber = $scope.client.businessPhonenumber;
 
       var clientCredentials = {
-        legalName: legalName,
-        nit: nit,
         tradeName: tradeName,
         managerName: managerName,
         managerPhonenumber: managerPhonenumber,
@@ -39,15 +35,13 @@
       }
 
       // Validación de los campos del formulario de actualización de info general de un cliente.
-      if (!legalName || !nit || !tradeName || !managerName || !managerPhonenumber || !businessPhonenumber) {
+      if (!tradeName || !managerName || !managerPhonenumber || !businessPhonenumber) {
         return;
       }
 
       ClientSvc.updateGeneralInfo(clientCredentials)
         .then(function(res) {
           var clientUpdated = res.data;
-          $scope.client.legalName = clientUpdated.legalName;
-          $scope.client.nit = clientUpdated.nit;
           $scope.client.tradeName = clientUpdated.tradeName;
           $scope.client.managerName = clientUpdated.managerName;
           $scope.client.managerPhonenumber = clientUpdated.managerPhonenumber;
@@ -194,7 +188,7 @@
     }
 
     $scope.cloneAddress = function() {
-      $scope.client.deliveryAddress = $scope.client.billAddress;
+      $scope.client.deliveryAddress = JSON.parse(JSON.stringify($scope.client.billAddress));
     }
 
     $scope.updatePassword = function () {

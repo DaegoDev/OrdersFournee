@@ -48,7 +48,6 @@ module.exports = {
     // se retorna un error. En caso de que exista se crea el regitro del usuario.
     Client.findOne({user: user.id})
     .then(function(client) {
-      sails.log.debug(client)
       if(client){
         clientEmployeeCredentials.client = client.id;
         return ClientEmployee.create(clientEmployeeCredentials);
@@ -56,7 +55,6 @@ module.exports = {
       throw "El cliente no existe";
     })
     .then(function(clientEmployee) {
-      sails.log.debug(clientEmployee);
       res.ok({
         clientEmployee: clientEmployee
       })
@@ -78,7 +76,6 @@ module.exports = {
     Client.find({ user: user.id})
     .populate('clientEmployee')
     .then(function(client) {
-      sails.log.debug(client);
       res.ok(client[0].clientEmployee);
     })
     .catch(function(err) {

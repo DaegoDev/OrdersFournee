@@ -26,7 +26,7 @@
           <div class="col-sm-4">
             <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required>
           </div>
-          <!-- VALIDACIONES NIR-->
+          <!-- VALIDACIONES NIT-->
           <div ng-messages="update.nit.$error" ng-if="update.nit.$touched || update.$submitted" ng-messages-multiple>
             <p ng-message="required" class="help-block"><b>El campo NIT es obligatorio.</b></p>
           </div>
@@ -60,27 +60,27 @@
       </div>
 
       <div class="form-group">
-        <div ng-class="{'has-error': update.managerName.$invalid && (!update.managerName.$pristine || update.$submitted || update.managerName.$touched),
-            'has-success': update.managerName.$valid}">
-          <label for="managerName" class="control-label col-sm-2">Nombre del administrador</label>
+        <div ng-class="{'has-error': update.ownerName.$invalid && (!update.ownerName.$pristine || update.$submitted || update.ownerName.$touched),
+            'has-success': update.ownerName.$valid}">
+          <label for="ownerName" class="control-label col-sm-2">Nombre del dueño</label>
           <div class="col-sm-4">
-            <input type="text" id="managerName" name="managerName" class="form-control" ng-model="client.managerName" required>
+            <input type="text" id="ownerName" name="ownerName" class="form-control" ng-model="client.ownerName" required>
           </div>
-          <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
-          <div ng-messages="update.managerName.$error" ng-if="update.managerName.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
+          <!-- VALIDACIONES DE NOMBRE DEL DUEÑO-->
+          <div ng-messages="update.ownerName.$error" ng-if="update.ownerName.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo nombre del dueño es obligatorio.</b></p>
           </div>
         </div>
 
-        <div ng-class="{'has-error': update.managerPhonenumber.$invalid && (!update.managerPhonenumber.$pristine || update.$submitted || update.managerPhonenumber.$touched),
-            'has-success': update.managerPhonenumber.$valid}">
-          <label for="managerPhonenumber" class="control-label col-sm-2">Telefono del administrador</label>
+        <div ng-class="{'has-error': update.ownerPhonenumber.$invalid && (!update.ownerPhonenumber.$pristine || update.$submitted || update.ownerPhonenumber.$touched),
+            'has-success': update.ownerPhonenumber.$valid}">
+          <label for="ownerPhonenumber" class="control-label col-sm-2">Telefono del dueño</label>
           <div class="col-sm-4">
-            <input type="text" id="managerPhonenumber" name="managerPhonenumber" class="form-control" ng-model="client.managerPhonenumber" required>
+            <input type="text" id="ownerPhonenumber" name="ownerPhonenumber" class="form-control" ng-model="client.ownerPhonenumber" required>
           </div>
-          <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
-          <div ng-messages="update.managerPhonenumber.$error" ng-if="update.managerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-            <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
+          <!-- VALIDACIONES DE TELEFONO DEL DUEÑO-->
+          <div ng-messages="update.ownerPhonenumber.$error" ng-if="update.ownerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
+            <p ng-message="required" class="help-block"><b>El campo telefono del dueño es obligatorio.</b></p>
           </div>
         </div>
       </div>
@@ -95,6 +95,14 @@
         </div>
       </div>
 
+    </fieldset>
+
+    <fieldset>
+      <legend>Horarios de recepción</legend>
+      <div ng-repeat="weekDay in weekDays" >
+          <input type="checkbox" >
+          <strong>{{weekDay.name}}</strong>
+      </div>
     </fieldset>
   </form>
 

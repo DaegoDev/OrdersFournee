@@ -32,15 +32,15 @@ module.exports = {
       required: true,
       columnName: 'trade_name'
     },
-    managerName: {
+    ownerName: {
       type: 'string',
       size: 256,
-      columnName: 'manager_name'
+      columnName: 'owner_name'
     },
-    managerPhonenumber: {
+    ownerPhonenumber: {
       type: 'string',
       size: 32,
-      columnName: 'manager_phonenumber'
+      columnName: 'owner_phonenumber'
     },
     businessPhonenumber: {
       type: 'string',
@@ -87,6 +87,12 @@ module.exports = {
     clientEmployee: {
       collection: 'clientemployee',
       via: 'client'
+    },
+    //Añade una referencia a week_day
+    receptionHours :{
+      collection: 'weekday',
+      via: 'client',
+      through: 'receptionhour'
     }
   }
 };

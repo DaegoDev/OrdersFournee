@@ -44,12 +44,12 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
       $scope.infoMsgOptions.showMessage = true;
       return;
     }
-    if (!$scope.client.managerName) {
+    if (!$scope.client.ownerName) {
       $scope.infoMsgOptions.message = 'Debe ingresar el nombre del administrador de la empresa.';
       $scope.infoMsgOptions.showMessage = true;
       return;
     }
-    if (!$scope.client.managerPhonenumber) {
+    if (!$scope.client.ownerPhonenumber) {
       $scope.infoMsgOptions.message = 'Debe ingresar el número telefonico del administrador.';
       $scope.infoMsgOptions.showMessage = true;
       return;
@@ -103,8 +103,8 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
       legalName: $scope.client.legalName,
       nit: $scope.client.nit,
       tradeName: $scope.client.tradeName,
-      managerName: $scope.client.managerName,
-      managerPhonenumber: $scope.client.managerPhonenumber,
+      ownerName: $scope.client.ownerName,
+      ownerPhonenumber: $scope.client.ownerPhonenumber,
       businessPhonenumber: $scope.client.businessPhonenumber,
       clientAdditionalInformation: $scope.client.additionalInformation,
       productCodes: $scope.productsCodes

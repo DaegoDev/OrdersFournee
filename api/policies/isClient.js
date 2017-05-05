@@ -5,7 +5,6 @@
 var passport = require('passport');
 module.exports = function (req, res, next) {
   passport.authenticate('jwt', function (err, user, info) {
-    // sails.log.debug(user);
     if (err) {
       return res.serverError();
     } else if (!user) {

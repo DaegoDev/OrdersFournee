@@ -5,7 +5,9 @@
     $scope.order.timeInitial = new Date();
     $scope.order.timeInitial.setHours(12);
     $scope.order.timeInitial.setMinutes(0);
-    $scope.order.timeFinal = $scope.order.timeInitial;
+    $scope.order.timeFinal = new Date();
+    $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
+    $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
 
     $scope.order.hstep = 1;
     $scope.order.mstep = 10;
@@ -138,14 +140,18 @@
       $scope.order.timeInitial = new Date();
       $scope.order.timeInitial.setHours(12);
       $scope.order.timeInitial.setMinutes(0);
-      $scope.order.timeFinal = $scope.order.timeInitial;
+      $scope.order.timeFinal = new Date();
+      $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
+      $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
       $scope.today();
       $scope.$apply();
     }
 
     $scope.changedInitial = function() {
       // $log.log('Time changed to: ' + $scope.timeInitial);
-      $scope.order.timeFinal = $scope.order.timeInitial;
+      $scope.order.timeFinal = new Date();
+      $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
+      $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
       $scope.order.minTimeFinal = $scope.order.timeInitial;
     };
 
@@ -156,6 +162,7 @@
     // Datepicker para la fecha de entrega
     $scope.today = function() {
       $scope.order.dt = new Date();
+      $scope.order.dt.setDate($scope.order.dt.getDate() + 1);
     };
     $scope.today();
 

@@ -8,7 +8,6 @@ module.exports = function (req, res, next) {
     if (err) {
       return res.serverError();
     } else if (!user) {
-      sails.log.debug(info.message);
       return res.unauthorized(null, info && info.code, info && info.message);
     }
     if (user.role.toLowerCase() === 'despachador') {

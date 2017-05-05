@@ -147,14 +147,12 @@ module.exports = {
     if (orderIds.length == 0) {
       return res.badRequest('Ids de los pedidos vacio.');
     }
-    sails.log.debug(orderIds);
     if(Array.isArray(orderIds)){
       orderIds.forEach(function (orderId, i, orderIds) {
         orderId = parseInt(orderId);
       })
     }
 
-    sails.log.debug(deliveryDate);
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
         id: orderIds
@@ -199,11 +197,9 @@ module.exports = {
     if (!newState) {
       return res.badRequest('Se debe ingresar el nuevo estado.');
     }
-    // sails.log.debug(states.indexOf(newState.toLowerCase()));
     if (states.indexOf(newState.toLowerCase()) == -1) {
       return res.badRequest("El estado no existe");
     }
-    sails.log.debug(orderIds);
     if(Array.isArray(orderIds)){
       orderIds.forEach(function (orderId, i, orderIds) {
         orderId = parseInt(orderId);
@@ -214,7 +210,6 @@ module.exports = {
         id: orderIds
       })
       .then(function(orders) {
-        // sails.log.debug(orders);
         // if (orders.length != orderIds.length) {
         //   throw "Una de las ordenes no existe";
         // }
@@ -261,7 +256,6 @@ module.exports = {
                    LEFT JOIN product ON client_product.product = product.code \
                    WHERE orders.delivery_date = ?', [deliveryDate],
       function(err, orders) {
-        // sails.log.debug(orders);
         if (err) {
           return res.serverError(err);
         }
@@ -348,8 +342,6 @@ module.exports = {
 };
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {
-  sails.log.debug(createdAt);
-  sails.log.debug(deliveryDate);
   var createdTime = createdAt.getHours();
   var createdDay = createdAt.getDate();
   var createdMonth = createdAt.getMonth();

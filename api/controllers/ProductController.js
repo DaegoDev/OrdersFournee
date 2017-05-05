@@ -56,7 +56,6 @@ module.exports = {
           var value = itemObject.value;
           arrayDough.push(value.toLowerCase());
         });
-        sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
         if (items.constructor == [].constructor) {
           items.forEach(function(item, i, items) {

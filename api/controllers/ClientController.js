@@ -18,24 +18,12 @@ module.exports = {
     var legalName = null;
     var nit = null;
     var tradeName = null;
-    var managerName = null;
-    var managerPhonenumber = null;
+    var ownerName = null;
+    var ownerPhonenumber = null;
     var businessPhonenumber = null;
     var clientAdditionalInformation = null;
     var productsCodes = [];
     var clientProductsCredentials = [];
-    // var billCountry = null;
-    // var billDepartment = null;
-    // var billCity = null;
-    // var billNeighborhood = null;
-    // var billNomenclature = null;
-    // var billAddrAdditionalInformation = null;
-    // var deliveryCountry = null;
-    // var deliveryDepartment = null;
-    // var deliveryCity = null;
-    // var deliveryNeighborhood = null;
-    // var deliveryNomenclature = null;
-    // var delivAddrAdditionalInformation = null;
     var role = null;
 
 
@@ -56,37 +44,16 @@ module.exports = {
     }
 
 
-    managerName = req.param('managerName');
-    managerPhonenumber = req.param('managerPhonenumber');
+    ownerName = req.param('ownerName');
+    ownerPhonenumber = req.param('ownerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
     productsCodes = req.param('productCodes');
 
-    // billCountry = req.param('billCountry');
-    // billDepartment = req.param('billDepartment');
-    // billCity = req.param('billCity');
-    // billNeighborhood = req.param('billNeighborhood');
-    // billNomenclature = req.param('billNomenclature');
-    // billAddrAdditionalInformation = req.param('billAddrAdditionalInformation');
-    // deliveryCountry = req.param('deliveryCountry');
-    // deliveryDepartment = req.param('deliveryDepartment');
-    // deliveryCity = req.param('deliveryCity');
-    // deliveryNeighborhood = req.param('deliveryNeighborhood');
-    // deliveryNomenclature = req.param('deliveryNomenclature');
-    // delivAddrAdditionalInformation = req.param('delivAddrAdditionalInformation');
-
     // Organización de credenciales y cifrado de la contraseña del usuario.
     var userCredentials = createUserCredentials(legalName, nit);
 
-    // Organización de credenciales de la dirección de entrega.
-    //  var billAddressCredentials = createAddressCredentials(billCountry, billDepartment, billCity, billNeighborhood,
-    //    billNomenclature, billAddrAdditionalInformation);
-    // Organización de credenciales de la dirección de facturación.
-    //  var deliveryAddressCredentials = createAddressCredentials(deliveryCountry, deliveryDepartment, deliveryCity, deliveryNeighborhood,
-    //    deliveryNomenclature, delivAddrAdditionalInformation);
-    // Organización de credenciales del cliente.
-
-    var clientCredentials = createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber,
+    var clientCredentials = createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber,
       businessPhonenumber, clientAdditionalInformation);
 
     //Obtengo la conección para realizar transacciones
@@ -106,28 +73,10 @@ module.exports = {
         if (user.length == 0) {
           return sql.insert('user', userCredentials)
         }
-        return res.conflict();
+        throw 'El usuario ya existe';
       })
       .then(function(newUser) {
         clientCredentials.user = newUser.insertId;
-        //   if (billAddressCredentials) {
-        //     return sql.insert('address', billAddressCredentials);
-        //   }
-        //   return null;
-        // })
-        // .then(function(insertedBillAddress) {
-        //   if (insertedBillAddress) {
-        //     clientCredentials.bill_address = insertedBillAddress.insertId;
-        //   }
-        //   if (deliveryAddressCredentials) {
-        //     return sql.insert('address', deliveryAddressCredentials);
-        //   }
-        //   return null;
-        // })
-        // .then(function(insertedDeliveryAddress) {
-        //   if (insertedDeliveryAddress) {
-        //     clientCredentials.delivery_address = insertedDeliveryAddress.insertId;
-        //   }
         return sql.insert('client', clientCredentials);
       })
       .then(function(client) {
@@ -312,7 +261,7 @@ module.exports = {
           client.products.remove(product);
           return client.save();
         }
-        return res.serverError();
+        throw 'El cliente no existe';
       })
       .then(function(client) {
         res.ok({
@@ -495,8 +444,8 @@ module.exports = {
     var legalName = null;
     var nit = null;
     var tradeName = null;
-    var managerName = null;
-    var managerPhonenumber = null;
+    var ownerName = null;
+    var ownerPhonenumber = null;
     var businessPhonenumber = null;
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
@@ -515,13 +464,13 @@ module.exports = {
       return res.badRequest('Se debe ingresar el nombre de la empresa.');
     }
 
-    managerName = req.param('managerName');
-    if (!managerName) {
+    ownerName = req.param('ownerName');
+    if (!ownerName) {
       return res.badRequest('Se debe ingresar el nombre del administrador.');
     }
 
-    managerPhonenumber = req.param('managerPhonenumber');
-    if (!managerPhonenumber) {
+    ownerPhonenumber = req.param('ownerPhonenumber');
+    if (!ownerPhonenumber) {
       return res.badRequest('Se debe ingresar el telefono del administrador.');
     }
 
@@ -530,12 +479,13 @@ module.exports = {
       return res.badRequest('Se debe ingresar el telefono de la empresa.');
     }
 
+    // Organización de credenciales del cliente
     var clientCredentials = {
       legalName: legalName,
       nit: nit,
       tradeName: tradeName,
-      managerName: managerName,
-      managerPhonenumber: managerPhonenumber,
+      ownerName: ownerName,
+      ownerPhonenumber: ownerPhonenumber,
       businessPhonenumber: businessPhonenumber
     }
     user = req.user;
@@ -596,6 +546,7 @@ module.exports = {
       return res.badRequest('Se debe ingresar un punto de referencia.');
     }
 
+    // Organización de credenciales de la dirección de facturación del cliente
     addressCredentials = {
       country: billCountry,
       department: billDepartment,
@@ -683,6 +634,7 @@ module.exports = {
       return res.badRequest('Se debe ingresar un punto de referencia.');
     }
 
+    // Organización de credenciales de la dirección de entrega del cliente.
     addressCredentials = {
       country: deliveryCountry,
       department: deliveryDepartment,
@@ -847,13 +799,13 @@ function createUserCredentials(username, password) {
   return userCredentials;
 }
 // crea las credenciales para insertar un cliente
-function createClientCredentials(legalName, nit, tradeName, managerName, managerPhonenumber, businessPhonenumber, additionalInformation) {
+function createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber, businessPhonenumber, additionalInformation) {
   var clientCredentials = {
     legal_name: legalName,
     nit: nit,
     trade_name: tradeName,
-    manager_name: managerName,
-    manager_phonenumber: managerPhonenumber,
+    owner_name: ownerName,
+    owner_phonenumber: ownerPhonenumber,
     business_phonenumber: businessPhonenumber,
     additional_information: additionalInformation
   };

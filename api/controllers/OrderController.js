@@ -252,7 +252,7 @@ module.exports = {
                 orders.final_suggested_time, orders.additional_information, client_employee.name as employeeName, client.trade_name, client.business_phonenumber, \
                 address.country, address.department, address.city, address.neighborhood, address.nomenclature, address.additional_information as referencia, \
                 product.short_name, order_product.amount, order_product.baked \
-                   FROM ordersFournee.`order` as orders \
+                   FROM `order` as orders \
 		               LEFT JOIN client_employee ON orders.client_employee = client_employee.id \
                    LEFT JOIN client ON orders.client = client.id \
                    LEFT JOIN address ON client.delivery_address = address.id \

@@ -18,7 +18,7 @@ var storageType = 'session';
 				role = res.data.role.toUpperCase();
 				PermRoleStore.clearStore();
 				PermRoleStore.defineRole('ANON', function () {return false;});
-				PermRoleStore.defineRole('ADMIN', function () {return false;});
+				PermRoleStore.defineRole('ADMINISTRADOR', function () {return false;});
 				PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
 				PermRoleStore.defineRole('CLIENTE', function () {return false;});
 				PermRoleStore.defineRole(role, function () {return true;});
@@ -34,7 +34,7 @@ var storageType = 'session';
 			// Terminación de la sesión de un usuario.
 			PermRoleStore.clearStore();
 			PermRoleStore.defineRole("ANON", function () {return true;})
-			PermRoleStore.defineRole('ADMIN', function () {return false;});
+			PermRoleStore.defineRole('ADMINISTRADOR', function () {return false;});
 			PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
 			PermRoleStore.defineRole('CLIENTE', function () {return false;});
 			StorageService.unset("auth_token", storageType);

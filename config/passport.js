@@ -8,7 +8,7 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 // Configuración de JwtStrategy
 
-var EXPIRES_IN_MINUTES = 60 * 120;
+var EXPIRES_IN_MINUTES = 60 * 60 * 15;
 var SECRET = process.env.tokenSecret
     || "gDDX7NnKuqDnvK87jROA0MDtATKvJ9jfb2NRE4E7uazqdlwR5P7Uu8veBWkUsG9";
 var ALGORITHM = "HS256";

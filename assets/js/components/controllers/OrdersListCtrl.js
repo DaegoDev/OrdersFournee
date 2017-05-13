@@ -1,6 +1,8 @@
 
   var fournee = angular.module('fournee');
   fournee.controller('OrdersListCtrl', ['$scope', '$log', 'OrderService', '$ngConfirm', function($scope, $log, OrderService, $ngConfirm) {
+    $scope.sortByProperty = 'id';
+
     // Datepicker para la fecha de entrega
     $scope.today = function() {
       $scope.dt = new Date();
@@ -89,15 +91,14 @@
 
     $scope.getOrdersByDeliveryDate = function() {
       var deliveryDate = ($scope.dt.getYear() + 1900) + "-" + $scope.dt.getMonth() + "-" + $scope.dt.getDate();
-      OrderService.getOrdersByDeliveryDate({
-          deliveryDate: deliveryDate
-        })
+      OrderService.getOrdersByDeliveryDate({deliveryDate: deliveryDate})
         .then(function(res) {
           $scope.orders = res.data;
           $scope.setCheckboxObj();
+          // console.log(res.data);
         })
         .catch(function(err) {
-
+          $log.debug('Error getting orders');
         })
     }
 
@@ -107,7 +108,6 @@
       angular.forEach($scope.orders, function(order, key) {
         $scope.checkboxObj[order.id] = false;
       })
-      // console.log($scope.checkboxObj);
     }
 
     // Obtiene todas los pedidos con una fecha de entrega
@@ -125,12 +125,21 @@
     }
 
     $scope.checkAllOrders = function() {
+      $scope.all = !$scope.all;
       angular.forEach($scope.checkboxObj, function(checkbox, index) {
         if ($scope.all && !checkbox) {
           $scope.checkboxObj[index] = !checkbox;
         } else if (!$scope.all && checkbox) {
           $scope.checkboxObj[index] = !checkbox;
         }
+      })
+    }
+
+    $scope.uncheckAllOrders = function() {
+      $scope.all = !$scope.all;
+      angular.forEach($scope.checkboxObj, function(checkbox, index) {
+        $scope.checkboxObj[index] = false;
+        $scope.all = false;
       })
     }
 
@@ -156,24 +165,38 @@
         $ngConfirm('Debe seleccionar una orden.');
         return;
       }
-      // console.log(checkedOrders);
       var credentials = {
         orderIds: checkedOrders,
         newState: $scope.placement.selected,
       }
       OrderService.changeState(credentials)
         .then(function(res) {
-          // console.log(res.data);
           var updatedOrders = res.data;
+          console.log(updatedOrders);
+          console.log($scope.orders);
           angular.forEach(updatedOrders, function(order, index) {
-            $scope.orders[order.id].state = order.state;
+            updateField("state", order.id, order.state);
           })
           $scope.all=false;
           $scope.setCheckboxObj();
         })
     }
 
+    function updateField(field, orderId, value) {
+      angular.forEach($scope.orders, function(order, index) {
+        if(order.id === orderId){
+          order[field] = value;
+          return;
+        }
+      })
+    }
+
     $scope.showConfirmation = function() {
+      var checkedOrders = getCheckedOrders();
+      if (checkedOrders.length == 0) {
+        $ngConfirm('Debe seleccionar una orden.');
+        return;
+      }
       $scope.ordersConfirmed = getCheckedOrders();
       $ngConfirm({
         title: 'Cambio de fecha de entrega',
@@ -187,6 +210,7 @@
             btnClass: 'btn-green',
             action: function() {
               changeDeliveryDate();
+              $scope.uncheckAllOrders();
             }
           },
           close: function() {
@@ -194,34 +218,36 @@
           }
         }
       });
+    }
 
+    function removeOrder(orderId) {
+      angular.forEach($scope.orders, function(order, index) {
+        if(order.id === orderId){
+          $scope.orders.splice(index,1);
+          return;
+        }
+      })
     }
 
     function changeDeliveryDate() {
       var checkedOrders = getCheckedOrders();
       var newDeliveryDate = ($scope.dt2.getYear() + 1900) + "-" + $scope.dt2.getMonth() + "-" + $scope.dt2.getDate();
-      // console.log(checkedOrders);
       var credentials = {
         orderIds: checkedOrders,
         deliveryDate: newDeliveryDate,
       }
-      // console.log(credentials.orderIds);
       OrderService.changeDeliveryDate(credentials)
         .then(function(res) {
-          // console.log(res.data);
           var updatedOrders = res.data;
           angular.forEach(updatedOrders, function(order, index) {
-            delete $scope.orders[order.id];
+            removeOrder(order.id);
           })
-          $scope.all=false;
+          $scope.all = false;
         })
     }
 
     $scope.showDetails = function(order) {
-      $scope.orderId = order;
-      var orderId = order.toString();
-      $scope.orderDetails = $scope.orders[orderId];
-      // console.log($scope.orderDetails);
+      $scope.orderDetails = order;
       $ngConfirm({
         title: 'Detalles del pedido',
         contentUrl: 'templates/private/employee/order-details.html',
@@ -231,4 +257,8 @@
       })
     }
 
+    $scope.sortBy = function (name) {
+      $scope.sortByProperty = name;
+      $scope.sortReversed = ($scope.sortByProperty === name) ? !$scope.sortReversed : false;
+    }
   }]);

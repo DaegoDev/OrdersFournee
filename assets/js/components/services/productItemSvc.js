@@ -29,6 +29,13 @@ var fournee = angular.module('fournee');
           });
           return item;
         },
+        getProductPriority: function () {
+          var priorities = $http({
+            url: '/item/getProductPriority',
+            method: 'GET'
+          });
+          return priorities;
+        },
         getAll: function() {
           var items = $http({
             url: '/item/getAll',

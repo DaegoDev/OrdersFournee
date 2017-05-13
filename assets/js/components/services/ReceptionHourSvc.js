@@ -10,6 +10,33 @@ function ($http, $rootScope) {
       });
       return weekDays;
     },
+    // Servicio para crear un horario de recepción.
+    createReceptionHour: function(credentials) {
+      var create = $http({
+        url: '/client/createReceptionHour',
+        method: 'POST',
+        params: credentials
+      });
+      return create;
+    },
+    // Servicio para eliminar un horario de recepción.
+    deleteReceptionHour: function(credentials) {
+      var deleted = $http({
+        url: '/client/deleteReceptionHour',
+        method: 'POST',
+        params: credentials
+      });
+      return deleted;
+    },
+    // Servicio para eliminar un horario de recepción.
+    getReceptionHourByClient: function(credentials) {
+      var receptionHour = $http({
+        url: '/client/getReceptionHour',
+        method: 'POST',
+        params: credentials
+      });
+      return receptionHour;
+    },
 
   };
 }]);

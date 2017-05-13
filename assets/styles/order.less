@@ -42,13 +42,12 @@ label {
 
 .toolbar-listOrder {
   display: inline-block;
-  // margin: 10px;
   background: #201300;
-  padding: 10px;
-
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
   label {
     color: @font-tussock;
-    padding-top: 7px;
   }
 }
 
@@ -84,7 +83,7 @@ label {
   }
   .date-text {
     display: inline-block;
-    width: 74%;
+    width: 73%;
     input {
       height: 25px;
     }
@@ -95,7 +94,7 @@ label {
   }
   .text-item {
     display: inline-block;
-    width: 23.5%;
+    width: 23%;
     input {
       height: 25px;
     }
@@ -106,7 +105,7 @@ label {
   }
   .text-reference {
     display: inline-block;
-    width: 74%;
+    width: 73%;
     input {
       height: 25px;
     }
@@ -118,8 +117,34 @@ label {
   }
   .textarea-comment {
     display: block;
-    width: 99%;
+    width: 98%;
     resize: none;
     height: 100px;
   }
+}
+
+.date-order {
+    position: relative;
+    h1 {
+      color: white;
+      cursor:pointer;
+    }
+  .section-deliveryDate {
+    z-index: 40;
+    input {
+      display: none;
+    }
+    position: absolute;
+    top: 0;
+
+  }
+}
+
+.checkbox-filter {
+  width: 100%;
+  background-color: @theme-nero;
+  color: @font-tussock;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  padding-left: 10px;
 }

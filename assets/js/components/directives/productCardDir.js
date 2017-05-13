@@ -14,14 +14,13 @@ var fournee = angular.module('fournee');
     }
   })
 
-  fournee.controller('productCardCtrl', ['$scope', '$log', productCardCtrl]);
+  fournee.controller('productCardCtrl', ['$scope', '$log','ClientSvc', '$ngConfirm', productCardCtrl]);
 
-  function productCardCtrl($scope, $log) {
+  function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     // Control variables to manage the behaviour of the directive base on the type value.
     $scope.dirControl = null;
     $scope.clientProduct = null;
     $scope.name = '';
-
     // Tooltip popover options
     $scope.tooltip = {
       content: "",
@@ -110,7 +109,40 @@ var fournee = angular.module('fournee');
     }
 
     // Function to add a product to the list passed as attribute.
-    $scope.addProductToList = function() {;
+    $scope.addProductToList = function() {
+      if (!$scope.currentSettings.state) {
+        $ngConfirm({
+          title: 'Error',
+          content: 'Debe seleccionar si desea añadir el producto horneado o congelado.',
+          backgroundDismiss: true,
+          buttons: {
+            confirm: {
+              text: 'Aceptar',
+              btnClass: 'btn-sienna',
+              action: function (scope, button) {
+              }
+            }
+          }
+        });
+        return;
+      }
+      if ($scope.currentSettings.amount == 0) {
+        $ngConfirm({
+          title: 'Error',
+          content: 'Debe ingresar la cantidad de productos que desea añadir.',
+          backgroundDismiss: true,
+          buttons: {
+            confirm: {
+              text: 'Aceptar',
+              btnClass: 'btn-sienna',
+              action: function (scope, button) {
+              }
+            }
+          }
+        });
+        return;
+      }
+
       var product = buildProduct();
       if (product) {
         var index = $scope.selectList.indexOf(product);
@@ -123,9 +155,6 @@ var fournee = angular.module('fournee');
     // Function to build current product selected.
     function buildProduct() {
       var currentProduct = null;
-      if ($scope.amount == 0) {
-        // return;
-      }
       if ($scope.currentSettings.state == 'frozen' && !rawProduct) {
         rawProduct = {
           client_product: $scope.product.id,
@@ -154,8 +183,64 @@ var fournee = angular.module('fournee');
     }
 
     $scope.getTitleColor = function(product) {
-      var dough = product.shortName.trim().split(" ")[0];
+      var dough = '';
+      product.items.forEach(function (item, i) {
+        if (item.elementName.toUpperCase().trim() == 'MASA') {
+          dough = item.value + item.shortValue + item.elementName;
+        }
+      });
       var colorHash = new ColorHash({lightness: [0.35, 0.3, 0.25]});
       return {'background-color': colorHash.hex(dough)}
+    }
+
+    $scope.changeCustomName = function (producCode) {
+      $ngConfirm({
+        title: 'Cambiar nombre',
+        content: 'Ingrese el nombre que desea asignarle al producto.<br> <input type="text" ng-model="customName" class="form-control"/>'+
+        '<br><alert-message options="messageModalOptions"></alert-message>',
+        backgroundDismiss: true,
+        scope: $scope,
+        buttons: {
+          exit: {
+            text: 'Salir',
+            btnClass: 'btn-sienna',
+            action: function (scope, button) {
+            }
+          },
+          confirm: {
+            text: 'Aceptar',
+            btnClass: 'btn-sienna',
+            action: function (scope, button) {
+              if (!$scope.customName) {
+                $scope.messageModalOptions = {
+                  showMessage: true,
+                  message: 'Debe ingresar un nombre para el producto.',
+                  type: 'error',
+                  title: 'Error.'
+                }
+                return false;
+              }
+              $scope.changeName();
+            }
+          }
+        }
+      });
+    }
+
+    $scope.changeName = function () {
+      if (!$scope.customName) {
+        return;
+      }
+      ClientSvc.changeProductName({
+          productCode: $scope.dirProduct.code,
+          customName: $scope.customName
+        })
+        .then(function (res) {
+          $scope.name = $scope.customName;
+          $scope.product.customName = $scope.customName;
+        })
+        .catch(function (err) {
+          $ngConfirm('El nombre del producto no ha sido cambiado, porfavor intente de nuevo.', 'Error');
+        });
     }
   }

@@ -1,7 +1,17 @@
   var fournee = angular.module('fournee');
-  fournee.controller('ClientDetailsCtrl', ['$scope', '$log', '$state', '$stateParams', '$ngConfirm', 'ClientSvc', 'productSvc', function($scope, $log, $state, $stateParams, $ngConfirm, ClientSvc, productSvc) {
+  fournee.controller('ClientDetailsCtrl', ['$scope', '$log', '$state', '$stateParams', '$ngConfirm', 'ClientSvc', 'productSvc', 'ReceptionHourSvc', function($scope, $log, $state, $stateParams, $ngConfirm, ClientSvc, productSvc, ReceptionHourSvc) {
     $scope.client = $stateParams.client;
     $scope.selectedProducts = [];
+    $scope.receptionHour = [];
+
+    console.log($scope.client);
+    ReceptionHourSvc.getReceptionHourByClient({clientId: $scope.client.id})
+    .then(function (res) {
+      $scope.receptionHour = res.data;
+    })
+    .catch(function (err) {
+
+    })
 
     if (!$scope.client) {
       $state.go('client.list');

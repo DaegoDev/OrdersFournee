@@ -11,19 +11,37 @@ fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
         if (StorageService.get("auth_token", "session")) {
           role = StorageService.get("role", "session");
           if (role) {
-            PermRoleStore.defineRole('ANON', function () {return false;});
-            PermRoleStore.defineRole('ADMIN', function () {return false;});
-            PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
-            PermRoleStore.defineRole('CLIENTE', function () {return false;});
-            PermRoleStore.defineRole(role.toUpperCase(), function() {return true;});
+            PermRoleStore.defineRole('ANON', function() {
+              return false;
+            });
+            PermRoleStore.defineRole('ADMINISTRADOR', function() {
+              return false;
+            });
+            PermRoleStore.defineRole('DESPACHADOR', function() {
+              return false;
+            });
+            PermRoleStore.defineRole('CLIENTE', function() {
+              return false;
+            });
+            PermRoleStore.defineRole(role.toUpperCase(), function() {
+              return true;
+            });
             $rootScope.$broadcast('renovateRole');
           }
         } else {
           PermRoleStore.clearStore();
-          PermRoleStore.defineRole('ADMIN', function () {return false;});
-          PermRoleStore.defineRole('DESPACHADOR', function () {return false;});
-          PermRoleStore.defineRole('CLIENTE', function () {return false;});
-          PermRoleStore.defineRole("ANON", function() {return true;});
+          PermRoleStore.defineRole('ADMINISTRADOR', function() {
+            return false;
+          });
+          PermRoleStore.defineRole('DESPACHADOR', function() {
+            return false;
+          });
+          PermRoleStore.defineRole('CLIENTE', function() {
+            return false;
+          });
+          PermRoleStore.defineRole("ANON", function() {
+            return true;
+          });
           $rootScope.$broadcast('renovateRole');
         }
       }
@@ -56,6 +74,19 @@ fournee.filter('stateFilter', function() {
     return 'Inactivo';
   }
 });
+// 
+// fournee.filter('orderByDay', function() {
+//   return function(object) {
+//     var json = {};
+//     console.log(object);
+//     angular.forEach(object, function(value, key) {
+//       console.log(value);
+//       json[value.weekDay.name] = {
+//         weekDay: {}
+//       }
+//     return json;
+//   };
+// });
 
 fournee.filter('bakedFilter', function() {
   return function(input) {

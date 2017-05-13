@@ -1,70 +1,94 @@
 <div class="basic-wrapper lg client-list-wrapper">
-  <div class="section-header">
-    <h1 style="color: white">Lista de pedidos: {{dt | date:'fullDate' | capitalize}}</h1>
+  <div class="section-header date-order">
+    <h1 ng-click="open1()">
+      <i class="glyphicon glyphicon-calendar"></i> Lista de pedidos: {{dt | date:'mediumDate' | capitalize}}
+    </h1>
+
+    <!-- ORDERS PER DATE -->
+    <div class="section-deliveryDate">
+      <p class="input-group col-sm-3">
+        <input type="text" id="date" ng-change="getOrdersByDeliveryDate()" class="form-control" uib-datepicker-popup="{{format}}"
+        ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
+        alt-input-formats="altInputFormats" ng-click="open1()" readonly/>
+      </p>
+    </div>
   </div>
 
-  <div class="section-deliveryDate">
-    <label class="control-label col-sm-1" for="date">Fecha:</label>
-    <p class="input-group col-sm-3">
-      <input type="text" id="date" ng-change="getOrdersByDeliveryDate()" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
-      />
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-      </span>
-    </p>
-  </div>
-
+  <!-- ORDERS CHANGE ATTR -->
   <div class="" style="padding: 5px">
-    <div class="toolbar-listOrder">
-      <div class="col-sm-6">
-        <label class="control-label col-sm-2" for="states">Estados:</label>
-        <p class="input-group col-sm-8">
-          <select class="form-control" id="states" ng-model="placement.selected" ng-options="option for option in placement.options"></select>
+    <div class="toolbar-listOrder form-inline">
+      <!-- ESTATE CHANGE -->
+      <div class="form-group col-sm-6">
+        <label for="states">Estados: </label>
+        <div class="input-group">
+          <select class="form-control input-sm" id="states" ng-model="placement.selected"
+          ng-options="option for option in placement.options"></select>
           <span class="input-group-btn">
-            <button type="button" ng-click="changeState()" class="btn btn-md btn-sienna">Cambiar estado</button>
+            <button type="button" ng-click="changeState()" class="btn btn-sm btn-sienna">Cambiar estado</button>
           </span>
-        </p>
+        </div>
       </div>
-      <div class="col-sm-6">
-        <label class="control-label col-sm-4" for="inputDate">Cambiar fecha:</label>
-        <p class="input-group col-sm-5">
-          <input type="text" id="inputDate" ng-change="showConfirmation()" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="popup2.opened" datepicker-options="optionsDeliveryDate" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
-          />
+
+      <!-- DATE CHANGE -->
+      <div class="form-group col-sm-6">
+        <label for="inputDate">Fecha:</label>
+        <div class="input-group">
+          <input type="text" id="inputDate" class="form-control input-sm"
+          uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="popup2.opened"
+          datepicker-options="optionsDeliveryDate" ng-required="true" close-text="Close"
+          alt-input-formats="altInputFormats" ng-click="open2()" readonly style="cursor:pointer"/>
           <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button type="button" ng-click="showConfirmation()" class="btn btn-sm btn-sienna">Cambiar fecha</button>
           </span>
-        </p>
+        </div>
       </div>
     </div>
+
+    <!-- CHECKBOX FILTER -->
+    <div class="checkbox-filter">
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-true-value="'confirmado'" ng-false-value="''" ng-model="checkFilter">Confirmado
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-true-value="'pendiente'" ng-false-value="''" ng-model="checkFilter">Pendiente
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-true-value="'alistado'" ng-false-value="''" ng-model="checkFilter">Alistado
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-true-value="'despachado'" ng-false-value="''" ng-model="checkFilter">Despachado
+      </label>
+    </div>
+    <!-- ORDER LIST -->
     <div class="table-container">
       <div class="table-responsive">
         <table class="table table-hover table-bordered table-condensed">
           <thead>
             <tr>
-              <th style="width: 70px">
+              <th style="width: 70px" ng-click="checkAllOrders()">
                 <input type="checkbox" ng-click="checkAllOrders()" ng-model="all" style="cursor:pointer"> Todo
               </th>
-              <th>Código</th>
-              <th>Cliente</th>
-              <th>Empleado</th>
-              <th>Telefono empresa</th>
-              <th>Hora deseada</th>
-              <th style="width: 100px">Estado</th>
+              <th ng-click="sortBy('id')">Código</th>
+              <th ng-click="sortBy('created_at')" style="width: 100px">Creación</th>
+              <th ng-click="sortBy('trade_name')">Cliente</th>
+              <th ng-click="sortBy('employeeName')">Empleado</th>
+              <th ng-click="sortBy('business_phonenumber')">Telefono empresa</th>
+              <th ng-click="sortBy('initial_suggested_time')">Hora deseada</th>
+              <th ng-click="sortBy('state')" style="width: 100px">Estado</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="order in orders" class="orderList">
+            <tr ng-repeat="ord in orders | filter: checkFilter | orderBy: sortByProperty:sortReversed" class="orderList">
               <td style="text-align: center">
-                <input type="checkbox" ng-click="checkSelectAll(order.id)" ng-model="checkboxObj[order.id]">
+                <input type="checkbox" ng-click="checkSelectAll(ord.id)" ng-model="checkboxObj[ord.id]">
               </td>
-              <div style="background-color: red">
-              <td ng-click="showDetails(order.id)">{{order.id}}</td>
-              <td ng-click="showDetails(order.id)">{{order.trade_name}}</td>
-              <td ng-click="showDetails(order.id)">{{order.employeeName}}</td>
-              <td ng-click="showDetails(order.id)">{{order.business_phonenumber}}</td>
-              <td ng-click="showDetails(order.id)">{{order.initial_suggested_time + '-' + order.final_suggested_time}}</td>
-              <td>{{order.state}}</td>
-            </div>
+              <td ng-click="showDetails(ord)">{{ord.id}}</td>
+              <td ng-click="showDetails(ord)">{{ord.created_at | date:'medium'}}</td>
+              <td ng-click="showDetails(ord)">{{ord.trade_name}}</td>
+              <td ng-click="showDetails(ord)">{{ord.employeeName}}</td>
+              <td ng-click="showDetails(ord)">{{ord.business_phonenumber}}</td>
+              <td ng-click="showDetails(ord)">{{ord.initial_suggested_time + '-' + ord.final_suggested_time}}</td>
+              <td>{{ord.state}}</td>
             </tr>
           </tbody>
         </table>

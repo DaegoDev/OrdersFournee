@@ -18,8 +18,8 @@
         <tbody>
           <tr ng-repeat="order in orders">
             <td>{{order.id}}</td>
-            <td>{{order.createdAt | date:'fullDate'}}</td>
-            <td>{{order.deliveryDate | date:'fullDate'}}</td>
+            <td>{{order.createdAt | date:'medium'}}</td>
+            <td>{{order.deliveryDate | date:'mediumDate'}}</td>
             <td>{{order.additionalInformation}}</td>
             <td>{{order.state}}</td>
             <!-- <td ng-click="showDetails(client)">

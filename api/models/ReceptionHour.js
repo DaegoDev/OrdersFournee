@@ -7,19 +7,20 @@
  */
 
 module.exports = {
+  // migrate: 'drop',
   tableName: 'reception_hour',
   attributes: {
     initialReceptionTime: {
       type: 'string',
       size: 8,
       notNull: true,
-      columnName: 'initial_reception_time'
+      columnName: 'init_recept_time'
     },
     finalReceptionTime: {
       type: 'string',
       size: 8,
       notNull: true,
-      columnName: 'final_reception_time'
+      columnName: 'final_recept_time'
     },
     // Añade una referencia a weekDay
     weekDay: {

@@ -26,7 +26,6 @@ module.exports = {
     var clientProductsCredentials = [];
     var role = null;
 
-
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     legalName = req.param('legalName');
     if (!legalName) {
@@ -280,6 +279,7 @@ module.exports = {
    */
   getProfile: function(req, res) {
     var user = req.user;
+    var profile = null;
     Client.find({
         user: user.id
       })
@@ -287,8 +287,16 @@ module.exports = {
       .populate('deliveryAddress')
       .populate('clientEmployee')
       .then(function(client) {
-        var profile = client[0];
+        profile = client[0];
         delete profile.additionalInformation;
+        // sails.log.debug(profile);
+        return ReceptionHour.find({
+          client: profile.id
+        }).populate("weekDay");
+      })
+      .then(function(receptionHour) {
+        profile.receptionHour = receptionHour;
+        // sails.log.debug(profile);
         return res.ok(profile);
       })
       .catch(function(err) {
@@ -308,14 +316,14 @@ module.exports = {
     var products = [];
     var item = null;
     var clientProductQueryStr =
-    'SELECT ' +
-    'cp.id, cp.client, cp.custom_name, cp.product, ' +
-    'p.name, p.short_name, ' +
-    'i.value, i.short_value, ' +
-    'e.name AS element_name ' +
-    'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
-    'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
-    'ORDER BY cp.product; ';
+      'SELECT ' +
+      'cp.id, cp.client, cp.custom_name, cp.product, ' +
+      'p.name, p.short_name, ' +
+      'i.value, i.short_value, ' +
+      'e.name AS element_name ' +
+      'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
+      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+      'ORDER BY cp.product; ';
 
     // Se obtiene el id del cliente que ejecuta la petición.
     userId = req.user.id;
@@ -325,13 +333,18 @@ module.exports = {
 
     // Se verifica que el cliente exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le habilitaron.
-    Client.findOne({user: userId})
-      .then(function (client) {
+    Client.findOne({
+        user: userId
+      })
+      .then(function(client) {
         Product.query(clientProductQueryStr, client.id,
           function(err, rawData) {
-            if(err) {
+            if (err) {
               sails.log.debug(err);
-              throw {code: 1, msg: 'Query error.'};
+              throw {
+                code: 1,
+                msg: 'Query error.'
+              };
             }
             rawData.forEach(function(data, i, dataArray) {
               if (tmpProduct == null) {
@@ -344,14 +357,14 @@ module.exports = {
               }
 
               item = {
-                elementName: data.element_name,
-                value: data.value,
-                shortValue: data.short_value
-              },
+                  elementName: data.element_name,
+                  value: data.value,
+                  shortValue: data.short_value
+                },
 
-              tmpProduct.items.push(item);
+                tmpProduct.items.push(item);
 
-              if (!dataArray[i+1]) {
+              if (!dataArray[i + 1]) {
                 product = {
                   id: data.id,
                   clientId: data.client,
@@ -359,7 +372,7 @@ module.exports = {
                   product: tmpProduct
                 }
                 products.push(product);
-              } else if (dataArray[i+1].product != tmpProduct.code) {
+              } else if (dataArray[i + 1].product != tmpProduct.code) {
                 product = {
                   id: data.id,
                   clientId: data.client,
@@ -373,7 +386,7 @@ module.exports = {
             return res.ok(products)
           });
       })
-      .catch(function (err) {
+      .catch(function(err) {
         if (err.code == 1) {
           return res.serverError();
         }
@@ -395,6 +408,7 @@ module.exports = {
       }
       var client = clients[0];
       delete client.additional_information;
+      // sails.log.debug(client);
       for (var field in client) {
         if (!client[field]) {
           return res.ok(false);
@@ -405,12 +419,20 @@ module.exports = {
         })
         .then(function(clientEmployees) {
           if (clientEmployees.length == 0) {
-            res.ok(false);
+            throw false;
+          }
+          return ReceptionHour.find({
+            client: client.id
+          });
+        })
+        .then(function(receptionHour) {
+          if (receptionHour.length == 0) {
+            throw false;
           }
           res.ok(true);
         })
         .catch(function(err) {
-          res.serverError(err);
+          res.ok(err);
         })
     })
   },
@@ -441,23 +463,12 @@ module.exports = {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var user = null;
-    var legalName = null;
-    var nit = null;
     var tradeName = null;
     var ownerName = null;
     var ownerPhonenumber = null;
     var businessPhonenumber = null;
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
-    legalName = req.param('legalName');
-    if (!legalName) {
-      return res.badRequest('Se debe ingresar una razon social.');
-    }
-
-    nit = req.param('nit');
-    if (!nit) {
-      return res.badRequest('Se debe ingresar un nit.');
-    }
 
     tradeName = req.param('tradeName');
     if (!tradeName) {
@@ -481,8 +492,6 @@ module.exports = {
 
     // Organización de credenciales del cliente
     var clientCredentials = {
-      legalName: legalName,
-      nit: nit,
       tradeName: tradeName,
       ownerName: ownerName,
       ownerPhonenumber: ownerPhonenumber,
@@ -676,6 +685,124 @@ module.exports = {
       })
   },
   /**
+   * Funcion para obtener los horarios de recepción.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  getReceptionHour: function (req, res) {
+    var clientId = null;
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    clientId = parseInt(req.param('clientId'));
+    if (!clientId) {
+      return res.badRequest('Id del cliente vacio.');
+    }
+
+    ReceptionHour.find({ client: clientId})
+    .populate('weekDay')
+    .then(function (receptionHour) {
+      res.ok(receptionHour);
+    })
+    .catch(function (err) {
+      res.serverError(err);
+    })
+  },
+  /**
+   * Funcion para crear un horario de recepción.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  createReceptionHour: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = req.user;
+    var initialReceptionTime = null;
+    var finalReceptionTime = null;
+    var weekDay = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    initialReceptionTime = req.param('initialReceptionTime');
+    if (!initialReceptionTime) {
+      return res.badRequest('Se debe ingresar una hora inicial.');
+    }
+
+    finalReceptionTime = req.param('finalReceptionTime');
+    if (!finalReceptionTime) {
+      return res.badRequest('Se debe ingresar una hora final.');
+    }
+
+    weekDay = parseInt(req.param('weekDay'));
+    if (!weekDay) {
+      return res.badRequest('Se debe ingresar un dia de la semana.');
+    }
+
+    // Organización de credenciales.
+    var receptionHourCredentials = {
+      initialReceptionTime: initialReceptionTime,
+      finalReceptionTime: finalReceptionTime,
+      weekDay: weekDay,
+    };
+
+
+    Client.findOne({
+        user: user.id
+      })
+      .then(function(client) {
+        receptionHourCredentials.client = client.id;
+        return ReceptionHour.find({client: client.id})
+        // sails.log.debug(receptionHourCredentials);
+      })
+      .then(function (receptionHours) {
+        var initialTimeCredentials = parseInt(receptionHourCredentials.initialReceptionTime.substring(0,2));
+        var finalTimeCredentials = parseInt(receptionHourCredentials.finalReceptionTime.substring(0,2));
+        receptionHours.forEach(function(receptionHour, i, receptionHours) {
+          if(receptionHourCredentials.weekDay === receptionHour.weekDay){
+            var initialTimeBd = parseInt(receptionHour.initialReceptionTime.substring(0,2));
+            var finalTimeBd = parseInt(receptionHour.finalReceptionTime.substring(0,2))
+            if( (initialTimeCredentials >= initialTimeBd && initialTimeCredentials < finalTimeBd) || (finalTimeCredentials >= initialTimeBd && finalTimeCredentials <= finalTimeBd)
+                || (initialTimeBd >= initialTimeCredentials && initialTimeBd < finalTimeCredentials)){
+              throw { code: 410, msg: "Los horarios se solapan con los horarios ya registrados."}
+            }
+          }
+        });
+        return ReceptionHour.create(receptionHourCredentials)
+      })
+      .then(function(receptionHour) {
+        return ReceptionHour.find({
+          id: receptionHour.id
+        }).populate('weekDay');
+      })
+      .then(function(receptionHourFull) {
+        res.created(receptionHourFull[0]);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
+  /**
+   * Funcion para eliminar un horario de recepción.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  deleteReceptionHour: function(req, res) {
+    // Se declara las variables necesarias
+    var receptionHourId = null;
+    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
+    receptionHourId = parseInt(req.param('receptionHourId'));
+    if (!receptionHourId) {
+      return res.badRequest('Id del horario es vacio.');
+    }
+    // sails.log.debug(receptionHourId);
+    // valida si existe el horario de recepción con el ese id.
+    ReceptionHour.destroy({
+      id: receptionHourId
+    }).exec(function(err) {
+      if (err) {
+        return res.serverError(err);
+      }
+      return res.ok();
+    });
+  },
+  /**
    * Funcion para crear un empleado de un cliente.
    * @param  {Object} req Request object
    * @param  {Object} res Response object
@@ -769,8 +896,51 @@ module.exports = {
         sails.log.debug(err);
         res.serverError();
       })
-  }
+  },
 
+  changeProductName: function(req, res) {
+    var customName = null;
+    var productCode = null;
+    var user = req.user;
+
+    customName = req.param('customName');
+    productCode = req.param('productCode');
+
+    Client.find({
+        user: user.id
+      })
+      .then(function(clientData) {
+        if (!clientData) {
+          throw {
+            code: 1,
+            msg: 'No client found'
+          };
+        }
+        return ClientProduct.update({
+          client: clientData[0].id,
+          product: productCode
+        }, {
+          customName: customName
+        });
+      })
+      .then(function(productData) {
+        if (!productData) {
+          throw {
+            code: 2,
+            msg: 'No product found'
+          };
+        }
+        return res.ok(productData);
+      })
+      .catch(function(err) {
+        if (err.code && err.code == 1) {
+          return res.serverError(err);
+        }
+        if (err.code && err.code == 2) {
+          return res.badRequest();
+        }
+      });
+  }
 };
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {

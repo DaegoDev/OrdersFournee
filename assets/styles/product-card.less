@@ -6,11 +6,12 @@ product-card {
   border: 1px solid;
   border-radius: 5px;
   line-height: 0;
-vertical-align: top;
+  vertical-align: top;
 
   &:hover {
     .product-wrapper {
-      &.list, &.select {
+      &.list,
+      &.select {
         cursor: pointer;
       }
 
@@ -35,22 +36,36 @@ vertical-align: top;
       height: 50px;
       overflow: auto;
       vertical-align: middle;
+
       h4 {
         display: table-cell;
         vertical-align: middle;
         font-size: 80%;
         color: @font-white;
       }
+
+      span {
+        display: table-cell;
+        width: 20px;
+        height: 20px;
+        i {
+          color: white;
+          cursor: pointer;
+        }
+      }
     }
 
     .product-items {
       max-width: 175px;
+
       table {
         margin-bottom: 0;
+
         tr {
           td {
             font-size: 85%;
           }
+
           &:first-child {
             td {
               border-top: 0;

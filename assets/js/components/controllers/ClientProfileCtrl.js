@@ -3,15 +3,31 @@
       $scope.employee = {};
       $scope.user = {};
 
-      ReceptionHourSvc.getWeekDays()
-        .then(function(res) {
-          console.log(res.data);
-          $scope.weekDays = res.data;
-          console.log($scope.weekDays[0]);
-        })
-        .catch(function(err) {
+      $scope.timeInitial = new Date();
+      $scope.timeInitial.setHours(12);
+      $scope.timeInitial.setMinutes(0);
 
-        })
+      $scope.minTimeInitial = new Date();
+      $scope.minTimeInitial.setHours(8);
+      $scope.minTimeInitial.setMinutes(0);
+      $scope.maxTimeInitial = new Date();
+      $scope.maxTimeInitial.setHours(22);
+      $scope.maxTimeInitial.setMinutes(0);
+
+      $scope.timeFinal = new Date();
+      $scope.timeFinal.setHours(12);
+      $scope.timeFinal.setMinutes(0);
+
+      $scope.minTimeFinal = new Date();
+      $scope.minTimeFinal.setHours($scope.timeInitial.getHours() + 2);
+      $scope.minTimeFinal.setMinutes($scope.timeInitial.getMinutes());
+      $scope.maxTimeFinal = new Date();
+      $scope.maxTimeFinal.setHours(24);
+      $scope.maxTimeFinal.setMinutes(0);
+
+      $scope.hstep = 1;
+      $scope.mstep = 10;
+
 
       // Dropdown para listar los tipos de empleados
       $scope.placement = {
@@ -25,14 +41,132 @@
         selected: 'Administración',
       };
 
-      ProfileService.getProfileClient()
+    ProfileService.getProfileClient()
+      .then(function(res) {
+        // console.log(res.data);
+        $scope.client = res.data;
+      })
+      .catch(function(err) {
+        $ngConfirm('No se ha podido obtener el perfil. Intente mas tarde');
+      })
+
+      ReceptionHourSvc.getWeekDays()
         .then(function(res) {
           // console.log(res.data);
-          $scope.client = res.data;
+          $scope.weekDays = res.data;
+          console.log($scope.weekDays[0]);
+          // Dropdown para listar los tipos de empleados
+          $scope.placementWeekDays = {
+            options: $scope.weekDays,
+            selectedOption: {id: 1, name: 'Lunes' },
+          };
         })
         .catch(function(err) {
-          $ngConfirm('No se ha podido obtener el perfil. Intente mas tarde');
+
         })
+
+      $scope.addReceptionHour = function () {
+        var initialReceptionTime = null;
+        var finalReceptionTime = null;
+        var weekDay = null;
+
+        if (!$scope.timeInitial) {
+          return;
+        }
+
+        if (!$scope.timeFinal) {
+          return;
+        }
+
+        if ($scope.timeInitial.getMinutes() <= 9) {
+          initialReceptionTime = $scope.timeInitial.getHours() + ':0' + $scope.timeInitial.getMinutes();
+        } else {
+          initialReceptionTime = $scope.timeInitial.getHours() + ':' + $scope.timeInitial.getMinutes();
+        }
+
+        if ($scope.timeFinal.getMinutes() <= 9) {
+          finalReceptionTime = $scope.timeFinal.getHours() + ':0' + $scope.timeFinal.getMinutes();
+        } else {
+          finalReceptionTime = $scope.timeFinal.getHours() + ':' + $scope.timeFinal.getMinutes();
+        }
+
+        weekDay = $scope.placementWeekDays.selectedOption.id;
+
+        var receptionHourCredentials = {
+          initialReceptionTime: initialReceptionTime,
+          finalReceptionTime: finalReceptionTime,
+          weekDay: weekDay,
+        }
+
+        ReceptionHourSvc.createReceptionHour(receptionHourCredentials)
+          .then(function(res) {
+            // console.log(res.data);
+            $scope.client.receptionHour.push(res.data);
+          })
+          .catch(function(err) {
+            console.log(err);
+            if(err.data.code == 410){
+              $ngConfirm(err.data.msg);
+            }else {
+              $ngConfirm('No fue posible crear el horario de recepción');
+            }
+          })
+      }
+
+      $scope.confirm = function (receptionHourId) {
+        $ngConfirm({
+          title: '¿Realmente desea eliminar el horario?',
+          useBootstrap: true,
+          content: 'Este dialogo eligirá la opción cancelar automaticamente en 6 segundo si no responde.',
+          autoClose: 'cancel|8000',
+          buttons: {
+            deleteReceptionHour: {
+              text: 'Eliminar',
+              btnClass: 'btn-red',
+              action: function() {
+                $scope.deleteReceptionHour(receptionHourId);
+              }
+            },
+            cancel: function() {
+              $ngConfirm('La acción ha sido cancelada');
+            }
+          }
+        });
+      }
+
+      $scope.deleteReceptionHour = function(receptionHourId) {
+        ReceptionHourSvc.deleteReceptionHour({
+            receptionHourId: receptionHourId
+          })
+          .then(function(res) {
+            angular.forEach($scope.client.receptionHour, function (receptionHour, index) {
+              if(receptionHour.id == receptionHourId){
+                $scope.client.receptionHour.splice(index,1);
+                $ngConfirm('Horario eliminado.');
+                return;
+              }
+            })
+          })
+          .catch(function(err) {
+            $ngConfirm('No se pudo eliminar el horario.');
+          })
+      }
+
+      $scope.changedInitial = function() {
+        if(($scope.timeFinal.getHours() - 2) <= ($scope.timeInitial.getHours())){
+          $scope.timeFinal = new Date();
+          $scope.timeFinal.setHours($scope.timeInitial.getHours() + 2);
+          $scope.timeFinal.setMinutes($scope.timeInitial.getMinutes());
+        }
+        $scope.minTimeFinal = new Date();
+        $scope.minTimeFinal.setHours($scope.timeInitial.getHours() + 2);
+        $scope.minTimeFinal.setMinutes($scope.timeInitial.getMinutes());
+      };
+
+      $scope.changedFinal = function() {
+        // $log.log('Time changed to: ' + $scope.timeInitial);
+
+      };
 
       $scope.updateGeneralInfo = function() {
         var legalName = $scope.client.legalName;
@@ -206,8 +340,9 @@
           })
       }
 
+
       $scope.cloneAddress = function() {
-        $scope.client.deliveryAddress = $scope.client.billAddress;
+        $scope.client.deliveryAddress = JSON.parse(JSON.stringify($scope.client.billAddress));
       }
 
       $scope.updatePassword = function() {
@@ -275,5 +410,5 @@
       $scope.switchAlert = function(value) {
         $scope[value] = !$scope[value];
       };
-    }
-  ]);
+
+  }]);

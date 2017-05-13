@@ -35,12 +35,14 @@ module.exports.policies = {
     updateGeneralInfo: 'isClient',
     updateBillAddress: 'isClient',
     updateDeliveryAddress: 'isClient',
+    createReceptionHour: 'isClient',
     createClientEmployee: 'isClient',
     // recuperarContrasena: 'isRecuperacionValida',
     enableProduct: 'isAdmin',
     disableProduct: 'isAdmin',
     signup: 'isAdmin',
-    getProductsEnabled: 'isClient'
+    getProductsEnabled: 'isClient',
+    changeProductName: 'isClient'
   },
 
   ClientEmployeeController: {

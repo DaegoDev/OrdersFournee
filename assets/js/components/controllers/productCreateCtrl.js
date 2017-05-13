@@ -13,9 +13,28 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
     title: ''
   }
 
-  productItemSvc.getAll()
-    .then(function(res) {
-      $scope.items = res.data
+  productItemSvc.getProductPriority()
+    .then(function (res) {
+      $scope.priorities = res.data;
+      $scope.items = [];
+
+      // Lets create the item array with mandatory elements firts.
+      $scope.priorities.mandatory.forEach(function (element, i, elements) {
+        $scope.items.push('&'+element.toUpperCase().trim()+'&');
+      });
+      return productItemSvc.getAll();
+    })
+    .then(function (res) {
+      // Lets sort elements in mandatory order, then in created order.
+      data = res.data
+      data.forEach(function (element, i, elements) {
+        index = $scope.items.indexOf('&'+element.name.toUpperCase().trim()+'&');
+        if (index == -1) {
+          $scope.items.push(element);
+        } else {
+          $scope.items[index] = element;
+        }
+      });
     });
 
   $scope.createProduct = function() {
@@ -55,17 +74,35 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
             }
           }
         });
-        $log.warn(res.data);
       })
       .catch(function(err) {
-        $scope.messageOptions = {
-          showMessage: true,
-          message: 'El producto no ha sido creado, es posible que el producto ya exista ' +
-            'o el servidor no esté disponible.',
-          type: 'error',
-          title: 'Error.'
+        if (err.data.code == 3 || err.data.code == 1) {
+          var mandatoryStr = '';
+          $scope.priorities.mandatory.forEach(function (element, i) {
+            mandatoryStr = mandatoryStr + ' ' +element.trim()+',';
+          });
+          mandatoryStr = mandatoryStr.substr(0, mandatoryStr.length - 1) + '.';
+          $scope.messageOptions = {
+            showMessage: true,
+            message: 'Debe ingresar: ' +mandatoryStr,
+            type: 'error',
+            title: 'Error.'
+          }
+        } else if (err.data.code == 4) {
+          $scope.messageOptions = {
+            showMessage: true,
+            message: 'El producto que desea crear ya existe',
+            type: 'error',
+            title: 'Error.'
+          }
+        } else {
+          $scope.messageOptions = {
+            showMessage: true,
+            message: 'El producto no ha sido creado, es posible que el servidor no esté disponible.',
+            type: 'error',
+            title: 'Error.'
+          }
         }
-        $log.info(err);
       });
   }
 
@@ -81,7 +118,6 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
           text: 'Cancelar',
           btnClass: 'btn-sienna',
           action: function(scope, button) {
-
           }
         },
         confirm: {
@@ -161,14 +197,24 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
     if (newValue != oldValue) {
       var name = '';
       var shortName = '';
-      for (var i in newValue) {
-        name = name + newValue[i].value + ' ';
-        shortName = shortName + newValue[i].shortValue + ' ';
-      }
+
+      $scope.priorities.order.forEach(function (element, i, elements) {
+        name = name + '&' + element.toUpperCase().trim() + '&';
+        shortName = shortName + '&' + element.toUpperCase().trim() + '&';
+      });
+
+      $scope.selectedItems.forEach(function (item, i, items) {
+        name = name.replace('&'+item.name.toUpperCase().trim()+'&', item.value + ' ')
+        shortName = shortName.replace('&'+item.name.toUpperCase().trim()+'&', item.shortValue +' ')
+      });
+
+      $scope.priorities.order.forEach(function (element, i, elements) {
+        name = name.replace('&'+element.toUpperCase().trim()+'&', '');
+        shortName = shortName.replace('&'+element.toUpperCase().trim()+'&', '');
+      });
+
       $scope.product.name = name.trim();
       $scope.product.shortName = shortName.trim();
     }
   }, true);
-
-
 }]);

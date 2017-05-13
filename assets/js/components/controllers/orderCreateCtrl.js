@@ -11,13 +11,15 @@
 
     $scope.order.hstep = 1;
     $scope.order.mstep = 10;
-    $scope.order.minTimeFinal = $scope.order.timeInitial;
     $scope.order.minTimeInitial = new Date();
     $scope.order.minTimeInitial.setHours(9);
     $scope.order.minTimeInitial.setMinutes(0);
     $scope.order.maxTimeInitial = new Date();
     $scope.order.maxTimeInitial.setHours(18);
     $scope.order.maxTimeInitial.setMinutes(0);
+    $scope.order.minTimeFinal = new Date();
+    $scope.order.minTimeFinal.setHours($scope.order.timeInitial.getHours() + 2);
+    $scope.order.minTimeFinal.setMinutes($scope.order.timeInitial.getMinutes());
     $scope.order.maxTimeFinal = $scope.order.maxTimeInitial;
 
     // Variables para el control de la lista de productos.
@@ -152,7 +154,9 @@
       $scope.order.timeFinal = new Date();
       $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
       $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
-      $scope.order.minTimeFinal = $scope.order.timeInitial;
+      $scope.order.minTimeFinal = new Date();
+      $scope.order.minTimeFinal.setHours($scope.order.timeInitial.getHours() + 2);
+      $scope.order.minTimeFinal.setMinutes($scope.order.timeInitial.getMinutes());
     };
 
     $scope.changedFinal = function() {
@@ -162,7 +166,11 @@
     // Datepicker para la fecha de entrega
     $scope.today = function() {
       $scope.order.dt = new Date();
-      $scope.order.dt.setDate($scope.order.dt.getDate() + 1);
+      if($scope.order.dt.getDay() == 6){
+        $scope.order.dt.setDate($scope.order.dt.getDate() + 2);
+      }else {
+        $scope.order.dt.setDate($scope.order.dt.getDate() + 1);
+      }
     };
     $scope.today();
 

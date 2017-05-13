@@ -64,9 +64,9 @@
             'has-success': update.ownerName.$valid}">
             <label for="ownerName" class="control-label col-sm-2">Nombre del dueño</label>
             <div class="col-sm-4">
-              <input type="text" id="managerName" name="managerName" class="form-control" ng-model="client.managerName" required placeholder="Karim Chohra">
+              <input type="text" id="ownerName" name="ownerName" class="form-control" ng-model="client.ownerName" required placeholder="Karim Chohra">
               <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
-              <div ng-messages="update.managerName.$error" ng-if="update.managerName.$touched || update.$submitted" ng-messages-multiple>
+              <div ng-messages="update.ownerName.$error" ng-if="update.ownerName.$touched || update.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
               </div>
             </div>
@@ -76,9 +76,9 @@
             'has-success': update.ownerPhonenumber.$valid}">
             <label for="ownerPhonenumber" class="control-label col-sm-2">Telefono del dueño</label>
             <div class="col-sm-4">
-              <input type="text" id="managerPhonenumber" name="managerPhonenumber" class="form-control" ng-model="client.managerPhonenumber" required placeholder="4483480">
+              <input type="text" id="ownerPhonenumber" name="ownerPhonenumber" class="form-control" ng-model="client.ownerPhonenumber" required placeholder="4483480">
               <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
-              <div ng-messages="update.managerPhonenumber.$error" ng-if="update.managerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
+              <div ng-messages="update.ownerPhonenumber.$error" ng-if="update.ownerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
               </div>
             </div>

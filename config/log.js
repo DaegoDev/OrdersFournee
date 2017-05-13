@@ -10,6 +10,21 @@
  * http://sailsjs.org/#!/documentation/concepts/Logging
  */
 
+ var winston = require('winston');
+ var customLogger = new winston.Logger();
+ /*see the documentation for Winston:  https://github.com/flatiron/winston */
+
+customLogger.add(winston.transports.Console, {
+  level: 'silly',
+  colorize: true
+});
+
+customLogger.add(winston.transports.File, {
+  level: 'silly',
+  filename: 'logfile.log',
+  json: true
+});
+
 module.exports.log = {
 
   /***************************************************************************
@@ -24,6 +39,7 @@ module.exports.log = {
   *                                                                          *
   ***************************************************************************/
 
-  // level: 'info'
-
+  level: 'silly',
+  custom: customLogger,
+  inspect: false
 };

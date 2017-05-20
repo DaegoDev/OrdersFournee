@@ -22,10 +22,10 @@
         <div class="col-sm-4" ng-class="{
           'has-error': clientInfo.nit.$invalid && (clientInfo.nit.$touched || clientInfo.$submitted),
           'has-success': !clientInfo.nit.$invalid}">
-          <input type="text" name="nit" id="nit" class="form-control" ng-model="client.nit" required ng-pattern="/^[0-9]{9}-[0-9]{1}$/" placeholder="900649114-2">
+          <input type="text" name="nit" id="nit" class="form-control" ng-model="client.nit" required  placeholder="900649114-2">
           <!-- NIT VALIDATIONS -->
           <div ng-messages="clientInfo.nit.$error" multiple="true" ng-if="clientInfo.nit.$touched || clientInfo.$submitted">
-            <div ng-message="pattern" class="help-block">El NIT no tiene un formato valido. Ej: 900649114-2</div>
+            <!--<div ng-message="pattern" class="help-block">El NIT no tiene un formato valido. Ej: 900649114-2</div>-->
             <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
           </div>
         </div>

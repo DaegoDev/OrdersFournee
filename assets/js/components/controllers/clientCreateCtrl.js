@@ -39,21 +39,6 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
       $scope.infoMsgOptions.showMessage = true;
       return;
     }
-    if (!$scope.client.businessPhonenumber) {
-      $scope.infoMsgOptions.message = 'Debe ingresar el número telefonico de la empresa.';
-      $scope.infoMsgOptions.showMessage = true;
-      return;
-    }
-    if (!$scope.client.ownerName) {
-      $scope.infoMsgOptions.message = 'Debe ingresar el nombre del administrador de la empresa.';
-      $scope.infoMsgOptions.showMessage = true;
-      return;
-    }
-    if (!$scope.client.ownerPhonenumber) {
-      $scope.infoMsgOptions.message = 'Debe ingresar el número telefonico del administrador.';
-      $scope.infoMsgOptions.showMessage = true;
-      return;
-    }
 
     var clientInfo = {
       legalName: $scope.client.legalName,

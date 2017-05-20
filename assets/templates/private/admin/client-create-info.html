@@ -44,42 +44,24 @@
           </div>
         </div>
 
-        <!-- BUSINESS PHONENUMBER FIELD -->
+        <!-- BUSINESS PHONENUMBER FIELD - OPTIONAL -->
         <label for="bussines-phonenumber" class="control-label col-sm-2">Telefono de la empresa:</label>
-        <div class="col-sm-4" ng-class="{
-          'has-error': clientInfo.businessPhonenumber.$invalid && (clientInfo.businessPhonenumber.$touched || clientInfo.$submitted),
-          'has-success': !clientInfo.businessPhonenumber.$invalid}">
-          <input type="text" name="businessPhonenumber" id="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber" required placeholder="4483480">
-          <!-- BUSSINESS PHONENUMBER VALIDATIONS -->
-          <div ng-messages="clientInfo.businessPhonenumber.$error" multiple="true" ng-if="clientInfo.businessPhonenumber.$touched || clientInfo.$submitted">
-            <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
-          </div>
+        <div class="col-sm-4">
+          <input type="text" name="businessPhonenumber" id="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber" placeholder="4483480">
         </div>
       </div>
 
       <div class="form-group" >
-        <!-- OWNER NAME FIELD -->
+        <!-- OWNER NAME FIELD - OPTIONAL -->
         <label for="owner-name" class="control-label col-sm-2">Nombre del dueño:</label>
-        <div class="col-sm-4" ng-class="{
-          'has-error': clientInfo.ownerName.$invalid && (clientInfo.ownerName.$touched || clientInfo.$submitted),
-          'has-success': !clientInfo.ownerName.$invalid}">
-          <input type="text" name="ownerName" id="owner-name" class="form-control" ng-model="client.ownerName" required>
-          <!-- OWNER NAME VALIDATIONS -->
-          <div ng-messages="clientInfo.ownerName.$error" multiple="true" ng-if="clientInfo.ownerName.$touched || clientInfo.$submitted">
-            <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
-          </div>
+        <div class="col-sm-4">
+          <input type="text" name="ownerName" id="owner-name" class="form-control" ng-model="client.ownerName">
         </div>
 
-        <!-- MANAGER PHONENUMBER FIELD -->
+        <!-- OWNER PHONENUMBER FIELD - OPTIONAL -->
         <label for="owner-phonenumber" class="control-label col-sm-2">Telefono del dueño:</label>
-        <div class="col-sm-4" ng-class="{
-          'has-error': clientInfo.ownerPhonenumber.$invalid && (clientInfo.ownerPhonenumber.$touched || clientInfo.$submitted),
-          'has-success': !clientInfo.ownerPhonenumber.$invalid}">
-          <input type="text" name="ownerPhonenumber" id="owner-phonenumber" class="form-control" ng-model="client.ownerPhonenumber" required>
-          <!-- MANAGER PHONENUMBER VALIDATIONS -->
-          <div ng-messages="clientInfo.ownerPhonenumber.$error" multiple="true" ng-if="clientInfo.ownerPhonenumber.$touched || clientInfo.$submitted">
-            <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
-          </div>
+        <div class="col-sm-4">
+          <input type="text" name="ownerPhonenumber" id="owner-phonenumber" class="form-control" ng-model="client.ownerPhonenumber">
         </div>
       </div>
       <div class="form-group">

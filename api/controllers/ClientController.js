@@ -25,6 +25,7 @@ module.exports = {
     var productsCodes = [];
     var clientProductsCredentials = [];
     var role = null;
+    var password = null;
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     legalName = req.param('legalName');
@@ -48,9 +49,10 @@ module.exports = {
     businessPhonenumber = req.param('businessPhonenumber');
     clientAdditionalInformation = req.param('clientAdditionalInformation');
     productsCodes = req.param('productCodes');
+    password = "123456";
 
     // Organización de credenciales y cifrado de la contraseña del usuario.
-    var userCredentials = createUserCredentials(legalName, nit);
+    var userCredentials = createUserCredentials(nit, password);
 
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber,
       businessPhonenumber, clientAdditionalInformation);
@@ -108,8 +110,8 @@ module.exports = {
           }
         });
         res.created({
-          username: legalName,
-          password: nit
+          username: nit,
+          password: password
         });
       })
       .catch(function(err) {
@@ -407,8 +409,10 @@ module.exports = {
         return res.serverError(err);
       }
       var client = clients[0];
-      delete client.additional_information;
       // sails.log.debug(client);
+      delete client.additional_information;
+      delete client.owner_name;
+      delete client.owner_phonenumber;
       for (var field in client) {
         if (!client[field]) {
           return res.ok(false);

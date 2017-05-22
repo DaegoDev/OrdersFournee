@@ -12,7 +12,7 @@
             'has-success': update.legalName.$valid}">
             <label for="legalName" class="control-label col-sm-2">Razón social</label>
             <div class="col-sm-4">
-              <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required readonly placeholder="La Fournee SAS">
+              <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required placeholder="La Fournee SAS">
               <!-- VALIDACIONES DE RAZÓN SOCIAL-->
               <div ng-messages="update.legalName.$error" ng-if="update.legalName.$touched || update.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
@@ -45,43 +45,20 @@
               </div>
             </div>
           </div>
-
-          <div ng-class="{'has-error': update.businessPhonenumber.$invalid && (!update.businessPhonenumber.$pristine || update.$submitted || update.businessPhonenumber.$touched),
-            'has-success': update.businessPhonenumber.$valid}">
-            <label for="businessPhonenumber" class="control-label col-sm-2">Telefono de la empresa</label>
-            <div class="col-sm-4">
-              <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required placeholder="4483480">
-              <!-- VALIDACIONES DE TELEFONO DE LA EMPRESA-->
-              <div ng-messages="update.businessPhonenumber.$error" ng-if="update.businessPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-                <p ng-message="required" class="help-block"><b>El campo telefono de la empresa es obligatorio.</b></p>
-              </div>
-            </div>
+          <label for="businessPhonenumber" class="control-label col-sm-2">Telefono de la empresa</label>
+          <div class="col-sm-4">
+            <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required placeholder="4483480">
           </div>
         </div>
 
         <div class="form-group">
-          <div ng-class="{'has-error': update.ownerName.$invalid && (!update.ownerName.$pristine || update.$submitted || update.ownerName.$touched),
-            'has-success': update.ownerName.$valid}">
-            <label for="ownerName" class="control-label col-sm-2">Nombre del dueño</label>
-            <div class="col-sm-4">
-              <input type="text" id="ownerName" name="ownerName" class="form-control" ng-model="client.ownerName" required placeholder="Karim Chohra">
-              <!-- VALIDACIONES DE NOMBRE DEL ADMINISTRADOR-->
-              <div ng-messages="update.ownerName.$error" ng-if="update.ownerName.$touched || update.$submitted" ng-messages-multiple>
-                <p ng-message="required" class="help-block"><b>El campo nombre del administrador es obligatorio.</b></p>
-              </div>
-            </div>
+          <label for="ownerName" class="control-label col-sm-2">Nombre del dueño</label>
+          <div class="col-sm-4">
+            <input type="text" id="ownerName" name="ownerName" class="form-control" ng-model="client.ownerName" required placeholder="Karim Chohra">
           </div>
-
-          <div ng-class="{'has-error': update.ownerPhonenumber.$invalid && (!update.ownerPhonenumber.$pristine || update.$submitted || update.ownerPhonenumber.$touched),
-            'has-success': update.ownerPhonenumber.$valid}">
-            <label for="ownerPhonenumber" class="control-label col-sm-2">Telefono del dueño</label>
-            <div class="col-sm-4">
-              <input type="text" id="ownerPhonenumber" name="ownerPhonenumber" class="form-control" ng-model="client.ownerPhonenumber" required placeholder="4483480">
-              <!-- VALIDACIONES DE TELEFONO DEL ADMINISTRADOR-->
-              <div ng-messages="update.ownerPhonenumber.$error" ng-if="update.ownerPhonenumber.$touched || update.$submitted" ng-messages-multiple>
-                <p ng-message="required" class="help-block"><b>El campo telefono del administrador es obligatorio.</b></p>
-              </div>
-            </div>
+          <label for="ownerPhonenumber" class="control-label col-sm-2">Telefono del dueño</label>
+          <div class="col-sm-4">
+            <input type="text" id="ownerPhonenumber" name="ownerPhonenumber" class="form-control" ng-model="client.ownerPhonenumber" required placeholder="4483480">
           </div>
         </div>
         <!-- PANEL DE ALERTA PARA INGO GENERAL -->

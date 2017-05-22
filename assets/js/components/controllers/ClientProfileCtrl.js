@@ -43,7 +43,6 @@
 
     ProfileService.getProfileClient()
       .then(function(res) {
-        // console.log(res.data);
         $scope.client = res.data;
       })
       .catch(function(err) {
@@ -52,7 +51,6 @@
 
       ReceptionHourSvc.getWeekDays()
         .then(function(res) {
-          // console.log(res.data);
           $scope.weekDays = res.data;
           console.log($scope.weekDays[0]);
           // Dropdown para listar los tipos de empleados
@@ -186,7 +184,7 @@
         }
 
         // Validación de los campos del formulario de actualización de info general de un cliente.
-        if (!legalName || !nit || !tradeName || !ownerName || !ownerPhonenumber || !businessPhonenumber) {
+        if (!legalName || !nit || !tradeName) {
           return;
         }
 

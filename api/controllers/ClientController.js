@@ -409,10 +409,11 @@ module.exports = {
         return res.serverError(err);
       }
       var client = clients[0];
-      // sails.log.debug(client);
+      sails.log.debug(client);
       delete client.additional_information;
       delete client.owner_name;
       delete client.owner_phonenumber;
+      delete client.business_phonenumber;
       for (var field in client) {
         if (!client[field]) {
           return res.ok(false);
@@ -467,6 +468,7 @@ module.exports = {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var user = null;
+    var legalName = null;
     var tradeName = null;
     var ownerName = null;
     var ownerPhonenumber = null;
@@ -479,23 +481,18 @@ module.exports = {
       return res.badRequest('Se debe ingresar el nombre de la empresa.');
     }
 
+    legalName = req.param('legalName');
+    if (!legalName) {
+      return res.badRequest('Se debe ingresar la razón social.');
+    }
+
     ownerName = req.param('ownerName');
-    if (!ownerName) {
-      return res.badRequest('Se debe ingresar el nombre del administrador.');
-    }
-
     ownerPhonenumber = req.param('ownerPhonenumber');
-    if (!ownerPhonenumber) {
-      return res.badRequest('Se debe ingresar el telefono del administrador.');
-    }
-
     businessPhonenumber = req.param('businessPhonenumber');
-    if (!businessPhonenumber) {
-      return res.badRequest('Se debe ingresar el telefono de la empresa.');
-    }
 
     // Organización de credenciales del cliente
     var clientCredentials = {
+      legalName: legalName,
       tradeName: tradeName,
       ownerName: ownerName,
       ownerPhonenumber: ownerPhonenumber,

@@ -30,10 +30,10 @@
         </thead>
         <tbody>
           <tr ng-repeat="employee in employees | filter:searchText | orderBy: sortByProperty:sortReversed">
-            <td>{{employee.name}}</td>
-            <td>{{employee.username}}</td>
-            <td>{{employee.role}}</td>
-            <td>{{employee.state}}</td>
+            <td style="vertical-align:middle">{{employee.name}}</td>
+            <td style="vertical-align:middle">{{employee.username}}</td>
+            <td style="vertical-align:middle">{{employee.role}}</td>
+            <td style="vertical-align:middle">{{employee.state}}</td>
             <td ng-click="confirm(employee.id)" style="width:90px">
               <span class="fa fa-remove"></span>
             </td>

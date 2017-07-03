@@ -17,18 +17,14 @@
         </thead>
         <tbody>
           <tr ng-repeat="order in orders">
-            <td>{{order.id}}</td>
-            <td>{{order.createdAt | date:'medium'}}</td>
-            <td>{{order.deliveryDate | date:'mediumDate'}}</td>
-            <td>{{order.additionalInformation}}</td>
+            <td style="vertical-align:middle">{{order.id}}</td>
+            <td style="vertical-align:middle">{{order.createdAt | date:'medium'}}</td>
+            <td style="vertical-align:middle">{{order.deliveryDate | date:'mediumDate'}}</td>
+            <td style="vertical-align:middle">{{order.additionalInformation}}</td>
             <td>{{order.state}}</td>
-            <!-- <td ng-click="showDetails(client)">
-              <span class="fa fa-search"></span>
-            </td> -->
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
 </div>

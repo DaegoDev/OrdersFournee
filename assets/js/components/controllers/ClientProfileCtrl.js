@@ -52,7 +52,6 @@
       ReceptionHourSvc.getWeekDays()
         .then(function(res) {
           $scope.weekDays = res.data;
-          console.log($scope.weekDays[0]);
           // Dropdown para listar los tipos de empleados
           $scope.placementWeekDays = {
             options: $scope.weekDays,
@@ -98,11 +97,9 @@
 
         ReceptionHourSvc.createReceptionHour(receptionHourCredentials)
           .then(function(res) {
-            // console.log(res.data);
             $scope.client.receptionHour.push(res.data);
           })
           .catch(function(err) {
-            console.log(err);
             if(err.data.code == 410){
               $ngConfirm(err.data.msg);
             }else {
@@ -396,7 +393,6 @@
             $scope.pswForm.$setUntouched();
           })
           .catch(function(err) {
-            console.log(err);
             $scope.alertMessagePassword = "La contraseña no ha sido cambiada, verifique su contraseña actual.";
             $scope.processing = false;
             $scope.error = true;

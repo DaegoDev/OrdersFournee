@@ -4,7 +4,6 @@
     $scope.selectedProducts = [];
     $scope.receptionHour = [];
 
-    console.log($scope.client);
     ReceptionHourSvc.getReceptionHourByClient({clientId: $scope.client.id})
     .then(function (res) {
       $scope.receptionHour = res.data;

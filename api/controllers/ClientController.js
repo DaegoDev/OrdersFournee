@@ -39,7 +39,6 @@ module.exports = {
         } else if (numberCell != '1' && numberCell != '2' && numberCell != 'ref') {
           var fila = numberCell;
           clients[fila].push(cells[cell].v);
-          // console.log(cells[cell].v);
         }
       }
       // sails.log.debug(clients);

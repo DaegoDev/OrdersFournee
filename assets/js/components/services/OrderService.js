@@ -22,7 +22,6 @@ function ($http, $rootScope) {
     },
     // Servicio para cambiar la fecha de entrega de un pedido
     changeDeliveryDate: function(credentials) {
-      console.log(credentials);
       var change = $http({
         url: '/order/updateDeliveryDate',
         method: 'PUT',

@@ -121,19 +121,18 @@ module.exports = {
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     legalName = req.param('legalName');
     if (!legalName) {
-      return res.badRequest('Se debe ingresar una razon social.');
+      return res.badRequest({code: 1, msg: 'Se debe ingresar una razon social.'});
     }
 
     nit = req.param('nit');
     if (!nit) {
-      return res.badRequest('Se debe ingresar un nit.');
+      return res.badRequest({code: 1, msg: 'Se debe ingresar un nit.'});
     }
 
     tradeName = req.param('tradeName');
     if (!tradeName) {
-      return res.badRequest('Se debe ingresar el nombre de la empresa.');
+      return res.badRequest({code: 1, msg: 'Se debe ingresar el nombre de la empresa.'});
     }
-
 
     ownerName = req.param('ownerName');
     ownerPhonenumber = req.param('ownerPhonenumber');

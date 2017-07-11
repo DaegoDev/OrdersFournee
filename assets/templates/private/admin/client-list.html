@@ -31,11 +31,11 @@
         </thead>
         <tbody>
           <tr ng-repeat="client in clients | filter:searchText | orderBy: sortByProperty:sortReversed">
-            <td>{{client.nit}}</td>
-            <td>{{client.legalName}}</td>
-            <td>{{client.tradeName}}</td>
-            <td>{{client.businessPhonenumber}}</td>
-            <td>{{client.user.state | stateFilter}}</td>
+            <td style="vertical-align:middle">{{client.nit}}</td>
+            <td style="vertical-align:middle">{{client.legalName}}</td>
+            <td style="vertical-align:middle">{{client.tradeName}}</td>
+            <td style="vertical-align:middle">{{client.businessPhonenumber}}</td>
+            <td style="vertical-align:middle">{{client.user.state | stateFilter}}</td>
             <td ng-click="showDetails(client)">
               <span class="fa fa-search"></span>
             </td>

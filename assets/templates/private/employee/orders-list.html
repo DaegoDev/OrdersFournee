@@ -79,16 +79,16 @@
           </thead>
           <tbody>
             <tr ng-repeat="ord in orders | filter: checkFilter | orderBy: sortByProperty:sortReversed" class="orderList">
-              <td style="text-align: center">
+              <td align="center" style="vertical-align:middle">
                 <input type="checkbox" ng-click="checkSelectAll(ord.id)" ng-model="checkboxObj[ord.id]">
               </td>
-              <td ng-click="showDetails(ord)">{{ord.id}}</td>
-              <td ng-click="showDetails(ord)">{{ord.created_at | date:'medium'}}</td>
-              <td ng-click="showDetails(ord)">{{ord.trade_name}}</td>
-              <td ng-click="showDetails(ord)">{{ord.employeeName}}</td>
-              <td ng-click="showDetails(ord)">{{ord.business_phonenumber}}</td>
-              <td ng-click="showDetails(ord)">{{ord.initial_suggested_time + '-' + ord.final_suggested_time}}</td>
-              <td>{{ord.state}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.id}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.created_at | date:'medium'}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.trade_name}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.employeeName}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.business_phonenumber}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.initial_suggested_time + '-' + ord.final_suggested_time}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.state}}</td>
             </tr>
           </tbody>
         </table>

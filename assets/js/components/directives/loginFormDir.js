@@ -60,6 +60,8 @@ fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStor
     AuthService.signinUser(credentials)
       .then(function(result) {
         $scope.signing = false;
+        $scope.user = {};
+        $scope.loginError = false;
         role = AuthService.getRole().toUpperCase();
         if (role === "ADMINISTRADOR") {
           $state.go('admin');

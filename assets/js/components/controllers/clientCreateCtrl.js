@@ -98,7 +98,17 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
     SignupService.signupClient(clientCredentials)
       .then(function(res) {
         $scope.user = res.data;
-        $state.go('client.create.user')
+        $state.go('client.create.user');
+        angular.forEach($scope.productsSelected, function(product, key) {
+          product.hide = false;
+        });
+        $scope.productsSelected = [];
+      })
+      .catch(function (err) {
+        console.log(err)
+        if(err.data.code && err.data.code == 1) {
+          $state.go('client.create.info');
+        }
       });
   }
 

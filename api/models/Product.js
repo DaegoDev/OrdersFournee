@@ -34,6 +34,13 @@ module.exports = {
       unique: true,
       columnName: 'short_name'
     },
+    enabled: {
+      type: 'boolean',
+      notNull: true,
+      default: true,
+      required: true,
+      columnName: 'enabled'
+    },
     // Añade una referencia a item
     items: {
       collection: 'item',
@@ -41,7 +48,6 @@ module.exports = {
       through: 'itemproduct'
     },
     // Añade una referencia a client
-
     clients: {
       collection: 'client',
       via: 'product',

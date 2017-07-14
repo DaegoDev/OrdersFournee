@@ -69,6 +69,9 @@ module.exports = {
     // Organización de credenciales de un producto.
     var productCredentials = {};
 
+    // Enabled product; 1 = true, 0 = false.
+    productCredentials.enabled = 1;
+
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
     var sql = connectionConfig.sql;
@@ -209,7 +212,7 @@ module.exports = {
       'i.value, i.short_value, ' +
       'e.name AS element_name ' +
       'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
-      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+      'WHERE p.enabled = 1 AND cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
       'ORDER BY cp.product; ';
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
@@ -274,7 +277,7 @@ module.exports = {
    * @param  {Object} res Response object
    * @return {Object}
    */
-  getAll: function(req, res) {
+  getAllEnabled: function(req, res) {
     var product = null;
     var products = [];
     var item = null;
@@ -283,7 +286,7 @@ module.exports = {
       'e.name as element_name, ' +
       'i.id as item_id, i.value, i.short_value ' +
       'FROM product as p, item_product as ip, item as i, element as e ' +
-      'WHERE p.code = ip.product_code AND ip.item_id = i.id AND i.element = e.id ' +
+      'WHERE p.code = ip.product_code AND p.enabled = 1 AND ip.item_id = i.id AND i.element = e.id ' +
       'ORDER BY p.code;';
 
     Product.query(productQueryStr,
@@ -321,12 +324,122 @@ module.exports = {
         return res.ok(products)
       });
   },
-  test: function (req, res) {
-    Element.find({
-      name: 'masa'
-    }).populate('items')
-    .then(function (data) {
-      return res.ok(data)
+
+  getAllDisabled: function (req, res ) {
+    var product = null;
+    var products = [];
+    var item = null;
+    var productQueryStr = 'SELECT ' +
+      'p.code, p.name, p.short_name, ' +
+      'e.name as element_name, ' +
+      'i.id as item_id, i.value, i.short_value ' +
+      'FROM product as p, item_product as ip, item as i, element as e ' +
+      'WHERE p.code = ip.product_code AND p.enabled = 0 AND ip.item_id = i.id AND i.element = e.id ' +
+      'ORDER BY p.code;';
+
+    Product.query(productQueryStr,
+      function(err, rawData) {
+        if (err) {
+          sails.log.debug(err);
+          return res.serverError();
+        }
+        rawData.forEach(function(data, i, dataArray) {
+          if (product == null) {
+            product = {
+              code: data.code,
+              name: data.name,
+              shortName: data.short_name,
+              items: []
+            }
+          }
+
+          item = {
+              itemId: data.item_id,
+              elementName: data.element_name,
+              value: data.value,
+              shortValue: data.short_value
+            },
+
+            product.items.push(item);
+
+          if (!dataArray[i + 1]) {
+            products.push(product);
+          } else if (dataArray[i + 1].code != product.code) {
+            products.push(product);
+            product = null;
+          }
+        })
+        return res.ok(products)
+      });
+  },
+
+  /**
+   * Funcion para obtener todos los productos.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  disableProduct: function (req, res) {
+    var productCode = null;
+
+    // Validation of productCode argument.
+    productCode = req.param('productCode');
+    if (!productCode) {
+      return res.badRequest('El id del producto está vacio.');
+    }
+
+    // First validate that the product exits.
+    Product.findOne({code: productCode})
+    .then(function (productData) {
+      if (!productData) {
+        throw {code:1, msg:"El producto no existe."};
+      }
+      return Product.update({code: productCode}, {enabled: false});
+    })
+    .then(function (productData) {
+      if (!productData) {
+        throw {code:2, msg:"El producto no ha sido actualizado."};
+      }
+      res.type('json');
+      return res.ok();
+    })
+    .catch(function (err) {
+      if (err.code) {
+        return res.badRequest(err);
+      }
+      return res.serverError(err);
+    });
+  },
+
+  enableProduct: function (req, res) {
+    var productCode = null;
+
+    // Validation of productCode argument.
+    productCode = req.param('productCode');
+    if (!productCode) {
+      return res.badRequest('El id del producto está vacio.');
+    }
+
+    // First validate that the product exits.
+    Product.findOne({code: productCode})
+    .then(function (productData) {
+      if (!productData) {
+        throw {code:1, msg:"El producto no existe."};
+      }
+      return Product.update({code: productCode}, {enabled: true});
+    })
+    .then(function (productData) {
+      if (!productData) {
+        throw {code:2, msg:"El producto no ha sido actualizado."};
+      }
+      res.type('json');
+      return res.ok();
+    })
+    .catch(function (err) {
+      if (err.code) {
+        return res.badRequest(err);
+      }
+      return res.serverError(err);
     });
   }
 };

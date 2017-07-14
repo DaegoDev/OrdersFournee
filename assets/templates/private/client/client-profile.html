@@ -75,7 +75,7 @@
     <fieldset>
       <legend>Horarios de recepción</legend>
       <div class="row">
-        <div class="col-sm-7 ">
+        <div class="col-sm-6">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -89,8 +89,8 @@
               <tr ng-repeat="n in client.receptionHour">
                 <td>{{n.weekDay.name}}</td>
                 <td>{{n.initialReceptionTime}}</td>
-                <td>{{n.finalReceptionTime}}</td>
-                <td ng-click="confirm(n.id)" style="width:90px">
+                <td >{{n.finalReceptionTime}}</td>
+                <td ng-click="confirm(n.id)" style="width:90px" align="center">
                   <span class="fa fa-remove day-remove" style=""></span>
                 </td>
               </tr>
@@ -196,8 +196,9 @@
           <div ng-class="{'has-error': billAddressUpdate.additionalInformation.$invalid && (!billAddressUpdate.additionalInformation.$pristine || billAddressUpdate.$submitted || billAddressUpdate.additionalInformation.$touched),
             'has-success': billAddressUpdate.additionalInformation.$valid}">
             <label for="" class="control-label col-sm-2">Punto de referencia</label>
-            <div class="col-sm-8">
-              <textarea rows="5" id="additionalInformation" name="additionalInformation" class="form-control" ng-model="client.billAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de facturación."></textarea>
+            <div class="col-sm-10" >
+              <textarea rows="5" id="additionalInformation" name="additionalInformation" style="resize:none" 
+              class="form-control" ng-model="client.billAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de facturación."></textarea>
               <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
               <div ng-messages="billAddressUpdate.additionalInformation.$error" ng-if="billAddressUpdate.additionalInformation.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo punto de referencia es obligatorio.</b></p>
@@ -287,8 +288,9 @@
           <div ng-class="{'has-error': deliveryAddressUpdate.additionalInformation.$invalid && (!deliveryAddressUpdate.additionalInformation.$pristine || deliveryAddressUpdate.$submitted || deliveryAddressUpdate.additionalInformation.$touched),
             'has-success': deliveryAddressUpdate.additionalInformation.$valid}">
             <label for="" class="control-label col-sm-2">Punto de referencia</label>
-            <div class="col-sm-8">
-              <textarea rows="5" id="additionalInformation" name="additionalInformation" class="form-control" ng-model="client.deliveryAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de entrega."></textarea>
+            <div class="col-sm-10">
+              <textarea rows="5" id="additionalInformation" name="additionalInformation" style="resize:none"
+              class="form-control" ng-model="client.deliveryAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de entrega."></textarea>
               <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
               <div ng-messages="deliveryAddressUpdate.additionalInformation.$error" ng-if="deliveryAddressUpdate.additionalInformation.$touched || deliveryAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo punto de referencia es obligatorio.</b></p>

@@ -11,21 +11,48 @@ function ($http, $rootScope) {
       });
       return create;
     },
-    // Service to get all existing products.
+    // Enables a given product.
+    enableProduct: function (credentials) {
+      var product = $http({
+        url: '/product/enableProduct',
+        method: 'PUT',
+        params: credentials
+      });
+      return product;
+    },
+    // Disables a given product.
+    disableProduct: function (credentials) {
+      var product = $http({
+        url: '/product/disableProduct',
+        method: 'PUT',
+        params: credentials
+      });
+      return product;
+    },
+    // Service to get all existing products that are enabled.
     getProducts: function() {
       var products = $http({
-        url: '/product/getAll',
+        url: '/product/getAllEnabled',
         method: 'GET'
       });
       return products;
     },
+    // Service to get all existing products that are disabled.
+    getProductsDisabled: function () {
+      var products = $http({
+        url: '/product/getAllDisabled',
+        method: 'GET'
+      });
+      return products;
+    },
+    // Service to get the products of a client.
     getProductsByClient: function (client) {
       var products = $http({
         url: '/product/getProductsByClient',
         method: 'GET',
         params: client
       });
-      return products;      
+      return products;
     }
   };
 }]);

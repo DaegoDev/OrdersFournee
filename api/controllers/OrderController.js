@@ -7,30 +7,6 @@
 
 module.exports = {
 
-  test: function (req, res) {
-    date = UTCDateService.getUTCDate({offset: -5});
-    dateCol = {
-      string: date,
-      date: date.getYear() + ' ' + date.getMonth() + ' ' +date.getDay(),
-      time: date.getHours() + ' ' + date.getMinutes() + ' ' +date.getSeconds()
-    };
-
-    date = UTCDateService.getUTCDate({offset: 2});
-    dateEsp = {
-      string: date,
-      date: date.getYear() + ' ' + date.getMonth() + ' ' +date.getDay(),
-      time: date.getHours() + ' ' + date.getMinutes() + ' ' +date.getSeconds()
-    };
-
-    date = UTCDateService.getUTCDate({offset: 9});
-    dateJap = {
-      string: date,
-      date: date.getYear() + ' ' + date.getMonth() + ' ' +date.getDay(),
-      time: date.getHours() + ' ' + date.getMinutes() + ' ' +date.getSeconds()
-    };
-
-    return res.ok({Col: dateCol, Esp: dateEsp,Jap: dateJap});
-  },
   /**
    * Funcion para crear un pedido.
    * @param  {Object} req Request object
@@ -354,7 +330,7 @@ module.exports = {
    * @param  {Object} res Response object
    * @return {Object}
    */
-   getByClient: function (req,res) {
+   getByClient: function (req, res) {
      // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
      // de la solicitud.
      var user = req.user;

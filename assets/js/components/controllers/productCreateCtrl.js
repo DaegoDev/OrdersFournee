@@ -1,5 +1,6 @@
 var fournee = angular.module('fournee');
-fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'productItemSvc', 'productSvc', function($scope, $log, $state, $ngConfirm, productItemSvc, productSvc) {
+fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'productItemSvc', 'productSvc',
+function($scope, $log, $state, $ngConfirm, productItemSvc, productSvc) {
   $scope.product = {};
   $scope.selectedItems = [];
   $scope.items = null;

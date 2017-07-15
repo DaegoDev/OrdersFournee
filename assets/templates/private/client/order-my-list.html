@@ -12,7 +12,7 @@
             <th>Fecha de entrega</th>
             <th>Información adicional</th>
             <th>Estado</th>
-            <!-- <th>Detalles</th> -->
+            <th>Opciones</th>
           </tr>
         </thead>
         <tbody>
@@ -21,7 +21,11 @@
             <td style="vertical-align:middle">{{order.createdAt | date:'medium'}}</td>
             <td style="vertical-align:middle">{{order.deliveryDate | date:'mediumDate'}}</td>
             <td style="vertical-align:middle">{{order.additionalInformation}}</td>
-            <td>{{order.state}}</td>
+            <td style="background-color: #201300; color: white;">{{order.state}}</td>
+            <td>
+              <a class="fa fa-edit" tooltips tooltip-template="Editar" ng-click='showEditForm(order)'></a>
+              <a class="fa fa-trash" tooltips tooltip-template="Cancelar" ng-click="cancelOrderConfirm(order)"></a>
+            </td>
           </tr>
         </tbody>
       </table>

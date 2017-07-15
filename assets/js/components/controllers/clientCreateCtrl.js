@@ -105,7 +105,7 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
         $scope.productsSelected = [];
       })
       .catch(function (err) {
-        console.log(err)
+        //console.log(err)
         if(err.data.code && err.data.code == 1) {
           $state.go('client.create.info');
         }

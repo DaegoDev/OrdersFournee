@@ -38,6 +38,15 @@ function ($http, $rootScope) {
       });
       return change;
     },
+    // Servicio para cancelar un pedido
+    cancelOrder: function(credentials) {
+      var cancel = $http({
+        url: '/order/cancelOrder',
+        method: 'PUT',
+        params: credentials
+      });
+      return cancel;
+    },
     // Servicio para obtener los pedidos de un cliente
     getOrdersByClient: function () {
       var getByClient = $http({
@@ -45,6 +54,24 @@ function ($http, $rootScope) {
         method: 'GET'
       });
       return getByClient;
+    },
+    // Servicio para obtener los productos seleccionados para un pedido.
+    getProductsSelected: function (params) {
+      var products = $http({
+        url: '/order/getProductsSelected',
+        method: 'GET',
+        params: params
+      });
+      return products;
+    },
+    // Servicio para validar que puede editar un pedido.
+    validateDateToUpdate: function (params) {
+      var isCorrect = $http({
+        url: '/order/validateDateToUpdate',
+        method: 'POST',
+        params: params
+      });
+      return isCorrect;
     }
 
   };

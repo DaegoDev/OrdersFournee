@@ -35,6 +35,50 @@ var fournee = angular.module('fournee');
     var rawProduct = null;
     var bakedProduct = null;
 
+    if ($scope.product.amount) {
+      if(!$scope.product.added){
+        var product = buildProductBd();
+        if (product) {
+          var index = $scope.selectList.indexOf(product);
+          if (index == -1) {
+            $scope.selectList.push(product);
+            $scope.product.added = true;
+          }
+        }
+      }
+    }
+
+    // Function to build a product obtained of the bd.
+    function buildProductBd() {
+      var name = null;
+      var currentProduct = null;
+      if($scope.product.customName){
+        name = $scope.product.customName;
+      }else {
+        name = $scope.product.product.shortName;
+      }
+
+      if (!$scope.product.baked && !rawProduct) {
+        rawProduct = {
+           client_product: $scope.product.id,
+           name: name,
+           amount: $scope.product.amount,
+           baked: $scope.product.baked == 1 ? true : false
+         }
+        currentProduct = rawProduct;
+      } else if ($scope.product.baked && !bakedProduct) {
+        bakedProduct = {
+           client_product: $scope.product.id,
+           name: name,
+           amount: $scope.product.amount,
+           baked: $scope.product.baked == 1 ? true : false
+         };
+        currentProduct = bakedProduct;
+      }
+      // console.log(rawProduct);
+      return currentProduct;
+    }
+
     if (!$scope.control) {
       $scope.control = {};
     }

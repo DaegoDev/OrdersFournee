@@ -81,10 +81,11 @@
 
     // Dropdown para listar los estados de un pedido;
     $scope.placement = {
-      options: ['Confirmado',
-        'Pendiente de confirmación',
+      options: ['Pendiente de confirmación',
+        'Confirmado',
         'Alistado',
-        'Despachado'
+        'Despachado',
+        'Cancelado'
       ],
       selected: 'Confirmado',
     };

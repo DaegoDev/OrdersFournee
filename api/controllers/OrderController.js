@@ -7,29 +7,39 @@
 
 module.exports = {
 
-  test: function (req, res) {
-    date = UTCDateService.getUTCDate({offset: -5});
+  test: function(req, res) {
+    date = UTCDateService.getUTCDate({
+      offset: -5
+    });
     dateCol = {
       string: date,
-      date: date.getYear() + ' ' + date.getMonth() + ' ' +date.getDay(),
-      time: date.getHours() + ' ' + date.getMinutes() + ' ' +date.getSeconds()
+      date: date.getYear() + ' ' + date.getMonth() + ' ' + date.getDay(),
+      time: date.getHours() + ' ' + date.getMinutes() + ' ' + date.getSeconds()
     };
 
-    date = UTCDateService.getUTCDate({offset: 2});
+    date = UTCDateService.getUTCDate({
+      offset: 2
+    });
     dateEsp = {
       string: date,
-      date: date.getYear() + ' ' + date.getMonth() + ' ' +date.getDay(),
-      time: date.getHours() + ' ' + date.getMinutes() + ' ' +date.getSeconds()
+      date: date.getYear() + ' ' + date.getMonth() + ' ' + date.getDay(),
+      time: date.getHours() + ' ' + date.getMinutes() + ' ' + date.getSeconds()
     };
 
-    date = UTCDateService.getUTCDate({offset: 9});
+    date = UTCDateService.getUTCDate({
+      offset: 9
+    });
     dateJap = {
       string: date,
-      date: date.getYear() + ' ' + date.getMonth() + ' ' +date.getDay(),
-      time: date.getHours() + ' ' + date.getMinutes() + ' ' +date.getSeconds()
+      date: date.getYear() + ' ' + date.getMonth() + ' ' + date.getDay(),
+      time: date.getHours() + ' ' + date.getMinutes() + ' ' + date.getSeconds()
     };
 
-    return res.ok({Col: dateCol, Esp: dateEsp,Jap: dateJap});
+    return res.ok({
+      Col: dateCol,
+      Esp: dateEsp,
+      Jap: dateJap
+    });
   },
   /**
    * Funcion para crear un pedido.
@@ -68,7 +78,9 @@ module.exports = {
     finalSuggestedTime = req.param('finalSuggestedTime');
     additionalInformation = req.param('additionalInformation');
 
-    createdAt = TimeZoneService.getDateNow({offset: -5}, null);
+    createdAt = TimeZoneService.getDateNow({
+      offset: -5
+    }, null);
     if (!isCorrectDeliveryDate(createdAt, deliveryDate)) {
       return res.badRequest("La fecha de entrega no es correcta");
     }
@@ -91,7 +103,7 @@ module.exports = {
     if (typeof productsToOrder == 'string') {
       productsToOrder = [JSON.parse(productsToOrder)];
     } else {
-      productsToOrder.forEach(function (product, index, productList) {
+      productsToOrder.forEach(function(product, index, productList) {
         productList[index] = JSON.parse(product);
       });
     }
@@ -103,12 +115,16 @@ module.exports = {
 
     sql.beginTransaction()
       .then(function() {
-        return Client.findOne({user: userId});
+        return Client.findOne({
+          user: userId
+        });
       })
       .then(function(client) {
         if (client) {
           orderCredentials.client = client.id;
-          return ClientEmployee.findOne({id: clientEmployee});
+          return ClientEmployee.findOne({
+            id: clientEmployee
+          });
         }
         throw "El cliente no existe";
       })
@@ -172,8 +188,8 @@ module.exports = {
     if (orderIds.length == 0) {
       return res.badRequest('Ids de los pedidos vacio.');
     }
-    if(Array.isArray(orderIds)){
-      orderIds.forEach(function (orderId, i, orderIds) {
+    if (Array.isArray(orderIds)) {
+      orderIds.forEach(function(orderId, i, orderIds) {
         orderId = parseInt(orderId);
       })
     }
@@ -211,7 +227,7 @@ module.exports = {
     // de la solicitud.
     var orderIds = null;
     var newState = null;
-    var states = ["confirmado", "pendiente de confirmación", "alistado", "despachado"];
+    var states = ["confirmado", "pendiente de confirmación", "alistado", "despachado", "cancelado"];
 
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     orderIds = req.param('orderIds');
@@ -225,8 +241,8 @@ module.exports = {
     if (states.indexOf(newState.toLowerCase()) == -1) {
       return res.badRequest("El estado no existe");
     }
-    if(Array.isArray(orderIds)){
-      orderIds.forEach(function (orderId, i, orderIds) {
+    if (Array.isArray(orderIds)) {
+      orderIds.forEach(function(orderId, i, orderIds) {
         orderId = parseInt(orderId);
       })
     }
@@ -244,6 +260,42 @@ module.exports = {
       })
       .then(function(orders) {
         res.ok(orders);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+  },
+  /**
+   * Funcion para cancelar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  cancelOrder: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var orderId = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
+
+    //Verifica que la orden exista. Si existe actualiza el campo estado a cancelado.
+    Order.find({
+        id: orderId
+      })
+      .then(function(order) {
+        if (!order) {
+          throw "La orden no existe";
+        }
+        return Order.update(orderId, {
+          state: 'cancelado'
+        });
+      })
+      .then(function(order) {
+        res.ok(order[0]);
       })
       .catch(function(err) {
         res.serverError(err);
@@ -354,25 +406,358 @@ module.exports = {
    * @param  {Object} res Response object
    * @return {Object}
    */
-   getByClient: function (req,res) {
-     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
-     // de la solicitud.
-     var user = req.user;
+  getByClient: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var user = req.user;
 
-     Client.findOne({
-         user: user.id
-       })
-       .then(function(client) {
-         return Order.find({client: client.id}).sort('createdAt DESC');
-       })
-       .then(function(order) {
-         res.ok(order);
-       })
-       .catch(function (err) {
-         res.serverError();
-       })
-   }
+    Client.findOne({
+        user: user.id
+      })
+      .then(function(client) {
+        return Order.find({
+          client: client.id
+        }).sort('createdAt DESC');
+      })
+      .then(function(order) {
+        res.ok(order);
+      })
+      .catch(function(err) {
+        res.serverError();
+      })
+  },
+  getProductsSelected: function(req, res) {
+    //Declaración de variables
+    var orderId = null;
+    var product = null;
+    var tmpProduct = null;
+    var products = [];
+    var item = null;
+    var orderProductQueryStr =
+      'SELECT ' +
+      'cp.id, cp.custom_name, cp.product, ' +
+      'op.baked, op.amount, op.client_product,' +
+      'p.name, p.short_name, ' +
+      'i.value, i.short_value, ' +
+      'e.name AS element_name ' +
+      'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp, order_product AS op ' +
+      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND op.client_product = cp.id AND op.order_id = ? ' +
+      'ORDER BY cp.product; ';
+
+    // Se obtiene el id del pedido.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('El pedido no es valido.');
+    }
+
+    // Se verifica que el pedido exista, en caso de que no exista
+    // se retorna un error. En caso de que exista se obtiene los productos que se le seleccionaron.
+    Order.findOne({
+        id: orderId
+      })
+      .then(function(order) {
+        Product.query(orderProductQueryStr, order.id,
+          function(err, rawData) {
+            if (err) {
+              sails.log.debug(err);
+              throw {
+                code: 1,
+                msg: 'Query error.'
+              };
+            }
+            rawData.forEach(function(data, i, dataArray) {
+              if (tmpProduct == null) {
+                tmpProduct = {
+                  code: data.product,
+                  name: data.name,
+                  shortName: data.short_name,
+                  items: []
+                }
+              }
+
+              item = {
+                  elementName: data.element_name,
+                  value: data.value,
+                  shortValue: data.short_value
+                },
+
+                tmpProduct.items.push(item);
+
+              if (!dataArray[i + 1]) {
+                product = {
+                  id: data.id,
+                  clientId: data.client,
+                  customName: data.custom_name,
+                  amount: data.amount,
+                  baked: data.baked,
+                  product: tmpProduct
+                }
+                products.push(product);
+              } else if (dataArray[i + 1].product != tmpProduct.code) {
+                product = {
+                  id: data.id,
+                  clientId: data.client,
+                  customName: data.custom_name,
+                  amount: data.amount,
+                  baked: data.baked,
+                  product: tmpProduct
+                }
+                products.push(product);
+                tmpProduct = null;
+              }
+            })
+            // sails.log.debug(products);
+            return res.ok(products)
+          });
+      })
+      .catch(function(err) {
+        if (err.code == 1) {
+          return res.serverError();
+        }
+      });;
+
+  },
+  /**
+   * Funcion para editar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  update: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var orderId = null;
+    var deliveryDate = null;
+    var clientEmployee = null;
+    var initialSuggestedTime = null;
+    var finalSuggestedTime = null;
+    var additionalInformation = null;
+    var updatedAt = null;
+    var productsToUpdate = [];
+    var productsOrdered = [];
+    var productsToAdd = [];
+    var productsToRemove = [];
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
+
+    var deliveryDateString = req.param('deliveryDate');
+    if (!deliveryDateString) {
+      return res.badRequest('Se debe ingresar la fecha de entrega.');
+    }
+    var dataDate = deliveryDateString.split("-", 3);
+    deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
+
+    clientEmployee = parseInt(req.param('clientEmployee'));
+    if (!clientEmployee) {
+      return res.badRequest('Id del empleado del cliente vacio.');
+    }
+
+    initialSuggestedTime = req.param('initialSuggestedTime');
+    finalSuggestedTime = req.param('finalSuggestedTime');
+    additionalInformation = req.param('additionalInformation');
+
+    updatedAt = TimeZoneService.getDateNow({
+      offset: -5
+    }, null);
+
+    // crear las credenciales para actualizar un pedido
+    var orderCredentials = {
+      delivery_date: deliveryDate,
+      initial_suggested_time: initialSuggestedTime,
+      final_suggested_time: finalSuggestedTime,
+      additional_information: additionalInformation,
+    };
+
+    // Arreglo de productos para actualizar.
+    productsToUpdate = req.param('productsToUpdate');
+
+    if (typeof productsToUpdate == 'string') {
+      productsToUpdate = [JSON.parse(productsToUpdate)];
+    } else {
+      productsToUpdate.forEach(function(product, index, productList) {
+        productList[index] = JSON.parse(product);
+      });
+    }
+
+    //Obtengo la conección para realizar transacciones
+    var connectionConfig = AlternativeConnectionService.getConnection();
+    var sql = connectionConfig.sql;
+
+    sql.beginTransaction()
+      .then(function() {
+        return Order.findOne({
+          id: orderId
+        });
+      })
+      .then(function(order) {
+        if (order) {
+          if (!isCorrectUpdatedDate(updatedAt, order.createdAt)) {
+            throw "Debe actualizar su pedido antes de las 2pm del día siguiente a la entrega";
+          }
+          if (!isCorrectDeliveryDate(updatedAt, deliveryDate)) {
+            throw "La fecha de entrega no es correcta";
+          }
+          return ClientEmployee.findOne({
+            id: clientEmployee
+          });
+        }
+        throw "El pedido no existe";
+      })
+      .then(function(clientemployee) {
+        if (clientemployee) {
+          orderCredentials.client_employee = clientemployee.id;
+          return sql.select({
+            table: 'order_product',
+            fields: ['client_product']
+          }, {
+            order_id: orderId
+          });
+        }
+        throw "El empleado no existe";
+      })
+      .then(function(orderProducts) {
+        var orderProductsIds = [];
+        orderProducts.forEach(function(orderProduct, indexOp, listOrderProducts) {
+          orderProductsIds.push(orderProduct.client_product);
+        })
+        productsToUpdate.forEach(function(productToUpdate, indexPtu, productList) {
+          var index = orderProductsIds.indexOf(productToUpdate.client_product);
+          if (index == -1 || orderProductsIds.length == 0) {
+            productToUpdate.order_id = orderId;
+            productsToAdd.push(productToUpdate);
+            // productList.splice(indexPtu, 1);
+          } else {
+            orderProductsIds.splice(index, 1);
+            productsOrdered.push(productToUpdate);
+          }
+        });
+        productsToRemove = orderProductsIds;
+        sails.log.debug(productsOrdered);
+        sails.log.debug(productsToAdd);
+        sails.log.debug(productsToRemove);
+        return sql.update('order', orderCredentials, {
+          id: orderId
+        });
+      })
+      .then(function(order) {
+        if (productsToRemove.length != 0) {
+          productsToRemove.forEach(function(productToRemove, index, listProductsToRemove) {
+            var product = {
+              client_product: productToRemove
+            }
+            return sql.delete('order_product', product)
+              .then(function(orderProduct) {
+
+              })
+              .catch(function() {
+                throw "Error al borrar un productos"
+              })
+          })
+        }
+      })
+      .then(function(orderProduct) {
+        if (productsOrdered.length != 0) {
+          productsOrdered.forEach(function(productOrdered, index, listProductsOrdered) {
+            return sql.update('order_product', productOrdered, {
+                client_product: productOrdered.client_product,
+                order_id: orderId
+              })
+              .then(function(orderProduct) {
+
+              })
+              .catch(function() {
+                throw "Error al actualizar un productos"
+              })
+          })
+        }
+      })
+      .then(function(orderProduct) {
+        if (productsToAdd.length != 0) {
+          return sql.insert('order_product', productsToAdd);
+        }
+      })
+      .then(function(orderProduct) {
+        sql.commit();
+        connectionConfig.connection.end(function(err) {
+          if (err) {
+            sails.log.debug(err);
+          }
+        });
+        res.created({
+          orderProduct: orderProduct
+        });
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        sql.rollback(function(err) {
+          connectionConfig.connection.end(function(err) {
+            if (err) {
+              sails.log.debug(err);
+            }
+          });
+          res.serverError(err);
+        });
+      });
+  },
+  /**
+   * Funcion para validar la hora para editar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  validateDateToUpdate: function(req, res) {
+    // Declaración de variables
+    var orderId = null;
+    var today = null;
+    var createdAt = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
+
+    today = TimeZoneService.getDateNow({
+      offset: -5
+    }, null);
+
+    Order.findOne({
+        id: orderId
+      })
+      .then(function(order) {
+        createdAt = new Date(order.createdAt);
+        var isCorrectDate = isCorrectUpdatedDate(today, createdAt);
+        if (!isCorrectDate || order.state == "cancelado") {
+          throw "Error";
+        } else {
+          res.ok();
+        }
+      })
+      .catch(function(err) {
+        res.serverError();
+      })
+
+  }
 };
+
+function isCorrectUpdatedDate(updatedAt, createdAt) {
+  var createdDay = createdAt.getDate();
+  var createdMonth = createdAt.getMonth();
+  var updatedTime = updatedAt.getHours();
+  var updatedDay = updatedAt.getDate();
+  var updatedMonth = updatedAt.getMonth();
+  var isCorrect = true;
+
+  if (updatedMonth != createdMonth || updatedDay != createdDay || updatedTime > 13) {
+    isCorrect = false;
+  }
+  return isCorrect;
+}
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {
   var createdTime = createdAt.getHours();

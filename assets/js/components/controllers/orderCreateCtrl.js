@@ -1,13 +1,53 @@
   var fournee = angular.module('fournee');
-  fournee.controller('orderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', function($scope, $log, $state, $ngConfirm, ClientSvc) {
+  fournee.controller('orderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', 'OrderService', '$stateParams', 'ProfileService', function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams, ProfileService) {
     // Timepicker para el rango de hora sugerida
+
+    // Variables para el control de la lista de productos.
     $scope.order = {};
+    $scope.orderList = [];
+    $scope.products = [];
+    var orderParam = null;
+    var tmpProductsEnabled = [];
+
+    // Verify that the form is to update or create.
+    if ($stateParams.order) {
+      $scope.formToUpdate = true;
+      orderParam = $stateParams.order;
+      $scope.order.additionalInformation = orderParam.additionalInformation;
+    }
+
+    // Call the function to get the products enabled to the client.
+    ClientSvc.getProductsClient()
+      .then(function(res) {
+        tmpProductsEnabled = res.data;
+        if ($scope.formToUpdate) {
+          return OrderService.getProductsSelected({orderId: orderParam.id});
+        }
+      })
+      .then(function (products) {
+        if (products) {
+          products.data.forEach(function(productSelected, indexPs) {
+            var idProductSelected = productSelected.id;
+            tmpProductsEnabled.forEach(function(productEnabled, indexPe) {
+              if (idProductSelected == productEnabled.id) {
+                tmpProductsEnabled[indexPe] = productSelected;
+              }
+            });
+          });
+        }
+        $scope.products = tmpProductsEnabled;
+      })
+      .catch(function(err) {
+        $log.error('Server error on get products.');
+      });
+
+
     $scope.order.timeInitial = new Date();
-    $scope.order.timeInitial.setHours(12);
-    $scope.order.timeInitial.setMinutes(0);
+    $scope.order.timeInitial.setHours($scope.formToUpdate ? orderParam.initialSuggestedTime.split(":")[0] : 12);
+    $scope.order.timeInitial.setMinutes($scope.formToUpdate ? orderParam.initialSuggestedTime.split(":")[1] : 0);
     $scope.order.timeFinal = new Date();
-    $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
-    $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
+    $scope.order.timeFinal.setHours($scope.formToUpdate ? orderParam.finalSuggestedTime.split(":")[0] : $scope.order.timeInitial.getHours() + 2);
+    $scope.order.timeFinal.setMinutes($scope.formToUpdate ? orderParam.finalSuggestedTime.split(":")[1] : $scope.order.timeInitial.getMinutes());
 
     $scope.order.hstep = 1;
     $scope.order.mstep = 10;
@@ -22,8 +62,6 @@
     $scope.order.minTimeFinal.setMinutes($scope.order.timeInitial.getMinutes());
     $scope.order.maxTimeFinal = $scope.order.maxTimeInitial;
 
-    // Variables para el control de la lista de productos.
-    $scope.orderList = [];
 
     // Dropdown para listar los empleados del cliente
     ClientSvc.getClientEmployees()
@@ -32,15 +70,127 @@
           options: res.data,
           selected: res.data[0],
         };
+        if ($scope.formToUpdate) {
+          res.data.forEach(function(employee) {
+            if (employee.id == orderParam.clientEmployee) {
+              $scope.placement.selected = employee;
+            }
+          })
+        }
       });
 
-    ClientSvc.getProductsClient()
-      .then(function(res) {
-        $scope.products = res.data;
-      })
-      .catch(function(err) {
-        $log.error('Server error on get products.');
+    // Function to update a order.
+    $scope.updateOrder = function() {
+      var productsToUpdate = [];
+      var product = null;
+      var tmpDeliveryDate = null;
+      var tmpClientEmployee = null;
+      var tmpInitialTime = null;
+      var tmpFinalTime = null;
+      var tmpInformation = null;
+
+      $scope.orderList.forEach(function(product) {
+        product = {
+          client_product: product.client_product,
+          amount: product.amount,
+          baked: product.baked,
+        }
+        productsToUpdate.push(product);
       });
+
+      tmpDeliveryDate = $scope.order.dt.getFullYear() + '-' + $scope.order.dt.getMonth() + '-' + $scope.order.dt.getDate();
+      tmpClientEmployee = $scope.placement.selected.id;
+
+      if ($scope.order.timeInitial.getMinutes() <= 9) {
+        tmpInitialTime = $scope.order.timeInitial.getHours() + ':0' + $scope.order.timeInitial.getMinutes();
+      } else {
+        tmpInitialTime = $scope.order.timeInitial.getHours() + ':' + $scope.order.timeInitial.getMinutes();
+      }
+
+      if ($scope.order.timeFinal.getMinutes() <= 9) {
+        tmpFinalTime = $scope.order.timeFinal.getHours() + ':0' + $scope.order.timeFinal.getMinutes();
+      } else {
+        tmpFinalTime = $scope.order.timeFinal.getHours() + ':' + $scope.order.timeFinal.getMinutes();
+      }
+
+      tmpInformation = $scope.order.additionalInformation;
+
+      var orderCredentials = {
+        orderId: orderParam.id,
+        deliveryDate: tmpDeliveryDate,
+        clientEmployee: tmpClientEmployee,
+        initialSuggestedTime: tmpInitialTime,
+        finalSuggestedTime: tmpFinalTime,
+        additionalInformation: tmpInformation,
+        productsToUpdate: productsToUpdate
+      }
+      ClientSvc.updateOrder(orderCredentials)
+        .then(function(res) {
+          $ngConfirm({
+            title: 'Pedido actualizado.',
+            content: 'El pedido ha sido actualizado con exito.',
+            type: 'green',
+            buttons: {
+              new: {
+                text: 'Nuevo pedido',
+                btnClass: 'btn-sienna',
+                action: function(scope, buttons) {
+                  $scope.reset();
+                  $state.go('order.create.shoppingCart');
+                }
+              },
+              exit: {
+                text: 'Salir',
+                btnClass: 'btn-sienna',
+                action: function(scope, buttons) {
+                  $state.go('order.myList');
+                }
+              }
+            }
+          });
+          $log.info(res.data);
+        })
+        .catch(function(err) {
+          $ngConfirm('El pedido no ha sido actualizado, verifique la fecha de entrega.');
+          $log.error(err);
+        });
+    }
+
+    $scope.confirm = function() {
+      ProfileService.getProfileClient()
+        .then(function(res) {
+          console.log(res.data);
+          $scope.client = res.data;
+          $ngConfirm({
+            title: 'Resumen del pedido',
+            contentUrl: 'templates/private/client/order-summary.html',
+            scope: $scope,
+            theme: 'light',
+            columnClass: 'medium',
+            backgroundDismiss: true,
+            buttons: {
+              confirm: {
+                text: 'Confirmar',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'a'],
+                action: function(scope, button) {
+                  if(formToUpdate){
+                    $scope.updateOrder();
+                  }else {
+                    $scope.makeOrder();
+                  }
+                }
+              },
+              Cancelar: function () {
+
+              }
+            }
+          })
+        })
+        .catch(function(err) {
+          $ngConfirm('No se ha podido obtener la información del perfil.');
+        })
+    }
 
     // Function to make a order.
     $scope.makeOrder = function() {
@@ -121,6 +271,7 @@
     // Function to validate products selected to make an order.
     $scope.validateProducts = function() {
       if ($scope.orderList.length == 0) {
+        $ngConfirm('Debe seleccionar al menos un producto.');
         return;
       }
       $state.go('order.create.info');
@@ -165,11 +316,16 @@
 
     // Datepicker para la fecha de entrega
     $scope.today = function() {
-      $scope.order.dt = new Date();
-      if($scope.order.dt.getDay() == 6){
-        $scope.order.dt.setDate($scope.order.dt.getDate() + 2);
+      if($scope.formToUpdate){
+        $scope.order.dt = new Date(orderParam.deliveryDate);
       }else {
-        $scope.order.dt.setDate($scope.order.dt.getDate() + 1);
+        console.log($scope.order.dt);
+        $scope.order.dt = new Date();
+        if ($scope.order.dt.getDay() == 6) {
+          $scope.order.dt.setDate($scope.order.dt.getDate() + 2);
+        } else {
+          $scope.order.dt.setDate($scope.order.dt.getDate() + 1);
+        }
       }
     };
     $scope.today();

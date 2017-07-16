@@ -174,7 +174,7 @@
                 btnClass: 'btn-blue',
                 keys: ['enter', 'a'],
                 action: function(scope, button) {
-                  if(formToUpdate){
+                  if($scope.formToUpdate){
                     $scope.updateOrder();
                   }else {
                     $scope.makeOrder();

@@ -54,8 +54,8 @@ var jsFilesToInject = [
   // Angular files are here.
   'js/main.js',
   'js/routes.js',
-  '/js/components/services/**/*.js',
-  '/js/components/controllers/**/*.js',
+  'js/components/services/**/*.js',
+  'js/components/controllers/**/*.js',
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.

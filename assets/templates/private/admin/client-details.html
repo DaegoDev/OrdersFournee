@@ -88,8 +88,24 @@
 
   <fieldset class="product-list">
     <legend>Productos habilitados</legend>
+
+    <div class="row">
+          <div class="col-sm-12">
+              <div>
+                  <div class="input-group stylish-input-group">
+                      <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchText">
+                      <span class="input-group-addon">
+                          <button type="submit">
+                              <span class="glyphicon glyphicon-search"></span>
+                          </button>
+                      </span>
+                  </div>
+              </div>
+          </div>
+    </div>
+
     <ul>
-      <li ng-repeat="clientProduct in client.products">
+      <li ng-repeat="clientProduct in client.products | filter:searchText">
         <p>{{clientProduct.product.name}}</p>
         <div ng-click="disableProduct(clientProduct)">
           <span class="fa fa-trash"></span>
@@ -114,7 +130,21 @@
         <div class="title">
           Productos disponibles
         </div>
-        <product-card ng-repeat="product in products" product="product"
+        <div class="row" style="margin-left:2px; margin-right:2px">
+              <div class="col-sm-12">
+                  <div>
+                      <div class="input-group stylish-input-group">
+                          <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchTextEnabling">
+                          <span class="input-group-addon">
+                              <button type="submit">
+                                  <span class="glyphicon glyphicon-search"></span>
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+        </div>
+        <product-card ng-repeat="product in products | filter:searchTextEnabling" product="product"
           ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
         </product-card>
       </div>

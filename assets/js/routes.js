@@ -133,6 +133,18 @@ var fournee = angular.module('fournee');
             }
           }
         })
+        .state('product.disable', {
+          url: '/disableProduct',
+          templateUrl: 'templates/private/shared/product-disable.html',
+          controller: 'productDisableCtrl',
+          data: {
+            permissions: {
+              only: "ADMINISTRADOR",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
         .state('product.create', {
           url: '/create',
           templateUrl: 'templates/private/shared/product-create.html',

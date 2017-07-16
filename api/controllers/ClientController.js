@@ -8,95 +8,6 @@
 var cv2json = require('convert-json');
 
 module.exports = {
-  prueba: function (req, res) {
-    var array = [];
-    array[1] = "uno";
-    return res.ok(array);
-    sails.log.verbose(array);
-  },
-  /**
-   * Funcion para importar lista de clientes.
-   * @param  {Object} req Request object
-   * @param  {Object} res Response object
-   * @return {Object}
-   */
-  importClients: function(req, res) {
-    var cells = null;
-    var clients = {};
-    var csv_trans = cv2json.xls('/home/jonnatan/Fournee/Lista_clientes_fournee-22052017.xls', null, function(err, result) {
-      if (err)
-        sails.log.debug(err);
-      else
-        cells = result.Sheets.Hoja1;
-      for (var i = 3; i <= 132; i++) {
-        clients[i] = [];
-      }
-      for (cell in cells) {
-        var numberCell = cell.substring(1);
-        // sails.log.debug(numberCell);
-        if (numberCell == "range") {
-          break;
-        } else if (numberCell != '1' && numberCell != '2' && numberCell != 'ref') {
-          var fila = numberCell;
-          clients[fila].push(cells[cell].v);
-        }
-      }
-      // sails.log.debug(clients);
-      // var users = [];
-      // sails.log.debug(typeof clientes);
-      var userIds = [];
-      // userIds = JSON.stringify(userIds);
-      for (var i = 3; i <= 10; i++) {
-        // sails.log.debug(clients[i][1]);
-        // Organización de credenciales y cifrado de la contraseña del usuario.
-        var userCredentials = {
-          username: clients[i][4],
-          password: CriptoService.hashValor("123456"),
-          role: "cliente",
-          state: true
-        };
-        User.create(userCredentials)
-        .then(function(user) {
-          sails.log.debug(user);
-          // userIds.push(user.id);
-        })
-        .catch(function(err) {
-          sails.log.debug(err);
-        });
-        // users.push(JSON.stringify(userCredentials));
-      }
-      // sails.log.debug(Array.isArray(users));
-      // sails.log.debug(userIds)
-
-      // var j = 3;
-      // for (id in userIds) {
-      //   // sails.log.debug(clients[i][1]);
-      //   // Organización de credenciales y cifrado de la contraseña del usuario.
-      //   var clientCredentials = {
-      //     legalName: clients[j][0],
-      //     nit: clients[j][4],
-      //     tradeName: clients[j][1],
-      //     ownerName: clients[j][6],
-      //     ownerPhonenumber: clients[j][7],
-      //     businessPhonenumber: clients[j][5],
-      //     additionalInformation: null
-      //   };
-      //   j++;
-      //   // sails.log.debug(userCredentials);
-      //   // clientes.push(clientCredentials);
-      //   User.findOne(id)
-      //     .then(function(user) {
-      //       // sails.log.debug(client);
-      //       user.client.add(clientCredentials);
-      //       return user.save();
-      //     })
-      //     .catch(function(err) {
-      //       sails.log.debug(err);
-      //       return;
-      //     });
-      // }
-    });
-  },
   /**
    * Funcion para registrar un cliente.
    * @param  {Object} req Request object
@@ -414,7 +325,7 @@ module.exports = {
       'i.value, i.short_value, ' +
       'e.name AS element_name ' +
       'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
-      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+      'WHERE p.enabled = 1 AND cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
       'ORDER BY cp.product; ';
 
     // Se obtiene el id del cliente que ejecuta la petición.

@@ -1,0 +1,64 @@
+<div class="product-disable">
+  <div class="products-enabled">
+
+    <div class="header">
+      <h1>Productos activos</h1>
+    </div>
+
+    <div class="products">
+      <!-- INPUT TO FILTER ENABLED PRODUCT LIST -->
+      <div class="col-sm-12">
+        <div>
+          <div class="input-group stylish-input-group">
+            <input type="text" class="form-control" placeholder="Filtrar los productos activos"
+            ng-model="searchTextEnabled.shortName">
+            <span class="input-group-addon">
+              <button type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENABLED PRODUCT LIST -->
+      <div class="product-list">
+        <product-card ng-repeat="product in productsEnabled | filter:searchTextEnabled"
+        product="product" type="list" ng-click="disableProduct(product)">
+      </product-card>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="products-disabled">
+
+    <div class="header">
+      <h1>Productos inactivos</h1>
+    </div>
+
+    <div>
+      <!-- INPUT TO FILTER DISABLED PRODUCT LIST -->
+      <div class="col-sm-12">
+        <div>
+          <div class="input-group stylish-input-group" >
+            <input type="text" class="form-control" placeholder="Filtrar los productos inactivos"
+            ng-model="searchTextDisabled.shortName">
+            <span class="input-group-addon">
+              <button type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISABLED PRODUCT LIST -->
+      <div class="product-list">
+        <product-card ng-repeat="product in productsDisabled | filter:searchTextDisabled"
+        product="product" type="list" ng-click="enableProduct(product)">
+      </product-card>        
+      </div>
+    </div>
+  </div>
+</div>

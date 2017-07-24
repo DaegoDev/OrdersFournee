@@ -1,0 +1,66 @@
+<div class="basic-wrapper lg">
+  <div class="section-header date-production">
+    <h1 ng-click="openDatePicker()">
+      <i class="glyphicon glyphicon-calendar"></i> Producción para el: {{datePicker.date | date:'fullDate'}}
+    </h1>
+    <div class="datepicker-product">
+      <input type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}" ng-model="datePicker.date" is-open="datePicker.opened"
+        datepicker-options="datePicker.options" ng-required="true" close-text="Cerrar" clear-text="Borrar" current-text="Hoy"
+        alt-input-formats="altInputFormats" ng-change="getProducts()" readonly/>
+    </div>
+  </div>
+
+  <div class="row production-checkbox" style="padding: 0px 10px">
+    <div class="col-sm-8">
+      <div class="input-group stylish-input-group">
+        <input type="text" class="form-control"  placeholder="Filtrar los productos por nombre." ng-model="search.shortName">
+        <span class="input-group-addon">
+          <button type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="search.state[1]"/> Confirmados
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="search.state[0]"/>Pendientes
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="production-table">
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th ng-click="sortBy('code')">Código</th>
+            <th ng-click="sortBy('shortName')">Producto</th>
+            <th ng-click="sortBy('state')">Estado</th>
+            <th ng-click="sortBy('frozen')">Congelados</th>
+            <th ng-click="sortBy('baked')">Horneados</th>
+            <th ng-click="sortBy('total')" style="cursor:pointer">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="product in products | filter:stateFilter | filter:search.shortName | orderBy: sortProperty: sortReversed">
+            <td>{{product.code}}</td>
+            <td>{{product.shortName}}</td>
+            <td ng-class="{confirmed: product.state, waiting: !product.state}">{{product.state ? 'Confirmados': 'Pendientes'}}</td>
+            <td>{{product.frozen}}</td>
+            <td>{{product.baked}}</td>
+            <td style="cursor:default">{{product.frozen + product.baked}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,5 @@
-
   var fournee = angular.module('fournee');
-  fournee.controller('OrdersListCtrl', ['$scope', '$log', 'OrderService', '$ngConfirm', function($scope, $log, OrderService, $ngConfirm) {
+  fournee.controller('OrderListCtrl', ['$scope', '$log', 'OrderService', '$ngConfirm', function($scope, $log, OrderService, $ngConfirm) {
     $scope.sortByProperty = 'id';
 
     // Datepicker para la fecha de entrega

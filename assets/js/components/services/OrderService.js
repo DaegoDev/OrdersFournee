@@ -46,7 +46,16 @@ function ($http, $rootScope) {
         method: 'GET'
       });
       return getByClient;
-    }
+    },
 
+    // Servicio para obtener la cantidad total de productos para un dia especifico.
+    getProductionDay: function (credentials) {
+      var products = $http({
+        url: '/order/getProductionDay',
+        method: 'GET',
+        params: credentials
+      });
+      return products;
+    }
   };
 }]);

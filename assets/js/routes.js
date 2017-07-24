@@ -224,7 +224,7 @@ var fournee = angular.module('fournee');
         .state('order.create', {
           url: '/create',
           templateUrl: 'templates/private/client/order-create.html',
-          controller: 'orderCreateCtrl',
+          controller: 'OrderCreateCtrl',
           data: {
             permissions: {
               only: "CLIENTE",
@@ -289,10 +289,33 @@ var fournee = angular.module('fournee');
         })
 
         // Order routes
-        .state('ordersList', {
-          url: '/ordersList',
-          templateUrl: 'templates/private/employee/orders-list.html',
-          controller: 'OrdersListCtrl',
+        .state('orders',{
+          url: '/orders',
+          templateUrl: 'templates/private/employee/orders.html',
+          data: {
+            permissions: {
+              only: ["ADMINISTRADOR", "DESPACHADOR"],
+                except: "ANON",
+                redirectTo: 'home'
+            }
+          }
+        })
+        .state('orders.orderList', {
+          url: '/orderList',
+          templateUrl: 'templates/private/employee/order-list.html',
+          controller: 'OrderListCtrl',
+          data: {
+            permissions: {
+              only: ["ADMINISTRADOR", "DESPACHADOR"],
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+        .state('orders.productProduction', {
+          url: '/productProduction',
+          templateUrl: 'templates/private/employee/product-production.html',
+          controller: 'ProductProductionCtrl',
           data: {
             permissions: {
               only: ["ADMINISTRADOR", "DESPACHADOR"],

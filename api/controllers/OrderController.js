@@ -44,7 +44,7 @@ module.exports = {
     finalSuggestedTime = req.param('finalSuggestedTime');
     additionalInformation = req.param('additionalInformation');
 
-    createdAt = TimeZoneService.getDateNow({offset: -5}, null);
+    createdAt = TimeZoneService.getDateNow({offset: -300}, null);
     if (!isCorrectDeliveryDate(createdAt, deliveryDate)) {
       return res.badRequest("La fecha de entrega no es correcta");
     }
@@ -347,16 +347,92 @@ module.exports = {
        .catch(function (err) {
          res.serverError();
        })
+   },
+
+   getProductionDay: function (req, res) {
+     var destTimeStamp = req.param('timestamp');
+     var destOffset = req.param('offset');
+     var date = null;
+
+     var productList = [];
+     var currentCode = null;
+     var lastCode = null;
+     var currentState = null;
+     var lastState = null;
+     var product = null;
+
+     // Bad request: Code 1 = required parameter is null or undefined.
+     if (!destTimeStamp) {
+       return res.badRequest({code: 1, msg: 'Missing timestamp'});
+     }
+
+     if (!destOffset) {
+       return res.badRequest({code: 1, msg: 'Missing offset'});
+     }
+
+     destTimeStamp = parseInt(destTimeStamp, 10);
+     date = TimeZoneService.getDateNow({timeStamp: destTimeStamp, offset: destOffset});
+     dateStr = TimeZoneService.createDateFormat({dateObject: date});
+     sails.log.debug(date);
+     sails.log.debug(dateStr);
+     var queryStr = "SELECT \
+       o.state, o.delivery_date, \
+       p.code, p.name , p.short_name, \
+       op.amount, op.baked \
+       FROM \
+       `order` o, order_product op, client_product cp, product p \
+       WHERE \
+       o.id = op.order_id AND cp.id = op.client_product AND p.code = cp.product \
+       AND CONVERT( o.delivery_date, CHAR(10)) = ? \
+       ORDER BY p.code, o.state;";
+
+     Order.query(queryStr, [dateStr], function (err, dataRows) {
+       if (err) {
+         return res.serverError(err);
+       }
+
+       dataRows.forEach(function (row, index, dataRows) {
+         currentCode = row.code;
+         currentState = row.state;
+         if (currentCode != lastCode || currentState != lastState) {
+           lastCode = currentCode;
+           lastState = currentState;
+           product = {
+             code: row.code,
+             name: row.name,
+             shortName: row.short_name,
+             state: row.state.toUpperCase().includes("CONFIRMADO") ? 1 : 0,
+             frozen: 0,
+             baked: 0
+           };
+           productList.push(product);
+         }
+
+         if (row.baked) {
+           product.baked += row.amount;
+         } else {
+           product.frozen += row.amount;
+         }
+
+       });
+       return res.ok(productList);
+     });
    }
 };
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {
+  var createdYear = createdAt.getFullYear();
   var createdTime = createdAt.getHours();
   var createdDay = createdAt.getDate();
   var createdMonth = createdAt.getMonth();
+  var deliveryYear = deliveryDate.getFullYear();
   var deliveryDay = deliveryDate.getDate();
   var deliveryMonth = deliveryDate.getMonth();
   var isCorrect = true;
+
+  if (deliveryYear > createdYear) {
+    return true;
+  }
 
   if (deliveryMonth < createdMonth || (createdTime > 3 && deliveryDay <= createdDay) || deliveryDate.getDay() == 0) {
     isCorrect = false;

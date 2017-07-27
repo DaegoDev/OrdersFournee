@@ -229,7 +229,7 @@
       tmpInformation = $scope.order.additionalInformation;
 
       var orderCredentials = {
-        deliveryDate: tmpDeliveryDate,
+        deliveryDateDesired: tmpDeliveryDate,
         clientEmployee: tmpClientEmployee,
         initialSuggestedTime: tmpInitialTime,
         finalSuggestedTime: tmpFinalTime,
@@ -238,9 +238,11 @@
       }
       ClientSvc.makeOrder(orderCredentials)
         .then(function(res) {
+          $scope.deliveryDateEstablished = res.data.deliveryDate;
           $ngConfirm({
             title: 'Pedido realizado.',
-            content: 'El pedido ha sido realizado con exito.',
+            scope: $scope,
+            content: "El pedido ha quedado registrado con fecha de entrega: {{deliveryDateEstablished | date:'fullDate' | capitalize}} ",
             type: 'green',
             buttons: {
               new: {
@@ -296,7 +298,7 @@
       $scope.order.timeFinal = new Date();
       $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
       $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
-      $scope.today();
+      $scope.deliveryDateDefault();
       $scope.$apply();
     }
 
@@ -315,7 +317,7 @@
     };
 
     // Datepicker para la fecha de entrega
-    $scope.today = function() {
+    $scope.deliveryDateDefault = function() {
       if($scope.formToUpdate){
         $scope.order.dt = new Date(orderParam.deliveryDate);
       }else {
@@ -328,7 +330,12 @@
         }
       }
     };
-    $scope.today();
+    $scope.deliveryDateDefault();
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 1);
 
     $scope.inlineOptions = {
       customClass: getDayClass,
@@ -336,13 +343,15 @@
       showWeeks: true
     };
 
+
     $scope.dateOptions = {
       dateDisabled: disabled,
       formatYear: 'yy',
       maxDate: new Date(2020, 5, 22),
-      minDate: new Date(),
+      minDate: $scope.formToUpdate ? new Date(orderParam.deliveryDate) : tomorrow,
       startingDay: 1
     };
+
 
     // Disable weekend selection
     function disabled(data) {
@@ -363,10 +372,6 @@
       opened: false
     };
 
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var afterTomorrow = new Date();
-    afterTomorrow.setDate(tomorrow.getDate() + 1);
     $scope.events = [{
         date: tomorrow,
         status: 'full'

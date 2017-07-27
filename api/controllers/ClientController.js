@@ -68,7 +68,7 @@ module.exports = {
     sql.beginTransaction()
       .then(function() {
         return sql.select('user', {
-          username: legalName
+          username: nit
         });
       })
       .then(function(user) {

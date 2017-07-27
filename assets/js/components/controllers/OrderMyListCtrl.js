@@ -21,12 +21,12 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
         });
       })
       .catch(function(err) {
-        $ngConfirm("No se puede editar el pedido después de las 2pm del mismo día en que lo creó.")
+        $ngConfirm("Hay algún impedimiento para editar el pedido.")
       })
   }
 
   $scope.cancelOrderConfirm = function(order) {
-    OrderService.validateDateToUpdate({
+    OrderService.validateStateToCancel({
         orderId: order.id
       })
       .then(function(res) {
@@ -51,7 +51,7 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
         });
       })
       .catch(function(err) {
-        $ngConfirm("No se puede cancelar el pedido después de las 2pm del mismo día en que lo creó.")
+        $ngConfirm("El pedido no se puede cancelar, ya ha sido despachado o cancelado")
       })
   }
 

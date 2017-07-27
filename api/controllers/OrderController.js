@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var schedule = require('node-schedule');
+
 module.exports = {
 
   /**
@@ -17,6 +19,7 @@ module.exports = {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var createdAt = null;
+    var deliveryDateDesired = null;
     var deliveryDate = null;
     var state = null;
     var initialSuggestedTime = null;
@@ -28,12 +31,12 @@ module.exports = {
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     var userId = req.user.id;
 
-    var deliveryDateString = req.param('deliveryDate');
+    var deliveryDateString = req.param('deliveryDateDesired');
     if (!deliveryDateString) {
       return res.badRequest('Se debe ingresar la fecha de entrega.');
     }
     var dataDate = deliveryDateString.split("-", 3);
-    deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
+    deliveryDateDesired = new Date(dataDate[0], dataDate[1], dataDate[2]);
 
     clientEmployee = parseInt(req.param('clientEmployee'));
     if (!clientEmployee) {
@@ -47,10 +50,19 @@ module.exports = {
     createdAt = TimeZoneService.getDateNow({
       offset: -5
     }, null);
-    if (!isCorrectDeliveryDate(createdAt, deliveryDate)) {
+
+    if (!isCorrectDeliveryDate(createdAt, deliveryDateDesired)) {
       return res.badRequest("La fecha de entrega no es correcta");
     }
-    state = setState(createdAt, deliveryDate);
+    isValid = validateDeliveryDateDesired(createdAt, deliveryDateDesired);
+    if (isValid) {
+      state = "Confirmado";
+      deliveryDate = deliveryDateDesired;
+    } else {
+      state = "Pendiente de confirmación"
+      deliveryDateDesired.setDate(deliveryDateDesired.getDate() + 1);
+      deliveryDate = deliveryDateDesired;
+    }
 
     // crear las credenciales para guardar un pedido
     var orderCredentials = {
@@ -105,17 +117,35 @@ module.exports = {
         productsToOrder.forEach(function(product, i, productsToOrder) {
           product.order_id = order.insertId;
         });
-        return sql.insert('order_product', productsToOrder);
+        return Promise.all = [order.insertId, sql.insert('order_product', productsToOrder)];
       })
-      .then(function(orderProduct) {
+      .spread(function(orderId, orderProduct) {
         sql.commit();
+        if (!isValid) {
+          var rule = new schedule.RecurrenceRule();
+          rule.year = createdAt.getFullYear()
+          rule.month = createdAt.getMonth();
+          rule.date = createdAt.getDate() + 1;
+          rule.hour = 14;
+          rule.minute = 1;
+          var j = schedule.scheduleJob(orderId.toString(), rule, function(y) {
+            Order.update(orderId, {
+                state: "Confirmado"
+              })
+              .then(function(order) {
+                sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
+              })
+          }.bind(null, orderId));
+          sails.log.debug();
+        }
         connectionConfig.connection.end(function(err) {
           if (err) {
             sails.log.debug(err);
           }
         });
         res.created({
-          orderProduct: orderProduct
+          orderProduct: orderProduct,
+          deliveryDate: deliveryDate
         });
       })
       .catch(function(err) {
@@ -159,23 +189,32 @@ module.exports = {
         orderId = parseInt(orderId);
       })
     }
+    sails.log.debug(orderIds);
 
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
         id: orderIds
       })
       .then(function(order) {
-        // if (!order) {
-        //   throw "La orden no existe";
-        // } else
-        // if (!isCorrectDeliveryDate(order.deliveryDate, deliveryDate)) {
-        //   throw "La nueva fecha de entrega no es correcta";
-        // }
         return Order.update(orderIds, {
-          deliveryDate: deliveryDate
+          deliveryDate: deliveryDate,
+          state: "Confirmado",
         });
       })
       .then(function(orders) {
+        if (Array.isArray(orderIds)) {
+          orderIds.forEach(function(orderId, i, orderIds) {
+            var job = schedule.scheduledJobs[orderId.toString()];
+            if (job) {
+              job.cancel();
+            }
+          })
+        }else {
+          var job = schedule.scheduledJobs[orderIds.toString()];
+          if (job) {
+            job.cancel();
+          }
+        }
         res.ok(orders)
       })
       .catch(function(err) {
@@ -257,7 +296,7 @@ module.exports = {
           throw "La orden no existe";
         }
         return Order.update(orderId, {
-          state: 'cancelado'
+          state: 'Cancelado'
         });
       })
       .then(function(order) {
@@ -603,9 +642,6 @@ module.exports = {
           }
         });
         productsToRemove = orderProductsIds;
-        sails.log.debug(productsOrdered);
-        sails.log.debug(productsToAdd);
-        sails.log.debug(productsToRemove);
         return sql.update('order', orderCredentials, {
           id: orderId
         });
@@ -698,7 +734,7 @@ module.exports = {
       .then(function(order) {
         createdAt = new Date(order.createdAt);
         var isCorrectDate = isCorrectUpdatedDate(today, createdAt);
-        if (!isCorrectDate || order.state == "cancelado") {
+        if (!isCorrectDate || order.state == "Cancelado" || order.state == "Despachado") {
           throw "Error";
         } else {
           res.ok();
@@ -707,8 +743,59 @@ module.exports = {
       .catch(function(err) {
         res.serverError();
       })
+  },
+  /**
+   * Funcion para validar la hora para editar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  validateStateToCancel: function(req, res) {
+    // Declaración de variables
+    var orderId = null;
 
-  }
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
+
+    Order.findOne({
+        id: orderId
+      })
+      .then(function(order) {
+        if (order.state == "Despachado" || order.state == "Cancelado") {
+          throw "Error";
+        } else {
+          res.ok();
+        }
+      })
+      .catch(function(err) {
+        res.serverError();
+      })
+  },
+  // testNodeSchedule: function(req, res) {
+  //   var msg = req.param('msg');
+  //   var minute = parseInt(req.param('minute'))
+  //   var name = req.param('name')
+  //   var rule = new schedule.RecurrenceRule();
+  //   rule.date = 25;
+  //   rule.hour = 12;
+  //   rule.minute = minute;
+  //   var x = 'Tada!';
+  //   var j = schedule.scheduleJob(name, rule, function(y) {
+  //     sails.log.debug("entro")
+  //     j.cancel();
+  //     sails.log.debug(msg)
+  //     console.log(y);
+  //   }.bind(null, x));
+  //   x = 'Changing Data';
+  //   res.ok("Esperemos...")
+  // },
+  // otherTest: function (req, res) {
+  //   var my_job = schedule.scheduledJobs["15"];
+  //   my_job.cancel();
+  // }
 };
 
 function isCorrectUpdatedDate(updatedAt, createdAt) {
@@ -739,15 +826,15 @@ function isCorrectDeliveryDate(createdAt, deliveryDate) {
   return isCorrect;
 }
 
-function setState(createdAt, deliveryDate) {
+function validateDeliveryDateDesired(createdAt, deliveryDate) {
   var createdTime = createdAt.getHours();
   var createdDay = createdAt.getDate();
   var deliveryDay = deliveryDate.getDate();
-  var state = "confirmado";
+  var correct = true;
 
-  if (((createdTime > 15 && createdTime < 23) && deliveryDay == (createdDay + 1)) ||
+  if (((createdTime > 13 && createdTime < 23) && deliveryDay == (createdDay + 1)) ||
     ((createdTime >= 0 && createdTime < 4) && deliveryDay == createdDay)) {
-    state = "pendiente de confirmacion";
+    correct = false;
   }
-  return state;
+  return correct;
 }

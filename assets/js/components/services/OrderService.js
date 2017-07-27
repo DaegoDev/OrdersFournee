@@ -72,7 +72,15 @@ function ($http, $rootScope) {
         params: params
       });
       return isCorrect;
+    },
+    // Servicio para validar que puede editar un pedido.
+    validateStateToCancel: function (params) {
+      var isCorrect = $http({
+        url: '/order/validateStateToCancel',
+        method: 'POST',
+        params: params
+      });
+      return isCorrect;
     }
-
   };
 }]);

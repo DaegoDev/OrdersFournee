@@ -915,7 +915,7 @@ function isCorrectUpdatedDate(updatedAt, deliveryDate) {
   if (deliveryYear > updatedYear) {
     return isCorrect;
   }
-  if ((updatedMonth >= deliveryMonth && updatedDay >= deliveryDay) || (updatedMonth == yesterderToDeliveryDate.getMonth() && updatedDay == yesterderToDeliveryDate.getDate() && updatedTime > 13) ) {
+  if ((updatedMonth > deliveryMonth) ||(updatedMonth == deliveryMonth && updatedDay >= deliveryDay) || (updatedMonth == yesterderToDeliveryDate.getMonth() && updatedDay == yesterderToDeliveryDate.getDate() && updatedTime > 13) ) {
     isCorrect = false;
   }
   return isCorrect;

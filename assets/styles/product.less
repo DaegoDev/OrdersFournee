@@ -235,7 +235,7 @@
       padding: 5px;
       width: 140px;
 
-      transition: all 0.5s ease;
+      transition: all 0.4s ease;
 
       &:hover {
         background-color: @theme-nero-hover;
@@ -247,6 +247,17 @@
         background-color: @theme-nero;
         color: @font-white;
       }
+    }
+
+    &.selecting {
+      opacity: 1;
+    }
+    &.selecting-add {
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    &.selecting-add-active {
+      opacity: 1;
     }
   }
 
@@ -279,13 +290,13 @@
 
   &.ng-hide-remove-active {
     opacity: 1;
-    transition: 1s all ease;
-    -moz-transition: 1s all ease;
-    -webkit-transition: 1s all ease;
+    transition: 0.4s all ease;
+    -moz-transition: 0.4s all ease;
+    -webkit-transition: 0.4s all ease;
 
-    transition-delay: 1s;
-    -moz-transition-delay: 1s;
-    -webkit-transition-delay: 1s;
+    transition-delay: 0.4s;
+    -moz-transition-delay: 0.4s;
+    -webkit-transition-delay: 0.4s;
   }
 }
 
@@ -294,16 +305,16 @@
 
   &.ng-hide {
       opacity: 0;
-      transition: 1s all ease;
-      -moz-transition: 1s all ease;
-      -webkit-transition: 1s all ease;
+      transition: 0.4s all ease;
+      -moz-transition: 0.4s all ease;
+      -webkit-transition: 0.4s all ease;
   }
 
   &.ng-hide-add-active {
     opacity: 0;
-    transition: 1s all ease;
-    -moz-transition: 1s all ease;
-    -webkit-transition: 1s all ease;
+    transition: 0.4s all ease;
+    -moz-transition: 0.4s all ease;
+    -webkit-transition: 0.4s all ease;
   }
 }
 

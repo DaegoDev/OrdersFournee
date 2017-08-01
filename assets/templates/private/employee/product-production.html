@@ -30,10 +30,10 @@
           <tr>
             <th ng-click="sortBy('code')">Código</th>
             <th ng-click="sortBy('shortName')">Producto</th>
-            <th colspan="2">{{products[0].today.date}}</th>
-            <th colspan="2">{{products[0].tomorrow.date}}</th>
-            <th colspan="2"> Despues de {{products[0].otherDays.date}}</th>
-            <th ng-click="sortBy('total')" style="cursor:pointer">Total</th>
+            <th colspan="3">{{products[0].today.date}}</th>
+            <th colspan="3">{{products[0].tomorrow.date}}</th>
+            <th colspan="3"> Despues de {{products[0].otherDays.date}}</th>
+            <!-- <th ng-click="sortBy('total')" style="cursor:pointer">Total</th> -->
           </tr>
         </thead>
         <tbody>
@@ -41,22 +41,28 @@
             <td colspan="2" align="center"></td>
             <td class="frozen-color" style="text-align:center; cursor: pointer" ng-click="sortBy('today.frozen')">Congelado</td>
             <td class="baked-color" style="text-align:center; cursor: pointer" ng-click="sortBy('today.baked')">Horneado</td>
+            <td class="theme-color" style="text-align:center; cursor: pointer" >Total</td>
             <td class="frozen-color" style="text-align:center; cursor: pointer" ng-click="sortBy('tomorrow.frozen')">Congelado</td>
             <td class="baked-color" style="text-align:center; cursor: pointer" ng-click="sortBy('tomorrow.baked')">Horneado</td>
+            <td class="theme-color" style="text-align:center; cursor: pointer" >Total</td>
             <td class="frozen-color" style="text-align:center; cursor: pointer" ng-click="sortBy('otherDays.frozen')">Congelado</td>
             <td class="baked-color" style="text-align:center; cursor: pointer" ng-click="sortBy('otherDays.baked')">Horneado</td>
-            <td></td>
+            <td class="theme-color" style="text-align:center; cursor: pointer" >Total</td>
+            <!-- <td></td> -->
           </tr>
           <tr ng-repeat="product in products | filter:search.shortName | orderBy: sortProperty: sortReversed">
             <td>{{product.code}}</td>
             <td>{{product.shortName}}</td>
             <td>{{product.today.frozen}}</td>
             <td>{{product.today.baked}}</td>
+            <td >{{product.today.frozen + product.today.baked}}</td>
             <td>{{product.tomorrow.frozen}}</td>
             <td>{{product.tomorrow.baked}}</td>
+            <td >{{product.tomorrow.frozen + product.tomorrow.baked}}</td>
             <td>{{product.otherDays.frozen}}</td>
             <td>{{product.otherDays.baked}}</td>
-            <td style="cursor:default">{{product.total}}</td>
+            <td >{{product.otherDays.frozen + product.otherDays.baked}}</td>
+            <!-- <td style="cursor:default">{{product.total}}</td> -->
           </tr>
         </tbody>
       </table>

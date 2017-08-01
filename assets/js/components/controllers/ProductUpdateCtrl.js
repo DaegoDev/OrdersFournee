@@ -1,8 +1,8 @@
 (function () {
   var fournee = angular.module('fournee');
 
-  fournee.controller('ProductUpdateCtrl', ['$scope','$log', '$state', '$ngConfirm', 'productSvc', 'productItemSvc',
-  function ($scope, $log, $state, $ngConfirm, productSvc, productItemSvc) {
+  fournee.controller('ProductUpdateCtrl', ['$scope','$log', '$timeout', '$state', '$ngConfirm', 'productSvc', 'productItemSvc',
+  function ($scope, $log, $timeout, $state, $ngConfirm, productSvc, productItemSvc) {
     $scope.selecting = true;
     $scope.selectedProduct = {};
     $scope.selectedElement = null;
@@ -148,6 +148,7 @@
 
     // Function to select a element which items will be shown in the item box.
     $scope.selectElement = function (element) {
+      $scope.selectingElement = true;
       if ($scope.selectedElement && element !== $scope.selectedElement) {
         $scope.selectedElement.selected = false;
       }
@@ -155,6 +156,10 @@
       $scope.selectedElement = element;
       currentElement = $scope.selectedElement;
       currentElement.selected = true;
+
+      $timeout(function () {
+        $scope.selectingElement = false;
+      }, 500);
     }
 
     // Function to select an item of a selected category

@@ -216,9 +216,6 @@ label {
       color: @font-tussock;
       padding: 10px 1px;
       cursor: pointer;
-      &:last-child {
-          cursor: default;
-      }
 
       &:hover {
         color: @font-white;
@@ -234,23 +231,6 @@ label {
 
       &:nth-child(2) {
         text-align: left;
-      }
-
-      &:last-child {
-        background-color: @theme-nero;
-        color: @font-tussock;
-        font-weight: bold;
-        span {
-          width: 100%;
-          text-align: center;
-          display: block;
-          padding: 10px;
-          margin: auto;
-        }
-        &:hover {
-          color: @font-white;
-          cursor: pointer;
-        }
       }
     }
   }
@@ -285,8 +265,8 @@ label {
 }
 
 .theme-color {
-  background-color: @theme-nero;
-  color: @font-tussock;
+  background-color: #5CB85C;
+  color: @font-white;
 }
 
 .frozen-color {

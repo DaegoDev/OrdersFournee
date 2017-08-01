@@ -813,11 +813,16 @@ function isCorrectUpdatedDate(updatedAt, createdAt) {
 }
 
 function isCorrectDeliveryDate(createdAt, deliveryDate) {
+  sails.log.debug(deliveryDate);
   var createdTime = createdAt.getHours();
   var createdDay = createdAt.getDate();
+  sails.log.debug(createdDay);
   var createdMonth = createdAt.getMonth();
+  sails.log.debug(createdMonth);
   var deliveryDay = deliveryDate.getDate();
+  sails.log.debug(deliveryDay);
   var deliveryMonth = deliveryDate.getMonth();
+  sails.log.debug(deliveryMonth);
   var isCorrect = true;
 
   if (deliveryMonth < createdMonth || (createdTime > 3 && deliveryDay <= createdDay) || deliveryDate.getDay() == 0) {

@@ -1,0 +1,65 @@
+<div class="basic-wrapper lg">
+  <div class="section-header date-production">
+    <h1 ng-click="openDatePicker()">
+      <i class="glyphicon glyphicon-calendar"></i> Productos desde el: {{datePicker.date | date:'fullDate'}}
+    </h1>
+    <div class="datepicker-product">
+      <input type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}" ng-model="datePicker.date" is-open="datePicker.opened"
+        datepicker-options="datePicker.options" ng-required="true" close-text="Cerrar" clear-text="Borrar" current-text="Hoy"
+        alt-input-formats="altInputFormats" ng-change="getProducts()" readonly/>
+    </div>
+  </div>
+
+  <div class="row" style="padding: 0px 10px">
+    <div class="col-sm-12">
+      <div class="input-group stylish-input-group">
+        <input type="text" class="form-control"  placeholder="Filtrar los productos." ng-model="search.shortName">
+        <span class="input-group-addon">
+          <button type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="production-table">
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th ng-click="sortBy('code')">Código</th>
+            <th ng-click="sortBy('shortName')">Producto</th>
+            <th colspan="2">{{products[0].today.date}}</th>
+            <th colspan="2">{{products[0].tomorrow.date}}</th>
+            <th colspan="2"> Despues de {{products[0].otherDays.date}}</th>
+            <th ng-click="sortBy('total')" style="cursor:pointer">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="2" align="center"></td>
+            <td class="frozen-color" style="text-align:center; cursor: pointer" ng-click="sortBy('today.frozen')">Congelado</td>
+            <td class="baked-color" style="text-align:center; cursor: pointer" ng-click="sortBy('today.baked')">Horneado</td>
+            <td class="frozen-color" style="text-align:center; cursor: pointer" ng-click="sortBy('tomorrow.frozen')">Congelado</td>
+            <td class="baked-color" style="text-align:center; cursor: pointer" ng-click="sortBy('tomorrow.baked')">Horneado</td>
+            <td class="frozen-color" style="text-align:center; cursor: pointer" ng-click="sortBy('otherDays.frozen')">Congelado</td>
+            <td class="baked-color" style="text-align:center; cursor: pointer" ng-click="sortBy('otherDays.baked')">Horneado</td>
+            <td></td>
+          </tr>
+          <tr ng-repeat="product in products | filter:search.shortName | orderBy: sortProperty: sortReversed">
+            <td>{{product.code}}</td>
+            <td>{{product.shortName}}</td>
+            <td>{{product.today.frozen}}</td>
+            <td>{{product.today.baked}}</td>
+            <td>{{product.tomorrow.frozen}}</td>
+            <td>{{product.tomorrow.baked}}</td>
+            <td>{{product.otherDays.frozen}}</td>
+            <td>{{product.otherDays.baked}}</td>
+            <td style="cursor:default">{{product.total}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

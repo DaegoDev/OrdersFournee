@@ -8,7 +8,7 @@
     <div class="section-deliveryDate">
       <p class="input-group col-sm-3">
         <input type="text" id="date" ng-change="getOrdersByDeliveryDate()" class="form-control" uib-datepicker-popup="{{format}}"
-        ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
+        ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Cerrar" clear-text="Borrar" current-text="Hoy"
         alt-input-formats="altInputFormats" ng-click="open1()" readonly/>
       </p>
     </div>
@@ -17,8 +17,46 @@
   <!-- ORDERS CHANGE ATTR -->
   <div class="" style="padding: 5px">
     <div class="toolbar-listOrder form-inline">
+
+      <!-- FILTERS -->
+      <div class="col-sm-1" uib-dropdown dropdown-append-to-body auto-close="outsideClick">
+        <button id="btn-append-to-body" type="button" class="btn btn-sm btn-sienna" uib-dropdown-toggle>
+          Filtros <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu order-filter" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+          <li role="menuitem">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-true-value="'confirmado'" ng-false-value="''" ng-model="checkFilter"/> Confirmado
+              </label>
+            </div>
+          </li>
+          <li role="menuitem">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-true-value="'pendiente'" ng-false-value="''" ng-model="checkFilter"/> Pendiente
+              </label>
+            </div>
+          </li>
+          <li role="menuitem">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-true-value="'alistado'" ng-false-value="''" ng-model="checkFilter"/> Alistado
+              </label>
+            </div>
+          </li>
+          <li role="menuitem">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-true-value="'despachado'" ng-false-value="''" ng-model="checkFilter"/> Despachado
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div>
+
       <!-- ESTATE CHANGE -->
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6 col-sm-offset">
         <label for="states">Estados: </label>
         <div class="input-group">
           <select class="form-control input-sm" id="states" ng-model="placement.selected"
@@ -30,7 +68,7 @@
       </div>
 
       <!-- DATE CHANGE -->
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-5">
         <label for="inputDate">Fecha:</label>
         <div class="input-group">
           <input type="text" id="inputDate" class="form-control input-sm"
@@ -44,24 +82,6 @@
       </div>
     </div>
 
-    <!-- CHECKBOX FILTER -->
-    <div class="checkbox-filter">
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-true-value="'confirmado'" ng-false-value="''" ng-model="checkFilter">Confirmado
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-true-value="'pendiente'" ng-false-value="''" ng-model="checkFilter">Pendiente
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-true-value="'alistado'" ng-false-value="''" ng-model="checkFilter">Alistado
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-true-value="'despachado'" ng-false-value="''" ng-model="checkFilter">Despachado
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-true-value="'cancelado'" ng-false-value="''" ng-model="checkFilter">Cancelado
-      </label>
-    </div>
     <!-- ORDER LIST -->
     <div class="table-container">
       <div class="table-responsive">

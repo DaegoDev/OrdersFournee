@@ -1,4 +1,4 @@
--(function () {
+(function () {
   var fournee = angular.module('fournee');
 
   fournee.controller('productDisableCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'productItemSvc', 'productSvc',

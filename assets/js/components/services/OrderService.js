@@ -55,6 +55,15 @@ function ($http, $rootScope) {
       });
       return getByClient;
     },
+    // Servicio para obtener la cantidad total de productos para un dia especifico.
+    getProductionAfterDate: function (credentials) {
+      var products = $http({
+        url: '/order/getProductionAfterDate',
+        method: 'GET',
+        params: credentials
+      });
+      return products;
+    },
     // Servicio para obtener los productos seleccionados para un pedido.
     getProductsSelected: function (params) {
       var products = $http({

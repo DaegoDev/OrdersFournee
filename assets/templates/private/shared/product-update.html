@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-      <div class="item-list">
+      <div class="item-list" ng-class="{selecting: selectingElement}">
         <div class="item" ng-repeat="item in selectedElement.items"
         ng-class="{selected: item.selected}" ng-click="selectItem(item)">
         <p>{{item.value}}</p>

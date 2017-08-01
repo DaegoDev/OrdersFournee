@@ -322,7 +322,6 @@
       if($scope.formToUpdate){
         $scope.order.dt = new Date(orderParam.deliveryDate);
       }else {
-        console.log($scope.order.dt);
         $scope.order.dt = new Date();
         if ($scope.order.dt.getDay() == 6) {
           $scope.order.dt.setDate($scope.order.dt.getDate() + 2);

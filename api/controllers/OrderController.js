@@ -44,7 +44,7 @@ module.exports = {
     finalSuggestedTime = req.param('finalSuggestedTime');
     additionalInformation = req.param('additionalInformation');
 
-    createdAt = TimeZoneService.getDateNow({offset: -300}, null);
+    createdAt = TimeZoneService.getDate({offset: -300}, null);
     if (!isCorrectDeliveryDate(createdAt, deliveryDate)) {
       return res.badRequest("La fecha de entrega no es correcta");
     }
@@ -349,72 +349,106 @@ module.exports = {
        })
    },
 
-   getProductionDay: function (req, res) {
-     var destTimeStamp = req.param('timestamp');
-     var destOffset = req.param('offset');
-     var date = null;
+   getProductionAfterDate: function (req, res) {
+     var timestamp = req.param('timestamp');
+     var offset = req.param('offset');
+
+     var today = null;
+     var tomorrow = null;
+     var todayStr = null;
+     var tomorrowStr = null;
 
      var productList = [];
      var currentCode = null;
      var lastCode = null;
-     var currentState = null;
-     var lastState = null;
      var product = null;
+     var day = null;
 
      // Bad request: Code 1 = required parameter is null or undefined.
-     if (!destTimeStamp) {
+     if (!timestamp) {
        return res.badRequest({code: 1, msg: 'Missing timestamp'});
      }
 
-     if (!destOffset) {
+     if (!offset) {
        return res.badRequest({code: 1, msg: 'Missing offset'});
      }
 
-     destTimeStamp = parseInt(destTimeStamp, 10);
-     date = TimeZoneService.getDateNow({timeStamp: destTimeStamp, offset: destOffset});
-     dateStr = TimeZoneService.createDateFormat({dateObject: date});
-     sails.log.debug(date);
-     sails.log.debug(dateStr);
-     var queryStr = "SELECT \
-       o.state, o.delivery_date, \
-       p.code, p.name , p.short_name, \
-       op.amount, op.baked \
-       FROM \
-       `order` o, order_product op, client_product cp, product p \
-       WHERE \
-       o.id = op.order_id AND cp.id = op.client_product AND p.code = cp.product \
-       AND CONVERT( o.delivery_date, CHAR(10)) = ? \
-       ORDER BY p.code, o.state;";
+     timestamp = parseInt(timestamp, 10);
 
-     Order.query(queryStr, [dateStr], function (err, dataRows) {
+     today = TimeZoneService.getDate({timestamp: timestamp, offset: offset});
+     tomorrow = new Date(today.getTime());
+     tomorrow.setDate(tomorrow.getDate() + 1);
+
+     todayStr = TimeZoneService.createFullDateFormat({dateObject: today});
+
+     var queryStr = "SELECT \
+     p.code, p.name , p.short_name as shortName, \
+     o.delivery_date AS deliveryDate, \
+     op.amount, op.baked \
+     FROM \
+     product p, `order` o, order_product op, client_product cp \
+     WHERE \
+     o.id = op.order_id AND cp.id = op.client_product AND p.code = cp.product \
+     AND o.delivery_date >= ? \
+     ORDER BY p.code;"
+
+     todayStr = TimeZoneService.createDateFormat({dateObject: today});
+     tomorrowStr = TimeZoneService.createDateFormat({dateObject: tomorrow});
+
+     Order.query(queryStr, [todayStr], function (err, rows) {
        if (err) {
          return res.serverError(err);
        }
 
-       dataRows.forEach(function (row, index, dataRows) {
-         currentCode = row.code;
-         currentState = row.state;
-         if (currentCode != lastCode || currentState != lastState) {
-           lastCode = currentCode;
-           lastState = currentState;
-           product = {
-             code: row.code,
-             name: row.name,
-             shortName: row.short_name,
-             state: row.state.toUpperCase().includes("CONFIRMADO") ? 1 : 0,
-             frozen: 0,
-             baked: 0
-           };
-           productList.push(product);
-         }
+       rows.forEach(function (row, index, rows) {
+          currentCode = row.code;
+          if (currentCode != lastCode) {
+            lastCode = currentCode;
 
-         if (row.baked) {
-           product.baked += row.amount;
-         } else {
-           product.frozen += row.amount;
-         }
+            product = {
+              code: row.code,
+              name: row.name,
+              shortName: row.shortName,
+              total: 0,
+              today: {
+                date: todayStr,
+                baked: 0,
+                frozen: 0
+              },
+              tomorrow: {
+                date: tomorrowStr,
+                baked: 0,
+                frozen: 0
+              },
+              otherDays: {
+                date: tomorrowStr,
+                baked: 0,
+                frozen: 0
+              }
+            };
+
+            productList.push(product);
+          }
+
+          if (row.deliveryDate.toISOString().includes(todayStr)) {
+            day = product.today;
+          }
+          else if (row.deliveryDate.toISOString().includes(tomorrowStr)) {
+            day = product.tomorrow;
+          } else {
+            day = product.otherDays;
+          }
+
+          if (row.baked) {
+            day.baked += row.amount;
+          } else {
+            day.frozen += row.amount;
+          }
+
+          product.total += row.amount;
 
        });
+
        return res.ok(productList);
      });
    }

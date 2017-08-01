@@ -145,6 +145,18 @@ var fournee = angular.module('fournee');
             }
           }
         })
+        .state('product.update', {
+          url: '/update',
+          templateUrl: 'templates/private/shared/product-update.html',
+          controller: 'ProductUpdateCtrl',
+          data: {
+            permissions: {
+              only: "ADMINISTRADOR",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
         .state('product.create', {
           url: '/create',
           templateUrl: 'templates/private/shared/product-create.html',

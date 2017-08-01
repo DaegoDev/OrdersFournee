@@ -49,9 +49,9 @@ function ($http, $rootScope) {
     },
 
     // Servicio para obtener la cantidad total de productos para un dia especifico.
-    getProductionDay: function (credentials) {
+    getProductionAfterDate: function (credentials) {
       var products = $http({
-        url: '/order/getProductionDay',
+        url: '/order/getProductionAfterDate',
         method: 'GET',
         params: credentials
       });

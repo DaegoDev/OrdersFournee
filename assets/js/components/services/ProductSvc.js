@@ -11,6 +11,15 @@ function ($http, $rootScope) {
       });
       return create;
     },
+    // Updates the items of a product.
+    updateProduct: function (credentials) {
+      var product = $http({
+        url: '/product/update',
+        method: 'PUT',
+        params: credentials
+      });
+      return product;
+    },
     // Enables a given product.
     enableProduct: function (credentials) {
       var product = $http({

@@ -19,11 +19,8 @@
       }
     };
 
-    // If the current hour is over 2pm then we get products of next day.
     date = $scope.datePicker.date;
-    if (date.getHours() >= 13) {
-      date.setDate(date.getDate() + 1)
-    }
+    date.setDate(date.getDate() + 1);
 
     $scope.search = {
       shortName: '',
@@ -34,12 +31,13 @@
     }
 
     $scope.getProducts = function () {
-      OrderService.getProductionDay(
+      OrderService.getProductionAfterDate(
         {
           timestamp: $scope.datePicker.date.getTime(),
           offset: (-1) * $scope.datePicker.date.getTimezoneOffset()
         })
         .then(function (res) {
+          $log.log(res.data);
           $scope.products = res.data;
         })
         .catch(function (err) {

@@ -1,0 +1,70 @@
+<!-- PRODUCT SELECTION -->
+<div class="product-select" ng-show="selecting">
+  <div class="section-header">
+    <h1>Selecciona el producto.</h1>
+  </div>
+
+  <!-- SEARCH FILTER -->
+  <div class="col-sm-12">
+    <div>
+      <div class="input-group stylish-input-group" style="margin: 10px">
+        <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchText.shortName">
+        <span class="input-group-addon">
+          <button type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT LIST -->
+  <product-card ng-repeat="product in products | filter: searchText" product="product" type="list" ng-click="selectProduct(product)"> </product-card>
+</div>
+
+<!-- PRODUCT EDITION -->
+<div class="product-edit" ng-show="!selecting">
+  <div class="section-header">
+    <h1>Editando el producto.</h1>
+  </div>
+
+  <div class="containers">
+    <div class="left-container">
+      <div class="form-horizontal product-info">
+        <div class="form-group">
+          <label for="name" class="col-sm-2">Nombre</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="name" value="{{selectedProduct.name}}" readonly>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="shortName" class="col-sm-2">Nombre abreviado</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="shortName" value="{{selectedProduct.shortName}}" readonly>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-inline col-sm-offset-2">
+            <input type="button" class="btn btn-sienna" ng-click="exit()" value="Cancelar">
+            <input type="button" class="btn btn-sienna" ng-click="updateProduct()" value="Aceptar">
+          </div>
+        </div>
+      </div>
+      <div class="item-list">
+        <div class="item" ng-repeat="item in selectedElement.items"
+        ng-class="{selected: item.selected}" ng-click="selectItem(item)">
+        <p>{{item.value}}</p>
+        <p><i>{{item.shortValue}}</i></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-container">
+    <div class="element" ng-repeat="element in elements"
+    ng-class="{selected: element.selected}" ng-click="selectElement(element)">
+    <p>{{element.name}}</p>
+    <p><i>{{element.selectedItem.shortValue}}</i></p>
+    </div>
+  </div>
+</div>
+</div>

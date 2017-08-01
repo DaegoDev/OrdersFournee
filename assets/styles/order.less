@@ -203,18 +203,6 @@ label {
         text-align: left;
       }
 
-      &.confirmed {
-        color: @font-white;
-        font-weight: bold;
-        background-color: #5CB85C;
-      }
-
-      &.waiting {
-        color: @font-white;
-        font-weight: bold;
-        background-color: #D9534F;
-      }
-
       &:last-child {
         background-color: @theme-nero;
         color: @font-tussock;
@@ -261,4 +249,19 @@ label {
       }
     }
   }
+}
+
+.theme-color {
+  background-color: @theme-nero;
+  color: @font-tussock;
+}
+
+.frozen-color {
+  background-color: #0275D8;
+  color: @font-white;
+}
+
+.baked-color {
+  background-color: #D9534F;
+  color: @font-white;
 }

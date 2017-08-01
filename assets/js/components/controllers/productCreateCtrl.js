@@ -54,7 +54,7 @@ function($scope, $log, $state, $ngConfirm, productItemSvc, productSvc) {
       .then(function(res) {
         $ngConfirm({
           title: 'Producto creado.',
-          content: 'El producto ha sido creado con exito.',
+          content: 'El producto ha sido creado con éxito.',
           type: 'green',
           buttons: {
             new: {

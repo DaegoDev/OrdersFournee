@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  // migrate: 'drop',
+  migrate: 'safe',
   tableName: 'address',
   attributes: {
     country: {

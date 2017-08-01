@@ -57,7 +57,6 @@
           $scope.signup.$setPristine();
           $scope.signup.$setUntouched();
 
-          console.log(name);
           $ngConfirm({
             title: 'Empleado guardado correctamente!',
             content: 'Notifiquele las credenciales de autenticación asignadas.\

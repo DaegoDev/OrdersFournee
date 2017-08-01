@@ -108,6 +108,14 @@ function ($http) {
       });
       return order;
     },
+    updateOrder: function (orderCredentials) {
+      var order = $http({
+        url: '/order/update',
+        methot: 'POST',
+        params: orderCredentials
+      });
+      return order;
+    },
     changeProductName: function (productCredentials) {
       var product = $http({
         url: '/client/changeProductName',

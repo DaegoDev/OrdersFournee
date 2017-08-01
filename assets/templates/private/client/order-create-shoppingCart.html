@@ -1,10 +1,14 @@
-<div class="">
-  <div class="product-selection">
-    <div class="products">
-      <div class="title">
-        Lista de productos
+<div>
+  <form class="form-horizontal" name="shoppingCart" ng-submit="validateProducts()" novalidate>
+    <div class="product-selection">
+      <div class="products">
+        <div class="title">
+          Lista de productos
+        </div>
+        <product-card ng-repeat="product in products" product="product" type="orderProduct" select-list="orderList" control="product.control">
+        </product-card>
       </div>
-      <div class="row" style="margin-left:2px; margin-right:2px">
+      <!-- <div class="row" style="margin-left:2px; margin-right:2px">
             <div class="col-sm-12">
                 <div>
                     <div class="input-group stylish-input-group">
@@ -21,24 +25,25 @@
       <product-card ng-repeat="product in products | filter:searchText" product="product" type="orderProduct"
         select-list="orderList" control="product.control">>
       </product-card>
-    </div>
+    </div> -->
 
-    <div class="selected-products">
-      <div class="title">
-        Seleccionados
-      </div>
-      <div ng-repeat="product in orderList" class="product order" ng-click="deselectProduct(product)">
-        <span class="product-name">{{product.name}}</span>
-        <span class="product-baked">{{product.baked | bakedFilter}}</span>
-        <span class="product-amount">X{{product.amount}}</span>
-        <div class="hover-trash">
-          <span class="fa fa-trash"></span>
+      <div class="selected-products">
+        <div class="title">
+          Seleccionados
+        </div>
+        <div ng-repeat="product in orderList" class="product order" ng-click="deselectProduct(product)">
+          <span class="product-name">{{product.name}}</span>
+          <span class="product-baked">{{product.baked | bakedFilter}}</span>
+          <span class="product-amount">X{{product.amount}}</span>
+          <div class="hover-trash">
+            <span class="fa fa-trash"></span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="button-nav">
-    <button type="button" name="button" ng-click="validateProducts()" class="btn btn-md btn-sienna">Confirmar</button>
-    <button type="button" name="button" ui-sref="home" class="btn btn-md btn-sienna">Salir</button>
-  </div>
+    <div class="button-nav">
+      <button type="submit" class="btn btn-md btn-sienna">Confirmar</button>
+      <button type="button" ui-sref="home" class="btn btn-md btn-sienna">Salir</button>
+    </div>
+  </form>
 </div>

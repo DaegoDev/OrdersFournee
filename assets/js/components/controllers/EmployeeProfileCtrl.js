@@ -5,7 +5,6 @@
 
     ProfileService.getProfileEmployee()
       .then(function(res) {
-        // console.log(res.data);
         $scope.employee = res.data;
       })
       .catch(function(err) {
@@ -21,7 +20,7 @@
 
       var employeeCredentials = {
         name: name,
-      }  
+      }
 
       EmployeeSvc.updateInformation(employeeCredentials)
         .then(function(res) {
@@ -35,7 +34,6 @@
           $scope.update.$setUntouched();
         })
         .catch(function(err) {
-          console.log(err);
           $scope.alertMessageEmployee = "No se ha podido actualizar la información.";
           $scope.signingUp = false;
           $scope.signupError = true;
@@ -96,7 +94,6 @@
           $scope.pswForm.$setUntouched();
         })
         .catch(function(err) {
-          console.log(err);
           $scope.alertMessagePassword = "La contraseña no ha sido cambiada, verifique su contraseña actual.";
           $scope.processing = false;
           $scope.error = true;
@@ -106,7 +103,6 @@
 
     // switch flag
     $scope.switchAlert = function(value) {
-      // console.log(value);
       $scope[value] = !$scope[value];
     };
   }]);

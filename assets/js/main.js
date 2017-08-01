@@ -74,13 +74,11 @@ fournee.filter('stateFilter', function() {
     return 'Inactivo';
   }
 });
-// 
+//
 // fournee.filter('orderByDay', function() {
 //   return function(object) {
 //     var json = {};
-//     console.log(object);
 //     angular.forEach(object, function(value, key) {
-//       console.log(value);
 //       json[value.weekDay.name] = {
 //         weekDay: {}
 //       }

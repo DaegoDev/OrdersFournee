@@ -22,7 +22,6 @@ function ($http, $rootScope) {
     },
     // Servicio para cambiar la fecha de entrega de un pedido
     changeDeliveryDate: function(credentials) {
-      console.log(credentials);
       var change = $http({
         url: '/order/updateDeliveryDate',
         method: 'PUT',
@@ -39,6 +38,15 @@ function ($http, $rootScope) {
       });
       return change;
     },
+    // Servicio para cancelar un pedido
+    cancelOrder: function(credentials) {
+      var cancel = $http({
+        url: '/order/cancelOrder',
+        method: 'PUT',
+        params: credentials
+      });
+      return cancel;
+    },
     // Servicio para obtener los pedidos de un cliente
     getOrdersByClient: function () {
       var getByClient = $http({
@@ -47,7 +55,6 @@ function ($http, $rootScope) {
       });
       return getByClient;
     },
-
     // Servicio para obtener la cantidad total de productos para un dia especifico.
     getProductionAfterDate: function (credentials) {
       var products = $http({
@@ -56,6 +63,33 @@ function ($http, $rootScope) {
         params: credentials
       });
       return products;
+    },
+    // Servicio para obtener los productos seleccionados para un pedido.
+    getProductsSelected: function (params) {
+      var products = $http({
+        url: '/order/getProductsSelected',
+        method: 'GET',
+        params: params
+      });
+      return products;
+    },
+    // Servicio para validar que puede editar un pedido.
+    validateDateToUpdate: function (params) {
+      var isCorrect = $http({
+        url: '/order/validateDateToUpdate',
+        method: 'POST',
+        params: params
+      });
+      return isCorrect;
+    },
+    // Servicio para validar que puede editar un pedido.
+    validateStateToCancel: function (params) {
+      var isCorrect = $http({
+        url: '/order/validateStateToCancel',
+        method: 'POST',
+        params: params
+      });
+      return isCorrect;
     }
   };
 }]);

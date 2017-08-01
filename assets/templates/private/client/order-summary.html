@@ -1,0 +1,87 @@
+<div class="order-details">
+  <h3>La siguiente información se enviará en su pedido,
+    si está seguro de la datos ingresados seleccione la opción confirmar. </h3>
+  <fieldset>
+    <legend>Información del perfil</legend>
+    <div class="group">
+      <label class="label-item">Departamento:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{client.deliveryAddress.department}}" readonly>
+      </div>
+      <label class="label-item">Ciudad:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{client.deliveryAddress.city}}" readonly>
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-item">Barrio:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{client.deliveryAddress.neighborhood}}" readonly>
+      </div>
+      <label class="label-item">Nomenclatura:</label>
+      <div class="text-item">
+        <input type="text" class="form-control" value="{{client.deliveryAddress.nomenclature}}" readonly>
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-reference">Referencia:</label>
+      <div class="text-reference">
+        <input type="text" class="form-control" value="{{client.deliveryAddress.additionalInformation}}" readonly>
+      </div>
+    </div>
+    <div class="group">
+      <label class="phonenumber-label">Teléfono:</label>
+      <div class="phonenumber-text">
+        <input type="text" class="form-control" value="{{client.businessPhonenumber}}" readonly>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Información del pedido</legend>
+    <div class="group">
+      <label class="date-label">Fecha de entrega:</label>
+      <div class="date-text">
+        <input type="text" class="form-control" value="{{order.dt | date:'mediumDate' | capitalize}}" readonly>
+      </div>
+    </div>
+    <div class="group">
+      <label class="suggestTime-label">Hora deseada para la entrega:</label>
+      <div class="suggestTime-text">
+        <input type="text" class="form-control" value="{{order.timeInitial.getHours()}}:{{order.timeInitial.getMinutes()}} - {{order.timeFinal.getHours()}}:{{order.timeFinal.getMinutes()}}" readonly>
+      </div>
+    </div>
+    <div class="group">
+      <label class="employee-label">Empleado que realiza el pedido:</label>
+      <div class="employee-text">
+        <input type="text" class="form-control" value="{{placement.selected.name}}" readonly>
+      </div>
+    </div>
+    <div class="group">
+      <label class="label-comment">Comentario:</label>
+      <textarea class="form-control textarea-comment" readonly>{{order.additionalInformation}}</textarea>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Productos</legend>
+    <div class="table-container">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped table-condensed">
+          <thead>
+            <tr>
+              <th style="font-weight:bold">Nombre</th>
+              <th style="font-weight:bold">Cantidad</th>
+              <th style="font-weight:bold">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="product in orderList">
+              <td>{{product.name}}</td>
+              <td>{{product.amount}}</td>
+              <td>{{product.baked | bakedFilter}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </fieldset>
+</div>

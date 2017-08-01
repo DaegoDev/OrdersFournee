@@ -237,6 +237,9 @@ var fournee = angular.module('fournee');
           url: '/create',
           templateUrl: 'templates/private/client/order-create.html',
           controller: 'OrderCreateCtrl',
+          params: {
+            order: null
+          },
           data: {
             permissions: {
               only: "CLIENTE",
@@ -247,6 +250,17 @@ var fournee = angular.module('fournee');
         })
         .state('order.create.shoppingCart', {
           url: '/shoppingCart',
+          templateUrl: 'templates/private/client/order-create-shoppingCart.html',
+          data: {
+            permissions: {
+              only: "CLIENTE",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+        .state('order.create.shoppingCartUpdate', {
+          url: '/shoppingCartUpdate',
           templateUrl: 'templates/private/client/order-create-shoppingCart.html',
           data: {
             permissions: {

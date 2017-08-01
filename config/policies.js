@@ -67,7 +67,9 @@ module.exports.policies = {
     updateDeliveryDate: 'isEmployee',
     changeState: 'isEmployee',
     getByDeliveryDate: 'isEmployee',
-    getByClient: 'isClient'
+    getByClient: 'isClient',
+    cancelOrder: 'isClient',
+    update: 'isClient'
   },
 
   ProductController: {

@@ -7,7 +7,6 @@
  */
 
 module.exports = {
-  // migrate: 'safe',
   tableName: 'product',
   attributes: {
     code: {

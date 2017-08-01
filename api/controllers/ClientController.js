@@ -8,7 +8,6 @@
 var cv2json = require('convert-json');
 
 module.exports = {
-
   /**
    * Funcion para registrar un cliente.
    * @param  {Object} req Request object
@@ -69,7 +68,7 @@ module.exports = {
     sql.beginTransaction()
       .then(function() {
         return sql.select('user', {
-          username: legalName
+          username: nit
         });
       })
       .then(function(user) {

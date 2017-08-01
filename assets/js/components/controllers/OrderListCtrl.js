@@ -80,10 +80,11 @@
 
     // Dropdown para listar los estados de un pedido;
     $scope.placement = {
-      options: ['Confirmado',
-        'Pendiente de confirmación',
+      options: ['Pendiente de confirmación',
+        'Confirmado',
         'Alistado',
-        'Despachado'
+        'Despachado',
+        'Cancelado'
       ],
       selected: 'Confirmado',
     };
@@ -94,7 +95,6 @@
         .then(function(res) {
           $scope.orders = res.data;
           $scope.setCheckboxObj();
-          // console.log(res.data);
         })
         .catch(function(err) {
           $log.debug('Error getting orders');
@@ -171,8 +171,6 @@
       OrderService.changeState(credentials)
         .then(function(res) {
           var updatedOrders = res.data;
-          console.log(updatedOrders);
-          console.log($scope.orders);
           angular.forEach(updatedOrders, function(order, index) {
             updateField("state", order.id, order.state);
           })

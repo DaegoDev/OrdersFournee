@@ -1,5 +1,5 @@
   var fournee = angular.module('fournee');
-  fournee.controller('OrderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', 'OrderService', '$stateParams', 'ProfileService', 
+  fournee.controller('OrderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', 'OrderService', '$stateParams', 'ProfileService',
   function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams, ProfileService) {
     // Timepicker para el rango de hora sugerida
 

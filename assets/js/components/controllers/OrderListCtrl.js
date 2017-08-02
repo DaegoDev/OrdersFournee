@@ -1,6 +1,12 @@
   var fournee = angular.module('fournee');
   fournee.controller('OrderListCtrl', ['$scope', '$log', 'OrderService', '$ngConfirm', function($scope, $log, OrderService, $ngConfirm) {
     $scope.sortByProperty = 'id';
+    $scope.checkList = [
+      {text: "Confirmado", value: "CONFIRMADO", checked: true},
+      {text: "Pendiente", value: "PENDIENTE", checked: true},
+      {text: "Alistado", value: "ALISTADO", checked: true},
+      {text: "Despachado", value: "DESPACHADO", checked: true}
+    ];
 
     // Datepicker para la fecha de entrega
     $scope.today = function() {

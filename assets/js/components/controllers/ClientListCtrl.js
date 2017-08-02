@@ -5,7 +5,6 @@ var fournee = angular.module('fournee');
     ClientSvc.getClients()
       .then(function (res) {
         $scope.clients = res.data;
-        $log.info(res);
       })
       .catch(function (err) {
         $log.error('It has no been posible to get all clients.')

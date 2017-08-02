@@ -76,7 +76,6 @@ fournee.filter('stateFilter', function() {
 });
 
 fournee.filter('orderState', function () {
-
   return function (orders, checkList) {
     var output = [];
     angular.forEach(orders, function (order, orderKey) {
@@ -86,9 +85,15 @@ fournee.filter('orderState', function () {
         }
       });
     });
-    console.log(output);
-    console.log(orders);
-    console.log(checkList);
     return output;
+  }
+});
+
+fournee.filter('bakedFilter', function() {
+  return function(input) {
+    if (input) {
+      return 'Horneado';
+    }
+    return 'Congelado';
   }
 });

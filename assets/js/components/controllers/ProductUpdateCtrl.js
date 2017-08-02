@@ -40,7 +40,6 @@
           $scope.elements[index] = element;
         }
       });
-      $log.log($scope.elements);
     })
     .catch(function (err) {
       $log.log(err);

@@ -1,5 +1,5 @@
   var fournee = angular.module('fournee');
-  fournee.controller('OrderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', 'OrderService', '$stateParams', 'ProfileService', 
+  fournee.controller('OrderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', 'OrderService', '$stateParams', 'ProfileService',
   function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams, ProfileService) {
     // Timepicker para el rango de hora sugerida
 
@@ -322,7 +322,6 @@
       if($scope.formToUpdate){
         $scope.order.dt = new Date(orderParam.deliveryDate);
       }else {
-        console.log($scope.order.dt);
         $scope.order.dt = new Date();
         if ($scope.order.dt.getDay() == 6) {
           $scope.order.dt.setDate($scope.order.dt.getDate() + 2);

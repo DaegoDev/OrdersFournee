@@ -21,7 +21,7 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
         });
       })
       .catch(function(err) {
-        $ngConfirm("Hay algún impedimiento para editar el pedido.")
+        $ngConfirm("Hay algún impedimiento de horario o estado para editar el pedido.")
       })
   }
 

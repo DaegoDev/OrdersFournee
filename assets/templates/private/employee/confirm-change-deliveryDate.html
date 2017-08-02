@@ -1,6 +1,7 @@
-Desea asignar {{dt2 | date:'fullDate'}} como nueva fecha de entrega de: <br/>
+Desea asignar {{dt2 | date:'fullDate'}} como nueva fecha de entrega de los pedidos con código: <br/>
 <ul>
   <li ng-repeat="order in ordersConfirmed" style="list-style-type: circle; margin-left: 30px">
-    <strong>{{orders[order].trade_name}}</strong>
+    <!-- <strong>{{orders[order].trade_name}}</strong> -->
+    <strong>{{order}}</strong>
   </li>
 </ul>

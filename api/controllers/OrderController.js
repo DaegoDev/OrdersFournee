@@ -1,20 +1,20 @@
 /**
-* OrderController
-*
-* @description :: Server-side logic for managing orders
-* @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
-*/
+ * OrderController
+ *
+ * @description :: Server-side logic for managing orders
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
 
 var schedule = require('node-schedule');
 
 module.exports = {
 
   /**
-  * Funcion para crear un pedido.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
+   * Funcion para crear un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   create: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -90,79 +90,79 @@ module.exports = {
 
 
     sql.beginTransaction()
-    .then(function() {
-      return Client.findOne({
-        user: userId
-      });
-    })
-    .then(function(client) {
-      if (client) {
-        orderCredentials.client = client.id;
-        return ClientEmployee.findOne({
-          id: clientEmployee
+      .then(function() {
+        return Client.findOne({
+          user: userId
         });
-      }
-      throw "El cliente no existe";
-    })
-    .then(function(clientemployee) {
-      if (clientemployee) {
-        orderCredentials.client_employee = clientemployee.id;
-        return sql.insert('order', orderCredentials);
-      }
-      throw "El empleado no existe";
-    })
-    .then(function(order) {
-      productsToOrder.forEach(function(product, i, productsToOrder) {
-        product.order_id = order.insertId;
-      });
-      return Promise.all = [order.insertId, sql.insert('order_product', productsToOrder)];
-    })
-    .spread(function(orderId, orderProduct) {
-      sql.commit();
-      if (!isValid) {
-        var rule = new schedule.RecurrenceRule();
-        rule.year = createdAt.getFullYear()
-        rule.month = createdAt.getMonth();
-        rule.date = createdAt.getDate() + 1;
-        rule.hour = 14;
-        rule.minute = 1;
-        var j = schedule.scheduleJob(orderId.toString(), rule, function(y) {
-          Order.update(orderId, {
-            state: "Confirmado"
-          })
-          .then(function(order) {
-            sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
-          })
-        }.bind(null, orderId));
-        sails.log.debug();
-      }
-      connectionConfig.connection.end(function(err) {
-        if (err) {
-          sails.log.debug(err);
+      })
+      .then(function(client) {
+        if (client) {
+          orderCredentials.client = client.id;
+          return ClientEmployee.findOne({
+            id: clientEmployee
+          });
         }
-      });
-      res.created({
-        orderProduct: orderProduct,
-        deliveryDate: deliveryDate
-      });
-    })
-    .catch(function(err) {
-      sql.rollback(function(err) {
+        throw "El cliente no existe";
+      })
+      .then(function(clientemployee) {
+        if (clientemployee) {
+          orderCredentials.client_employee = clientemployee.id;
+          return sql.insert('order', orderCredentials);
+        }
+        throw "El empleado no existe";
+      })
+      .then(function(order) {
+        productsToOrder.forEach(function(product, i, productsToOrder) {
+          product.order_id = order.insertId;
+        });
+        return Promise.all = [order.insertId, sql.insert('order_product', productsToOrder)];
+      })
+      .spread(function(orderId, orderProduct) {
+        sql.commit();
+        if (!isValid) {
+          var rule = new schedule.RecurrenceRule();
+          rule.year = createdAt.getFullYear()
+          rule.month = createdAt.getMonth();
+          rule.date = createdAt.getDate() + 1;
+          rule.hour = 14;
+          rule.minute = 1;
+          var j = schedule.scheduleJob(orderId.toString(), rule, function(y) {
+            Order.update(orderId, {
+                state: "Confirmado"
+              })
+              .then(function(order) {
+                sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
+              })
+          }.bind(null, orderId));
+          sails.log.debug();
+        }
         connectionConfig.connection.end(function(err) {
           if (err) {
             sails.log.debug(err);
           }
         });
+        res.created({
+          orderProduct: orderProduct,
+          deliveryDate: deliveryDate
+        });
+      })
+      .catch(function(err) {
+        sql.rollback(function(err) {
+          connectionConfig.connection.end(function(err) {
+            if (err) {
+              sails.log.debug(err);
+            }
+          });
+        });
+        res.serverError(err);
       });
-      res.serverError(err);
-    });
   },
   /**
-  * Funcion para actualizar la fecha de entrega de un pedido.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
+   * Funcion para actualizar la fecha de entrega de un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   updateDeliveryDate: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -191,40 +191,40 @@ module.exports = {
 
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
-      id: orderIds
-    })
-    .then(function(order) {
-      return Order.update(orderIds, {
-        deliveryDate: deliveryDate,
-        state: "Confirmado",
-      });
-    })
-    .then(function(orders) {
-      if (Array.isArray(orderIds)) {
-        orderIds.forEach(function(orderId, i, orderIds) {
-          var job = schedule.scheduledJobs[orderId.toString()];
+        id: orderIds
+      })
+      .then(function(order) {
+        return Order.update(orderIds, {
+          deliveryDate: deliveryDate,
+          state: "Confirmado",
+        });
+      })
+      .then(function(orders) {
+        if (Array.isArray(orderIds)) {
+          orderIds.forEach(function(orderId, i, orderIds) {
+            var job = schedule.scheduledJobs[orderId.toString()];
+            if (job) {
+              job.cancel();
+            }
+          })
+        } else {
+          var job = schedule.scheduledJobs[orderIds.toString()];
           if (job) {
             job.cancel();
           }
-        })
-      }else {
-        var job = schedule.scheduledJobs[orderIds.toString()];
-        if (job) {
-          job.cancel();
         }
-      }
-      res.ok(orders)
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+        res.ok(orders)
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
-  * Funcion para cambiar el estado de un pedido.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
+   * Funcion para cambiar el estado de un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   changeState: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -251,29 +251,29 @@ module.exports = {
     }
     //Verifica que la orden exista. Si existe cambia el campo estado con el nuevo valor enviado
     Order.find({
-      id: orderIds
-    })
-    .then(function(orders) {
-      // if (orders.length != orderIds.length) {
-      //   throw "Una de las ordenes no existe";
-      // }
-      return Order.update(orderIds, {
-        state: newState
-      });
-    })
-    .then(function(orders) {
-      res.ok(orders);
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+        id: orderIds
+      })
+      .then(function(orders) {
+        // if (orders.length != orderIds.length) {
+        //   throw "Una de las ordenes no existe";
+        // }
+        return Order.update(orderIds, {
+          state: newState
+        });
+      })
+      .then(function(orders) {
+        res.ok(orders);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
-  * Funcion para cancelar un pedido.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
+   * Funcion para cancelar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   cancelOrder: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -287,29 +287,29 @@ module.exports = {
 
     //Verifica que la orden exista. Si existe actualiza el campo estado a cancelado.
     Order.find({
-      id: orderId
-    })
-    .then(function(order) {
-      if (!order) {
-        throw "La orden no existe";
-      }
-      return Order.update(orderId, {
-        state: 'Cancelado'
-      });
-    })
-    .then(function(order) {
-      res.ok(order[0]);
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+        id: orderId
+      })
+      .then(function(order) {
+        if (!order) {
+          throw "La orden no existe";
+        }
+        return Order.update(orderId, {
+          state: 'Cancelado'
+        });
+      })
+      .then(function(order) {
+        res.ok(order[0]);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
-  * Funcion para obtener los pedidos dado una fecha de entrega.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
+   * Funcion para obtener los pedidos dado una fecha de entrega.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   getByDeliveryDate: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -335,46 +335,46 @@ module.exports = {
     LEFT JOIN client_product ON order_product.client_product = client_product.id \
     LEFT JOIN product ON client_product.product = product.code \
     WHERE orders.delivery_date = ? order by orders.id', [deliveryDate],
-    function(err, orders) {
-      if (err) {
-        return res.serverError(err);
-      }
-      var arrayOrders = [];
-      var orderTmp = null;
-      orders.forEach(function(order, index, orders) {
-        var orderId = order.id.toString();
-        var short_name = order.short_name;
-        var amount = order.amount;
-        var baked = order.baked;
-        delete order.short_name;
-        delete order.amount;
-        delete order.baked;
-
-        if (!orderTmp) {
-          orderTmp = order;
-          orderTmp.products = [];
-          arrayOrders.push(orderTmp);
+      function(err, orders) {
+        if (err) {
+          return res.serverError(err);
         }
+        var arrayOrders = [];
+        var orderTmp = null;
+        orders.forEach(function(order, index, orders) {
+          var orderId = order.id.toString();
+          var short_name = order.short_name;
+          var amount = order.amount;
+          var baked = order.baked;
+          delete order.short_name;
+          delete order.amount;
+          delete order.baked;
 
-        orderTmp.products.push({
-          short_name: short_name,
-          amount: amount,
-          baked: baked
+          if (!orderTmp) {
+            orderTmp = order;
+            orderTmp.products = [];
+            arrayOrders.push(orderTmp);
+          }
+
+          orderTmp.products.push({
+            short_name: short_name,
+            amount: amount,
+            baked: baked
+          });
+
+          if (orders[index + 1] && orders[index + 1].id.toString() != orderId) {
+            orderTmp = null;
+          }
         });
-
-        if (orders[index + 1] && orders[index + 1].id.toString() != orderId) {
-          orderTmp = null;
-        }
-      });
-      res.ok(arrayOrders);
-    })
+        res.ok(arrayOrders);
+      })
   },
   /**
-  * Funcion para obtener el estado de un pedido.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
+   * Funcion para obtener el estado de un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
   getState: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
@@ -388,47 +388,49 @@ module.exports = {
 
     //Verifica que la orden exista. Si existe, obtiene su estado;
     Order.findOne({
-      id: orderId
-    })
-    .then(function(order) {
-      if (!order) {
-        throw "La orden no existe";
-      }
-      res.ok({
-        id: order.id,
-        State: order.state
-      });
-    })
-    .catch(function(err) {
-      res.serverError(err);
-    })
+        id: orderId
+      })
+      .then(function(order) {
+        if (!order) {
+          throw "La orden no existe";
+        }
+        res.ok({
+          id: order.id,
+          State: order.state
+        });
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
   },
   /**
-  * Funcion para obtener los pedidos por cliente.
-  * @param  {Object} req Request object
-  * @param  {Object} res Response object
-  * @return {Object}
-  */
-  getByClient: function (req, res) {
+   * Funcion para obtener los pedidos por cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getByClient: function(req, res) {
     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
     // de la solicitud.
     var user = req.user;
 
     Client.findOne({
-      user: user.id
-    })
-    .then(function(client) {
-      return Order.find({client: client.id}).sort('createdAt DESC');
-    })
-    .then(function(order) {
-      res.ok(order);
-    })
-    .catch(function (err) {
-      res.serverError();
-    })
+        user: user.id
+      })
+      .then(function(client) {
+        return Order.find({
+          client: client.id
+        }).sort('createdAt DESC');
+      })
+      .then(function(order) {
+        res.ok(order);
+      })
+      .catch(function(err) {
+        res.serverError();
+      })
   },
 
-  getProductionAfterDate: function (req, res) {
+  getProductionAfterDate: function(req, res) {
     var timestamp = req.param('timestamp');
     var offset = req.param('offset');
 
@@ -445,20 +447,31 @@ module.exports = {
 
     // Bad request: Code 1 = required parameter is null or undefined.
     if (!timestamp) {
-      return res.badRequest({code: 1, msg: 'Missing timestamp'});
+      return res.badRequest({
+        code: 1,
+        msg: 'Missing timestamp'
+      });
     }
 
     if (!offset) {
-      return res.badRequest({code: 1, msg: 'Missing offset'});
+      return res.badRequest({
+        code: 1,
+        msg: 'Missing offset'
+      });
     }
 
     timestamp = parseInt(timestamp, 10);
 
-    today = TimeZoneService.getDate({timestamp: timestamp, offset: offset});
+    today = TimeZoneService.getDate({
+      timestamp: timestamp,
+      offset: offset
+    });
     tomorrow = new Date(today.getTime());
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    todayStr = TimeZoneService.createFullDateFormat({dateObject: today});
+    todayStr = TimeZoneService.createFullDateFormat({
+      dateObject: today
+    });
 
     var queryStr = "SELECT \
     p.code, p.name , p.short_name as shortName, \
@@ -471,15 +484,19 @@ module.exports = {
     AND o.delivery_date >= ? \
     ORDER BY p.code;"
 
-    todayStr = TimeZoneService.createDateFormat({dateObject: today});
-    tomorrowStr = TimeZoneService.createDateFormat({dateObject: tomorrow});
+    todayStr = TimeZoneService.createDateFormat({
+      dateObject: today
+    });
+    tomorrowStr = TimeZoneService.createDateFormat({
+      dateObject: tomorrow
+    });
 
-    Order.query(queryStr, [todayStr], function (err, rows) {
+    Order.query(queryStr, [todayStr], function(err, rows) {
       if (err) {
         return res.serverError(err);
       }
 
-      rows.forEach(function (row, index, rows) {
+      rows.forEach(function(row, index, rows) {
         currentCode = row.code;
         if (currentCode != lastCode) {
           lastCode = currentCode;
@@ -511,8 +528,7 @@ module.exports = {
 
         if (row.deliveryDate.toISOString().includes(todayStr)) {
           day = product.today;
-        }
-        else if (row.deliveryDate.toISOString().includes(tomorrowStr)) {
+        } else if (row.deliveryDate.toISOString().includes(tomorrowStr)) {
           day = product.tomorrow;
         } else {
           day = product.otherDays;
@@ -540,15 +556,15 @@ module.exports = {
     var products = [];
     var item = null;
     var orderProductQueryStr =
-    'SELECT ' +
-    'cp.id, cp.custom_name, cp.product, ' +
-    'op.baked, op.amount, op.client_product,' +
-    'p.name, p.short_name, ' +
-    'i.value, i.short_value, ' +
-    'e.name AS element_name ' +
-    'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp, order_product AS op ' +
-    'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND op.client_product = cp.id AND op.order_id = ? ' +
-    'ORDER BY cp.product; ';
+      'SELECT ' +
+      'cp.id, cp.custom_name, cp.product, ' +
+      'op.baked, op.amount, op.client_product,' +
+      'p.name, p.short_name, ' +
+      'i.value, i.short_value, ' +
+      'e.name AS element_name ' +
+      'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp, order_product AS op ' +
+      'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND op.client_product = cp.id AND op.order_id = ? ' +
+      'ORDER BY cp.product; ';
 
     // Se obtiene el id del pedido.
     orderId = parseInt(req.param('orderId'));
@@ -559,62 +575,62 @@ module.exports = {
     // Se verifica que el pedido exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le seleccionaron.
     Order.findOne({
-      id: orderId
-    })
-    .then(function(order) {
-      Product.query(orderProductQueryStr, order.id,
-        function(err, rawData) {
-          if (err) {
-            sails.log.debug(err);
-            throw {
-              code: 1,
-              msg: 'Query error.'
-            };
-          }
-          rawData.forEach(function(data, i, dataArray) {
-            if (tmpProduct == null) {
-              tmpProduct = {
-                code: data.product,
-                name: data.name,
-                shortName: data.short_name,
-                items: []
-              }
+        id: orderId
+      })
+      .then(function(order) {
+        Product.query(orderProductQueryStr, order.id,
+          function(err, rawData) {
+            if (err) {
+              sails.log.debug(err);
+              throw {
+                code: 1,
+                msg: 'Query error.'
+              };
             }
-
-            item = {
-              elementName: data.element_name,
-              value: data.value,
-              shortValue: data.short_value
-            },
-
-            tmpProduct.items.push(item);
-
-            if (!dataArray[i + 1]) {
-              product = {
-                id: data.id,
-                clientId: data.client,
-                customName: data.custom_name,
-                amount: data.amount,
-                baked: data.baked,
-                product: tmpProduct
+            rawData.forEach(function(data, i, dataArray) {
+              if (tmpProduct == null) {
+                tmpProduct = {
+                  code: data.product,
+                  name: data.name,
+                  shortName: data.short_name,
+                  items: []
+                }
               }
-              products.push(product);
-            } else if (dataArray[i + 1].product != tmpProduct.code) {
-              product = {
-                id: data.id,
-                clientId: data.client,
-                customName: data.custom_name,
-                amount: data.amount,
-                baked: data.baked,
-                product: tmpProduct
+
+              item = {
+                  elementName: data.element_name,
+                  value: data.value,
+                  shortValue: data.short_value
+                },
+
+                tmpProduct.items.push(item);
+
+              if (!dataArray[i + 1]) {
+                product = {
+                  id: data.id,
+                  clientId: data.client,
+                  customName: data.custom_name,
+                  amount: data.amount,
+                  baked: data.baked,
+                  product: tmpProduct
+                }
+                products.push(product);
+              } else if (dataArray[i + 1].product != tmpProduct.code) {
+                product = {
+                  id: data.id,
+                  clientId: data.client,
+                  customName: data.custom_name,
+                  amount: data.amount,
+                  baked: data.baked,
+                  product: tmpProduct
+                }
+                products.push(product);
+                tmpProduct = null;
               }
-              products.push(product);
-              tmpProduct = null;
-            }
-          })
-          // sails.log.debug(products);
-          return res.ok(products)
-        });
+            })
+            // sails.log.debug(products);
+            return res.ok(products)
+          });
       })
       .catch(function(err) {
         if (err.code == 1) {
@@ -622,77 +638,79 @@ module.exports = {
         }
       });;
 
-    },
-    /**
-    * Funcion para editar un pedido.
-    * @param  {Object} req Request object
-    * @param  {Object} res Response object
-    * @return {Object}
-    */
-    update: function(req, res) {
-      // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
-      // de la solicitud.
-      var orderId = null;
-      var deliveryDate = null;
-      var clientEmployee = null;
-      var initialSuggestedTime = null;
-      var finalSuggestedTime = null;
-      var additionalInformation = null;
-      var updatedAt = null;
-      var productsToUpdate = [];
-      var productsOrdered = [];
-      var productsToAdd = [];
-      var productsToRemove = [];
+  },
+  /**
+   * Funcion para editar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  update: function(req, res) {
+    // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+    // de la solicitud.
+    var orderId = null;
+    var deliveryDate = null;
+    var clientEmployee = null;
+    var initialSuggestedTime = null;
+    var finalSuggestedTime = null;
+    var additionalInformation = null;
+    var updatedAt = null;
+    var productsToUpdate = [];
+    var productsOrdered = [];
+    var productsToAdd = [];
+    var productsToRemove = [];
 
-      // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
 
-      orderId = parseInt(req.param('orderId'));
-      if (!orderId) {
-        return res.badRequest('Id del pedido vacio.');
-      }
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
 
-      var deliveryDateString = req.param('deliveryDate');
-      if (!deliveryDateString) {
-        return res.badRequest('Se debe ingresar la fecha de entrega.');
-      }
-      var dataDate = deliveryDateString.split("-", 3);
-      deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
+    var deliveryDateString = req.param('deliveryDate');
+    if (!deliveryDateString) {
+      return res.badRequest('Se debe ingresar la fecha de entrega.');
+    }
+    var dataDate = deliveryDateString.split("-", 3);
+    deliveryDate = new Date(dataDate[0], dataDate[1], dataDate[2]);
 
-      clientEmployee = parseInt(req.param('clientEmployee'));
-      if (!clientEmployee) {
-        return res.badRequest('Id del empleado del cliente vacio.');
-      }
+    clientEmployee = parseInt(req.param('clientEmployee'));
+    if (!clientEmployee) {
+      return res.badRequest('Id del empleado del cliente vacio.');
+    }
 
-      initialSuggestedTime = req.param('initialSuggestedTime');
-      finalSuggestedTime = req.param('finalSuggestedTime');
-      additionalInformation = req.param('additionalInformation');
+    initialSuggestedTime = req.param('initialSuggestedTime');
+    finalSuggestedTime = req.param('finalSuggestedTime');
+    additionalInformation = req.param('additionalInformation');
 
-      updatedAt = TimeZoneService.getDate({offset: -300}, null);
+    updatedAt = TimeZoneService.getDate({
+      offset: -300
+    }, null);
 
-      // crear las credenciales para actualizar un pedido
-      var orderCredentials = {
-        delivery_date: deliveryDate,
-        initial_suggested_time: initialSuggestedTime,
-        final_suggested_time: finalSuggestedTime,
-        additional_information: additionalInformation,
-      };
+    // crear las credenciales para actualizar un pedido
+    var orderCredentials = {
+      delivery_date: deliveryDate,
+      initial_suggested_time: initialSuggestedTime,
+      final_suggested_time: finalSuggestedTime,
+      additional_information: additionalInformation,
+    };
 
-      // Arreglo de productos para actualizar.
-      productsToUpdate = req.param('productsToUpdate');
+    // Arreglo de productos para actualizar.
+    productsToUpdate = req.param('productsToUpdate');
 
-      if (typeof productsToUpdate == 'string') {
-        productsToUpdate = [JSON.parse(productsToUpdate)];
-      } else {
-        productsToUpdate.forEach(function(product, index, productList) {
-          productList[index] = JSON.parse(product);
-        });
-      }
+    if (typeof productsToUpdate == 'string') {
+      productsToUpdate = [JSON.parse(productsToUpdate)];
+    } else {
+      productsToUpdate.forEach(function(product, index, productList) {
+        productList[index] = JSON.parse(product);
+      });
+    }
 
-      //Obtengo la conección para realizar transacciones
-      var connectionConfig = AlternativeConnectionService.getConnection();
-      var sql = connectionConfig.sql;
+    //Obtengo la conección para realizar transacciones
+    var connectionConfig = AlternativeConnectionService.getConnection();
+    var sql = connectionConfig.sql;
 
-      sql.beginTransaction()
+    sql.beginTransaction()
       .then(function() {
         return Order.findOne({
           id: orderId
@@ -700,7 +718,8 @@ module.exports = {
       })
       .then(function(order) {
         if (order) {
-          if (!isCorrectUpdatedDate(updatedAt, order.createdAt)) {
+          var deliveryDate = new Date(order.deliveryDate);
+          if (!isCorrectUpdatedDate(updatedAt, deliveryDate)|| order.state == "Cancelado" || order.state == "Despachado") {
             throw "Debe actualizar su pedido antes de las 2pm del día siguiente a la entrega";
           }
           if (!isCorrectDeliveryDate(updatedAt, deliveryDate)) {
@@ -752,12 +771,12 @@ module.exports = {
               client_product: productToRemove
             }
             return sql.delete('order_product', product)
-            .then(function(orderProduct) {
+              .then(function(orderProduct) {
 
-            })
-            .catch(function() {
-              throw "Error al borrar un productos"
-            })
+              })
+              .catch(function() {
+                throw "Error al borrar un productos"
+              })
           })
         }
       })
@@ -765,15 +784,15 @@ module.exports = {
         if (productsOrdered.length != 0) {
           productsOrdered.forEach(function(productOrdered, index, listProductsOrdered) {
             return sql.update('order_product', productOrdered, {
-              client_product: productOrdered.client_product,
-              order_id: orderId
-            })
-            .then(function(orderProduct) {
+                client_product: productOrdered.client_product,
+                order_id: orderId
+              })
+              .then(function(orderProduct) {
 
-            })
-            .catch(function() {
-              throw "Error al actualizar un productos"
-            })
+              })
+              .catch(function() {
+                throw "Error al actualizar un productos"
+              })
           })
         }
       })
@@ -804,33 +823,41 @@ module.exports = {
           res.serverError(err);
         });
       });
-    },
-    /**
-    * Funcion para validar la hora para editar un pedido.
-    * @param  {Object} req Request object
-    * @param  {Object} res Response object
-    * @return {Object}
-    */
-    validateDateToUpdate: function(req, res) {
-      // Declaración de variables
-      var orderId = null;
-      var today = null;
-      var createdAt = null;
+  },
+  /**
+   * Funcion para validar la hora para editar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  validateDateToUpdate: function(req, res) {
+    // Declaración de variables
+    var orderId = null;
+    var today = null;
+    var deliveryDate = null;
 
-      // Definición de variables apartir de los parametros de la solicitud y validaciones.
-      orderId = parseInt(req.param('orderId'));
-      if (!orderId) {
-        return res.badRequest('Id del pedido vacio.');
-      }
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
 
-      today = TimeZoneService.getDate({offset: -300}, null);
+    today = TimeZoneService.getDate({
+      offset: -300
+    }, null);
 
-      Order.findOne({id: orderId})
+    Order.findOne({
+        id: orderId
+      })
       .then(function(order) {
-        createdAt = new Date(order.createdAt);
-        var isCorrectDate = isCorrectUpdatedDate(today, createdAt);
+        sails.log.debug(order)
+        deliveryDate = new Date(order.deliveryDate);
+        var isCorrectDate = isCorrectUpdatedDate(today, deliveryDate);
         if (!isCorrectDate || order.state == "Cancelado" || order.state == "Despachado") {
-          throw {code: 1, msg: "Error in update date validation."};
+          throw {
+            code: 1,
+            msg: "Error in update date validation."
+          };
         } else {
           res.ok();
         }
@@ -838,29 +865,32 @@ module.exports = {
       .catch(function(err) {
         res.serverError(err);
       })
-    },
-    /**
-    * Funcion para validar la hora para editar un pedido.
-    * @param  {Object} req Request object
-    * @param  {Object} res Response object
-    * @return {Object}
-    */
-    validateStateToCancel: function(req, res) {
-      // Declaración de variables
-      var orderId = null;
+  },
+  /**
+   * Funcion para validar la hora para editar un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  validateStateToCancel: function(req, res) {
+    // Declaración de variables
+    var orderId = null;
 
-      // Definición de variables apartir de los parametros de la solicitud y validaciones.
-      orderId = parseInt(req.param('orderId'));
-      if (!orderId) {
-        return res.badRequest('Id del pedido vacio.');
-      }
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    orderId = parseInt(req.param('orderId'));
+    if (!orderId) {
+      return res.badRequest('Id del pedido vacio.');
+    }
 
-      Order.findOne({
+    Order.findOne({
         id: orderId
       })
       .then(function(order) {
         if (order.state == "Despachado" || order.state == "Cancelado") {
-          throw {code:1, msg: "Error in state validation."};
+          throw {
+            code: 1,
+            msg: "Error in state validation."
+          };
         } else {
           res.ok();
         }
@@ -868,74 +898,66 @@ module.exports = {
       .catch(function(err) {
         res.serverError();
       })
-    },
-    // testNodeSchedule: function(req, res) {
-    //   var msg = req.param('msg');
-    //   var minute = parseInt(req.param('minute'))
-    //   var name = req.param('name')
-    //   var rule = new schedule.RecurrenceRule();
-    //   rule.date = 25;
-    //   rule.hour = 12;
-    //   rule.minute = minute;
-    //   var x = 'Tada!';
-    //   var j = schedule.scheduleJob(name, rule, function(y) {
-    //     sails.log.debug("entro")
-    //     j.cancel();
-    //     sails.log.debug(msg)
-    //     console.log(y);
-    //   }.bind(null, x));
-    //   x = 'Changing Data';
-    //   res.ok("Esperemos...")
-    // },
-    // otherTest: function (req, res) {
-    //   var my_job = schedule.scheduledJobs["15"];
-    //   my_job.cancel();
-    // }
-  };
+  },
+};
 
-  function isCorrectUpdatedDate(updatedAt, createdAt) {
-    var createdDay = createdAt.getDate();
-    var createdMonth = createdAt.getMonth();
-    var updatedTime = updatedAt.getHours();
-    var updatedDay = updatedAt.getDate();
-    var updatedMonth = updatedAt.getMonth();
-    var isCorrect = true;
+function isCorrectUpdatedDate(updatedAt, deliveryDate) {
+  var deliveryYear = deliveryDate.getFullYear()
+  var deliveryMonth = deliveryDate.getMonth();
+  var deliveryDay = deliveryDate.getDate();
+  var updatedTime = updatedAt.getHours();
+  var updatedYear = updatedAt.getFullYear();
+  var updatedMonth = updatedAt.getMonth();
+  var updatedDay = updatedAt.getDate();
+  var yesterderToDeliveryDate = new Date(deliveryYear, deliveryMonth, deliveryDay);
+  yesterderToDeliveryDate.setDate(deliveryDay - 1);
+  var isCorrect = true;
+  if (deliveryYear > updatedYear) {
+    return isCorrect;
+  }
+  if ((updatedMonth > deliveryMonth) ||(updatedMonth == deliveryMonth && updatedDay >= deliveryDay) || (updatedMonth == yesterderToDeliveryDate.getMonth() && updatedDay == yesterderToDeliveryDate.getDate() && updatedTime > 13) ) {
+    isCorrect = false;
+  }
+  return isCorrect;
+}
 
-    if (updatedMonth != createdMonth || updatedDay != createdDay || updatedTime > 13) {
-      isCorrect = false;
-    }
+function isCorrectDeliveryDate(createdAt, deliveryDate) {
+  var createdYear = createdAt.getFullYear();
+  var createdTime = createdAt.getHours();
+  var createdDay = createdAt.getDate();
+  var createdMonth = createdAt.getMonth();
+  var deliveryYear = deliveryDate.getFullYear();
+  var deliveryDay = deliveryDate.getDate();
+  var deliveryMonth = deliveryDate.getMonth();
+  var isCorrect = true;
+  if (deliveryYear > createdYear) {
     return isCorrect;
   }
 
-  function isCorrectDeliveryDate(createdAt, deliveryDate) {
-    var createdYear = createdAt.getFullYear();
-    var createdTime = createdAt.getHours();
-    var createdDay = createdAt.getDate();
-    var createdMonth = createdAt.getMonth();
-    var deliveryYear = deliveryDate.getFullYear();
-    var deliveryDay = deliveryDate.getDate();
-    var deliveryMonth = deliveryDate.getMonth();
-    var isCorrect = true;
-
-    if (deliveryYear > createdYear) {
-      return true;
-    }
-
-    if (deliveryMonth < createdMonth || (createdTime > 3 && deliveryDay <= createdDay) || deliveryDate.getDay() == 0) {
-      isCorrect = false;
-    }
-    return isCorrect;
+  if (deliveryMonth < createdMonth || (createdTime > 3 && deliveryDay <= createdDay && deliveryMonth <= createdMonth) || deliveryDate.getDay() == 0) {
+    isCorrect = false;
   }
+  return isCorrect;
+}
 
-  function validateDeliveryDateDesired(createdAt, deliveryDate) {
-    var createdTime = createdAt.getHours();
-    var createdDay = createdAt.getDate();
-    var deliveryDay = deliveryDate.getDate();
-    var correct = true;
+function validateDeliveryDateDesired(createdAt, deliveryDate) {
+  var createdTime = createdAt.getHours();
+  var createdYear = createdAt.getFullYear();
+  var createdMonth = createdAt.getMonth();
+  var createdDay = createdAt.getDate();
+  var deliveryYear = deliveryDate.getFullYear();
+  var deliveryMonth = deliveryDate.getMonth();
+  var deliveryDay = deliveryDate.getDate();
+  var tomorrow = new Date(createdYear, createdMonth, createdDay);
+  tomorrow.setDate(createdDay + 1);
+  var correct = true;
 
-    if (((createdTime > 13 && createdTime < 23) && deliveryDay == (createdDay + 1)) ||
-    ((createdTime >= 0 && createdTime < 4) && deliveryDay == createdDay)) {
-      correct = false;
-    }
+  if (deliveryYear > createdYear) {
     return correct;
   }
+  if (((createdTime > 13 && createdTime < 23) && deliveryDay == tomorrow.getDate() && deliveryMonth == tomorrow.getMonth()) ||
+    ((createdTime >= 0 && createdTime < 4) && deliveryDay == createdDay && deliveryMonth == createdMonth)) {
+    correct = false;
+  }
+  return correct;
+}

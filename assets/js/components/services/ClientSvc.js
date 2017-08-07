@@ -15,7 +15,7 @@ function ($http) {
     disableClient: function(client) {
       var msg = $http({
         url: '/client/delete',
-        method: 'PUT',
+        method: 'DELETE',
         params: client
       });
       return msg;
@@ -34,8 +34,8 @@ function ($http) {
     enableProducts: function(clientProducts) {
       var client = $http({
         url: '/client/enableProduct',
-        method: 'POST',
-        params: clientProducts
+        method: 'PUT',
+        data: clientProducts
       });
       return client;
     },
@@ -44,7 +44,7 @@ function ($http) {
       var client = $http({
         url: '/client/disableProduct',
         method: 'PUT',
-        params: clientProduct
+        data: clientProduct
       });
       return client;
     },
@@ -69,7 +69,7 @@ function ($http) {
       var clientUpdated = $http({
         url: '/client/updateGeneralInfo',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return clientUpdated;
     },
@@ -78,7 +78,7 @@ function ($http) {
       var addressUpdated = $http({
         url: '/client/updateBillAddress',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return addressUpdated;
     },
@@ -87,7 +87,7 @@ function ($http) {
       var addressUpdated = $http({
         url: '/client/updateDeliveryAddress',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return addressUpdated;
     },
@@ -96,31 +96,31 @@ function ($http) {
       var create = $http({
         url: '/client/createClientEmployee',
         method: 'POST',
-        params: credentials
+        data: credentials
       });
       return create;
     },
     makeOrder: function (orderCredentials) {
       var order = $http({
         url: '/order/create',
-        methot: 'POST',
-        params: orderCredentials
+        method: 'POST',
+        data: orderCredentials
       });
       return order;
     },
     updateOrder: function (orderCredentials) {
       var order = $http({
         url: '/order/update',
-        methot: 'POST',
-        params: orderCredentials
+        method: 'PUT',
+        data: orderCredentials
       });
       return order;
     },
     changeProductName: function (productCredentials) {
       var product = $http({
         url: '/client/changeProductName',
-        methot: 'POST',
-        params: productCredentials
+        methot: 'PUT',
+        data: productCredentials
       });
       return product;
     }

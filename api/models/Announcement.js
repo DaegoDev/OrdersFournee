@@ -7,17 +7,28 @@
  */
 
 module.exports = {
+  // migrate: 'drop',
   tableName: 'announcement',
   attributes: {
+    id: {
+      type: 'integer',
+      primaryKey: true,
+      autoIncrement: true,
+      columnName: 'id'
+    },
     createdAt: {
-      type: 'date',
-      unique: true,
+      type: 'datetime',
       columnName: 'created_at'
     },
     updatedAt: {
-      type: 'date',
-      unique: true,
+      type: 'datetime',
       columnName: 'updated_at'
+    },
+    title: {
+      type: 'string',
+      size: 128,
+      notNull: true,
+      columnName: 'title'
     },
     content: {
       type: 'text',
@@ -27,7 +38,8 @@ module.exports = {
     },
     // Añade una referencia a user
     user: {
-      model: 'user'
+      model: 'user',
+      columnName: 'user'
     }
   }
 };

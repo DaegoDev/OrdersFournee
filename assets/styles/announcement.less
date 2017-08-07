@@ -1,0 +1,129 @@
+.announcement-create {
+
+  .content {
+    padding: 20px;
+  }
+  p {
+    word-break: break-all;
+  }
+}
+
+.announcement-list {
+  .content {
+    padding: 10px 20px;
+    table {
+      th {
+        font-size: 100%;
+        text-align: center;
+        font-weight: bold;
+        background-color: @theme-nero;
+        color: @font-tussock;
+        padding: 10px 1px;
+        cursor: pointer;
+
+        &:hover {
+          color: @font-white;
+        }
+      }
+
+      td {
+        font-size: 90%;
+        word-wrap: break-word;
+        max-width: 250px;
+        text-align: center;
+        vertical-align: middle;
+
+        &:nth-child(2) {
+          text-align: left;
+        }
+        &:last-child {
+          background-color: @theme-nero;
+
+          a {
+            color: @font-tussock;
+            font-size: 150%;
+            cursor: pointer;
+            margin: 3px;
+
+            &:hover {
+              color: @font-white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+summernote {
+  overflow: hidden;
+}
+
+.note-editing-area {
+  overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+.announcements {
+  padding: 15px;
+  width: 100%;
+  clear: both;
+  width: 70%;
+
+  position: relative;
+  overflow: hidden;
+  background-color: @bg-white;
+  border: 1px solid;
+  border-radius: 5px 5px 20px 20px;
+  box-shadow: 5px 5px 10px black;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 0;
+
+  .header {
+    display: block;
+    width: 100%;
+    padding: 10px 10px;
+    float: left;
+    clear: both;
+
+    font-weight: bold;
+    font-size: 125%;
+
+    background-color: @theme-nero;
+
+    .title {
+      font-size: 125%;
+      color: @font-tussock;
+    }
+  }
+
+  .content {
+    display: block;
+    width: 100%;
+
+    float: left;
+    clear: both;
+
+    padding: 15px;
+    overflow: auto;
+    word-break: break-all;
+    word-wrap: break-word;  }
+
+  .footer {
+    display: block;
+    width: 100%;
+    float: left;
+    clear: both;
+    padding: 0 10px;
+
+    .created-date {
+      float: right;
+      margin: 10px 10px;
+      font-size: 90%;
+      color: darkgray;
+    }
+  }
+}

@@ -7,7 +7,7 @@ var fournee = angular.module('fournee');
           var item = $http({
             url: '/item/createItem',
             method: 'POST',
-            params: newItem
+            data: newItem
           });
           return item;
         },
@@ -15,7 +15,7 @@ var fournee = angular.module('fournee');
           var element = $http({
             url: '/item/createElement',
             method: 'POST',
-            params: newElement
+            data: newElement
           });
           return element;
         },

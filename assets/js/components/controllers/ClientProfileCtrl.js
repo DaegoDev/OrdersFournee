@@ -159,8 +159,6 @@
       };
 
       $scope.changedFinal = function() {
-        // $log.log('Time changed to: ' + $scope.timeInitial);
-
       };
 
       $scope.updateGeneralInfo = function() {

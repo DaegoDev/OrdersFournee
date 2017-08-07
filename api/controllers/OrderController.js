@@ -76,13 +76,13 @@ module.exports = {
     // Arreglo de productos para registrar con la pedido
     productsToOrder = req.param('productsToOrder');
 
-    if (typeof productsToOrder == 'string') {
-      productsToOrder = [JSON.parse(productsToOrder)];
-    } else {
-      productsToOrder.forEach(function(product, index, productList) {
-        productList[index] = JSON.parse(product);
-      });
-    }
+    // if (typeof productsToOrder == 'string') {
+    //   productsToOrder = [JSON.parse(productsToOrder)];
+    // } else {
+    //   productsToOrder.forEach(function(product, index, productList) {
+    //     productList[index] = JSON.parse(product);
+    //   });
+    // }
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -134,7 +134,6 @@ module.exports = {
                 sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
               })
           }.bind(null, orderId));
-          sails.log.debug();
         }
         connectionConfig.connection.end(function(err) {
           if (err) {
@@ -187,8 +186,6 @@ module.exports = {
         orderId = parseInt(orderId);
       })
     }
-    sails.log.debug(orderIds);
-
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
         id: orderIds
@@ -628,7 +625,6 @@ module.exports = {
                 tmpProduct = null;
               }
             })
-            // sails.log.debug(products);
             return res.ok(products)
           });
       })
@@ -698,13 +694,13 @@ module.exports = {
     // Arreglo de productos para actualizar.
     productsToUpdate = req.param('productsToUpdate');
 
-    if (typeof productsToUpdate == 'string') {
-      productsToUpdate = [JSON.parse(productsToUpdate)];
-    } else {
-      productsToUpdate.forEach(function(product, index, productList) {
-        productList[index] = JSON.parse(product);
-      });
-    }
+    // if (typeof productsToUpdate == 'string') {
+    //   productsToUpdate = [JSON.parse(productsToUpdate)];
+    // } else {
+    //   productsToUpdate.forEach(function(product, index, productList) {
+    //     productList[index] = JSON.parse(product);
+    //   });
+    // }
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();

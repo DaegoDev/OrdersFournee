@@ -75,7 +75,6 @@ var fournee = angular.module('fournee');
          };
         currentProduct = bakedProduct;
       }
-      // console.log(rawProduct);
       return currentProduct;
     }
 

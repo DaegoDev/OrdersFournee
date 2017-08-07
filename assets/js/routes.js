@@ -6,7 +6,8 @@ var fournee = angular.module('fournee');
       $stateProvider
         .state('home', {
           url: '/',
-          templateUrl: 'templates/public/home.html'
+          templateUrl: 'templates/public/home.html',
+          controller: 'HomeCtrl'
         })
 
         /**
@@ -191,6 +192,55 @@ var fournee = angular.module('fournee');
           url: '/list',
           templateUrl: 'templates/private/admin/employee-list.html',
           controller: 'EmployeeListCtrl',
+          data: {
+            permissions: {
+              only: "ADMINISTRADOR",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+        .state('announcement', {
+          url: '/announcement',
+          templateUrl: 'templates/private/admin/announcement.html',
+          data: {
+            permissions: {
+              only: "ADMINISTRADOR",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+        .state('announcement.create', {
+          url: '/create',
+          templateUrl: 'templates/private/admin/announcement-create.html',
+          controller: 'AnnouncementCreateCtrl',
+          params: {announcement: null, mode: null},
+          data: {
+            permissions: {
+              only: "ADMINISTRADOR",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+        .state('announcement.list', {
+          url: '/list',
+          templateUrl: 'templates/private/admin/announcement-list.html',
+          controller: 'AnnouncementListCtrl',
+          data: {
+            permissions: {
+              only: "ADMINISTRADOR",
+              except: "ANON",
+              redirectTo: 'home'
+            }
+          }
+        })
+        .state('announcementPreview', {
+          url: '/preview',
+          templateUrl: 'templates/private/admin/announcement-preview.html',
+          controller: 'AnnouncementPreviewCtrl',
+          params: {announcement: null, mode: null},
           data: {
             permissions: {
               only: "ADMINISTRADOR",

@@ -5,7 +5,7 @@ function ($http, $rootScope) {
     // Service to get all existing week days.
     getWeekDays: function() {
       var weekDays = $http({
-        url: '/receptionhour/getWeekDays',
+        url: '/receptionHour/getWeekDays',
         method: 'GET'
       });
       return weekDays;
@@ -15,7 +15,7 @@ function ($http, $rootScope) {
       var create = $http({
         url: '/client/createReceptionHour',
         method: 'POST',
-        params: credentials
+        data: credentials
       });
       return create;
     },
@@ -23,7 +23,7 @@ function ($http, $rootScope) {
     deleteReceptionHour: function(credentials) {
       var deleted = $http({
         url: '/client/deleteReceptionHour',
-        method: 'POST',
+        method: 'DELETE',
         params: credentials
       });
       return deleted;
@@ -32,7 +32,7 @@ function ($http, $rootScope) {
     getReceptionHourByClient: function(credentials) {
       var receptionHour = $http({
         url: '/client/getReceptionHour',
-        method: 'POST',
+        method: 'GET',
         params: credentials
       });
       return receptionHour;

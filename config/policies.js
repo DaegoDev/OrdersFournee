@@ -29,19 +29,20 @@ module.exports.policies = {
   '*': true,
 
   ClientController: {
+    signup: 'isAdmin',
+    delete: 'isAdmin',
     updatePassword: 'isClient',
+    enableProduct: 'isAdmin',
+    disableProduct: 'isAdmin',
     getProfile: 'isClient',
+    getProductsEnabled: 'isClient',
     validateInformation: 'isClient',
+    getAll: 'isAdmin',
     updateGeneralInfo: 'isClient',
     updateBillAddress: 'isClient',
     updateDeliveryAddress: 'isClient',
     createReceptionHour: 'isClient',
     createClientEmployee: 'isClient',
-    // recuperarContrasena: 'isRecuperacionValida',
-    enableProduct: 'isAdmin',
-    disableProduct: 'isAdmin',
-    signup: 'isAdmin',
-    getProductsEnabled: 'isClient',
     changeProductName: 'isClient'
   },
 
@@ -53,28 +54,48 @@ module.exports.policies = {
   EmployeeController: {
     signup: 'isAdmin',
     delete: 'isAdmin',
+    getAll: 'isAdmin',
     updatePassword: 'isEmployee',
     getProfile: 'isEmployee',
     updateInformation: 'isEmployee'
   },
 
   ItemController: {
-    create: 'isAdmin',
+    createItem: 'isAdmin',
+    getByName: 'isAdmin',
+    getAll: 'isAdmin',
+    createElement: 'isAdmin'
   },
 
   OrderController: {
     create: 'isClient',
     updateDeliveryDate: 'isEmployee',
     changeState: 'isEmployee',
+    cancelOrder: 'isClient',
     getByDeliveryDate: 'isEmployee',
     getByClient: 'isClient',
-    cancelOrder: 'isClient',
-    update: 'isClient'
+    getProductionAfterDate: 'isEmployee',
+    getProductsSelected: 'isClient',
+    update: 'isClient',
+    validateDateToUpdate: 'isClient',
+    validateStateToCancel: 'isClient'
   },
 
   ProductController: {
-    create: 'isAdmin'
+    create: 'isAdmin',
+    update: 'isAdmin',
+    getProductsByClient: 'isAdmin',
+    getAllEnabled: 'isAdmin',
+    getAllDisabled: 'isAdmin',
+    disableProduct: 'isAdmin',
+    enableProduct: 'isAdmin',
   },
+
+  AnnouncementController: {
+    create: 'isAdmin',
+    update: 'isAdmin',
+    delete: 'isAdmin',
+  }
 
 
   /***************************************************************************

@@ -25,7 +25,7 @@ angular.module('fournee')
 			var changePsw = $http({
         url: '/employee/updatePassword',
         method: 'PUT',
-				params: credentials
+				data: credentials
       });
       return changePsw;
 		},
@@ -35,7 +35,7 @@ angular.module('fournee')
 			var changePsw = $http({
 				url: '/client/updatePassword',
 				method: 'PUT',
-				params: credentials
+				data: credentials
 			});
 			return changePsw;
 		},

@@ -160,7 +160,6 @@
     $scope.confirm = function() {
       ProfileService.getProfileClient()
         .then(function(res) {
-          console.log(res.data);
           $scope.client = res.data;
           $ngConfirm({
             title: 'Resumen del pedido',
@@ -177,7 +176,7 @@
                 action: function(scope, button) {
                   if($scope.formToUpdate){
                     $scope.updateOrder();
-                  }else {
+                  } else {
                     $scope.makeOrder();
                   }
                 }
@@ -304,7 +303,6 @@
     }
 
     $scope.changedInitial = function() {
-      // $log.log('Time changed to: ' + $scope.timeInitial);
       $scope.order.timeFinal = new Date();
       $scope.order.timeFinal.setHours($scope.order.timeInitial.getHours() + 2);
       $scope.order.timeFinal.setMinutes($scope.order.timeInitial.getMinutes());
@@ -314,7 +312,6 @@
     };
 
     $scope.changedFinal = function() {
-      // $log.log('Time changed to: ' + $scope.timeFinal);
     };
 
     // Datepicker para la fecha de entrega

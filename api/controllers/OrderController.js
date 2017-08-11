@@ -47,7 +47,9 @@ module.exports = {
     finalSuggestedTime = req.param('finalSuggestedTime');
     additionalInformation = req.param('additionalInformation');
 
-    createdAt = TimeZoneService.getDate({offset: -300}, null);
+    createdAt = TimeZoneService.getDate({
+      offset: -300
+    }, null);
     if (!isCorrectDeliveryDate(createdAt, deliveryDateDesired)) {
       return res.badRequest("La fecha de entrega no es correcta");
     }
@@ -57,8 +59,11 @@ module.exports = {
       state = "Confirmado";
       deliveryDate = deliveryDateDesired;
     } else {
-      state = "Pendiente de confirmación"
+      state = "Pendiente de confirmación";
       deliveryDateDesired.setDate(deliveryDateDesired.getDate() + 1);
+      if (deliveryDateDesired.getDay() == 0) {
+        deliveryDateDesired.setDate(deliveryDateDesired.getDate() + 1)
+      }
       deliveryDate = deliveryDateDesired;
     }
 
@@ -76,13 +81,13 @@ module.exports = {
     // Arreglo de productos para registrar con la pedido
     productsToOrder = req.param('productsToOrder');
 
-    if (typeof productsToOrder == 'string') {
-      productsToOrder = [JSON.parse(productsToOrder)];
-    } else {
-      productsToOrder.forEach(function(product, index, productList) {
-        productList[index] = JSON.parse(product);
-      });
-    }
+    // if (typeof productsToOrder == 'string') {
+    //   productsToOrder = [JSON.parse(productsToOrder)];
+    // } else {
+    //   productsToOrder.forEach(function(product, index, productList) {
+    //     productList[index] = JSON.parse(product);
+    //   });
+    // }
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -134,7 +139,6 @@ module.exports = {
                 sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
               })
           }.bind(null, orderId));
-          sails.log.debug();
         }
         connectionConfig.connection.end(function(err) {
           if (err) {
@@ -187,8 +191,6 @@ module.exports = {
         orderId = parseInt(orderId);
       })
     }
-    sails.log.debug(orderIds);
-
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
         id: orderIds
@@ -628,7 +630,6 @@ module.exports = {
                 tmpProduct = null;
               }
             })
-            // sails.log.debug(products);
             return res.ok(products)
           });
       })
@@ -698,13 +699,13 @@ module.exports = {
     // Arreglo de productos para actualizar.
     productsToUpdate = req.param('productsToUpdate');
 
-    if (typeof productsToUpdate == 'string') {
-      productsToUpdate = [JSON.parse(productsToUpdate)];
-    } else {
-      productsToUpdate.forEach(function(product, index, productList) {
-        productList[index] = JSON.parse(product);
-      });
-    }
+    // if (typeof productsToUpdate == 'string') {
+    //   productsToUpdate = [JSON.parse(productsToUpdate)];
+    // } else {
+    //   productsToUpdate.forEach(function(product, index, productList) {
+    //     productList[index] = JSON.parse(product);
+    //   });
+    // }
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -719,7 +720,7 @@ module.exports = {
       .then(function(order) {
         if (order) {
           var deliveryDate = new Date(order.deliveryDate);
-          if (!isCorrectUpdatedDate(updatedAt, deliveryDate)|| order.state == "Cancelado" || order.state == "Despachado") {
+          if (!isCorrectUpdatedDate(updatedAt, deliveryDate) || order.state == "Cancelado" || order.state == "Despachado") {
             throw "Debe actualizar su pedido antes de las 2pm del día siguiente a la entrega";
           }
           if (!isCorrectDeliveryDate(updatedAt, deliveryDate)) {
@@ -915,7 +916,7 @@ function isCorrectUpdatedDate(updatedAt, deliveryDate) {
   if (deliveryYear > updatedYear) {
     return isCorrect;
   }
-  if ((updatedMonth > deliveryMonth) ||(updatedMonth == deliveryMonth && updatedDay >= deliveryDay) || (updatedMonth == yesterderToDeliveryDate.getMonth() && updatedDay == yesterderToDeliveryDate.getDate() && updatedTime > 13) ) {
+  if ((updatedMonth > deliveryMonth) || (updatedMonth == deliveryMonth && updatedDay >= deliveryDay) || (updatedMonth == yesterderToDeliveryDate.getMonth() && updatedDay == yesterderToDeliveryDate.getDate() && updatedTime > 13)) {
     isCorrect = false;
   }
   return isCorrect;

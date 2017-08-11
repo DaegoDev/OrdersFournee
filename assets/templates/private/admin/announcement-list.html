@@ -1,0 +1,29 @@
+<div class="announcement-list">
+  <div class="section-header">
+     <h1>Lista de anuncios</h1>
+  </div>
+
+<div class="content">
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Titulo</th>
+        <th>Creado el</th>
+        <th>Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="announcement in announcements | orderBy:'createdAt':true" >
+        <td>{{announcement.id}}</td>
+        <td>{{announcement.title}}</td>
+        <td>{{announcement.createdAt | date:'medium'}}</td>
+        <td >
+          <a class="fa fa-edit" tooltips tooltip-template="Editar" ng-click="selectAnnouncement(announcement)"></a>
+          <a class="fa fa-trash" tooltips tooltip-template="Eliminar" ng-click="deleteAnnouncement(announcement)"></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>

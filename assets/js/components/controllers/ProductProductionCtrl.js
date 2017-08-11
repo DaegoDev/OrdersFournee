@@ -37,7 +37,6 @@
           offset: (-1) * $scope.datePicker.date.getTimezoneOffset()
         })
         .then(function (res) {
-          $log.log(res.data);
           $scope.products = res.data;
         })
         .catch(function (err) {

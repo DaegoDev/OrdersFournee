@@ -47,6 +47,7 @@ module.exports = {
   * @return {String}      Retorna un string el cual corresponde a el token generado.
   */
   crearToken: function (user) {
+    delete user.password;
     return jwt.sign({
       // Payload
       user: user.toJSON()

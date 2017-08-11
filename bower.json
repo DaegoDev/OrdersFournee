@@ -32,9 +32,11 @@
     "angular-messages": "~1.6.3",
     "angular-confirm": "angular1-confirm#^1.1.0",
     "angular-tooltips": "~1.1.10",
-    "color-hash": "^1.0.3"
+    "color-hash": "^1.0.3",
+    "angular-summernote": "^0.8.1",
+    "angular-sanitize": "^1.6.5"
   },
   "resolutions": {
-    "angular": "1.6.4"
+    "angular": "1.6.5"
   }
 }

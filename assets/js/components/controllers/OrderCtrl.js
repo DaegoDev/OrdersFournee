@@ -1,7 +1,6 @@
 var fournee = angular.module('fournee');
 fournee.controller('OrderCtrl', ['$scope', '$log', '$state', 'ClientSvc', '$ngConfirm', function($scope, $log, $state, ClientSvc, $ngConfirm) {
   if ($state.current.name != "order.myList") {
-  console.log($state.current.name);
     ClientSvc.validateInformation()
     .then(function(res) {
       var isCompletedInformation = res.data;

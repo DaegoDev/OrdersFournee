@@ -32,9 +32,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  }
+  '/': {view: 'homepage'},
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +43,60 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
+  'POST /client/signup' : {controller: "ClientController", action:"signup"},
+  'DELETE /client/delete' : {controller: "ClientController", action:"delete"},
+  'PUT /client/updatePassword' : {controller: "ClientController", action:"updatePassword"},
+  'PUT /client/enableProduct' : {controller: "ClientController", action:"enableProduct"},
+  'PUT /client/disableProduct' : {controller: "ClientController", action:"disableProduct"},
+  'GET /client/getProfile' : {controller: "ClientController", action:"getProfile"},
+  'GET /client/getProductsEnabled' : {controller: "ClientController", action:"getProductsEnabled"},
+  'GET /client/validateInformation' : {controller: "ClientController", action:"validateInformation"},
+  'GET /client/getAll' : {controller: "ClientController", action:"getAll"},
+  'PUT /client/updateGeneralInfo' : {controller: "ClientController", action:"updateGeneralInfo"},
+  'PUT /client/updateBillAddress' : {controller: "ClientController", action:"updateBillAddress"},
+  'PUT /client/updateDeliveryAddress' : {controller: "ClientController", action:"updateDeliveryAddress"},
+  'GET /client/getReceptionHour' : {controller: "ClientController", action:"getReceptionHour"},
+  'POST /client/createReceptionHour' : {controller: "ClientController", action:"createReceptionHour"},
+  'DELETE /client/deleteReceptionHour' : {controller: "ClientController", action:"deleteReceptionHour"},
+  'POST /client/createClientEmployee' : {controller: "ClientController", action:"createClientEmployee"},
+  'GET /client/validateClient' : {controller: "ClientController", action:"validateClient"},
+  'PUT /client/changeProductName' : {controller: "ClientController", action:"changeProductName"},
+  'POST /clientEmployee/addClientEmployee' : {controller: "ClientEmployee", action:"addClientEmployee"},
+  'GET /clientEmployee/getEmployeesByClient' : {controller: "ClientEmployee", action:"getEmployeesByClient"},
+  'POST /employee/signup' : {controller: "EmployeeController", action:"signup"},
+  'DELETE /employee/delete' : {controller: "EmployeeController", action:"delete"},
+  'PUT /employee/updatePassword' : {controller: "EmployeeController", action:"updatePassword"},
+  'GET /employee/getProfile' : {controller: "EmployeeController", action:"getProfile"},
+  'GET /employee/getAll' : {controller: "EmployeeController", action:"getAll"},
+  'PUT /employee/updateInformation' : {controller: "EmployeeController", action:"updateInformation"},
+  'POST /item/createItem' : {controller: "ItemController", action:"createItem"},
+  'GET /item/getByName' : {controller: "ItemController", action:"getByName"},
+  'GET /item/getAll' : {controller: "ItemController", action:"getAll"},
+  'POST /item/createElement' : {controller: "ItemController", action:"createElement"},
+  'GET /item/getProductPriority' : {controller: "ItemController", action:"getProductPriority"},
+  'POST /order/create' : {controller: "OrderController", action:"create"},
+  'PUT /order/updateDeliveryDate' : {controller: "OrderController", action:"updateDeliveryDate"},
+  'PUT /order/changeState' : {controller: "OrderController", action:"changeState"},
+  'PUT /order/cancelOrder' : {controller: "OrderController", action:"cancelOrder"},
+  'GET /order/getByDeliveryDate' : {controller: "OrderController", action:"getByDeliveryDate"},
+  'GET /order/getState' : {controller: "OrderController", action:"getState"},
+  'GET /order/getByClient' : {controller: "OrderController", action:"getByClient"},
+  'GET /order/getProductionAfterDate' : {controller: "OrderController", action:"getProductionAfterDate"},
+  'GET /order/getProductsSelected' : {controller: "OrderController", action:"getProductsSelected"},
+  'PUT /order/update' : {controller: "OrderController", action:"update"},
+  'GET /order/validateDateToUpdate' : {controller: "OrderController", action:"validateDateToUpdate"},
+  'GET /order/validateStateToCancel' : {controller: "OrderController", action:"validateStateToCancel"},
+  'POST /product/create' : {controller: "ProductController", action:"create"},
+  'PUT /product/update' : {controller: "ProductController", action:"update"},
+  'GET /product/getProductsByClient' : {controller: "ProductController", action:"getProductsByClient"},
+  'GET /product/getAllEnabled' : {controller: "ProductController", action:"getAllEnabled"},
+  'GET /product/getAllDisabled' : {controller: "ProductController", action:"getAllDisabled"},
+  'PUT /product/disableProduct' : {controller: "ProductController", action:"disableProduct"},
+  'PUT /product/enableProduct' : {controller: "ProductController", action:"enableProduct"},
+  'POST /announcement/create' : {controller: "AnnouncementController", action:"create"},
+  'PUT /announcement/update' : {controller: "AnnouncementController", action:"update"},
+  'DELETE /announcement/delete' : {controller: "AnnouncementController", action:"delete"},
+  'GET /announcement/getAll' : {controller: "AnnouncementController", action:"getAll"},
+  'GET /receptionHour/getWeekDays' : {controller: "ReceptionHourController", action:"getWeekDays"},
+  'POST /auth/signinUser' : {controller: "AuthController", action:"signinUser"}
 };

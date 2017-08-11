@@ -1,12 +1,16 @@
-<div class="announcements" ng-repeat="announcement in announcements | orderBy:'createdAt':true">
+<div class="announcements">
   <div class="header">
     <p class="title">{{announcement.title}}</p>
   </div>
   <div class="content">
-    <div ng-bind-html="announcement.content"></div>
+    <div ng-bind-html="sanitize(announcement.content)"></div>
   </div>
   <div class="footer">
     <hr>
     <p class="created-date">{{announcement.createdAt | date:'medium'}}</p>
   </div>
+</div>
+
+<div class="announcements">
+  <button type="button" style="width:100%" class="btn btn-sienna" ng-click="back()">Regresar</button>
 </div>

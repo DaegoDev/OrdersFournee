@@ -1,6 +1,6 @@
 'use stric';
 var fournee = angular.module('fournee', ['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword',
-  'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips'
+  'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips', 'summernote', 'ngSanitize'
 ]);
 
 // Inicializacion de la configuracion principal al ingresar al dominio.
@@ -72,6 +72,20 @@ fournee.filter('stateFilter', function() {
       return 'Activo';
     }
     return 'Inactivo';
+  }
+});
+
+fournee.filter('orderState', function () {
+  return function (orders, checkList) {
+    var output = [];
+    angular.forEach(orders, function (order, orderKey) {
+      angular.forEach(checkList, function (checkValue, checkKey) {
+        if (checkValue.checked && order.state.toUpperCase().trim().includes(checkValue.value)) {
+          output.push(order);
+        }
+      });
+    });
+    return output;
   }
 });
 

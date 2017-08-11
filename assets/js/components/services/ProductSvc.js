@@ -7,7 +7,7 @@ function ($http, $rootScope) {
       var create = $http({
         url: '/product/create',
         method: 'POST',
-        params: credentials
+        data: credentials
       });
       return create;
     },
@@ -16,7 +16,7 @@ function ($http, $rootScope) {
       var product = $http({
         url: '/product/update',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return product;
     },
@@ -25,7 +25,7 @@ function ($http, $rootScope) {
       var product = $http({
         url: '/product/enableProduct',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return product;
     },
@@ -34,7 +34,7 @@ function ($http, $rootScope) {
       var product = $http({
         url: '/product/disableProduct',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return product;
     },

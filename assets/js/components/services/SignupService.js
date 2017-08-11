@@ -9,7 +9,7 @@ function ($http, $rootScope) {
       var signup = $http({
         url: '/client/signup',
         method: 'POST',
-        params: credentials
+        data: credentials
       });
       return signup;
     },
@@ -29,7 +29,7 @@ function ($http, $rootScope) {
       var signup = $http({
         url: '/employee/signup',
         method: 'POST',
-        params: credentials
+        data: credentials
       });
       return signup;
     },

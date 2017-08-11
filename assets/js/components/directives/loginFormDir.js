@@ -12,7 +12,8 @@ fournee.directive('loginForm', function() {
   }
 })
 
-fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStore', '$log', function($scope, $state, AuthService, $cookieStore, $log) {
+fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStore', '$log',
+  function($scope, $state, AuthService, $cookieStore, $log) {
   $scope.user = {};
   $scope.authenticated = AuthService.isAuthenticated();
 
@@ -72,6 +73,7 @@ fournee.controller('loginCtrl', ['$scope', '$state', 'AuthService', '$cookieStor
         }
       })
       .catch(function(err) {
+        $scope.user.password = '';
         $scope.signing = false;
         $scope.loginError = true;
         $scope.errorMessage = "No se ha podido iniciar sesión, verifique su nombre de usuario o contraseña.";

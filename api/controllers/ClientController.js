@@ -292,14 +292,12 @@ module.exports = {
       .then(function(client) {
         profile = client[0];
         delete profile.additionalInformation;
-        // sails.log.debug(profile);
         return ReceptionHour.find({
           client: profile.id
         }).populate("weekDay");
       })
       .then(function(receptionHour) {
         profile.receptionHour = receptionHour;
-        // sails.log.debug(profile);
         return res.ok(profile);
       })
       .catch(function(err) {
@@ -410,7 +408,6 @@ module.exports = {
         return res.serverError(err);
       }
       var client = clients[0];
-      sails.log.debug(client);
       delete client.additional_information;
       delete client.owner_name;
       delete client.owner_phonenumber;
@@ -755,7 +752,6 @@ module.exports = {
         return ReceptionHour.find({
           client: client.id
         })
-        // sails.log.debug(receptionHourCredentials);
       })
       .then(function(receptionHours) {
         var initialTimeCredentials = parseInt(receptionHourCredentials.initialReceptionTime.substring(0, 2));
@@ -800,7 +796,6 @@ module.exports = {
     if (!receptionHourId) {
       return res.badRequest('Id del horario es vacio.');
     }
-    // sails.log.debug(receptionHourId);
     // valida si existe el horario de recepción con el ese id.
     ReceptionHour.destroy({
       id: receptionHourId
@@ -951,6 +946,7 @@ module.exports = {
       });
   }
 };
+
 // crea las credenciales para insertar una dirección
 function createAddressCredentials(country, department, city, neighborhood, nomenclature, additionalInformation) {
   if (!country || !department || !city || !neighborhood || !nomenclature) {

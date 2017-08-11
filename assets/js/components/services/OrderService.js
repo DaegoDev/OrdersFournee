@@ -7,7 +7,7 @@ function ($http, $rootScope) {
       var create = $http({
         url: '/order/create',
         method: 'POST',
-        params: credentials
+        data: credentials
       });
       return create;
     },
@@ -25,7 +25,7 @@ function ($http, $rootScope) {
       var change = $http({
         url: '/order/updateDeliveryDate',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return change;
     },
@@ -34,7 +34,7 @@ function ($http, $rootScope) {
       var change = $http({
         url: '/order/changeState',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return change;
     },
@@ -43,7 +43,7 @@ function ($http, $rootScope) {
       var cancel = $http({
         url: '/order/cancelOrder',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return cancel;
     },
@@ -77,7 +77,7 @@ function ($http, $rootScope) {
     validateDateToUpdate: function (params) {
       var isCorrect = $http({
         url: '/order/validateDateToUpdate',
-        method: 'POST',
+        method: 'GET',
         params: params
       });
       return isCorrect;
@@ -86,7 +86,7 @@ function ($http, $rootScope) {
     validateStateToCancel: function (params) {
       var isCorrect = $http({
         url: '/order/validateStateToCancel',
-        method: 'POST',
+        method: 'GET',
         params: params
       });
       return isCorrect;

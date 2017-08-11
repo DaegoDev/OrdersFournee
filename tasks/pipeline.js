@@ -21,6 +21,7 @@ var cssFilesToInject = [
   'bower_components/font-awesome/css/font-awesome.min.css',
   'bower_components/angular-confirm/css/angular-confirm.css',
   'bower_components/angular-tooltips/dist/angular-tooltips.min.css',
+  'bower_components/summernote/dist/summernote.css',
   'styles/**/*.css'
 ];
 
@@ -34,7 +35,10 @@ var jsFilesToInject = [
 
   // Dependencies like jQuery, or Angular are brought in here
   'js/dependencies/**/*.js',
-  // 'bower_components/jquery/dist/jquery.min.js',
+  'bower_components/jquery/dist/jquery.min.js',
+  'bower_components/bootstrap/dist/js/bootstrap.min.js',
+  'bower_components/summernote/dist/summernote.js',
+  'bower_components/summernote/dist/lang/summernote-es-ES.min.js',
   'bower_components/angular/angular.js',
   'bower_components/angular-route/angular-route.js',
   'bower_components/angular-ui-router/release/angular-ui-router.js',
@@ -49,6 +53,8 @@ var jsFilesToInject = [
   'bower_components/angular-password/angular-password.js',
   'bower_components/angular-confirm/dist/angular-confirm.min.js',
   'bower_components/angular-tooltips/dist/angular-tooltips.min.js',
+  'bower_components/angular-sanitize/angular-sanitize.min.js',
+  'bower_components/angular-summernote/dist/angular-summernote.min.js',
   'bower_components/color-hash/dist/color-hash.js',
 
   // Angular files are here.

@@ -23,32 +23,12 @@
         <button id="btn-append-to-body" type="button" class="btn btn-sm btn-sienna" uib-dropdown-toggle>
           Filtros <span class="caret"></span>
         </button>
+
         <ul class="dropdown-menu order-filter" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
-          <li role="menuitem">
+          <li role="menuitem" ng-repeat="checkValue in checkList">
             <div class="checkbox">
               <label>
-                <input type="checkbox" ng-true-value="'confirmado'" ng-false-value="''" ng-model="checkFilter"/> Confirmado
-              </label>
-            </div>
-          </li>
-          <li role="menuitem">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-true-value="'pendiente'" ng-false-value="''" ng-model="checkFilter"/> Pendiente
-              </label>
-            </div>
-          </li>
-          <li role="menuitem">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-true-value="'alistado'" ng-false-value="''" ng-model="checkFilter"/> Alistado
-              </label>
-            </div>
-          </li>
-          <li role="menuitem">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-true-value="'despachado'" ng-false-value="''" ng-model="checkFilter"/> Despachado
+                <input type="checkbox" ng-model="checkValue.checked"/> {{checkValue.text}}
               </label>
             </div>
           </li>
@@ -101,7 +81,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="ord in orders | filter: checkFilter | orderBy: sortByProperty:sortReversed" class="orderList">
+            <tr ng-repeat="ord in orders | orderState:checkList | orderBy: sortByProperty:sortReversed" class="orderList">
               <td align="center" style="vertical-align:middle">
                 <input type="checkbox" ng-click="checkSelectAll(ord.id)" ng-model="checkboxObj[ord.id]">
               </td>

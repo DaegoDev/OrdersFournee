@@ -14,7 +14,7 @@ function ($http) {
     deleteEmployee: function(employee) {
       var deleteEmployee = $http({
         url: '/employee/delete',
-        method: 'GET',
+        method: 'DELETE',
         params: employee
       });
       return deleteEmployee;
@@ -24,7 +24,7 @@ function ($http) {
       var updateEmployee = $http({
         url: '/employee/updateInformation',
         method: 'PUT',
-        params: credentials
+        data: credentials
       });
       return updateEmployee;
     },

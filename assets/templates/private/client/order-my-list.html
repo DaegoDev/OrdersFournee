@@ -2,7 +2,7 @@
   <div class="section-header">
     <h1>Mis pedidos</h1>
   </div>
-  <div class="table-container">
+  <div class="order-mylist table-container">
     <div class="table-responsive">
       <table class="table table-hover table-bordered table-condensed">
         <thead>
@@ -21,7 +21,7 @@
             <td style="vertical-align:middle">{{order.createdAt | date:'medium'}}</td>
             <td style="vertical-align:middle">{{order.deliveryDate | date:'mediumDate'}}</td>
             <td style="vertical-align:middle">{{order.additionalInformation}}</td>
-            <td style="background-color: #201300; color: white;">{{order.state}}</td>
+            <td style="background-color: #201300; color: white;">{{order.state | capitalize}}</td>
             <td>
               <a class="fa fa-edit" tooltips tooltip-template="Editar" ng-click='showEditForm(order)'></a>
               <a class="fa fa-trash" tooltips tooltip-template="Cancelar" ng-click="cancelOrderConfirm(order)"></a>

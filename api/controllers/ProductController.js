@@ -37,7 +37,7 @@ module.exports = {
       });
     } else {
       items.forEach(function(item, i, items) {
-        item = JSON.parse(item)
+        // item = JSON.parse(item)
         items[i] = item;
         indexMandatory = mandatoryItems.indexOf(items[i].name.toUpperCase().trim());
         if (indexMandatory != -1) {
@@ -225,7 +225,7 @@ module.exports = {
        return res.badRequest({code: 2, msg: 'There are no enough items'});
      } else {
        items.forEach(function(item, i, items) {
-         item = JSON.parse(item);
+        //  item = JSON.parse(item);
          items[i] = item;
 
          indexMandatory = mandatoryItems.indexOf(items[i].name.toUpperCase().trim());

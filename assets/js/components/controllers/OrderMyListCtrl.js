@@ -15,7 +15,6 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
         orderId: order.id
       })
       .then(function(res) {
-        console.log("hora correcta");
         $state.go('order.create.shoppingCartUpdate', {
           order: order
         });
@@ -30,7 +29,6 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
         orderId: order.id
       })
       .then(function(res) {
-        console.log("hora correcta");
         $ngConfirm({
           title: '¿Realmente desea cancelar el pedido?',
           useBootstrap: true,
@@ -60,7 +58,6 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
         orderId: order.id
       })
       .then(function(res) {
-        console.log(res.data);
         order.state = res.data.state;
       })
       .catch(function(err) {

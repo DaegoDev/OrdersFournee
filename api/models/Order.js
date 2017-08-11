@@ -28,7 +28,7 @@ module.exports = {
       size: 64,
       notNull: true,
       required: true,
-      defaultsTo: 'confirmado',
+      defaultsTo: 'Confirmado',
       columnName: 'state'
     },
     initialSuggestedTime: {

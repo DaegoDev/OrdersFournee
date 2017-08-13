@@ -907,8 +907,15 @@ module.exports = {
     var productCode = null;
     var user = req.user;
 
+    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
     customName = req.param('customName');
+    if (!customName) {
+      return res.badRequest('Nombre vacio.');
+    }
     productCode = req.param('productCode');
+    if (!productCode) {
+      return res.badRequest('Código del producto vacio.');
+    }
 
     Client.find({
         user: user.id
@@ -937,6 +944,7 @@ module.exports = {
         return res.ok(productData);
       })
       .catch(function(err) {
+        sails.log.debug(err);
         if (err.code && err.code == 1) {
           return res.serverError(err);
         }

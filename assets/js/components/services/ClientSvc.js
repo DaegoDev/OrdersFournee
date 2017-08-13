@@ -119,7 +119,7 @@ function ($http) {
     changeProductName: function (productCredentials) {
       var product = $http({
         url: '/client/changeProductName',
-        methot: 'PUT',
+        method: 'PUT',
         data: productCredentials
       });
       return product;

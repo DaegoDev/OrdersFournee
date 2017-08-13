@@ -50,6 +50,8 @@ module.exports = {
     createdAt = TimeZoneService.getDate({
       offset: -300
     }, null);
+    // createdAt = new Date();
+    // createdAt.setDate(createdAt.getDate()-1);
     if (!isCorrectDeliveryDate(createdAt, deliveryDateDesired)) {
       return res.badRequest("La fecha de entrega no es correcta");
     }
@@ -951,12 +953,13 @@ function validateDeliveryDateDesired(createdAt, deliveryDate) {
   var deliveryDay = deliveryDate.getDate();
   var tomorrow = new Date(createdYear, createdMonth, createdDay);
   tomorrow.setDate(createdDay + 1);
+  var afterTomorrow = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate() + 1);
   var correct = true;
 
   if (deliveryYear > createdYear) {
     return correct;
   }
-  if (((createdTime > 13 && createdTime < 23) && deliveryDay == tomorrow.getDate() && deliveryMonth == tomorrow.getMonth()) ||
+  if (((createdTime > 13 && createdTime < 23) && deliveryMonth == tomorrow.getMonth() && (deliveryDay == tomorrow.getDate() || (tomorrow.getDay() == 0 && afterTomorrow.getDate() == deliveryDay ))) ||
     ((createdTime >= 0 && createdTime < 4) && deliveryDay == createdDay && deliveryMonth == createdMonth)) {
     correct = false;
   }

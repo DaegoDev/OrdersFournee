@@ -13,7 +13,7 @@ var fournee = angular.module('fournee');
     }
   })
 
-  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc',function($scope, $log, productItemSvc) {
+  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc', '$ngConfirm', function($scope, $log, productItemSvc, $ngConfirm) {
     $scope.currentItem = null;
     $scope.isCollapsed = false;
     $scope.dirControl = null;
@@ -52,6 +52,9 @@ var fournee = angular.module('fournee');
       })
       .catch(function (err) {
         $log.warn(err)
+        if (err.data.code == 460) {
+          $ngConfirm(err.data.msg)
+        }
       });
     }
 

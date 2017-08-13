@@ -49,18 +49,41 @@ module.exports = {
       })
       .then(function(element) {
         if (!element) {
-          throw 'El elemento no existe';
+
+          throw {
+            code: 461,
+            msg: 'El elemento no existe'
+          };
         }
         itemCredentials.element = elementId;
+        // Se verifica que no haya otro elemento con el mismo valor o abreviación.
+        return Item.find({
+          or: [{
+              value: value
+            },
+            {
+              shortValue: shortValue
+            }
+          ]
+        })
+      })
+      .then(function(item) {
+        if (item.length > 0) {
+          throw {
+            code: 460,
+            msg: "Ya existe un item con ese valor o abreviación"
+          };
+        }
         // se crea un item en la base de datos
         return Item.create(itemCredentials)
+
       })
       .then(function(item) {
         res.created(item);
       })
       .catch(function(err) {
         sails.log.debug(err);
-        res.serverError();
+        res.serverError(err);
       });
   },
   /**

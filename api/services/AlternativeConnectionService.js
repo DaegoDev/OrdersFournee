@@ -24,7 +24,8 @@ module.exports = {
       host: sailsMySqlConfig.host,
       user: sailsMySqlConfig.user,
       password: sailsMySqlConfig.password,
-      database: sailsMySqlConfig.database
+      database: sailsMySqlConfig.database,
+      timezone: sailsMySqlConfig.timezone
     });
 
     // Paso la coneccion al constructor de la libreria mysql-wrap

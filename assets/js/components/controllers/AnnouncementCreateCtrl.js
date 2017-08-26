@@ -115,7 +115,7 @@
             text: 'Nuevo anuncio',
             btnClass: 'btn-sienna',
             action: function() {
-              $state.go('announcement.create');
+              $state.reload();
             }
           },
           exit: {

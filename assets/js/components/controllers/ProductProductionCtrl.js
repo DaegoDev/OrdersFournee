@@ -33,10 +33,10 @@
     $scope.getProducts = function () {
       OrderService.getProductionAfterDate(
         {
-          timestamp: $scope.datePicker.date.getTime(),
-          offset: (-1) * $scope.datePicker.date.getTimezoneOffset()
+          timestamp: $scope.datePicker.date.getTime() + (-(new Date().getTimezoneOffset() * 60 * 1000)),
         })
         .then(function (res) {
+          console.log(res.data);
           $scope.products = res.data;
         })
         .catch(function (err) {
@@ -44,24 +44,24 @@
         });
       }
 
-    $scope.getProducts();
+      $scope.getProducts();
 
-    $scope.openDatePicker = function () {
-      $scope.datePicker.opened = true;
-    };
+      $scope.openDatePicker = function () {
+        $scope.datePicker.opened = true;
+      };
 
-    $scope.stateFilter = function (product) {
-      for (var i = 0; i < Object.keys($scope.search.state).length; i++) {
-        if (product.state == i) {
-          return $scope.search.state[i];
+      $scope.stateFilter = function (product) {
+        for (var i = 0; i < Object.keys($scope.search.state).length; i++) {
+          if (product.state == i) {
+            return $scope.search.state[i];
+          }
         }
+      };
+
+      $scope.sortBy = function (property) {
+        $scope.sortProperty = property;
+        $scope.sortReversed = ($scope.sortProperty === property) ? !$scope.sortReversed : false;
       }
-    };
 
-    $scope.sortBy = function (property) {
-      $scope.sortProperty = property;
-      $scope.sortReversed = ($scope.sortProperty === property) ? !$scope.sortReversed : false;
-    }
-
-  }])
-})();
+    }])
+  })();

@@ -11,37 +11,19 @@ fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
         if (StorageService.get("auth_token", "session")) {
           role = StorageService.get("role", "session");
           if (role) {
-            PermRoleStore.defineRole('ANON', function() {
-              return false;
-            });
-            PermRoleStore.defineRole('ADMINISTRADOR', function() {
-              return false;
-            });
-            PermRoleStore.defineRole('DESPACHADOR', function() {
-              return false;
-            });
-            PermRoleStore.defineRole('CLIENTE', function() {
-              return false;
-            });
-            PermRoleStore.defineRole(role.toUpperCase(), function() {
-              return true;
-            });
+            PermRoleStore.defineRole('ANON', function() {return false;});
+            PermRoleStore.defineRole('ADMINISTRADOR', function() {return false;});
+            PermRoleStore.defineRole('DESPACHADOR', function() {return false;});
+            PermRoleStore.defineRole('CLIENTE', function() {return false;});
+            PermRoleStore.defineRole(role.toUpperCase(), function() {return true;});
             $rootScope.$broadcast('renovateRole');
           }
         } else {
           PermRoleStore.clearStore();
-          PermRoleStore.defineRole('ADMINISTRADOR', function() {
-            return false;
-          });
-          PermRoleStore.defineRole('DESPACHADOR', function() {
-            return false;
-          });
-          PermRoleStore.defineRole('CLIENTE', function() {
-            return false;
-          });
-          PermRoleStore.defineRole("ANON", function() {
-            return true;
-          });
+          PermRoleStore.defineRole('ADMINISTRADOR', function() {return false;});
+          PermRoleStore.defineRole('DESPACHADOR', function() {return false;});
+          PermRoleStore.defineRole('CLIENTE', function() {return false;});
+          PermRoleStore.defineRole("ANON", function() {return true;});
           $rootScope.$broadcast('renovateRole');
         }
       }

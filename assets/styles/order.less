@@ -209,7 +209,7 @@ label {
   padding: 10px;
   table {
     th {
-      font-size: 100%;
+      font-size: 125%;
       text-align: center;
       font-weight: bold;
       background-color: @theme-nero;
@@ -223,7 +223,7 @@ label {
     }
 
     td {
-      font-size: 90%;
+      font-size: 110%;
       word-wrap: break-word;
       max-width: 250px;
       text-align: center;
@@ -231,6 +231,14 @@ label {
 
       &:nth-child(2) {
         text-align: left;
+      }
+      &:last-child {
+        background-color: @theme-nero;
+        color: @font-tussock;
+        text-align: center;
+        &:hover {
+          color: @font-white;
+        }
       }
     }
   }

@@ -17,7 +17,7 @@
       <tr ng-repeat="announcement in announcements | orderBy:'createdAt':true" >
         <td>{{announcement.id}}</td>
         <td>{{announcement.title}}</td>
-        <td>{{announcement.createdAt | date:'medium'}}</td>
+        <td>{{announcement.createdAt | date:'medium':'+0000'}}</td>
         <td >
           <a class="fa fa-edit" tooltips tooltip-template="Editar" ng-click="selectAnnouncement(announcement)"></a>
           <a class="fa fa-trash" tooltips tooltip-template="Eliminar" ng-click="deleteAnnouncement(announcement)"></a>

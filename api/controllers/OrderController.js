@@ -64,8 +64,11 @@ module.exports = {
       state = "Confirmado";
       deliveryDate = deliveryDateDesired;
     } else {
-      state = "Pendiente de confirmación"
+      state = "Pendiente de confirmación";
       deliveryDateDesired.setUTCDate(deliveryDateDesired.getUTCDate() + 1);
+      if (deliveryDateDesired.getUTCDay() == 0) {
+        deliveryDateDesired.setUTCDate(deliveryDateDesired.getUTCDate() + 1)
+      }
       deliveryDate = deliveryDateDesired;
     }
 
@@ -897,43 +900,51 @@ module.exports = {
     }
     return isCorrect;
   }
+  if ((updatedMonth > deliveryMonth) || (updatedMonth == deliveryMonth && updatedDay >= deliveryDay) ||
+  (updatedMonth == yesterderToDeliveryDate.getUTCMonth() && updatedDay == yesterderToDeliveryDate.getUTCDate() && updatedTime > 13)) {
+    isCorrect = false;
+  }
+  return isCorrect;
+}
 
-  function isCorrectDeliveryDate(createdAt, deliveryDate) {
-    var createdYear = createdAt.getUTCFullYear();
-    var createdTime = createdAt.getUTCHours();
-    var createdDay = createdAt.getUTCDate();
-    var createdMonth = createdAt.getUTCMonth();
-    var deliveryYear = deliveryDate.getUTCFullYear();
-    var deliveryDay = deliveryDate.getUTCDate();
-    var deliveryMonth = deliveryDate.getUTCMonth();
-    var isCorrect = true;
-    if (deliveryYear > createdYear) {
-      return isCorrect;
-    }
-
-    if (deliveryMonth < createdMonth || (createdTime > 3 && deliveryDay <= createdDay && deliveryMonth <= createdMonth) ||
-    deliveryDate.getUTCDay() == 0) {
-      isCorrect = false;
-    }
+function isCorrectDeliveryDate(createdAt, deliveryDate) {
+  var createdYear = createdAt.getUTCFullYear();
+  var createdTime = createdAt.getUTCHours();
+  var createdDay = createdAt.getUTCDate();
+  var createdMonth = createdAt.getUTCMonth();
+  var deliveryYear = deliveryDate.getUTCFullYear();
+  var deliveryDay = deliveryDate.getUTCDate();
+  var deliveryMonth = deliveryDate.getUTCMonth();
+  var isCorrect = true;
+  if (deliveryYear > createdYear) {
     return isCorrect;
   }
 
-  function validateDeliveryDateDesired(createdAt, deliveryDate) {
-    var createdTime = createdAt.getUTCHours();
-    var createdYear = createdAt.getUTCFullYear();
-    var createdMonth = createdAt.getUTCMonth();
-    var createdDay = createdAt.getUTCDate();
-    var deliveryYear = deliveryDate.getUTCFullYear();
-    var deliveryMonth = deliveryDate.getUTCMonth();
-    var deliveryDay = deliveryDate.getUTCDate();
-    var tomorrow = new Date(createdYear, createdMonth, createdDay);
-    tomorrow.setUTCDate(createdDay + 1);
-    var correct = true;
+  if (deliveryMonth < createdMonth || (createdTime > 3 && deliveryDay <= createdDay && deliveryMonth <= createdMonth) ||
+  deliveryDate.getUTCDay() == 0) {
+    isCorrect = false;
+  }
+  return isCorrect;
+}
 
-    if (deliveryYear > createdYear) {
-      return correct;
-    }
-    if (((createdTime > 13 && createdTime < 23) && deliveryDay == tomorrow.getUTCDate() && deliveryMonth == tomorrow.getUTCMonth()) ||
+function validateDeliveryDateDesired(createdAt, deliveryDate) {
+  var createdTime = createdAt.getUTCHours();
+  var createdYear = createdAt.getUTCFullYear();
+  var createdMonth = createdAt.getUTCMonth();
+  var createdDay = createdAt.getUTCDate();
+  var deliveryYear = deliveryDate.getUTCFullYear();
+  var deliveryMonth = deliveryDate.getUTCMonth();
+  var deliveryDay = deliveryDate.getUTCDate();
+  var tomorrow = new Date(createdYear, createdMonth, createdDay);
+  tomorrow.setDate(createdDay + 1);
+  var afterTomorrow = new Date(tomorrow.getUTCFullYear(), tomorrow.getUTCMonth(), tomorrow.getUTCDate() + 1);
+  var correct = true;
+
+  if (deliveryYear > createdYear) {
+    return correct;
+  }
+  if (((createdTime > 13 && createdTime < 23) && deliveryMonth == tomorrow.getUTCMonth() && (deliveryDay == tomorrow.getUTCDate() ||
+  (tomorrow.getUTCDay() == 0 && afterTomorrow.getUTCDate() == deliveryDay ))) ||
     ((createdTime >= 0 && createdTime < 4) && deliveryDay == createdDay && deliveryMonth == createdMonth)) {
       correct = false;
     }

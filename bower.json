@@ -34,7 +34,8 @@
     "angular-tooltips": "~1.1.10",
     "color-hash": "^1.0.3",
     "angular-summernote": "^0.8.1",
-    "angular-sanitize": "^1.6.5"
+    "angular-sanitize": "^1.6.5",
+    "angularPrint": "angular-print#^0.3.8"
   },
   "resolutions": {
     "angular": "1.6.5"

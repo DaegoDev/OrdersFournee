@@ -1,10 +1,10 @@
 /**
- * Order.js
- *
- * @description :: Modelo que representa la tabla order en la base de datos
- * @autors      :: Jonnatan Rios Vasquez- jrios328@gmail.com    Diego Alvarez-daegoudea@gmail.com
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+* Order.js
+*
+* @description :: Modelo que representa la tabla order en la base de datos
+* @autors      :: Jonnatan Rios Vasquez- jrios328@gmail.com    Diego Alvarez-daegoudea@gmail.com
+* @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
+*/
 
 module.exports = {
   // migrate: 'drop',

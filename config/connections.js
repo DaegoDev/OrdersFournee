@@ -33,7 +33,8 @@ module.exports.connections = {
     host: 'localhost',
     database: 'ordersFournee',
     user: 'root', //optional
-    password: 'jrv92328' //optional
+    password: 'root', //optional
+    timezone: 'utc'
   },
 
   /***************************************************************************

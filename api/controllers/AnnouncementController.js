@@ -27,8 +27,9 @@ module.exports = {
 		}
 		// content = sanitizeHtml(content); // Cleans the html from unwanted scripting.
 
-		createdAt = TimeZoneService.getDate({offset: -300});
+		createdAt = TimeZoneService.getDate({});
 		updatedAt = createdAt;
+		createdAt.setHours(createdAt.getHours() + (createdAt.getTimezoneOffset() / 60));
 
 		announcementCredentials = {
 			user: req.user.id,
@@ -37,7 +38,7 @@ module.exports = {
 			createdAt: createdAt,
 			updatedAt: updatedAt
 		}
-
+		
 		Announcement.create(announcementCredentials)
 		.then(function (resData) {
 			return res.created();
@@ -70,7 +71,7 @@ module.exports = {
 		}
 		// content = sanitizeHtml(content); // Cleans the html from unwanted scripting.
 
-		updatedAt = TimeZoneService.getDate({offset: -300});
+		updatedAt = TimeZoneService.getDate({});
 
 		announcementCredentials = {
 			title: title,

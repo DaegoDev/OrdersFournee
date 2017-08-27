@@ -18,8 +18,8 @@
         <tbody>
           <tr ng-repeat="order in orders">
             <td style="vertical-align:middle">{{order.id}}</td>
-            <td style="vertical-align:middle">{{order.createdAt | date:'medium'}}</td>
-            <td style="vertical-align:middle">{{order.deliveryDate | date:'mediumDate'}}</td>
+            <td style="vertical-align:middle">{{order.createdAt | date:'medium':'+0000'}}</td>
+            <td style="vertical-align:middle">{{order.deliveryDate | date:'mediumDate':'+0000'}}</td>
             <td style="vertical-align:middle">{{order.additionalInformation}}</td>
             <td style="background-color: #201300; color: white;">{{order.state | capitalize}}</td>
             <td>

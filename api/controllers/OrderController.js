@@ -657,12 +657,12 @@ module.exports = {
 
     var queryStr = "SELECT \
     p.code, p.name , p.short_name as shortName, \
-    o.delivery_date AS deliveryDate, \
+    o.delivery_date AS deliveryDate, o.state, \
     op.amount, op.baked \
     FROM \
     product p, `order` o, order_product op, client_product cp \
     WHERE \
-    o.id = op.order_id AND cp.id = op.client_product AND p.code = cp.product \
+    o.id = op.order_id AND cp.id = op.client_product AND p.code = cp.product AND o.state != 'Cancelado' \
     AND o.delivery_date >= ? \
     ORDER BY p.code;"
 

@@ -19,14 +19,12 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
   ClientSvc.getProductsClient()
   .then(function(res) {
     tmpProductsEnabled = res.data;
-    console.log(tmpProductsEnabled);
     if ($scope.formToUpdate) {
       return OrderService.getProductsSelected({orderId: orderParam.id});
     }
   })
   .then(function (products) {
     if (products) {
-      console.log(products.data);
       products.data.forEach(function(productSelected, indexPs) {
         var idProductSelected = productSelected.id;
         tmpProductsEnabled.forEach(function(productEnabled, indexPe) {
@@ -36,7 +34,6 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
         });
       });
     }
-    // console.log(tmpProductsEnabled);
     $scope.products = tmpProductsEnabled;
   })
   .catch(function(err) {

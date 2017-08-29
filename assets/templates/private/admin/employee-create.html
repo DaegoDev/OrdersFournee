@@ -9,7 +9,7 @@
           'has-success': signup.username.$valid}">
           <label class="control-label col-sm-2" for="username">Nombre de usuario:</label>
           <div class="col-sm-10">
-            <input type="text" name="username" id="username" ng-model="employee.username" class="form-control" required placeholder="johnny66"/>
+            <input type="text" name="username" id="username" ng-model="employee.username" class="form-control" required placeholder="Ej. johnny66"/>
             <!-- VALIDACIONES DE NOMBRE DE USUARIO-->
             <div ng-messages="signup.username.$error" ng-if="signup.username.$touched || signup.$submitted" ng-messages-multiple>
               <p ng-message="required" class="help-block"><b>El campo nombre de usuario es obligatorio.</b></p>
@@ -24,7 +24,7 @@
           'has-success': signup.password.$valid}">
           <label class="control-label col-sm-2" for="password">Contraseña:</label>
           <div class="col-sm-10">
-            <input type="password" name="password" id="password" ng-model="employee.password" ng-minlength="6" class="form-control" required placeholder="H@rdT0guessPa55"/>
+            <input type="password" name="password" id="password" ng-model="employee.password" ng-minlength="6" class="form-control" required placeholder="Ej. H@rdT0guessPa55"/>
             <!-- VALIDACIONES DE CONTRASEÑA -->
             <div ng-messages="signup.password.$error" ng-if="signup.password.$touched || signup.$submitted" ng-messages-multiple>
               <p ng-message="required" class="help-block"><b>El campo de contraseña es obligatorio.</b></p>
@@ -40,7 +40,7 @@
         'has-success': signup.rePassword.$valid}">
           <label class="control-label col-sm-2" for="rePassword">Confirmar contraseña:</label>
           <div class="col-sm-10">
-            <input type="password" name="rePassword" id="rePassword" ng-model="employee.rePassword" class="form-control" match-password="password" required placeholder="H@rdT0guessPa55"/>
+            <input type="password" name="rePassword" id="rePassword" ng-model="employee.rePassword" class="form-control" match-password="password" required placeholder="Ej. H@rdT0guessPa55"/>
             <!-- VALIDACIONES DE CONTRASEÑA -->
             <div ng-messages="signup.rePassword.$error" ng-if="signup.rePassword.$touched || signup.$submitted" ng-messages-multiple>
               <p ng-message="required" class="help-block"><b>El campo de confirmar contraseña es obligatorio.</b></p>
@@ -61,7 +61,7 @@
           'has-success': signup.name.$valid}">
           <label class="control-label col-sm-2" for="name">Nombre del empleado:</label>
           <div class="col-sm-10">
-            <input type="text" name="name" id="name" ng-model="employee.name" class="form-control" required placeholder="Johnny Ieri"/>
+            <input type="text" name="name" id="name" ng-model="employee.name" class="form-control" required placeholder="Ej. Johnny Ieri"/>
             <!-- VALIDACIONES DE NOMBRE -->
             <div ng-messages="signup.name.$error" ng-if="signup.name.$touched || signup.$submitted" ng-messages-multiple>
               <p ng-message="required" class="help-block"><b>El campo de nombre es obligatorio.</b></p>

@@ -1,8 +1,6 @@
 var fournee = angular.module('fournee');
 fournee.controller('OrderCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm', 'ClientSvc', 'OrderService', '$stateParams', 'ProfileService',
 function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams, ProfileService) {
-  // Timepicker para el rango de hora sugerida
-
   // Variables para el control de la lista de productos.
   $scope.order = {};
   $scope.orderList = [];
@@ -21,12 +19,14 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
   ClientSvc.getProductsClient()
   .then(function(res) {
     tmpProductsEnabled = res.data;
+    console.log(tmpProductsEnabled);
     if ($scope.formToUpdate) {
       return OrderService.getProductsSelected({orderId: orderParam.id});
     }
   })
   .then(function (products) {
     if (products) {
+      console.log(products.data);
       products.data.forEach(function(productSelected, indexPs) {
         var idProductSelected = productSelected.id;
         tmpProductsEnabled.forEach(function(productEnabled, indexPe) {
@@ -36,6 +36,7 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
         });
       });
     }
+    // console.log(tmpProductsEnabled);
     $scope.products = tmpProductsEnabled;
   })
   .catch(function(err) {
@@ -92,7 +93,7 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
 
     $scope.orderList.forEach(function(product) {
       product = {
-        client_product: product.client_product,
+        client_product: product.clientProduct,
         amount: product.amount,
         baked: product.baked,
       }
@@ -204,7 +205,7 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
 
     $scope.orderList.forEach(function(product) {
       product = {
-        client_product: product.client_product,
+        client_product: product.clientProduct,
         amount: product.amount,
         baked: product.baked,
       }
@@ -237,8 +238,6 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
       productsToOrder: productsToOrder
     }
 
-    console.log(orderCredentials);
-
     ClientSvc.makeOrder(orderCredentials)
     .then(function(res) {
       $scope.deliveryDateEstablished = res.data.deliveryDate;
@@ -265,7 +264,6 @@ function($scope, $log, $state, $ngConfirm, ClientSvc, OrderService, $stateParams
           }
         }
       });
-      $log.info(res.data);
     })
     .catch(function(err) {
       $ngConfirm('El pedido no ha sido creado, verifique la fecha de entrega.');

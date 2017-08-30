@@ -3,11 +3,10 @@
     <fieldset>
       <legend>Información de entrega</legend>
       <div class="col-sm-12">
-        <font color="red"> Recuerde que los pedidos que se envíen antes de la 2 pm se entregarán al día siguiente,
-          en caso de haberlo enviado después de esta hora y su fecha deseada para la entrega
-        es el siguiente día, se analiza disponibilidad de la empresa, pero su fecha de entrega será
-        en dos días si no se acepta su fecha deseada para la entrega.</font>
-        <hr />
+        <div class="panel panel-default">
+          <div class="panel-body">  <font color="red"> Recuerde que los pedidos que se envíen antes de la 2 pm se entregarán al día siguiente, en caso de haberlo enviado después de esta hora y su fecha deseada para la entrega es el siguiente día, se analiza disponibilidad de la empresa, pero su fecha
+              de entrega será en dos días si no se acepta su fecha deseada para la entrega.</font></div>
+        </div>
       </div>
       <div class="col-sm-4">
         <h1 ng-if="!formToUpdate">Fecha deseada para la entrega:</h1>
@@ -23,20 +22,20 @@
       </div>
 
       <div class="col-sm-7">
-        <h1 for="delivery_date">Horario deseado para la entrega:</h1>
+        <h1 for="delivery_date">Horario deseado para la entrega (Hora militar):</h1>
         <div class="col-sm-1 label-time">
           <label>Inicial: </label>
         </div>
         <div class="col-sm-4">
-          <div uib-timepicker ng-model="order.timeInitial" name="initial_suggested_time" ng-change="changedInitial()"
-          hour-step="order.hstep" minute-step="order.mstep" min="order.minTimeInitial" max="order.maxTimeInitial" show-meridian=false></div>
+          <div uib-timepicker ng-model="order.timeInitial" name="initial_suggested_time"
+          ng-change="changedInitial()" hour-step="order.hstep" minute-step="order.mstep"  show-meridian=false></div>
         </div>
         <div class="col-sm-1 label-time">
           <label>Final:</label>
         </div>
         <div class="col-sm-4">
-          <div uib-timepicker ng-model="order.timeFinal" name="initial_suggested_time" ng-change="changedFinal()"
-          hour-step="order.hstep" minute-step="order.mstep" min="order.minTimeFinal" max="order.maxTimeFinal" show-meridian=false></div>
+          <div uib-timepicker ng-model="order.timeFinal" name="initial_suggested_time"
+          ng-change="changedFinal()" hour-step="order.hstep" minute-step="order.mstep" show-meridian=false></div>
         </div>
       </div>
     </fieldset>

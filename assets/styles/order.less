@@ -46,6 +46,7 @@ label {
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
+
   label {
     color: @font-tussock;
   }
@@ -54,6 +55,7 @@ label {
 .section-deliveryDate {
   padding: 10px;
   font-size: 130%;
+
   label {
     color: @font-black;
     padding-top: 7px;
@@ -63,9 +65,11 @@ label {
 .orderList {
   td {
     cursor: pointer;
+
     &:first-child {
       cursor: default;
     }
+
     input[type="checkbox"] {
       cursor: pointer;
     }
@@ -77,68 +81,86 @@ label {
     margin-top: 5px;
     margin-bottom: 5px;
   }
+
   .date-label {
     display: inline-block;
     width: 25%;
   }
+
   .date-text {
     display: inline-block;
     width: 73%;
+
     input {
       height: 25px;
     }
   }
+
   .suggestTime-label {
     display: inline-block;
     width: 45%;
   }
+
   .suggestTime-text {
     display: inline-block;
     width: 53%;
+
     input {
       height: 25px;
     }
   }
+
   .employee-label {
     display: inline-block;
     width: 45%;
   }
+
   .employee-text {
     display: inline-block;
     width: 53%;
+
     input {
       height: 25px;
     }
   }
+
   .phonenumber-label {
     display: inline-block;
     width: 25%;
   }
+
   .phonenumber-text {
     display: inline-block;
     width: 33%;
+
     input {
       height: 25px;
     }
   }
+
   .label-item {
     display: inline-block;
     width: 25%;
   }
+
   .text-item {
     display: inline-block;
     width: 23%;
+
     input {
       height: 25px;
     }
   }
+
   .label-reference {
     display: inline-block;
     width: 25%;
   }
+
   .text-reference {
     display: inline-block;
     width: 73%;
+
     input {
       height: 25px;
     }
@@ -148,6 +170,7 @@ label {
     display: block;
     width: 99%;
   }
+
   .textarea-comment {
     display: block;
     width: 98%;
@@ -157,15 +180,18 @@ label {
 }
 
 .date-order {
-    position: relative;
-    h1 {
-      color: white;
-      cursor:pointer;
-    }
+  position: relative;
+
+  h1 {
+    color: white;
+    cursor: pointer;
+  }
+
   .section-deliveryDate {
     z-index: 40;
     position: absolute;
     bottom: 0;
+
     input {
       display: none;
     }
@@ -191,22 +217,26 @@ label {
 
 .order-filter {
   li {
-      padding-left: 10px;
+    padding-left: 10px;
+
+    label {
+      line-height: 25px;
+    }
+
+    &:hover {
+      background-color: @theme-nero-hover;
+
       label {
-        line-height: 25px;
+        color: @font-white;
+        width: 100%;
       }
-      &:hover {
-        background-color: @theme-nero-hover;
-        label {
-          color: @font-white;
-          width: 100%;
-        }
-      }
+    }
   }
 }
 
 .production-table {
   padding: 10px;
+
   table {
     th {
       font-size: 125%;
@@ -246,14 +276,17 @@ label {
 
 .date-production {
   position: relative;
+
   h1 {
     color: white;
-    cursor:pointer;
+    cursor: pointer;
   }
+
   .datepicker-product {
     bottom: 0;
     z-index: 40;
     position: absolute;
+
     input {
       display: none;
     }
@@ -262,9 +295,9 @@ label {
 
 .production-checkbox {
   .checkbox {
-
     label {
       line-height: 25px;
+
       &:hover {
         background-color: #F9F9F9;
       }
@@ -280,11 +313,12 @@ label {
 
         &:last-child {
           text-align: center;
+
           a {
             color: @font-tussock;
+
             &:hover {
               color: @font-white;
-
             }
           }
         }
@@ -306,4 +340,31 @@ label {
 .baked-color {
   background-color: #D9534F;
   color: @font-white;
+}
+
+@media print {
+  .col-name {
+  }
+
+  .col-amount {
+    text-align: center;
+    width: 40px;
+  }
+
+  .col-baked {
+    text-align: left;
+  }
+
+  td {
+    width: 30px;
+    border-style: solid;
+    border-bottom-width: thin;
+    font-size: 22px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  @page {
+    size: 220mm 297mm;
+    margin: -12mm 30mm 4mm 4mm;
+  }
 }

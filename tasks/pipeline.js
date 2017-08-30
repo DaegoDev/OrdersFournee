@@ -22,6 +22,7 @@ var cssFilesToInject = [
   'bower_components/angular-confirm/css/angular-confirm.css',
   'bower_components/angular-tooltips/dist/angular-tooltips.min.css',
   'bower_components/summernote/dist/summernote.css',
+  'bower_components/angularPrint/angularPrint.css',
   'styles/**/*.css'
 ];
 
@@ -56,6 +57,7 @@ var jsFilesToInject = [
   'bower_components/angular-sanitize/angular-sanitize.min.js',
   'bower_components/angular-summernote/dist/angular-summernote.min.js',
   'bower_components/color-hash/dist/color-hash.js',
+  'bower_components/angularPrint/angularPrint.js',
 
   // Angular files are here.
   'js/main.js',

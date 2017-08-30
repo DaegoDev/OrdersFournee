@@ -10,7 +10,7 @@
         <div class="col-sm-4" ng-class="{
           'has-error': clientInfo.legalName.$invalid && (clientInfo.legalName.$touched || clientInfo.$submitted),
           'has-success': clientInfo.legalName.$valid}">
-          <input type="text" name="legalName" id="legal_name" class="form-control" ng-model="client.legalName" required placeholder="La Fournee SAS">
+          <input type="text" name="legalName" id="legal_name" class="form-control" ng-model="client.legalName" required placeholder="Ej. La Fournee SAS">
           <!-- LEGAL NAME VALIDATIONS -->
           <div ng-messages="clientInfo.legalName.$error" multiple="true" ng-if="clientInfo.legalName.$touched || clientInfo.$submitted">
             <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
@@ -22,7 +22,7 @@
         <div class="col-sm-4" ng-class="{
           'has-error': clientInfo.nit.$invalid && (clientInfo.nit.$touched || clientInfo.$submitted),
           'has-success': !clientInfo.nit.$invalid}">
-          <input type="text" name="nit" id="nit" class="form-control" ng-model="client.nit" required  placeholder="900649114">
+          <input type="text" name="nit" id="nit" class="form-control" ng-model="client.nit" required  placeholder="Ej. 900649114">
           <!-- NIT VALIDATIONS -->
           <div ng-messages="clientInfo.nit.$error" multiple="true" ng-if="clientInfo.nit.$touched || clientInfo.$submitted">
             <!--<div ng-message="pattern" class="help-block">El NIT no tiene un formato valido. Ej: 900649114-2</div>-->
@@ -37,7 +37,7 @@
         <div class="col-sm-4" ng-class="{
           'has-error': clientInfo.tradeName.$invalid && (clientInfo.tradeName.$touched || clientInfo.$submitted),
           'has-success': !clientInfo.tradeName.$invalid}">
-          <input type="text" name="tradeName" id="trade-name" class="form-control" ng-model="client.tradeName" required placeholder="La Fournee">
+          <input type="text" name="tradeName" id="trade-name" class="form-control" ng-model="client.tradeName" required placeholder="Ej. La Fournee">
           <!-- TRADE NAME VALIDATIONS -->
           <div ng-messages="clientInfo.tradeName.$error" multiple="true" ng-if="clientInfo.tradeName.$touched || clientInfo.$submitted">
             <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
@@ -47,7 +47,7 @@
         <!-- BUSINESS PHONENUMBER FIELD - OPTIONAL -->
         <label for="bussines-phonenumber" class="control-label col-sm-2">Telefono de la empresa:</label>
         <div class="col-sm-4">
-          <input type="text" name="businessPhonenumber" id="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber" placeholder="4483480">
+          <input type="text" name="businessPhonenumber" id="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber" placeholder="Ej. 4483480">
         </div>
       </div>
 
@@ -55,13 +55,13 @@
         <!-- OWNER NAME FIELD - OPTIONAL -->
         <label for="owner-name" class="control-label col-sm-2">Nombre del dueño:</label>
         <div class="col-sm-4">
-          <input type="text" name="ownerName" id="owner-name" class="form-control" ng-model="client.ownerName" placeholder="Karim chohra">
+          <input type="text" name="ownerName" id="owner-name" class="form-control" ng-model="client.ownerName" placeholder="Ej. Karim chohra">
         </div>
 
         <!-- OWNER PHONENUMBER FIELD - OPTIONAL -->
         <label for="owner-phonenumber" class="control-label col-sm-2">Telefono del dueño:</label>
         <div class="col-sm-4">
-          <input type="text" name="ownerPhonenumber" id="owner-phonenumber" class="form-control" ng-model="client.ownerPhonenumber" placeholder="3124325684">
+          <input type="text" name="ownerPhonenumber" id="owner-phonenumber" class="form-control" ng-model="client.ownerPhonenumber" placeholder="Ej. 3124325684">
         </div>
       </div>
       <div class="form-group">

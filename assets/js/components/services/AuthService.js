@@ -24,7 +24,7 @@ var storageType = 'session';
 				PermRoleStore.defineRole(role, function () {return true;});
 				StorageService.set("auth_token", res.data.token, storageType);
 				StorageService.set("role", role, storageType);
-				$rootScope.$broadcast('renovateRole');				
+				$rootScope.$broadcast('renovateRole');
 			})
 			.catch(function (err) {
 				console.log(err);

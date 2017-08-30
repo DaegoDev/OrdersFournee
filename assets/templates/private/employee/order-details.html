@@ -1,6 +1,6 @@
 
 <div class="order-details">
-  <fieldset>
+  <fieldset print-remove>
     <legend>Dirección de la entrega</legend>
     <div class="group">
       <label class="date-label">Fecha de creación:</label>
@@ -38,29 +38,31 @@
       <label class="label-comment">Comentario:</label>
       <textarea class="form-control textarea-comment" readonly>{{orderDetails.additional_information}}</textarea>
     </div>
-
   </fieldset>
   <fieldset>
-    <legend>Productos</legend>
+    <legend print-remove>Productos</legend>
     <div class="table-container">
       <div class="table-responsive">
-        <table class="table table-hover table-striped table-condensed">
+        <table  class="table table-hover table-striped table-condensed">
           <thead>
-            <tr>
+            <tr print-remove>
               <th style="font-weight:bold">Nombre</th>
               <th style="font-weight:bold">Cantidad</th>
               <th style="font-weight:bold">Estado</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody print-section>
             <tr ng-repeat="product in orderDetails.products">
-              <td>{{product.short_name}}</td>
-              <td>{{product.amount}}</td>
-              <td>{{product.baked | bakedFilter}}</td>
+              <td class="col-name">{{product.short_name}}</td>
+              <td class="col-amount">{{product.amount}}</td>
+              <td class="col-baked">{{product.baked | bakedFilter}}</td>
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="button-nav">
+      <button class="btn btn-md btn-sienna"  print-btn>Imprimir comanda</button>
     </div>
   </fieldset>
 </div>

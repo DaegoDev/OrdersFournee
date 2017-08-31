@@ -111,6 +111,8 @@ module.exports = {
           var value = itemObject.value;
           arrayDough.push(value.toLowerCase().trim());
         });
+        arrayDough.splice(24, 0, 'nulo');
+        sails.log.debug(arrayDough);
         // Construye la parte númerica del codigo del producto
         if (items.constructor == [].constructor) {
           items.forEach(function(item, i, items) {

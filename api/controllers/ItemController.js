@@ -38,6 +38,7 @@ module.exports = {
 
     value = value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
     shortValue = shortValue.toUpperCase();
+
     // Organización de credenciales de un item.
     var itemCredentials = {
       value: value,

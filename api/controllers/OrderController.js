@@ -83,8 +83,6 @@ module.exports = {
       observation: observation
     };
 
-    sails.log.debug(orderCredentials);
-
     // Arreglo de productos para registrar con la pedido
     productsToOrder = req.param('productsToOrder');
     if (!productsToOrder) {
@@ -97,16 +95,12 @@ module.exports = {
 
     sql.beginTransaction()
     .then(function() {
-      return Client.findOne({
-        user: userId
-      });
+      return Client.findOne({user: userId});
     })
     .then(function(client) {
       if (client) {
         orderCredentials.client = client.id;
-        return ClientEmployee.findOne({
-          id: clientEmployee
-        });
+        return ClientEmployee.findOne({id: clientEmployee});
       }
       throw "El cliente no existe";
     })
@@ -133,9 +127,7 @@ module.exports = {
         rule.hour = 14;
         rule.minute = 1;
         var j = schedule.scheduleJob(orderId.toString(), rule, function(y) {
-          Order.update(orderId, {
-            state: "Confirmado"
-          })
+          Order.update(orderId, {state: "Confirmado"})
           .then(function(order) {
             sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
           })
@@ -179,10 +171,8 @@ module.exports = {
     var additionalInformation = null;
     var updatedAt = null;
     var productsToUpdate = [];
-    var productsOrdered = [];
-    var productsToAdd = [];
-    var productsToRemove = [];
 
+    var products = [];
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
 
     orderId = parseInt(req.param('orderId'));
@@ -210,8 +200,8 @@ module.exports = {
       return res.badRequest('Debe ingresar una hora final de entrega.');
     }
 
-    productsToUpdate = req.param('productsToUpdate');     // Arreglo de productos para actualizar.
     additionalInformation = req.param('additionalInformation');
+    productsToUpdate = req.param('productsToUpdate');     // Arreglo de productos para actualizar.
     updatedAt = TimeZoneService.getDate({});
     deliveryDate = TimeZoneService.getDate({timestamp: deliveryDate})
 
@@ -229,113 +219,54 @@ module.exports = {
 
     sql.beginTransaction()
     .then(function() {
-      return Order.findOne({
-        id: orderId
-      });
+      return Order.findOne({id: orderId});
     })
     .then(function(order) {
       if (order) {
         var deliveryDate = new Date(order.deliveryDate);
-        if (!isCorrectUpdatedDate(updatedAt, deliveryDate)|| order.state == "Cancelado" || order.state == "Despachado") {
+        if (
+          !isCorrectUpdatedDate(updatedAt, deliveryDate) ||
+          order.state == "Cancelado" ||
+          order.state == "Despachado"
+        ) {
           throw "Debe actualizar su pedido antes de las 2pm del día siguiente a la entrega";
         }
         if (!isCorrectDeliveryDate(updatedAt, deliveryDate)) {
           throw "La fecha de entrega no es correcta";
         }
-        return ClientEmployee.findOne({
-          id: clientEmployee
-        });
+        return ClientEmployee.findOne({id: clientEmployee});
       }
       throw "El pedido no existe";
     })
     .then(function(clientemployee) {
       if (clientemployee) {
         orderCredentials.client_employee = clientemployee.id;
-        return sql.select({
-          table: 'order_product',
-          fields: ['client_product']
-        }, {
-          order_id: orderId
-        });
+        return sql.delete('order_product', {order_id: orderId});
       }
       throw "El empleado no existe";
     })
     .then(function(orderProducts) {
-      var orderProductsIds = [];
-      orderProducts.forEach(function(orderProduct, indexOp, listOrderProducts) {
-        orderProductsIds.push(orderProduct.client_product);
+      productsToUpdate.forEach(function (product, i, array) {
+        product.order_id = orderId;
+        products.push(product);
       })
-      productsToUpdate.forEach(function(productToUpdate, indexPtu, productList) {
-        var index = orderProductsIds.indexOf(productToUpdate.client_product);
-        if (index == -1 || orderProductsIds.length == 0) {
-          productToUpdate.order_id = orderId;
-          productsToAdd.push(productToUpdate);
-          // productList.splice(indexPtu, 1);
-        } else {
-          orderProductsIds.splice(index, 1);
-          productsOrdered.push(productToUpdate);
-        }
-      });
-      productsToRemove = orderProductsIds;
-      return sql.update('order', orderCredentials, {
-        id: orderId
-      });
+      return sql.insert('order_product', products)
     })
-    .then(function(order) {
-      if (productsToRemove.length != 0) {
-        productsToRemove.forEach(function(productToRemove, index, listProductsToRemove) {
-          var product = {
-            client_product: productToRemove
-          }
-          return sql.delete('order_product', product)
-          .then(function(orderProduct) {
-
-          })
-          .catch(function() {
-            throw "Error al borrar un productos"
-          })
-        })
-      }
-    })
-    .then(function(orderProduct) {
-      if (productsOrdered.length != 0) {
-        productsOrdered.forEach(function(productOrdered, index, listProductsOrdered) {
-          return sql.update('order_product', productOrdered, {
-            client_product: productOrdered.client_product,
-            order_id: orderId
-          })
-          .then(function(orderProduct) {
-
-          })
-          .catch(function() {
-            throw "Error al actualizar un productos"
-          })
-        })
-      }
-    })
-    .then(function(orderProduct) {
-      if (productsToAdd.length != 0) {
-        return sql.insert('order_product', productsToAdd);
-      }
+    .then(function(orderProducts) {
+      return sql.update('order', orderCredentials, {id: orderId});
     })
     .then(function(orderProduct) {
       sql.commit();
       connectionConfig.connection.end(function(err) {
-        if (err) {
-          sails.log.debug(err);
-        }
+        if (err) {sails.log.debug(err);}
       });
-      res.created({
-        orderProduct: orderProduct
-      });
+      res.created({orderProduct: orderProduct});
     })
     .catch(function(err) {
       sails.log.debug(err);
       sql.rollback(function(err) {
         connectionConfig.connection.end(function(err) {
-          if (err) {
-            sails.log.debug(err);
-          }
+          if (err) {sails.log.debug(err);}
         });
         res.serverError(err);
       });
@@ -721,16 +652,18 @@ module.exports = {
     var tmpProduct = null;
     var products = [];
     var item = null;
+    var rawProduct = null;
+    var bakedProduct = null;
     var orderProductQueryStr =
     'SELECT ' +
-    'cp.id, cp.custom_name, cp.product, ' +
-    'op.baked, op.amount, op.client_product,' +
+    'cp.id, cp.custom_name, cp.product, cp.client, ' +
+    'op.baked, op.amount,' +
     'p.name, p.short_name, ' +
     'i.value, i.short_value, ' +
     'e.name AS element_name ' +
     'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp, order_product AS op ' +
     'WHERE cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND op.client_product = cp.id AND op.order_id = ? ' +
-    'ORDER BY cp.product; ';
+    'ORDER BY cp.product, op.baked; ';
 
     // Se obtiene el id del pedido.
     orderId = parseInt(req.param('orderId'));
@@ -740,18 +673,13 @@ module.exports = {
 
     // Se verifica que el pedido exista, en caso de que no exista
     // se retorna un error. En caso de que exista se obtiene los productos que se le seleccionaron.
-    Order.findOne({
-      id: orderId
-    })
+    Order.findOne({id: orderId})
     .then(function(order) {
       Product.query(orderProductQueryStr, order.id,
         function(err, rawData) {
           if (err) {
             sails.log.debug(err);
-            throw {
-              code: 1,
-              msg: 'Query error.'
-            };
+            throw {code: 1, msg: 'Query error.'};
           }
           rawData.forEach(function(data, i, dataArray) {
             if (tmpProduct == null) {
@@ -768,30 +696,61 @@ module.exports = {
               value: data.value,
               shortValue: data.short_value
             },
-
             tmpProduct.items.push(item);
+
+            if (!data.baked && !rawProduct) {
+              rawProduct = {
+                clientProduct: data.id,
+                name: data.customName ? data.customName : data.short_name,
+                amount: data.amount,
+                baked: false
+              }
+            }
+            else if (data.baked && !bakedProduct) {
+              bakedProduct = {
+                clientProduct: data.id,
+                name: data.customName ? data.customName : data.short_name,
+                amount: data.amount,
+                baked: true
+              }
+            }
 
             if (!dataArray[i + 1]) {
               product = {
                 id: data.id,
                 clientId: data.client,
                 customName: data.custom_name,
-                amount: data.amount,
-                baked: data.baked,
                 product: tmpProduct
               }
+
+              if (rawProduct) {
+                product.rawProduct = rawProduct;
+              }
+              if (bakedProduct) {
+                product.bakedProduct = bakedProduct;
+              }
+
               products.push(product);
-            } else if (dataArray[i + 1].product != tmpProduct.code) {
+            }
+            else if (dataArray[i + 1].product != data.product) {
               product = {
                 id: data.id,
                 clientId: data.client,
                 customName: data.custom_name,
-                amount: data.amount,
-                baked: data.baked,
                 product: tmpProduct
               }
+
+              if (rawProduct) {
+                product.rawProduct = rawProduct;
+              }
+              if (bakedProduct) {
+                product.bakedProduct = bakedProduct;
+              }
+
               products.push(product);
               tmpProduct = null;
+              bakedProduct = null;
+              rawProduct = null;
             }
           })
           return res.ok(products)
@@ -829,7 +788,6 @@ module.exports = {
         id: orderId
       })
       .then(function(order) {
-        sails.log.debug(order)
         deliveryDate = new Date(order.deliveryDate);
         var isCorrectDate = isCorrectUpdatedDate(today, deliveryDate);
         if (!isCorrectDate || order.state == "Cancelado" || order.state == "Despachado") {

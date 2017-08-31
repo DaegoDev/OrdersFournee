@@ -26,7 +26,7 @@
       minHeight: null,
       maxHeight: null,
 
-      focus: true,
+      focus: false,
       styleWithSpan: true,
       defaultFontName: 'Arial',
 

@@ -90,6 +90,15 @@ function ($http, $rootScope) {
         params: params
       });
       return isCorrect;
+    },
+    // Servicio para definir el pedido como facturado.
+    setInvoiced: function (params) {
+      var order = $http({
+        url: '/order/setInvoiced',
+        method: 'PUT',
+        data: params
+      });
+      return order;
     }
   };
 }]);

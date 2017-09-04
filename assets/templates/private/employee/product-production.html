@@ -1,7 +1,7 @@
 <div class="basic-wrapper lg">
   <div class="section-header date-production">
     <h1 ng-click="openDatePicker()">
-      <i class="glyphicon glyphicon-calendar"></i> Productos desde el: {{datePicker.date | date:'fullDate'}}
+      <i class="glyphicon glyphicon-calendar"></i> Productos desde el: {{datePicker.date | date:'fullDate' | capitalize}}
     </h1>
     <div class="datepicker-product">
       <input type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}" ng-model="datePicker.date" is-open="datePicker.opened"

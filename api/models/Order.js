@@ -49,6 +49,13 @@ module.exports = {
       type: 'text',
       columnName: 'observation'
     },
+    invoiced: {
+      type: 'boolean',
+      notNull: true,
+      defaultsTo: false,
+      required: true,
+      columnName: 'invoiced'
+    },
     // Añade una referencia a client
     client: {
       model: 'client',

@@ -80,7 +80,8 @@ module.exports = {
       initial_suggested_time: initialSuggestedTime,
       final_suggested_time: finalSuggestedTime,
       additional_information: additionalInformation,
-      observation: observation
+      observation: observation,
+      invoiced: false
     };
 
     // Arreglo de productos para registrar con la pedido
@@ -130,6 +131,9 @@ module.exports = {
           Order.update(orderId, {state: "Confirmado"})
           .then(function(order) {
             sails.log.debug("Se confirmo automaticamente el pedido" + order.id.toString());
+          })
+          .catch(function (err) {
+            sails.log.debug(err);
           })
         }.bind(null, orderId));
       }
@@ -448,7 +452,7 @@ module.exports = {
     deliveryDate = [initialDate.toISOString(), finalDate.toISOString()];
 
     Order.query('SELECT orders.id, orders.created_at, orders.delivery_date, orders.state, orders.initial_suggested_time, \
-    orders.final_suggested_time, orders.additional_information, client_employee.name as employeeName, client.trade_name, client.business_phonenumber, \
+    orders.final_suggested_time, orders.additional_information, orders.invoiced, client_employee.name as employeeName, client.trade_name, client.business_phonenumber, \
     address.country, address.department, address.city, address.neighborhood, address.nomenclature, address.additional_information as referencia, \
     product.short_name, order_product.amount, order_product.baked \
     FROM `order` as orders \
@@ -835,6 +839,45 @@ module.exports = {
       .catch(function(err) {
         res.serverError();
       })
+    },
+    /**
+    * Funcion para definir el pedido como facturado.
+    * @param  {Object} req Request object
+    * @param  {Object} res Response object
+    * @return {Object}
+    */
+    setInvoiced: function (req, res) {
+      // Declaración de variables
+      var orderId = null;
+      var invoicedValue = null;
+
+      // Definición de variables apartir de los parametros de la solicitud y validaciones.
+      orderId = parseInt(req.param('orderId'));
+      if (!orderId) {
+        return res.badRequest('Id del pedido vacio.');
+      }
+
+      invoicedValue = req.param('invoicedValue');
+      if (invoicedValue != 0 && invoicedValue != 1) {
+        return res.badRequest('Valor del campo facturado vacío o erroneo');
+      }
+
+      //Verifica que la orden exista. Si existe cambia el campo facturado con el nuevo valor enviado
+      Order.find({
+        id: orderId
+      })
+      .then(function(order) {
+        return Order.update(orderId, {
+          invoiced: invoicedValue
+        });
+      })
+      .then(function(order) {
+        res.ok(order[0]);
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      })
+
     },
   };
 

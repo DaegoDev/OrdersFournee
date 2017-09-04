@@ -86,6 +86,7 @@ module.exports.routes = {
   'PUT /order/update' : {controller: "OrderController", action:"update"},
   'GET /order/validateDateToUpdate' : {controller: "OrderController", action:"validateDateToUpdate"},
   'GET /order/validateStateToCancel' : {controller: "OrderController", action:"validateStateToCancel"},
+  'PUT /order/setInvoiced' : {controller: 'OrderController', action: "setInvoiced"},
   'POST /product/create' : {controller: "ProductController", action:"create"},
   'PUT /product/update' : {controller: "ProductController", action:"update"},
   'GET /product/getProductsByClient' : {controller: "ProductController", action:"getProductsByClient"},

@@ -1,49 +1,56 @@
-
 <div class="order-details">
-  <fieldset print-remove>
-    <legend>Dirección de la entrega</legend>
+  <fieldset>
+    <legend print-remove>Dirección de la entrega</legend>
     <div class="group">
-      <label class="date-label">Fecha de creación:</label>
-      <div class="date-text">
-        <input type="text" class="form-control" value="{{orderDetails.created_at | date:'medium' | capitalize}}" readonly>
+      <label print-remove class="date-label">Cliente:</label>
+      <div print-section class="date-text">
+        <input print-section type="text" class="form-control name-client" value="{{orderDetails.trade_name | capitalize}}" readonly>
       </div>
     </div>
-    <div class="group">
-      <label class="label-item">Departamento:</label>
-      <div class="text-item">
-        <input type="text" class="form-control" value="{{orderDetails.department}}" readonly>
+    <div print-remove>
+      <div class="group">
+        <label class="date-label">Fecha de creación:</label>
+        <div class="date-text">
+          <input type="text" class="form-control" value="{{orderDetails.created_at | date:'medium':'+0000' | capitalize}}" readonly>
+        </div>
       </div>
-      <label class="label-item">Ciudad:</label>
-      <div class="text-item">
-        <input type="text" class="form-control" value="{{orderDetails.city}}" readonly>
+      <div class="group">
+        <label class="label-item">Departamento:</label>
+        <div class="text-item">
+          <input type="text" class="form-control" value="{{orderDetails.department}}" readonly>
+        </div>
+        <label class="label-item">Ciudad:</label>
+        <div class="text-item">
+          <input type="text" class="form-control" value="{{orderDetails.city}}" readonly>
+        </div>
       </div>
-    </div>
-    <div class="group">
-      <label class="label-item">Barrio:</label>
-      <div class="text-item">
-        <input type="text" class="form-control" value="{{orderDetails.neighborhood}}" readonly>
+      <div class="group">
+        <label class="label-item">Barrio:</label>
+        <div class="text-item">
+          <input type="text" class="form-control" value="{{orderDetails.neighborhood}}" readonly>
+        </div>
+        <label class="label-item">Nomenclatura:</label>
+        <div class="text-item">
+          <input type="text" class="form-control" value="{{orderDetails.nomenclature}}" readonly>
+        </div>
       </div>
-      <label class="label-item">Nomenclatura:</label>
-      <div class="text-item">
-        <input type="text" class="form-control" value="{{orderDetails.nomenclature}}" readonly>
+      <div class="group">
+        <label class="label-reference">Referencia:</label>
+        <div class="text-reference">
+          <input type="text" class="form-control" value="{{orderDetails.referencia}}" readonly>
+        </div>
       </div>
-    </div>
-    <div class="group">
-      <label class="label-reference">Referencia:</label>
-      <div class="text-reference">
-        <input type="text" class="form-control" value="{{orderDetails.referencia}}" readonly>
+      <div class="group">
+        <label class="label-comment">Comentario:</label>
+        <textarea class="form-control textarea-comment" readonly>{{orderDetails.additional_information}}</textarea>
       </div>
-    </div>
-    <div class="group">
-      <label class="label-comment">Comentario:</label>
-      <textarea class="form-control textarea-comment" readonly>{{orderDetails.additional_information}}</textarea>
     </div>
   </fieldset>
   <fieldset>
     <legend print-remove>Productos</legend>
     <div class="table-container">
       <div class="table-responsive">
-        <table  class="table table-hover table-striped table-condensed">
+        <table class="table table-hover table-striped table-condensed">
           <thead>
             <tr print-remove>
               <th style="font-weight:bold">Nombre</th>
@@ -62,7 +69,7 @@
       </div>
     </div>
     <div class="button-nav">
-      <button class="btn btn-md btn-sienna"  print-btn>Imprimir comanda</button>
+      <button class="btn btn-md btn-sienna" print-btn>Imprimir comanda</button>
     </div>
   </fieldset>
 </div>

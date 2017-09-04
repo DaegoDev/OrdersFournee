@@ -36,7 +36,7 @@
         </ul>
       </div>
 
-      <!-- ESTATE CHANGE -->
+      <!-- STATE CHANGE -->
       <div class="form-group col-sm-6 col-sm-offset">
         <label for="states">Estados: </label>
         <div class="input-group">
@@ -79,6 +79,7 @@
               <th ng-click="sortBy('business_phonenumber')">Telefono empresa</th>
               <th ng-click="sortBy('initial_suggested_time')">Hora deseada</th>
               <th ng-click="sortBy('state')" style="width: 100px">Estado</th>
+              <th ng-if="isAdmin()" style="width: 60px">Fact.</th>
             </tr>
           </thead>
           <tbody>
@@ -92,7 +93,10 @@
               <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.employeeName}}</td>
               <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.business_phonenumber}}</td>
               <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.initial_suggested_time + '-' + ord.final_suggested_time}}</td>
-              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle">{{ord.state}}</td>
+              <td ng-click="showDetails(ord)" align="center" style="vertical-align:middle; background-color: #201300; color: white;">{{ord.state}}</td>
+              <td ng-if="isAdmin()" align="center" style="vertical-align:middle">
+                <input type="checkbox" ng-click="setInvoiced(ord)" ng-true-value="1" ng-false-value="0" ng-model="ord.invoiced">
+              </td>
             </tr>
           </tbody>
         </table>

@@ -12,7 +12,7 @@
             'has-success': update.legalName.$valid}">
             <label for="legalName" class="control-label col-sm-2">Razón social</label>
             <div class="col-sm-4">
-              <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required placeholder="La Fournee SAS">
+              <input type="text" id="legalName" name="legalName" class="form-control" ng-model="client.legalName" required placeholder="Ej. La Fournee SAS">
               <!-- VALIDACIONES DE RAZÓN SOCIAL-->
               <div ng-messages="update.legalName.$error" ng-if="update.legalName.$touched || update.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo razón social es obligatorio.</b></p>
@@ -24,8 +24,8 @@
             'has-success': update.nit.$valid}">
             <label for="nit" class="control-label col-sm-2">NIT</label>
             <div class="col-sm-4">
-              <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required readonly placeholder="900649114-2">
-              <!-- VALIDACIONES NIR-->
+              <input type="text" id="nit" name="nit" class="form-control" ng-model="client.nit" required placeholder="Ej. 900649114">
+              <!-- VALIDACIONES NIT-->
               <div ng-messages="update.nit.$error" ng-if="update.nit.$touched || update.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo NIT es obligatorio.</b></p>
               </div>
@@ -38,7 +38,7 @@
             'has-success': update.tradeName.$valid}">
             <label for="tradeName" class="control-label col-sm-2">Nombre de la empresa</label>
             <div class="col-sm-4">
-              <input type="text" id="tradeName" name="tradeName" class="form-control" ng-model="client.tradeName" required placeholder="La Fournee">
+              <input type="text" id="tradeName" name="tradeName" class="form-control" ng-model="client.tradeName" required placeholder="Ej. La Fournee">
               <!-- VALIDACIONES DE NOMBRE DE LA EMPRESA-->
               <div ng-messages="update.tradeName.$error" ng-if="update.tradeName.$touched || update.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo nombre de la empresa es obligatorio.</b></p>
@@ -47,18 +47,24 @@
           </div>
           <label for="businessPhonenumber" class="control-label col-sm-2">Telefono de la empresa</label>
           <div class="col-sm-4">
-            <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required placeholder="4483480">
+            <input type="text" id="businessPhonenumber" name="businessPhonenumber" class="form-control" ng-model="client.businessPhonenumber" required placeholder="Ej. 4483480">
           </div>
         </div>
 
         <div class="form-group">
+          <label for="email" class="control-label col-sm-2">Correo electrónico:</label>
+          <div class="col-sm-4">
+            <input type="email" id="email" name="email" class="form-control" ng-model="client.email" placeholder="Ej. admin@fournee.com.co">
+          </div>
           <label for="ownerName" class="control-label col-sm-2">Nombre del dueño</label>
           <div class="col-sm-4">
-            <input type="text" id="ownerName" name="ownerName" class="form-control" ng-model="client.ownerName" required placeholder="Karim Chohra">
+            <input type="text" id="ownerName" name="ownerName" class="form-control" ng-model="client.ownerName" required placeholder="Ej. Karim Chohra">
           </div>
+        </div>
+        <div class="form-group">
           <label for="ownerPhonenumber" class="control-label col-sm-2">Telefono del dueño</label>
           <div class="col-sm-4">
-            <input type="text" id="ownerPhonenumber" name="ownerPhonenumber" class="form-control" ng-model="client.ownerPhonenumber" required placeholder="4483480">
+            <input type="text" id="ownerPhonenumber" name="ownerPhonenumber" class="form-control" ng-model="client.ownerPhonenumber" required placeholder="Ej. 4483480">
           </div>
         </div>
         <!-- PANEL DE ALERTA PARA INGO GENERAL -->
@@ -78,7 +84,7 @@
         <div class="col-sm-6">
           <table class="table table-hover">
             <thead>
-              <tr>
+              <tr class="lead">
                 <th>Día</th>
                 <th>Hora inicial</th>
                 <th>Hora final</th>
@@ -133,7 +139,7 @@
             'has-success': billAddressUpdate.country.$valid}">
             <label for="country" class="control-label col-sm-2">País</label>
             <div class="col-sm-4">
-              <input type="text" id="country" name="country" class="form-control" ng-model="client.billAddress.country" required placeholder="Colombia">
+              <input type="text" id="country" name="country" class="form-control" ng-model="client.billAddress.country" required placeholder="Ej. Colombia">
               <!-- VALIDACIONES DE PAIS-->
               <div ng-messages="billAddressUpdate.country.$error" ng-if="billAddressUpdate.country.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo pais es obligatorio.</b></p>
@@ -145,7 +151,7 @@
             'has-success': billAddressUpdate.department.$valid}">
             <label for="department" class="control-label col-sm-2">Despartamento</label>
             <div class="col-sm-4">
-              <input type="text" id="department" name="department" class="form-control" ng-model="client.billAddress.department" required placeholder="Antioquia">
+              <input type="text" id="department" name="department" class="form-control" ng-model="client.billAddress.department" required placeholder="Ej. Antioquia">
               <!-- VALIDACIONES DE DEPARTAMENTO-->
               <div ng-messages="billAddressUpdate.department.$error" ng-if="billAddressUpdate.department.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo departamento es obligatorio.</b></p>
@@ -159,7 +165,7 @@
             'has-success': billAddressUpdate.city.$valid}">
             <label for="city" class="control-label col-sm-2">Ciudad</label>
             <div class="col-sm-4">
-              <input type="text" id="city" name="city" class="form-control" ng-model="client.billAddress.city" required placeholder="Medellín">
+              <input type="text" id="city" name="city" class="form-control" ng-model="client.billAddress.city" required placeholder="Ej. Medellín">
               <!-- VALIDACIONES DE CIUDAD-->
               <div ng-messages="billAddressUpdate.city.$error" ng-if="billAddressUpdate.city.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo ciudad es obligatorio.</b></p>
@@ -171,7 +177,7 @@
           'has-success': billAddressUpdate.neighborhood.$valid}">
             <label for="neighborhood" class="control-label col-sm-2">Barrio</label>
             <div class="col-sm-4">
-              <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.billAddress.neighborhood" required placeholder="Colon">
+              <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.billAddress.neighborhood" required placeholder="Ej. Colon">
               <!-- VALIDACIONES DE BARRIO-->
               <div ng-messages="billAddressUpdate.neighborhood.$error" ng-if="billAddressUpdate.neighborhood.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo barrio es obligatorio.</b></p>
@@ -184,7 +190,7 @@
             'has-success': billAddressUpdate.nomenclature.$valid}">
             <label for="nomenclature" class="control-label col-sm-2">Nomenclatura</label>
             <div class="col-sm-4">
-              <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.billAddress.nomenclature" required placeholder="KR 46#42-43">
+              <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.billAddress.nomenclature" required placeholder="Ej. KR 46#42-43">
               <!-- VALIDACIONES DE NOMENCLATURA-->
               <div ng-messages="billAddressUpdate.nomenclature.$error" ng-if="billAddressUpdate.nomenclature.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
                 <p ng-message="required" class="help-block"><b>El campo nomenclatura es obligatorio.</b></p>
@@ -197,7 +203,7 @@
             'has-success': billAddressUpdate.additionalInformation.$valid}">
             <label for="" class="control-label col-sm-2">Punto de referencia</label>
             <div class="col-sm-10" >
-              <textarea rows="5" id="additionalInformation" name="additionalInformation" style="resize:none" 
+              <textarea rows="5" id="additionalInformation" name="additionalInformation" style="resize:none"
               class="form-control" ng-model="client.billAddress.additionalInformation" required placeholder="Ingrese aquí información que ayude a localizar la dirección de facturación."></textarea>
               <!-- VALIDACIONES DE PUNTO DE REFERENCIA-->
               <div ng-messages="billAddressUpdate.additionalInformation.$error" ng-if="billAddressUpdate.additionalInformation.$touched || billAddressUpdate.$submitted" ng-messages-multiple>
@@ -374,7 +380,7 @@
         <div class="col-sm-7 ">
           <table class="table table-hover">
             <thead>
-              <tr>
+              <tr class="lead">
                 <th>Nombre</th>
                 <th>Telefono</th>
                 <th>Rol</th>

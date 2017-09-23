@@ -1,6 +1,7 @@
 'use stric';
 var fournee = angular.module('fournee', ['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword',
-  'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips', 'summernote', 'ngSanitize', 'AngularPrint'
+  'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips', 'summernote', 'ngSanitize', 'AngularPrint',
+  'bcherny/formatAsCurrency'
 ]);
 
 // Inicializacion de la configuracion principal al ingresar al dominio.
@@ -11,19 +12,37 @@ fournee.run(['$rootScope', 'StorageService', 'PermRoleStore',
         if (StorageService.get("auth_token", "session")) {
           role = StorageService.get("role", "session");
           if (role) {
-            PermRoleStore.defineRole('ANON', function() {return false;});
-            PermRoleStore.defineRole('ADMINISTRADOR', function() {return false;});
-            PermRoleStore.defineRole('DESPACHADOR', function() {return false;});
-            PermRoleStore.defineRole('CLIENTE', function() {return false;});
-            PermRoleStore.defineRole(role.toUpperCase(), function() {return true;});
+            PermRoleStore.defineRole('ANON', function() {
+              return false;
+            });
+            PermRoleStore.defineRole('ADMINISTRADOR', function() {
+              return false;
+            });
+            PermRoleStore.defineRole('DESPACHADOR', function() {
+              return false;
+            });
+            PermRoleStore.defineRole('CLIENTE', function() {
+              return false;
+            });
+            PermRoleStore.defineRole(role.toUpperCase(), function() {
+              return true;
+            });
             $rootScope.$broadcast('renovateRole');
           }
         } else {
           PermRoleStore.clearStore();
-          PermRoleStore.defineRole('ADMINISTRADOR', function() {return false;});
-          PermRoleStore.defineRole('DESPACHADOR', function() {return false;});
-          PermRoleStore.defineRole('CLIENTE', function() {return false;});
-          PermRoleStore.defineRole("ANON", function() {return true;});
+          PermRoleStore.defineRole('ADMINISTRADOR', function() {
+            return false;
+          });
+          PermRoleStore.defineRole('DESPACHADOR', function() {
+            return false;
+          });
+          PermRoleStore.defineRole('CLIENTE', function() {
+            return false;
+          });
+          PermRoleStore.defineRole("ANON", function() {
+            return true;
+          });
           $rootScope.$broadcast('renovateRole');
         }
       }
@@ -57,11 +76,11 @@ fournee.filter('stateFilter', function() {
   }
 });
 
-fournee.filter('orderState', function () {
-  return function (orders, checkList) {
+fournee.filter('orderState', function() {
+  return function(orders, checkList) {
     var output = [];
-    angular.forEach(orders, function (order, orderKey) {
-      angular.forEach(checkList, function (checkValue, checkKey) {
+    angular.forEach(orders, function(order, orderKey) {
+      angular.forEach(checkList, function(checkValue, checkKey) {
         if (checkValue.checked && order.state.toUpperCase().trim().includes(checkValue.value)) {
           output.push(order);
         }
@@ -77,5 +96,11 @@ fournee.filter('bakedFilter', function() {
       return 'Horneado';
     }
     return 'Congelado';
+  }
+});
+
+fournee.filter('pesos', function($filter) {
+  return function(value) {
+    return '$' + value
   }
 });

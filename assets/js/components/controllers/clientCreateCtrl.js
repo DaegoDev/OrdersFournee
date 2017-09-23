@@ -88,6 +88,7 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
       legalName: $scope.client.legalName,
       nit: $scope.client.nit,
       tradeName: $scope.client.tradeName,
+      email: $scope.client.email,
       ownerName: $scope.client.ownerName,
       ownerPhonenumber: $scope.client.ownerPhonenumber,
       businessPhonenumber: $scope.client.businessPhonenumber,

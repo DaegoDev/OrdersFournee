@@ -123,6 +123,14 @@ function ($http) {
         data: productCredentials
       });
       return product;
+    },
+    changeProductPrice: function (productCredentials) {
+      var product = $http({
+        url: '/client/changeProductPrice',
+        method: 'PUT',
+        data: productCredentials
+      });
+      return product;
     }
   };
 }]);

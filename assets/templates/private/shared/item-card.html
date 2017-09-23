@@ -7,7 +7,7 @@
   <div class="main-content" ng-hide="isCollapsed">
     <div class="items-content">
       <ul class="items">
-        <li ng-repeat="jsonValue in item.items" ng-class="{selected: jsonValue.isSelected}" ng-click="selectItem(jsonValue)">
+        <li ng-repeat="jsonValue in item.items | orderBy:'value'" ng-class="{selected: jsonValue.isSelected}" ng-click="selectItem(jsonValue)">
           <h2>{{jsonValue.value}}</h2>
           <h3>{{jsonValue.shortValue}}</h3>
         </li>

@@ -147,6 +147,7 @@
           })
       }
 
+      // Función que se activa cuando el cliente cambia la hora de recepción inicial.
       $scope.changedInitial = function() {
         if(($scope.timeFinal.getHours() - 2) <= ($scope.timeInitial.getHours())){
           $scope.timeFinal = new Date();
@@ -161,10 +162,12 @@
       $scope.changedFinal = function() {
       };
 
+      // Función que actualiza la información general de un clinte.
       $scope.updateGeneralInfo = function() {
         var legalName = $scope.client.legalName;
         var nit = $scope.client.nit;
         var tradeName = $scope.client.tradeName;
+        var email = $scope.client.email;
         var ownerName = $scope.client.ownerName;
         var ownerPhonenumber = $scope.client.ownerPhonenumber;
         var businessPhonenumber = $scope.client.businessPhonenumber;
@@ -173,6 +176,7 @@
           legalName: legalName,
           nit: nit,
           tradeName: tradeName,
+          email: email,
           ownerName: ownerName,
           ownerPhonenumber: ownerPhonenumber,
           businessPhonenumber: businessPhonenumber,
@@ -189,6 +193,7 @@
             $scope.client.legalName = clientUpdated.legalName;
             $scope.client.nit = clientUpdated.nit;
             $scope.client.tradeName = clientUpdated.tradeName;
+            $scope.client.email = clientUpdated.email;
             $scope.client.ownerName = clientUpdated.ownerName;
             $scope.client.ownerPhonenumber = clientUpdated.ownerPhonenumber;
             $scope.client.businessPhonenumber = clientUpdated.businessPhonenumber;
@@ -200,7 +205,12 @@
             $scope.update.$setUntouched();
           })
           .catch(function(err) {
-            $scope.alertMessageGeneral = "No se ha podido actualizar la información.";
+            console.log(err);
+            if (err.data.statusCode == 400) {
+              $scope.alertMessageGeneral = "El NIT o Razón social ya existen.";
+            }else {
+              $scope.alertMessageGeneral = "No se ha podido actualizar la información.";
+            }
             $scope.signingUp = false;
             $scope.signupError = true;
             $scope.showAlertGeneral = true;

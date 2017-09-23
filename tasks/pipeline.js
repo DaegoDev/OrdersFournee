@@ -58,6 +58,7 @@ var jsFilesToInject = [
   'bower_components/angular-summernote/dist/angular-summernote.min.js',
   'bower_components/color-hash/dist/color-hash.js',
   'bower_components/angularPrint/angularPrint.js',
+  'bower_components/format-as-currency/dist/format-as-currency.js',
 
   // Angular files are here.
   'js/main.js',

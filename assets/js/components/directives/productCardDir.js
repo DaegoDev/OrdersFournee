@@ -21,6 +21,8 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
   $scope.dirControl = null;
   $scope.clientProduct = null;
   $scope.name = '';
+  $scope.price = '';
+
   // Tooltip popover options
   $scope.tooltip = {
     content: "",
@@ -57,6 +59,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
   }
   $scope.dirControl = $scope.control;
 
+
   // Check which type of directive is used, then set the corresponding values.
   if ($scope.type == 'orderProduct') {
 
@@ -70,14 +73,19 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     } else {
       $scope.name = $scope.dirProduct.shortName;
     }
+    $scope.price = $scope.dirProduct.price;
+
   } else if ($scope.type == 'select') {
     $scope.class = ['select'];
     $scope.dirProduct = $scope.product;
     $scope.name = $scope.product.shortName;
+    $scope.price = $scope.product.price;
+
   } else if ($scope.type == 'list') {
     $scope.class = ['list'];
     $scope.dirProduct = $scope.product;
     $scope.name = $scope.product.shortName;
+    $scope.price = $scope.product.price;
   }
 
   $scope.toggleCollapse = function() {

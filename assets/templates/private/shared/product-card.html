@@ -1,8 +1,11 @@
 <div class="product-wrapper" ng-class="class">
-  <div class="product-header" ng-style='getTitleColor(dirProduct)' ng-click="toggleCollapse()"
-  uib-popover-template="tooltip.templateUrl"  popover-placement="auto bottom-center" popover-trigger="'mouseenter'" popover-popup-delay="550">
+  <div class="product-header" ng-style='getTitleColor(dirProduct)' ng-click="toggleCollapse()" uib-popover-template="tooltip.templateUrl" popover-placement="auto bottom-center" popover-trigger="'mouseenter'" popover-popup-delay="550">
     <h4>{{name}}</h4>
     <span ng-if="type == 'orderProduct'"><i ng-click="changeCustomName(producCode)" class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+  </div>
+  <div class="product-price">
+    <span><i class="fa fa-hand-o-right" aria-hidden="true"></i></span>
+    <p style="color: black;">{{price | currency : '$' : '0'}} ud.</p>
   </div>
 
   <div class="amount-order" ng-if="type == 'orderProduct'">

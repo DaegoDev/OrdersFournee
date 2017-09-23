@@ -127,6 +127,7 @@
 
       ClientSvc.updateOrder(orderCredentials)
       .then(function(res) {
+        $scope.orderSended = false;
         $ngConfirm({
           title: 'Pedido actualizado.',
           content: 'El pedido ha sido actualizado con exito.',
@@ -156,6 +157,7 @@
       });
     }
 
+    $scope.orderSended = false;
     $scope.confirm = function() {
       if (!$scope.order.timeInitial || !$scope.order.timeFinal) {
         $ngConfirm("Debe ingresar el horario deseado de entrega");
@@ -177,10 +179,13 @@
               btnClass: 'btn-blue',
               keys: ['enter', 'a'],
               action: function(scope, button) {
-                if ($scope.formToUpdate) {
-                  $scope.updateOrder();
-                } else {
-                  $scope.makeOrder();
+                if (!$scope.orderSended) {
+                  $scope.orderSended = true;
+                  if ($scope.formToUpdate) {
+                    $scope.updateOrder();
+                  } else {
+                    $scope.makeOrder();
+                  }
                 }
               }
             },
@@ -242,6 +247,7 @@
 
       ClientSvc.makeOrder(orderCredentials)
       .then(function(res) {
+        $scope.orderSended = false;
         $scope.deliveryDateEstablished = res.data.deliveryDate;
         $ngConfirm({
           title: 'Pedido realizado.',

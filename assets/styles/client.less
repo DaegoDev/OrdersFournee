@@ -143,6 +143,7 @@
   margin: 10px;
   display: flex;
   flex-direction: row-reverse;
+
   button {
     margin-left: 10px;
   }
@@ -151,6 +152,7 @@
 .client-list-wrapper {
   .table-container {
     padding: 10px;
+
     table {
       th {
         font-size: 100%;
@@ -160,8 +162,9 @@
         color: @font-tussock;
         padding: 10px 1px;
         cursor: pointer;
+
         &:last-child {
-            cursor: default;
+          cursor: default;
         }
 
         &:hover {
@@ -173,9 +176,11 @@
         font-size: 90%;
         word-wrap: break-word;
         max-width: 250px;
+
         &:last-child {
           background-color: @theme-nero;
           color: @font-tussock;
+
           span {
             width: 100%;
             text-align: center;
@@ -183,11 +188,13 @@
             padding: 10px;
             margin: auto;
           }
+
           &:hover {
             color: @font-white;
             cursor: pointer;
           }
         }
+
         a {
           display: inline-block;
           float: left;
@@ -239,6 +246,7 @@
     ul {
       display: flex;
       flex-wrap: wrap;
+
       li {
         position: relative;
         width: 150px;
@@ -250,10 +258,12 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+
         p {
           text-align: center;
         }
-        div {
+
+        .disable-option {
           overflow: hidden;
           border-radius: 5px;
           position: absolute;
@@ -267,6 +277,7 @@
           justify-content: center;
           align-items: center;
           transition: width 0.5s ease;
+
           span {
             display: block;
             vertical-align: middle;
@@ -275,17 +286,68 @@
           }
         }
 
+        .price-option {
+          overflow: hidden;
+          border-radius: 5px;
+          position: absolute;
+          margin-left: 50%;
+          width: 0;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-color: @btn-navy;
+          color: @font-white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: width 0.5s ease;
+
+          span {
+            display: block;
+            vertical-align: middle;
+            text-align: center;
+            background-color: @btn-navy;
+          }
+        }
+
+        .product-price {
+          width: 100%;
+          padding-top: 0px;
+          height: 23px;
+          text-align: center;
+
+          p {
+            display: inline;
+            color: @bg-white;
+          }
+
+          span {
+            display: inline;
+            color: @bg-white;
+          }
+        }
+
         &:hover {
           cursor: pointer;
+
           p {
             visibility: hidden;
           }
-          div {
+
+          .disable-option {
             visibility: visible;
-            width: 100%;
+            width: 50%;
             transition: width 0.5s ease;
-            span {
-            }
+
+            span {}
+          }
+
+          .price-option {
+            visibility: visible;
+            width: 50%;
+            transition: width 0.5s ease;
+
+            span {}
           }
         }
       }
@@ -296,8 +358,9 @@
     display: flex;
     margin: 15px;
     flex-direction: row-reverse;
+
     button {
-      margin: 0px 5px;
+      margin: 0 5px;
     }
   }
 
@@ -305,28 +368,10 @@
     margin: 15px;
   }
 }
-
 /* ANIMATIONS
 ============================================================================= */
-.keyframes(trashColorIn; {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 100%;
-  }
-  });
-
-  .keyframes(trashColorOut; {
-    0% {
-      width: 100%;
-    }
-    100% {
-      visibility: hidden;
-      width: 0;
-    }
-    });
-
+.keyframes(trashColorIn; { 0% { width: 0; } 100% { width: 100%; } });
+.keyframes(trashColorOut; { 0% { width: 100%; } 100% { visibility: hidden; width: 0; } });
 /* slide out to the left */
 @keyframes slideOutLeft {
   to {

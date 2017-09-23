@@ -5,52 +5,94 @@
 
   <div class="client-info" ng-hide="enablingProduct">
 
-  <fieldset class="general-info form-horizontal">
-    <legend>Información general</legend>
-    <div class="form-group">
-      <label class="control-label col-sm-2">Razón social</label>
-      <div class="col-sm-4">
-        <input type="text" class="form-control" readonly value="{{client.legalName}}">
+    <fieldset class="general-info form-horizontal">
+      <legend>Información general</legend>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Razón social</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" readonly value="{{client.legalName}}">
+        </div>
+        <label class="control-label col-sm-2">NIT</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" readonly value="{{client.nit}}">
+        </div>
       </div>
-      <label class="control-label col-sm-2">NIT</label>
-      <div class="col-sm-4">
-        <input type="text" class="form-control" readonly value="{{client.nit}}">
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label class="control-label col-sm-2">Nombre de la empresa</label>
-      <div class="col-sm-4">
-        <input type="text" class="form-control" readonly value="{{client.tradeName}}">
+      <div class="form-group">
+        <label class="control-label col-sm-2">Nombre de la empresa</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" readonly value="{{client.tradeName}}">
+        </div>
+        <label class="control-label col-sm-2">Telefono de la empresa</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" readonly value="{{client.businessPhonenumber}}">
+        </div>
       </div>
-      <label class="control-label col-sm-2">Telefono de la empresa</label>
-      <div class="col-sm-4">
-        <input type="text" class="form-control" readonly value="{{client.businessPhonenumber}}">
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label class="control-label col-sm-2">Nombre del dueño</label>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Correo electrónico:</label>
+        <div class="col-sm-4">
+          <input type="email" class="form-control" readonly value="{{client.email}}">
+        </div>
+        <label class="control-label col-sm-2">Nombre del dueño</label>
         <div class="col-sm-4">
           <input type="text" class="form-control" readonly value="{{client.ownerName}}">
         </div>
+      </div>
+      <div class="form-group">
         <label class="control-label col-sm-2">Telefono del dueño</label>
         <div class="col-sm-4">
           <input type="text" class="form-control" readonly value="{{client.ownerPhonenumber}}">
         </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2">Información adicional</label>
-      <div class="col-sm-10">
-        <textarea class="form-control" rows="5" readonly>{{client.additionalInformation}}</textarea>
       </div>
-    </div>
-  </fieldset>
-  <fieldset>
-    <legend>Horarios de recepción</legend>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Información adicional</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" rows="5" readonly >{{client.additionalInformation}}</textarea>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="general-info form-horizontal">
+      <legend>Dirección de entrega</legend>
+      <div class="form-group">
+        <label class="control-label col-sm-2">País</label>
+        <div class="col-sm-4">
+          <input type="text" readonly id="country" name="country" class="form-control" value="{{client.deliveryAddress.country}}">
+        </div>
+        <label class="control-label col-sm-2">Despartamento</label>
+        <div class="col-sm-4">
+          <input type="text" id="department" name="department" readonly class="form-control" value="{{client.deliveryAddress.department}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Ciudad</label>
+        <div class="col-sm-4">
+          <input type="text" id="city" name="city" class="form-control" value="{{client.deliveryAddress.city}}" readonly>
+        </div>
+
+        <label class="control-label col-sm-2">Barrio</label>
+        <div class="col-sm-4">
+          <input type="text" id="neighborhood" name="neighborhood" class="form-control" value="{{client.deliveryAddress.neighborhood}}" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Nomenclatura</label>
+        <div class="col-sm-4">
+          <input type="text" id="nomenclature" name="nomenclature" class="form-control" value="{{client.deliveryAddress.nomenclature}}" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="" class="control-label col-sm-2">Punto de referencia</label>
+        <div class="col-sm-10">
+          <textarea rows="5" style="resize:none" class="form-control" readonly>{{client.deliveryAddress.additionalInformation}}</textarea>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="employee-list">
+      <legend>Horarios de recepción</legend>
       <table class="table table-hover">
         <thead>
-          <tr>
+          <tr class="lead">
             <th>Día</th>
             <th>Desde</th>
             <th>Hasta</th>
@@ -64,65 +106,72 @@
           </tr>
         </tbody>
       </table>
-  </fieldset>
+    </fieldset>
 
-  <fieldset class="employee-list">
-    <legend>Lista de empleados</legend>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Telefono</th>
-          <th>Rol</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="employee in client.clientEmployee">
-          <td>{{employee.name}}</td>
-          <td>{{employee.phonenumber}}</td>
-          <td>{{employee.role}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </fieldset>
+    <fieldset class="employee-list">
+      <legend>Lista de empleados</legend>
+      <table class="table table-hover">
+        <thead>
+          <tr class="lead">
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="employee in client.clientEmployee">
+            <td>{{employee.name}}</td>
+            <td>{{employee.phonenumber}}</td>
+            <td>{{employee.role}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
 
-  <fieldset class="product-list">
-    <legend>Productos habilitados</legend>
+    <fieldset class="product-list">
+      <legend>Productos habilitados</legend>
 
-    <div class="row">
-          <div class="col-sm-12">
-              <div>
-                  <div class="input-group stylish-input-group">
-                      <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchText">
-                      <span class="input-group-addon">
+      <div class="row">
+        <div class="col-sm-12">
+          <div>
+            <div class="input-group stylish-input-group">
+              <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchText">
+              <span class="input-group-addon">
                           <button type="submit">
                               <span class="glyphicon glyphicon-search"></span>
-                          </button>
-                      </span>
-                  </div>
-              </div>
+              </button>
+              </span>
+            </div>
           </div>
-    </div>
-
-    <ul>
-      <li ng-repeat="clientProduct in client.products | filter:searchText">
-        <p>{{clientProduct.product.name}}</p>
-        <div ng-click="disableProduct(clientProduct)">
-          <span class="fa fa-trash"></span>
         </div>
-      </li>
-    </ul>
-  </fieldset>
+      </div>
 
-  <div class="button-list" ng-show="client.user.state == 1">
-    <button type="button" name="button" class="btn btn-sienna" ng-click="showProducts()">
+      <ul>
+        <li ng-repeat="clientProduct in client.products | filter:searchText">
+          <p>{{clientProduct.product.name}}</p>
+          <div class="disable-option" ng-click="disableProduct(clientProduct)">
+            <span class="fa fa-trash">Remover</span>
+          </div>
+          <div class="price-option" ng-click="setSpecialPrice(clientProduct)">
+            <span class="fa fa-money">Precio</span>
+          </div>
+          <div class="product-price">
+            <span><i class="fa fa-hand-o-right" aria-hidden="true"></i></span>
+            <p>{{clientProduct.customPrice ? clientProduct.customPrice : clientProduct.product.price | currency : '$' : '0'}} ud.</p>
+          </div>
+        </li>
+      </ul>
+    </fieldset>
+
+    <div class="button-list" ng-show="client.user.state == 1">
+      <button type="button" name="button" class="btn btn-sienna" ng-click="showProducts()">
       Habilitar productos
     </button>
-    <button type="button" name="button" class="btn btn-sienna" ng-click="disableClient()">
+      <button type="button" name="button" class="btn btn-sienna" ng-click="disableClient()">
       Deshabilitar cliente
     </button>
+    </div>
   </div>
-</div>
 
   <div class="product-enabler" ng-show="enablingProduct">
     <div class="product-selection">
@@ -131,21 +180,20 @@
           Productos disponibles
         </div>
         <div class="row" style="margin-left:2px; margin-right:2px">
-              <div class="col-sm-12">
-                  <div>
-                      <div class="input-group stylish-input-group">
-                          <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchTextEnabling">
-                          <span class="input-group-addon">
+          <div class="col-sm-12">
+            <div>
+              <div class="input-group stylish-input-group">
+                <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchTextEnabling">
+                <span class="input-group-addon">
                               <button type="submit">
                                   <span class="glyphicon glyphicon-search"></span>
-                              </button>
-                          </span>
-                      </div>
-                  </div>
+                </button>
+                </span>
               </div>
+            </div>
+          </div>
         </div>
-        <product-card ng-repeat="product in products | filter:searchTextEnabling" product="product"
-          ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
+        <product-card ng-repeat="product in products | filter:searchTextEnabling" product="product" ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
         </product-card>
       </div>
 
@@ -153,8 +201,7 @@
         <div class="title">
           Seleccionados
         </div>
-        <div ng-repeat="product in selectedProducts" class="product"
-          ng-click="deselectProduct(product)">
+        <div ng-repeat="product in selectedProducts" class="product" ng-click="deselectProduct(product)">
           <span class="product-name">{{product.shortName}}</span>
           <div class="hover-trash">
             <span class="fa fa-trash"></span>

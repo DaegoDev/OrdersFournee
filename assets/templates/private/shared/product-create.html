@@ -18,6 +18,13 @@
             <input type="text" class="form-control" readonly value="{{product.shortName}}">
           </div>
         </div>
+        <div class="form-group">
+          <label for="price" class="col-sm-2 control-label">Precio:</label>
+          <div class="field-price input-group col-sm-3">
+            <span class="input-group-addon">$</span>
+            <input type="number" id="price" class="form-control currency" ng-model="product.price">
+          </div>
+        </div>
 
         <!-- CREATE NEW ELEMENT AND CONFIRM PRODUCT CREATION. -->
         <div class="form-group">

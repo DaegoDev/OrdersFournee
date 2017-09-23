@@ -20,6 +20,7 @@ module.exports = {
     var legalName = null;
     var nit = null;
     var tradeName = null;
+    var email = null;
     var ownerName = null;
     var ownerPhonenumber = null;
     var businessPhonenumber = null;
@@ -32,19 +33,29 @@ module.exports = {
     // Definición de variables apartir de los parametros de la solicitud y validaciones.
     legalName = req.param('legalName');
     if (!legalName) {
-      return res.badRequest({code: 1, msg: 'Se debe ingresar una razon social.'});
+      return res.badRequest({
+        code: 1,
+        msg: 'Se debe ingresar una razon social.'
+      });
     }
 
     nit = req.param('nit');
     if (!nit) {
-      return res.badRequest({code: 1, msg: 'Se debe ingresar un nit.'});
+      return res.badRequest({
+        code: 1,
+        msg: 'Se debe ingresar un nit.'
+      });
     }
 
     tradeName = req.param('tradeName');
     if (!tradeName) {
-      return res.badRequest({code: 1, msg: 'Se debe ingresar el nombre de la empresa.'});
+      return res.badRequest({
+        code: 1,
+        msg: 'Se debe ingresar el nombre de la empresa.'
+      });
     }
 
+    email = req.param('email');
     ownerName = req.param('ownerName');
     ownerPhonenumber = req.param('ownerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
@@ -56,7 +67,7 @@ module.exports = {
     var userCredentials = createUserCredentials(nit, password);
 
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber,
-      businessPhonenumber, clientAdditionalInformation);
+      businessPhonenumber, clientAdditionalInformation, email);
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -93,7 +104,8 @@ module.exports = {
             productsCodes.forEach(function(productCode, i, productsCodes) {
               var clientProduct = {
                 client: client.insertId,
-                product: productCode
+                product: productCode,
+                enabled: true
               }
               clientProductsCredentials.push(clientProduct);
             });
@@ -259,15 +271,19 @@ module.exports = {
     // en caso de que no, envia el mensaje de error
     Client.findOne(clientId)
       .then(function(client) {
-        if (client) {
-          client.products.remove(product);
-          return client.save();
+        if (!client) {
+          throw 'El cliente no existe';
         }
-        throw 'El cliente no existe';
+        return ClientProduct.update({
+          client: client.id,
+          product: product
+        }, {
+          enabled: false
+        });
       })
-      .then(function(client) {
+      .then(function(clientProduct) {
         res.ok({
-          client: client
+          client: clientProduct
         })
       })
       .catch(function(err) {
@@ -319,11 +335,11 @@ module.exports = {
     var clientProductQueryStr =
       'SELECT ' +
       'cp.id, cp.client, cp.custom_name, cp.product, ' +
-      'p.name, p.short_name, ' +
+      'p.name, p.short_name, p.price,' +
       'i.value, i.short_value, ' +
       'e.name AS element_name ' +
       'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
-      'WHERE p.enabled = 1 AND cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
+      'WHERE p.enabled = 1 AND cp.enabled = 1 AND cp.product = p.code AND ip.product_code = p.code AND ip.item_id = i.id AND i.element = e.id AND cp.client = ? ' +
       'ORDER BY cp.product; ';
 
     // Se obtiene el id del cliente que ejecuta la petición.
@@ -353,6 +369,7 @@ module.exports = {
                   code: data.product,
                   name: data.name,
                   shortName: data.short_name,
+                  price: data.price,
                   items: []
                 }
               }
@@ -468,6 +485,8 @@ module.exports = {
     var user = null;
     var legalName = null;
     var tradeName = null;
+    var email = null;
+    var nit = null;
     var ownerName = null;
     var ownerPhonenumber = null;
     var businessPhonenumber = null;
@@ -484,26 +503,69 @@ module.exports = {
       return res.badRequest('Se debe ingresar la razón social.');
     }
 
+    nit = req.param('nit');
+    if (!nit) {
+      return res.badRequest('Se debe ingresar el nit.');
+    }
+
+    email = req.param('email');
     ownerName = req.param('ownerName');
     ownerPhonenumber = req.param('ownerPhonenumber');
     businessPhonenumber = req.param('businessPhonenumber');
 
     // Organización de credenciales del cliente
     var clientCredentials = {
-      legalName: legalName,
-      tradeName: tradeName,
-      ownerName: ownerName,
-      ownerPhonenumber: ownerPhonenumber,
-      businessPhonenumber: businessPhonenumber
+      legal_name: legalName,
+      trade_name: tradeName,
+      nit: nit,
+      email: email,
+      owner_name: ownerName,
+      owner_phonenumber: ownerPhonenumber,
+      business_phonenumber: businessPhonenumber
     }
+
     user = req.user;
-    Client.update({
-        user: user.id
-      }, clientCredentials)
+
+    //Obtengo la conección para realizar transacciones
+    var connectionConfig = AlternativeConnectionService.getConnection();
+    var sql = connectionConfig.sql;
+
+    sql.beginTransaction()
+      .then(() => {
+        return sql.update('user', {
+          username: nit
+        }, {
+          id: user.id
+        });
+      })
       .then(function(userUpdated) {
-        res.ok(userUpdated[0]);
+        return sql.update('client', clientCredentials, {
+          user: user.id
+        });
+      })
+      .then((clientUpdated) => {
+        sql.commit();
+        connectionConfig.connection.end(function(err) {
+          if (err) {
+            sails.log.debug(err);
+          }
+        });
+        return Client.findOne({
+          user: user.id
+        })
+      })
+      .then((client) => {
+        res.ok(client);
       })
       .catch(function(err) {
+        sails.log.debug(err);
+        sql.rollback(function(err) {
+          connectionConfig.connection.end(function(err) {
+            if (err) {
+              sails.log.debug(err);
+            }
+          });
+        });
         res.serverError(err);
       })
   },
@@ -902,6 +964,11 @@ module.exports = {
       })
   },
 
+  /**
+   * Funcion para cambiar el nombre del producto asignado a un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
   changeProductName: function(req, res) {
     var customName = null;
     var productCode = null;
@@ -952,7 +1019,67 @@ module.exports = {
           return res.badRequest();
         }
       });
-  }
+  },
+  /**
+   * Funcion para cambiar el precio del producto asignado a un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  changeProductPrice: function(req, res) {
+    var customPrice = null;
+    var clientId = null;;
+    var productCode = null;
+
+    // Definición de la variable id, apartir de los parametros de la solicitud y validaciones.
+    customPrice = req.param('customPrice');
+    if (!customPrice) {
+      return res.badRequest('Precio vacio.');
+    }
+    clientId = parseInt(req.param('clientId'));
+    if (!clientId) {
+      return res.badRequest('Cliente vacio.');
+    }
+    productCode = req.param('productCode');
+    if (!productCode) {
+      return res.badRequest('Código del producto vacio.');
+    }
+
+    Client.find({
+        id: clientId
+      })
+      .then(function(clientData) {
+        if (!clientData) {
+          throw {
+            code: 1,
+            msg: 'No client found'
+          };
+        }
+        return ClientProduct.update({
+          client: clientData[0].id,
+          product: productCode
+        }, {
+          customPrice: customPrice
+        });
+      })
+      .then(function(productData) {
+        if (!productData) {
+          throw {
+            code: 2,
+            msg: 'No product found'
+          };
+        }
+        return res.ok(productData);
+      })
+      .catch(function(err) {
+        sails.log.debug(err);
+        if (err.code && err.code == 1) {
+          return res.serverError(err);
+        }
+        if (err.code && err.code == 2) {
+          return res.badRequest();
+        }
+      });
+  },
 };
 
 // crea las credenciales para insertar una dirección
@@ -982,11 +1109,12 @@ function createUserCredentials(username, password) {
   return userCredentials;
 }
 // crea las credenciales para insertar un cliente
-function createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber, businessPhonenumber, additionalInformation) {
+function createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber, businessPhonenumber, additionalInformation, email) {
   var clientCredentials = {
     legal_name: legalName,
     nit: nit,
     trade_name: tradeName,
+    email: email,
     owner_name: ownerName,
     owner_phonenumber: ownerPhonenumber,
     business_phonenumber: businessPhonenumber,

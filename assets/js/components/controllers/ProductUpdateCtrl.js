@@ -47,7 +47,8 @@
 
     $scope.updateProduct = function () {
       var credentials = {
-        productCode: $scope.selectedProduct.code
+        productCode: $scope.selectedProduct.code,
+        price: $scope.selectedProduct.price,
       }
       var items = [];
 
@@ -111,6 +112,7 @@
       $scope.selectedProduct.code = product.code;
       $scope.selectedProduct.name = product.name;
       $scope.selectedProduct.shortName = product.shortName;
+      $scope.selectedProduct.price = product.price;
 
       var element = null;
       var item = null;

@@ -36,9 +36,15 @@ module.exports = {
     enabled: {
       type: 'boolean',
       notNull: true,
-      default: true,
+      defaultsTo: true,
       required: true,
       columnName: 'enabled'
+    },
+    price: {
+      type: 'float',
+      notNull: true,
+      defaultsTo: 0,
+      columnName: 'price',
     },
     // Añade una referencia a item
     items: {

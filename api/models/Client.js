@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  migrate: 'safe',
+  // migrate: 'alter',
   tableName: 'client',
   attributes: {
     legalName: {
@@ -32,6 +32,11 @@ module.exports = {
       notNull: true,
       required: true,
       columnName: 'trade_name'
+    },
+    email: {
+      type: 'string',
+      size: 128,
+      columnName: 'email'
     },
     ownerName: {
       type: 'string',

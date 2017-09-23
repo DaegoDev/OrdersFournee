@@ -22,6 +22,17 @@ module.exports = {
       size: 64,
       columnName: 'custom_name'
     },
+    customPrice: {
+      type: 'float',
+      columnName: 'custom_price'
+    },
+    enabled: {
+      type: 'boolean',
+      notNull: true,
+      defaultsTo: true,
+      required: true,
+      columnName: 'enabled'
+    },
     // Añade una referencia a order
     orders: {
       collection: 'order',

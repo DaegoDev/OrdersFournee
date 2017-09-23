@@ -61,6 +61,7 @@ module.exports.routes = {
   'POST /client/createClientEmployee' : {controller: "ClientController", action:"createClientEmployee"},
   'GET /client/validateClient' : {controller: "ClientController", action:"validateClient"},
   'PUT /client/changeProductName' : {controller: "ClientController", action:"changeProductName"},
+  'PUT /client/changeProductPrice' : {controller: "ClientController", action:"changeProductPrice"},
   'POST /clientEmployee/addClientEmployee' : {controller: "ClientEmployee", action:"addClientEmployee"},
   'GET /clientEmployee/getEmployeesByClient' : {controller: "ClientEmployee", action:"getEmployeesByClient"},
   'POST /employee/signup' : {controller: "EmployeeController", action:"signup"},

@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  migrate: 'safe',
+  // migrate: 'safe',
   tableName: 'week_day',
   attributes: {
     name: {

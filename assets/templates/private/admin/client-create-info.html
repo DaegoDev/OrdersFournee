@@ -45,21 +45,29 @@
         </div>
 
         <!-- BUSINESS PHONENUMBER FIELD - OPTIONAL -->
-        <label for="bussines-phonenumber" class="control-label col-sm-2">Telefono de la empresa:</label>
+        <label for="bussines-phonenumber" class="control-label col-sm-2">Teléfono de la empresa:</label>
         <div class="col-sm-4">
           <input type="text" name="businessPhonenumber" id="bussines-phonenumber" class="form-control" ng-model="client.businessPhonenumber" placeholder="Ej. 4483480">
         </div>
       </div>
 
       <div class="form-group" >
+        <!-- EMAIL FIELD - OPTIONAL -->
+        <label for="email" class="control-label col-sm-2">Correo electrónico:</label>
+        <div class="col-sm-4">
+          <input type="email" id="email" name="email" class="form-control" ng-model="client.email" placeholder="Ej. admin@fournee.com.co">
+        </div>
+
         <!-- OWNER NAME FIELD - OPTIONAL -->
         <label for="owner-name" class="control-label col-sm-2">Nombre del dueño:</label>
         <div class="col-sm-4">
           <input type="text" name="ownerName" id="owner-name" class="form-control" ng-model="client.ownerName" placeholder="Ej. Karim chohra">
         </div>
 
+      </div>
+      <div class="form-group">
         <!-- OWNER PHONENUMBER FIELD - OPTIONAL -->
-        <label for="owner-phonenumber" class="control-label col-sm-2">Telefono del dueño:</label>
+        <label for="owner-phonenumber" class="control-label col-sm-2">Teléfono del dueño:</label>
         <div class="col-sm-4">
           <input type="text" name="ownerPhonenumber" id="owner-phonenumber" class="form-control" ng-model="client.ownerPhonenumber" placeholder="Ej. 3124325684">
         </div>

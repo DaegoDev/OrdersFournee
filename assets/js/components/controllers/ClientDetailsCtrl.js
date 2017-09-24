@@ -5,6 +5,8 @@
       $scope.client = JSON.parse(StorageService.get('client', 'session'));
       $scope.selectedProducts = [];
       $scope.receptionHour = [];
+      $scope.simbolGeneral = 'G';
+      $scope.simbolSpecial = 'E';
 
       ReceptionHourSvc.getReceptionHourByClient({
           clientId: $scope.client.id
@@ -29,7 +31,7 @@
         var productCodes = [];
         var client = {};
         angular.forEach($scope.selectedProducts, function(product, key) {
-          productCodes.push(product.code);
+          productCodes.push({product: product.code, customPrice: product.customPrice});
         })
 
         client.clientId = $scope.client.id;
@@ -78,6 +80,8 @@
       }
 
       $scope.setSpecialPrice = function(customProduct) {
+        console.log(customProduct);
+        $scope.customPriceEnabled = customProduct.customPrice ? true : false;
         $ngConfirm({
           title: 'Asignar precio',
           content: 'Ingrese el precio que desea asignarle al producto ' + customProduct.product.name + ', para el cliente ' + $scope.client.tradeName +
@@ -86,6 +90,19 @@
           backgroundDismiss: true,
           scope: $scope,
           buttons: {
+            removePrice: {
+              text: 'Precio general',
+              btnClass: 'btn-green',
+              disabled: !$scope.customPriceEnabled,
+              action : function (scope, button) {
+                var clientProduct = {
+                  clientId: $scope.client.id,
+                  productCode: customProduct.product.code,
+                  customPrice: "#"
+                }
+                $scope.changePrice(clientProduct);
+              }
+            },
             exit: {
               text: 'Salir',
               btnClass: 'btn-sienna',
@@ -104,7 +121,6 @@
                   }
                   return false;
                 }
-
                 var clientProduct = {
                   clientId: $scope.client.id,
                   productCode: customProduct.product.code,
@@ -117,18 +133,20 @@
         });
       }
 
-      $scope.changePrice = function (clientProduct) {
-        if (!$scope.customPrice) {
+      $scope.changePrice = function(clientProduct) {
+        console.log(clientProduct);
+        if (!$scope.customPrice && clientProduct.customPrice != "#") {
           return;
         }
         ClientSvc.changeProductPrice(clientProduct)
-        .then(function (res) {
-          getClientProducts();
-          // $scope.client.products = $scope.customPrice;
-        })
-        .catch(function (err) {
-          $ngConfirm('El precio del producto no ha sido cambiado, porfavor intente de nuevo.', 'Error');
-        });
+          .then(function(res) {
+            console.log(res.data);
+            getClientProducts();
+            $scope.customPrice = '';
+          })
+          .catch(function(err) {
+            $ngConfirm('El precio del producto no ha sido cambiado, porfavor intente de nuevo.', 'Error');
+          });
       }
 
       // Function to disable/delete the current client.
@@ -195,11 +213,74 @@
       // Function to select a product, hide it from the list and show it in the
       // selected products.
       $scope.selectProduct = function(product) {
-        var index = $scope.selectedProducts.indexOf(product);
-        if (index == -1) {
-          $scope.selectedProducts.push(product);
-          product.hide = true;
-        }
+        $ngConfirm({
+          title: 'Asignar precio',
+          content: 'Desea asignar precio especial para este producto.',
+          backgroundDismiss: false,
+          scope: $scope,
+          buttons: {
+            set: {
+              text: 'Asignar',
+              btnClass: 'btn-sienna',
+              action: function(scope, button) {
+                $ngConfirm({
+                  title: 'Asignar precio',
+                  content: 'Ingrese el precio especial ' +
+                    '.<br> <input type="number" ng-model="newCustomPrice" class="form-control"/>' +
+                    '<br><alert-message options="messageModalOptions"></alert-message>',
+                  backgroundDismiss: false,
+                  scope: $scope,
+                  buttons: {
+                    cancel: {
+                      text: 'Cancelar',
+                      btnClass: 'btn-sienna',
+                      action: function(scope, button) {
+
+                      }
+
+                    },
+                    accept: {
+                      text: 'Aceptar',
+                      btnClass: 'btn-sienna',
+                      action: function(scope, button) {
+                        if (!$scope.newCustomPrice) {
+                          $scope.messageModalOptions = {
+                            showMessage: true,
+                            message: 'Debe ingresar un precio para el producto.',
+                            type: 'error',
+                            title: 'Error.'
+                          }
+                          return false;
+                        }
+                        var index = $scope.selectedProducts.indexOf(product);
+                        if (index == -1) {
+                          product.customPrice = $scope.newCustomPrice;
+                          product.sectionGeneralPrice = false;
+                          $scope.selectedProducts.push(product);
+                          $scope.newCustomPrice = '';
+                          product.hide = true;
+                        }
+
+                      }
+                    }
+                  }
+                });
+              }
+            },
+            continue: {
+              text: 'Continuar',
+              btnClass: 'btn-sienna',
+              action: function(scope, button) {
+                var index = $scope.selectedProducts.indexOf(product);
+                if (index == -1) {
+                  product.sectionGeneralPrice = true;
+                  $scope.selectedProducts.push(product);
+                  product.hide = true;
+                }
+              }
+            }
+          }
+        });
       }
 
       //Function to un-select deselect a product from the selected products and

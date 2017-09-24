@@ -62,7 +62,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
 
   // Check which type of directive is used, then set the corresponding values.
   if ($scope.type == 'orderProduct') {
-
+    console.log($scope.product);
     $scope.dirProduct = $scope.product.product;
     $scope.clientProduct = {
       clientId: $scope.clientId,
@@ -73,7 +73,11 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     } else {
       $scope.name = $scope.dirProduct.shortName;
     }
-    $scope.price = $scope.dirProduct.price;
+    if ($scope.product.customPrice) {
+      $scope.price = $scope.product.customPrice;
+    }else {
+      $scope.price = $scope.dirProduct.price;
+    }
 
   } else if ($scope.type == 'select') {
     $scope.class = ['select'];

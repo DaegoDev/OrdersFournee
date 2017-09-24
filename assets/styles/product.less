@@ -69,12 +69,29 @@
   .product {
     position: relative;
     border-radius: 5px;
-    display: flex;
+    // display: flex;
     margin: 10px;
     background-color: @theme-nero;
     color: @font-tussock;
     font-size: 90%;
     padding: 5px;
+
+    .product-price {
+      width: 100%;
+      padding-top: 0px;
+      margin-top: 5px;
+      text-align: center;
+
+      p {
+        display: inline;
+        color: @bg-white;
+      }
+
+      span {
+        display: inline;
+        color: @bg-white;
+      }
+    }
 
     &.order {
       flex-wrap: wrap;

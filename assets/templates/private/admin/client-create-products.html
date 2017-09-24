@@ -5,21 +5,18 @@
         Lista de productos
       </div>
       <div class="row" style="margin-left:2px; margin-right:2px">
-            <div class="col-sm-12">
-                <div>
-                    <div class="input-group stylish-input-group">
-                        <input type="text" class="form-control"  placeholder="Filtrar los productos" ng-model="searchText.shortName">
-                        <span class="input-group-addon">
-                            <button type="submit">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </div>
+        <div class="col-sm-12">
+          <div class="input-group stylish-input-group">
+            <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchText.shortName">
+            <span class="input-group-addon">
+            <button type="submit">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+            </span>
+          </div>
+        </div>
       </div>
-      <product-card ng-repeat="product in products | filter:searchText" product="product"
-        ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
+      <product-card ng-repeat="product in products | filter:searchText" product="product" ng-hide="product.hide" type="select" ng-click="selectProduct(product)">
       </product-card>
     </div>
 
@@ -27,9 +24,13 @@
       <div class="title">
         Seleccionados
       </div>
-      <div ng-repeat="product in productsSelected" class="product"
-        ng-click="unSelectProduct(product)">
+      <div ng-repeat="product in productsSelected" class="product" ng-click="unSelectProduct(product)">
         <span class="product-name">{{product.shortName}}</span>
+        <div class="product-price">
+          <span><i class="fa fa-hand-o-right" aria-hidden="true"></i></span>
+          <p ng-if="!product.sectionGeneralPrice">{{product.customPrice | currency : '$' : '0'}} ud.</p>
+          <p ng-if="product.sectionGeneralPrice">Precio general</p>
+        </div>
         <div class="hover-trash">
           <span class="fa fa-trash"></span>
         </div>

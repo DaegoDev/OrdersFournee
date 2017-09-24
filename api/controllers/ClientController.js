@@ -94,22 +94,17 @@ module.exports = {
       })
       .then(function(client) {
         if (productsCodes) {
-          if (typeof productsCodes == 'string') {
-            var clientProduct = {
-              client: client.insertId,
-              product: productsCodes
-            };
-            clientProductsCredentials.push(clientProduct);
-          } else {
-            productsCodes.forEach(function(productCode, i, productsCodes) {
-              var clientProduct = {
-                client: client.insertId,
-                product: productCode,
-                enabled: true
-              }
+            productsCodes.forEach(function(product, i, productsCodes) {
+              var clientProduct = product;
+              clientProduct.client = client.insertId;
+              clientProduct.enabled = true;
+              // var clientProduct = {
+              //   client: client.insertId,
+              //   product: productCode,
+              //   enabled: true
+              // }
               clientProductsCredentials.push(clientProduct);
             });
-          }
         } else {
           return sql;
         }
@@ -234,16 +229,18 @@ module.exports = {
     // en caso de que no, envia el mensaje de error
     Client.findOne(clientId)
       .then(function(client) {
-        if (client) {
-          client.products.add(products);
-          return client.save();
+        if (!client) {
+          return res.serverError();
         }
-        return res.serverError();
-      })
-      .then(function(client) {
-        res.ok({
-          client: client
+        products.forEach(function (product, index, productsList) {
+          product.client = clientId;
         })
+        return ClientProduct.create(products);
+        // client.products.add(products);
+        // return client.save();
+      })
+      .then(function(clientProducts) {
+        res.ok(clientProducts)
       })
       .catch(function(err) {
         sails.log.debug(err);
@@ -334,7 +331,7 @@ module.exports = {
     var item = null;
     var clientProductQueryStr =
       'SELECT ' +
-      'cp.id, cp.client, cp.custom_name, cp.product, ' +
+      'cp.id, cp.client, cp.custom_name, cp.custom_price, cp.product, ' +
       'p.name, p.short_name, p.price,' +
       'i.value, i.short_value, ' +
       'e.name AS element_name ' +
@@ -387,6 +384,7 @@ module.exports = {
                   id: data.id,
                   clientId: data.client,
                   customName: data.custom_name,
+                  customPrice: data.custom_price,
                   product: tmpProduct
                 }
                 products.push(product);
@@ -395,6 +393,7 @@ module.exports = {
                   id: data.id,
                   clientId: data.client,
                   customName: data.custom_name,
+                  customPrice: data.custom_price,
                   product: tmpProduct
                 }
                 products.push(product);
@@ -1034,7 +1033,10 @@ module.exports = {
     customPrice = req.param('customPrice');
     if (!customPrice) {
       return res.badRequest('Precio vacio.');
+    }else if (customPrice == "#") {
+      customPrice = null;
     }
+
     clientId = parseInt(req.param('clientId'));
     if (!clientId) {
       return res.badRequest('Cliente vacio.');

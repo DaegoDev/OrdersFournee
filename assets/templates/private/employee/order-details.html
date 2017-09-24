@@ -2,42 +2,46 @@
   <fieldset>
     <legend print-remove>Dirección de la entrega</legend>
     <div class="group">
-      <label print-remove class="date-label">Cliente:</label>
-      <div print-section class="date-text">
+      <label print-remove class="label-item">Cliente:</label>
+      <div print-section class="text-item">
         <input print-section type="text" class="form-control name-client" value="{{orderDetails.trade_name | capitalize}}" readonly>
+      </div>
+      <label print-remove class="label-item">Razón social:</label>
+      <div print-remove class="text-item">
+        <input print-remove type="text" class="form-control" value="{{orderDetails.legal_name | capitalize}}" readonly>
       </div>
     </div>
     <div print-remove>
       <div class="group">
-        <label class="date-label">Fecha de creación:</label>
-        <div class="date-text">
-          <input type="text" class="form-control" value="{{orderDetails.created_at | date:'medium':'+0000' | capitalize}}" readonly>
-        </div>
-      </div>
-      <div class="group">
         <label class="label-item">Departamento:</label>
         <div class="text-item">
-          <input type="text" class="form-control" value="{{orderDetails.department}}" readonly>
+          <input type="text" class="form-control" value="{{orderDetails.department | capitalize}}" readonly>
         </div>
         <label class="label-item">Ciudad:</label>
         <div class="text-item">
-          <input type="text" class="form-control" value="{{orderDetails.city}}" readonly>
+          <input type="text" class="form-control" value="{{orderDetails.city | capitalize}}" readonly>
         </div>
       </div>
       <div class="group">
         <label class="label-item">Barrio:</label>
         <div class="text-item">
-          <input type="text" class="form-control" value="{{orderDetails.neighborhood}}" readonly>
+          <input type="text" class="form-control" value="{{orderDetails.neighborhood | capitalize}}" readonly>
         </div>
         <label class="label-item">Nomenclatura:</label>
         <div class="text-item">
-          <input type="text" class="form-control" value="{{orderDetails.nomenclature}}" readonly>
+          <input type="text" class="form-control" value="{{orderDetails.nomenclature | capitalize}}" readonly>
         </div>
       </div>
       <div class="group">
         <label class="label-reference">Referencia:</label>
         <div class="text-reference">
-          <input type="text" class="form-control" value="{{orderDetails.referencia}}" readonly>
+          <input type="text" class="form-control" value="{{orderDetails.referencia | capitalize}}" readonly>
+        </div>
+      </div>
+      <div class="group">
+        <label class="date-label">Fecha de creación:</label>
+        <div class="date-text">
+          <input type="text" class="form-control" value="{{orderDetails.created_at | date:'medium':'+0000' | capitalize}}" readonly>
         </div>
       </div>
       <div class="group">

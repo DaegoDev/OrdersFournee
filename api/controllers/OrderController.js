@@ -452,7 +452,7 @@ module.exports = {
     deliveryDate = [initialDate.toISOString(), finalDate.toISOString()];
 
     Order.query('SELECT orders.id, orders.created_at, orders.delivery_date, orders.state, orders.initial_suggested_time, \
-    orders.final_suggested_time, orders.additional_information, orders.invoiced, client_employee.name as employeeName, client.trade_name, client.business_phonenumber, \
+    orders.final_suggested_time, orders.additional_information, orders.invoiced, client_employee.name as employeeName, client.trade_name, client.legal_name, client.business_phonenumber, \
     address.country, address.department, address.city, address.neighborhood, address.nomenclature, address.additional_information as referencia, \
     product.short_name, order_product.amount, order_product.baked \
     FROM `order` as orders \

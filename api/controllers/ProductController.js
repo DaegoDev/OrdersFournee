@@ -455,6 +455,7 @@ module.exports = {
               id: data.id,
               clientId: data.client,
               customName: data.custom_name,
+              customPrice: data.custom_price,
               product: tmpProduct
             }
             products.push(product);

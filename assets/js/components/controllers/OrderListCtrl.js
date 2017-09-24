@@ -282,9 +282,9 @@ fournee.controller('OrderListCtrl', ['$scope', '$log', 'OrderService', '$ngConfi
 
   $scope.showDetails = function(order) {
     $scope.orderDetails = order;
-    console.log(order);
     $ngConfirm({
       title: 'Detalles del pedido',
+      useBootstrap: false,
       contentUrl: 'templates/private/employee/order-details.html',
       scope: $scope,
       theme: 'light',

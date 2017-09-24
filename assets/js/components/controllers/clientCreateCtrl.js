@@ -1,5 +1,6 @@
 var fournee = angular.module('fournee');
-fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc', 'SignupService', function($scope, $log, $state, productSvc, SignupService) {
+fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc', 'SignupService', '$ngConfirm',
+function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
   $scope.client = {};
   $scope.productsCodes = [];
   $scope.productsSelected = [];
@@ -64,11 +65,79 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
   }
 
   $scope.selectProduct = function(product) {
-    var index = $scope.productsSelected.indexOf(product);
-    if (index == -1) {
-      $scope.productsSelected.push(product);
-      product.hide = true;
-    }
+    $ngConfirm({
+      title: 'Asignar precio',
+      content: 'Desea asignar precio especial para este producto.',
+      backgroundDismiss: false,
+      scope: $scope,
+      buttons: {
+        set: {
+          text: 'Asignar',
+          btnClass: 'btn-sienna',
+          action: function(scope, button) {
+            $ngConfirm({
+              title: 'Asignar precio',
+              content: 'Ingrese el precio especial ' +
+                '.<br> <input type="number" ng-model="newCustomPrice" class="form-control"/>' +
+                '<br><alert-message options="messageModalOptions"></alert-message>',
+              backgroundDismiss: false,
+              scope: $scope,
+              buttons: {
+                cancel: {
+                  text: 'Cancelar',
+                  btnClass: 'btn-sienna',
+                  action: function(scope, button) {
+
+                  }
+
+                },
+                accept: {
+                  text: 'Aceptar',
+                  btnClass: 'btn-sienna',
+                  action: function(scope, button) {
+                    if (!$scope.newCustomPrice) {
+                      $scope.messageModalOptions = {
+                        showMessage: true,
+                        message: 'Debe ingresar un precio para el producto.',
+                        type: 'error',
+                        title: 'Error.'
+                      }
+                      return false;
+                    }
+                    var index = $scope.productsSelected.indexOf(product);
+                    if (index == -1) {
+                      product.customPrice = $scope.newCustomPrice;
+                      product.sectionGeneralPrice = false;
+                      $scope.productsSelected.push(product);
+                      $scope.newCustomPrice = '';
+                      product.hide = true;
+                    }
+
+                  }
+                }
+              }
+            });
+          }
+        },
+        continue: {
+          text: 'Continuar',
+          btnClass: 'btn-sienna',
+          action: function(scope, button) {
+            var index = $scope.productsSelected.indexOf(product);
+            if (index == -1) {
+              product.sectionGeneralPrice = true;
+              $scope.productsSelected.push(product);
+              product.hide = true;
+            }
+          }
+        }
+      }
+    });
+    // var index = $scope.productsSelected.indexOf(product);
+    // if (index == -1) {
+    //   $scope.productsSelected.push(product);
+    //   product.hide = true;
+    // }
   }
 
   $scope.unSelectProduct = function(product) {
@@ -81,7 +150,7 @@ fournee.controller('clientCreateCtrl', ['$scope', '$log', '$state', 'productSvc'
 
   $scope.createClient = function() {
     angular.forEach($scope.productsSelected, function(product, key) {
-      $scope.productsCodes.push(product.code);
+      $scope.productsCodes.push({product: product.code, customPrice: product.customPrice});
     });
 
     var clientCredentials = {

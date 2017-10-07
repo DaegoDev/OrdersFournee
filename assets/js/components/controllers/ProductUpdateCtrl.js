@@ -45,10 +45,35 @@
       $log.log(err);
     });
 
+
+    $scope.formatNumber = function () {
+      console.log($scope.selectedProduct.price);
+      if (!$scope.selectedProduct.price) {
+        return;
+      }
+      var number = $scope.selectedProduct.price.replace(/\D/g,'');
+      console.log("number begin " + number);
+      var numberLength = number.length
+      if (numberLength > 3) {
+        var n = Math.trunc(numberLength / 3);
+        console.log(n);
+        for (var i = 1; i <= n; i++) {
+          var arrNumber = number.split("");
+          var index = (numberLength - (3 * i));
+          if (index != 0) {
+            arrNumber.splice(index, 0, '.');
+          }
+          number = arrNumber.join("");
+        }
+      }
+      console.log(number);
+      $scope.selectedProduct.price = number;
+    }
+
     $scope.updateProduct = function () {
       var credentials = {
         productCode: $scope.selectedProduct.code,
-        price: $scope.selectedProduct.price,
+        price: $scope.selectedProduct.price.replace(/\D/g,''),
       }
       var items = [];
 

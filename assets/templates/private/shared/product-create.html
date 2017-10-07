@@ -22,7 +22,7 @@
           <label for="price" class="col-sm-2 control-label">Precio:</label>
           <div class="field-price input-group col-sm-3">
             <span class="input-group-addon">$</span>
-            <input type="number" id="price" class="form-control currency" ng-model="product.price">
+            <input type="text" id="price" class="form-control" ng-change="formatNumber()"  ng-model="product.price">
           </div>
         </div>
 

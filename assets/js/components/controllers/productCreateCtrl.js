@@ -7,7 +7,7 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
     $scope.product.name = '';
     $scope.product.shortName = '';
     $scope.product.price = '';
-    
+
     // Message options configuration to further error messages.
     $scope.messageOptions = {
       showMessage: false,
@@ -40,6 +40,29 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
         });
       });
 
+      $scope.formatNumber = function () {
+        if (!$scope.product.price) {
+          return;
+        }
+        var number = $scope.product.price.replace(/\D/g,'');
+        console.log("number begin " + number);
+        var numberLength = number.length
+        if (numberLength > 3) {
+          var n = Math.trunc(numberLength / 3);
+          console.log(n);
+          for (var i = 1; i <= n; i++) {
+            var arrNumber = number.split("");
+            var index = (numberLength - (3 * i));
+            if (index != 0) {
+              arrNumber.splice(index, 0, '.');
+            }
+            number = arrNumber.join("");
+          }
+        }
+        console.log(number);
+        $scope.product.price = number;
+      }
+
     $scope.createProduct = function() {
       var items = [];
       var price = null;
@@ -51,17 +74,25 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
           shortValue: item.shortValue
         });
       });
-      price = $scope.product.price;
-      console.log($scope.product.price);
-      if (price == null || price <= 0) {
+      price = $scope.product.price.replace(/\D/g,'');
+      if (price == null || parseInt(price) <= 0) {
         $scope.messageOptions = {
           showMessage: true,
-          message: 'Debe ingresar el precio. ',
+          message: 'Debe ingresar correctamente el precio. ',
           type: 'error',
           title: 'Error.'
         }
         return;
       }
+      // if (!$scope.product.price.match(/\d{3}\.\d{3}|\d+/g)) {
+      //   $scope.messageOptions = {
+      //     showMessage: true,
+      //     message: 'Debe ingresar caracteres validos en el precio. ',
+      //     type: 'error',
+      //     title: 'Error.'
+      //   }
+      //   return;
+      // }
       productSvc.createProduct({
           items: items,
           price: price,

@@ -84,15 +84,7 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
         }
         return;
       }
-      // if (!$scope.product.price.match(/\d{3}\.\d{3}|\d+/g)) {
-      //   $scope.messageOptions = {
-      //     showMessage: true,
-      //     message: 'Debe ingresar caracteres validos en el precio. ',
-      //     type: 'error',
-      //     title: 'Error.'
-      //   }
-      //   return;
-      // }
+      
       productSvc.createProduct({
           items: items,
           price: price,

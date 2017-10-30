@@ -918,14 +918,12 @@ module.exports = {
         })
       })
       .then((clientProducts) => {
-        sails.log.debug(clientProducts);
         var total = 0;
         clientProducts.forEach(function (clientProduct, index, clientProducts) {
           var amount = productsToOrder[clientProduct.id].amount;
           var subTotal = clientProduct.customPrice * amount;
           total += subTotal;
         })
-        sails.log.debug(total);
         if (total < minOrderPrice) {
           res.ok({
             isValid: false,

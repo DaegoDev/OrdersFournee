@@ -297,7 +297,6 @@
         }
       });
 
-      console.log(productsToOrder);
       OrderService.validateMinOrderPrice({productsToOrder: productsToOrder})
       .then((res) => {
         if (!res.data.isValid) {
@@ -320,7 +319,6 @@
       var index = $scope.orderList.indexOf(product);
       $scope.orderList.splice(index, 1);
       product.amount = 0;
-      console.log($scope.orderList);
       $scope.calculateTotal();
     }
 

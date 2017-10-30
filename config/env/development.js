@@ -20,5 +20,5 @@ module.exports = {
   // models: {
   //   connection: 'someMongodbServer'
   // }
-  // hookTimeout: 400000,
+  hookTimeout: 500000,
 };

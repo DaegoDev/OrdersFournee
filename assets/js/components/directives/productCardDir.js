@@ -41,7 +41,6 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm, toastr) {
   var rawProduct = null;
   var bakedProduct = null;
 
-  console.log($scope.product);
 
   if ($scope.product.bakedProduct) {
     bakedProduct = $scope.product.bakedProduct;
@@ -68,7 +67,6 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm, toastr) {
 
   // Check which type of directive is used, then set the corresponding values.
   if ($scope.type == 'orderProduct') {
-    console.log($scope.product);
     $scope.dirProduct = $scope.product.product;
     $scope.clientProduct = {
       clientId: $scope.clientId,

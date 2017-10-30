@@ -28,7 +28,7 @@ module.exports = {
 
   port: process.env.PORT || 1337,
 
-  // hookTimeout: 400000,
+  hookTimeout: 500000,
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/

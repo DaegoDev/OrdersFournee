@@ -32,22 +32,26 @@
     <div class="left-container">
       <div class="form-horizontal product-info">
         <div class="form-group">
-          <label for="name" class="col-sm-2">Nombre</label>
-          <div class="col-sm-10">
+          <label for="name" class="col-sm-3 control-label">Nombre: </label>
+          <div class="col-sm-9">
             <input type="text" class="form-control" name="name" value="{{selectedProduct.name}}" readonly>
           </div>
         </div>
         <div class="form-group">
-          <label for="shortName" class="col-sm-2">Nombre abreviado</label>
-          <div class="col-sm-10">
+          <label for="shortName" class="col-sm-3 control-label">Nombre abreviado: </label>
+          <div class="col-sm-9">
             <input type="text" class="form-control" name="shortName" value="{{selectedProduct.shortName}}" readonly>
           </div>
         </div>
         <div class="form-group">
-          <label for="price" class="col-sm-2 control-label">Precio:</label>
+          <!-- <label for="price" class="col-sm-2 control-label">Precio:</label>
           <div class="field-price input-group col-sm-3">
             <span class="input-group-addon">$</span>
             <input type="text" id="price" class="form-control" ng-change="formatNumber()" ng-model="selectedProduct.price">
+          </div> -->
+          <label for="price" class="col-sm-3 control-label">Unidades paquete:</label>
+          <div class="field-units-pack  col-sm-2">
+            <input style="margin-left: 3px;" type="number" id="unitsPack" class="form-control" ng-model="selectedProduct.unitsPack">
           </div>
         </div>
         <div class="form-group">

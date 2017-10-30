@@ -17,7 +17,7 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  
+
   models: {
     connection: 'localMysql'
   },
@@ -28,6 +28,7 @@ module.exports = {
 
   port: process.env.PORT || 1337,
 
+  // hookTimeout: 400000,
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/

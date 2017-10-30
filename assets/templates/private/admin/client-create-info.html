@@ -71,6 +71,20 @@
         <div class="col-sm-4">
           <input type="text" name="ownerPhonenumber" id="owner-phonenumber" class="form-control" ng-model="client.ownerPhonenumber" placeholder="Ej. 3124325684">
         </div>
+        <!-- MIN ORDER PRICE FIELD - -->
+        <label for="minOrderPrice" class="control-label col-sm-2">Precio mínimo para pedidos:</label>
+        <div class="col-sm-4" ng-class="{
+          'has-error': clientInfo.minOrderPrice.$invalid && (clientInfo.minOrderPrice.$touched || clientInfo.$submitted),
+          'has-success': !clientInfo.minOrderPrice.$invalid}">
+          <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input type="text" name="minOrderPrice" id="minOrderPrice" class="form-control" ng-change="formatPrice(client.minOrderPrice, 2)" ng-model="client.minOrderPrice" required placeholder="Ej. $50.000">
+          </div>
+          <!-- MIN ORDER PRICE VALIDATIONS -->
+          <div ng-messages="clientInfo.minOrderPrice.$error" multiple="true" ng-if="clientInfo.minOrderPrice.$touched || clientInfo.$submitted">
+            <div ng-messages-include="templates/public/standard-ngmessages.html"></div>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <!-- ADITIONAL INFORMATION FIELD - OPTIONAL -->

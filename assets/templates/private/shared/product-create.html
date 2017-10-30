@@ -19,10 +19,14 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="price" class="col-sm-2 control-label">Precio:</label>
-          <div class="field-price input-group col-sm-3">
+          <!-- <label for="price" class="col-sm-2 control-label">Precio:</label>
+          <div class="field-price col-sm-3">
             <span class="input-group-addon">$</span>
             <input type="text" id="price" class="form-control" ng-change="formatNumber()"  ng-model="product.price">
+          </div> -->
+          <label for="unitsPack" class="col-sm-2 control-label">Unidades paquete:</label>
+          <div class="field-units-pack col-sm-2">
+            <input type="number" id="unitsPack" class="form-control"  ng-model="product.unitsPack">
           </div>
         </div>
 

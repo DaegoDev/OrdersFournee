@@ -14,10 +14,11 @@ fournee.directive('productCard', function() {
   }
 })
 
-fournee.controller('productCardCtrl', ['$scope', '$log','ClientSvc', '$ngConfirm', productCardCtrl]);
+fournee.controller('productCardCtrl', ['$scope', '$log', 'ClientSvc', '$ngConfirm', 'toastr', productCardCtrl]);
 
-function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
+function productCardCtrl($scope, $log, ClientSvc, $ngConfirm, toastr) {
   // Control variables to manage the behaviour of the directive base on the type value.
+
   $scope.dirControl = null;
   $scope.clientProduct = null;
   $scope.name = '';
@@ -31,11 +32,16 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
   }
 
   // Control variables to manage the two type of order products (raw or baked).
-  $scope.currentSettings = {baked: "", amount: 0}
+  $scope.currentSettings = {
+    baked: "",
+    amount: 0
+  }
   $scope.baked = "";
   $scope.amount = 0;
   var rawProduct = null;
   var bakedProduct = null;
+
+  console.log($scope.product);
 
   if ($scope.product.bakedProduct) {
     bakedProduct = $scope.product.bakedProduct;
@@ -75,7 +81,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     }
     if ($scope.product.customPrice) {
       $scope.price = $scope.product.customPrice;
-    }else {
+    } else {
       $scope.price = $scope.dirProduct.price;
     }
 
@@ -83,14 +89,17 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     $scope.class = ['select'];
     $scope.dirProduct = $scope.product;
     $scope.name = $scope.product.shortName;
-    $scope.price = $scope.product.price;
+    // $scope.price = $scope.product.price;
 
   } else if ($scope.type == 'list') {
     $scope.class = ['list'];
     $scope.dirProduct = $scope.product;
     $scope.name = $scope.product.shortName;
-    $scope.price = $scope.product.price;
+    // $scope.price = $scope.product.price;
   }
+
+  // Set the units per pack for all types.
+  $scope.unitsPack = $scope.dirProduct.unitsPack;
 
   $scope.toggleCollapse = function() {
     $scope.collapsed = !$scope.collapsed;
@@ -112,7 +121,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     return buildProduct();
   }
 
-  $scope.dirControl.selectProduct = function () {
+  $scope.dirControl.selectProduct = function() {
     return $scope.product;
   }
 
@@ -148,8 +157,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
           confirm: {
             text: 'Aceptar',
             btnClass: 'btn-sienna',
-            action: function (scope, button) {
-            }
+            action: function(scope, button) {}
           }
         }
       });
@@ -164,8 +172,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
           confirm: {
             text: 'Aceptar',
             btnClass: 'btn-sienna',
-            action: function (scope, button) {
-            }
+            action: function(scope, button) {}
           }
         }
       });
@@ -189,6 +196,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
         clientProduct: $scope.product.id,
         name: $scope.name,
         amount: 0,
+        price: $scope.price,
         baked: false
       }
       $scope.product.rawProduct = rawProduct;
@@ -197,6 +205,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
         clientProduct: $scope.product.id,
         name: $scope.name,
         amount: 0,
+        price: $scope.price,
         baked: true
       }
       $scope.product.bakedProduct = bakedProduct;
@@ -210,38 +219,62 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
       currentProduct = rawProduct;
     }
     currentProduct.amount += $scope.currentSettings.amount;
+    if ($scope.unitsPack) {
+      var mod = currentProduct.amount % $scope.unitsPack;
+      // Si la cantidad a pedir no es multiplo de las unidades por paquete
+      // a la cantidad a pedir se suma la cantidad faltante requerida.
+      if (mod != 0) {
+        var halfUnitsPack = Math.round($scope.unitsPack / 2);
+        var rest = $scope.unitsPack - mod;
+        if (mod >= halfUnitsPack || currentProduct.amount < $scope.unitsPack) {
+          currentProduct.amount += rest;
+        } else {
+          currentProduct.amount -= mod;
+        }
+        toastr.info( 'La cantidad se redondeó a ' + currentProduct.amount, {
+          closeButton: true,
+          closeHtml: '<button>X</button>',
+          timeOut: 4000,
+          progressBar: true
+        });
+        $scope.currentSettings.amount = currentProduct.amount;
+      }
+    }
     return currentProduct;
   }
 
   $scope.getTitleColor = function(product) {
     var dough = '';
-    product.items.forEach(function (item, i) {
+    product.items.forEach(function(item, i) {
       if (item.elementName.toUpperCase().trim() == 'MASA') {
         dough = item.value + item.shortValue + item.elementName;
       }
     });
-    var colorHash = new ColorHash({lightness: [0.35, 0.3, 0.25]});
-    return {'background-color': colorHash.hex(dough)}
+    var colorHash = new ColorHash({
+      lightness: [0.35, 0.3, 0.25]
+    });
+    return {
+      'background-color': colorHash.hex(dough)
+    }
   }
 
-  $scope.changeCustomName = function (producCode) {
+  $scope.changeCustomName = function(producCode) {
     $ngConfirm({
       title: 'Cambiar nombre',
-      content: 'Ingrese el nombre que desea asignarle al producto.<br> <input type="text" ng-model="customName" class="form-control"/>'+
-      '<br><alert-message options="messageModalOptions"></alert-message>',
+      content: 'Ingrese el nombre que desea asignarle al producto.<br> <input type="text" ng-model="customName" class="form-control"/>' +
+        '<br><alert-message options="messageModalOptions"></alert-message>',
       backgroundDismiss: true,
       scope: $scope,
       buttons: {
         exit: {
           text: 'Salir',
           btnClass: 'btn-sienna',
-          action: function (scope, button) {
-          }
+          action: function(scope, button) {}
         },
         confirm: {
           text: 'Aceptar',
           btnClass: 'btn-sienna',
-          action: function (scope, button) {
+          action: function(scope, button) {
             if (!$scope.customName) {
               $scope.messageModalOptions = {
                 showMessage: true,
@@ -258,20 +291,20 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm) {
     });
   }
 
-  $scope.changeName = function () {
+  $scope.changeName = function() {
     if (!$scope.customName) {
       return;
     }
     ClientSvc.changeProductName({
-      productCode: $scope.dirProduct.code,
-      customName: $scope.customName
-    })
-    .then(function (res) {
-      $scope.name = $scope.customName;
-      $scope.product.customName = $scope.customName;
-    })
-    .catch(function (err) {
-      $ngConfirm('El nombre del producto no ha sido cambiado, porfavor intente de nuevo.', 'Error');
-    });
+        productCode: $scope.dirProduct.code,
+        customName: $scope.customName
+      })
+      .then(function(res) {
+        $scope.name = $scope.customName;
+        $scope.product.customName = $scope.customName;
+      })
+      .catch(function(err) {
+        $ngConfirm('El nombre del producto no ha sido cambiado, porfavor intente de nuevo.', 'Error');
+      });
   }
 }

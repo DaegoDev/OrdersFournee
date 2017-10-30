@@ -42,9 +42,14 @@ module.exports = {
     },
     price: {
       type: 'float',
-      notNull: true,
       defaultsTo: 0,
       columnName: 'price',
+    },
+    unitsPack: {
+      type: 'integer',
+      notNull: true,
+      defaultsTo: 0,
+      columnName: 'units_pack'
     },
     // Añade una referencia a item
     items: {

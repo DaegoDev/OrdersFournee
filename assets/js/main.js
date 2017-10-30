@@ -1,7 +1,7 @@
 'use stric';
 var fournee = angular.module('fournee', ['ui.router', 'permission', 'permission.ui', 'ngMessages', 'ngPassword',
   'ngAnimate', 'ui.bootstrap', 'ngCookies', 'cp.ngConfirm', '720kb.tooltips', 'summernote', 'ngSanitize', 'AngularPrint',
-  'bcherny/formatAsCurrency'
+  'bcherny/formatAsCurrency', 'toastr'
 ]);
 
 // Inicializacion de la configuracion principal al ingresar al dominio.

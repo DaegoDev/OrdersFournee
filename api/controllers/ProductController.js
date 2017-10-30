@@ -20,6 +20,7 @@ module.exports = {
     var nameStr = '';
     var items = [];
     var price = null;
+    var unitsPack = null;
     var doughName = null;
     var arrayDough = [];
     var numberCode = null;
@@ -30,8 +31,16 @@ module.exports = {
 
     items = req.param('items');
     price = req.param('price');
+    unitsPack = parseInt(req.param('unitsPack'));
 
-    if(!price){
+    // if(!price){
+    //   return res.badRequest({
+    //     code: 5,
+    //     msg: 'There are not price.'
+    //   })
+    // }
+
+    if (!unitsPack) {
       return res.badRequest({
         code: 5,
         msg: 'There are not price.'
@@ -109,7 +118,8 @@ module.exports = {
 
         productCredentials.name = nameStr;
         productCredentials.short_name = shortNameStr;
-        productCredentials.price = price;
+        productCredentials.units_pack = unitsPack;
+        // productCredentials.price = price;
 
         return Element.find({
           name: 'masa'
@@ -217,6 +227,7 @@ module.exports = {
      var shortNameStr = '';
      var nameStr = '';
      var price = null;
+     var unitsPack = null;
      var doughId = null;
      var mandatoryItems = ['MASA', 'FORMA', 'GRAMAJE CRUDO'];
      var checkedMandatory = [false, false, false];
@@ -225,6 +236,7 @@ module.exports = {
 
      productCode = req.param('productCode');
      price = req.param('price');
+     unitsPack = parseInt(req.param('unitsPack'))
      items = req.param('items');
 
     //  Parameter validations.
@@ -232,9 +244,13 @@ module.exports = {
        return res.badRequest({code:1, msg: "Mising items parameter"});
      }
 
-     if (!price) {
-       return res.badRequest({code:1, msg: "Mising price parameter"});
-     }
+    //  if (!price) {
+    //    return res.badRequest({code:1, msg: "Mising price parameter"});
+    //  }
+
+    if (!unitsPack) {
+      return res.badRequest({code:1, msg: 'Missing units pack parameter'});
+    }
 
      if (!productCode) {
        return res.badRequest({code:1, msg: "Mising productCode parameter"});
@@ -311,7 +327,8 @@ module.exports = {
          productCredentials.code = productCode;
          productCredentials.name = nameStr;
          productCredentials.shortName = shortNameStr;
-         productCredentials.price = price;
+        //  productCredentials.price = price;
+         productCredentials.unitsPack = unitsPack;
          productCredentials.enabled = 1; // Enabled product; 1 = true, 0 = false.
 
          return ItemProduct.find({product_code: productCode}).populate('item');
@@ -354,7 +371,7 @@ module.exports = {
        })
        .then(function (data) {
          return sql.update('product',
-         {name: productCredentials.name, short_name: productCredentials.shortName, price: productCredentials.price},
+         {name: productCredentials.name, short_name: productCredentials.shortName, price: productCredentials.price, units_pack: productCredentials.unitsPack},
          {code: productCredentials.code});
        })
        .then(function (data) {
@@ -401,7 +418,7 @@ module.exports = {
     var clientProductQueryStr =
       'SELECT ' +
       'cp.id, cp.client, cp.custom_name, cp.product, cp.custom_price, ' +
-      'p.name, p.short_name, p.price, ' +
+      'p.name, p.short_name, p.price, p.units_pack,' +
       'i.value, i.short_value, ' +
       'e.name AS element_name ' +
       'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
@@ -429,6 +446,7 @@ module.exports = {
               name: data.name,
               shortName: data.short_name,
               price: data.price,
+              unitsPack: data.units_pack,
               items: []
             }
           }
@@ -447,6 +465,7 @@ module.exports = {
               clientId: data.client,
               customName: data.custom_name,
               customPrice: data.custom_price,
+              unitsPack: data.units_pack,
               product: tmpProduct
             }
             products.push(product);
@@ -456,6 +475,7 @@ module.exports = {
               clientId: data.client,
               customName: data.custom_name,
               customPrice: data.custom_price,
+              unitsPack: data.units_pack,
               product: tmpProduct
             }
             products.push(product);
@@ -478,7 +498,7 @@ module.exports = {
     var products = [];
     var item = null;
     var productQueryStr = 'SELECT ' +
-      'p.code, p.name, p.short_name, p.price,' +
+      'p.code, p.name, p.short_name, p.price, p.units_pack,' +
       'e.name as element_name, ' +
       'i.id as item_id, i.value, i.short_value ' +
       'FROM product as p, item_product as ip, item as i, element as e ' +
@@ -498,6 +518,7 @@ module.exports = {
               name: data.name,
               shortName: data.short_name,
               price: data.price,
+              unitsPack: data.units_pack,
               items: []
             }
           }

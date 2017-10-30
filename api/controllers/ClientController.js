@@ -25,6 +25,7 @@ module.exports = {
     var ownerPhonenumber = null;
     var businessPhonenumber = null;
     var clientAdditionalInformation = null;
+    var minOrderPrice = null;
     var productsCodes = [];
     var clientProductsCredentials = [];
     var role = null;
@@ -55,6 +56,14 @@ module.exports = {
       });
     }
 
+    minOrderPrice = req.param('minOrderPrice');
+    if (!minOrderPrice) {
+      return res.badRequest({
+        code: 1,
+        msg: 'Se debe ingresar el precio minimo para un pedido.'
+      });
+    }
+
     email = req.param('email');
     ownerName = req.param('ownerName');
     ownerPhonenumber = req.param('ownerPhonenumber');
@@ -67,7 +76,7 @@ module.exports = {
     var userCredentials = createUserCredentials(nit, password);
 
     var clientCredentials = createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber,
-      businessPhonenumber, clientAdditionalInformation, email);
+      businessPhonenumber, clientAdditionalInformation, email, minOrderPrice);
 
     //Obtengo la conección para realizar transacciones
     var connectionConfig = AlternativeConnectionService.getConnection();
@@ -332,7 +341,7 @@ module.exports = {
     var clientProductQueryStr =
       'SELECT ' +
       'cp.id, cp.client, cp.custom_name, cp.custom_price, cp.product, ' +
-      'p.name, p.short_name, p.price,' +
+      'p.name, p.short_name, p.price, p.units_pack,' +
       'i.value, i.short_value, ' +
       'e.name AS element_name ' +
       'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp ' +
@@ -367,6 +376,7 @@ module.exports = {
                   name: data.name,
                   shortName: data.short_name,
                   price: data.price,
+                  unitsPack: data.units_pack,
                   items: []
                 }
               }
@@ -428,6 +438,7 @@ module.exports = {
       delete client.owner_name;
       delete client.owner_phonenumber;
       delete client.business_phonenumber;
+      delete client.min_order_price;
       for (var field in client) {
         if (!client[field]) {
           return res.ok(false);
@@ -1082,6 +1093,52 @@ module.exports = {
         }
       });
   },
+  /**
+   * Funcion para actualizar el precio minimo para un pedido.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+  setMinOrderPrice: function (req, res) {
+    var clientId = null;
+    var minOrderPrice = null;
+
+    clientId = parseInt(req.param('clientId'));
+    if (!clientId) {
+      return res.badRequest('Id del cliente vacio.');
+    }
+
+    minOrderPrice = req.param('minOrderPrice');
+    if (!minOrderPrice) {
+      return res.badRequest('Precio minimo de pedido vacio.');
+    }
+
+    Client.find({
+        id: clientId
+      })
+      .then(function(clientData) {
+        if (!clientData) {
+          throw {
+            code: 1,
+            msg: 'No client found'
+          };
+        }
+        return Client.update({
+          id: clientId
+        }, {
+          minOrderPrice: minOrderPrice
+        });
+      })
+      .then(function(client) {
+        return res.ok(client.minOrderPrice);
+      })
+      .catch(function(err) {
+        sails.log.error(err);
+        if (err.code && err.code == 1) {
+          return res.serverError(err);
+        }
+      });
+
+  }
 };
 
 // crea las credenciales para insertar una dirección
@@ -1111,7 +1168,8 @@ function createUserCredentials(username, password) {
   return userCredentials;
 }
 // crea las credenciales para insertar un cliente
-function createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber, businessPhonenumber, additionalInformation, email) {
+function createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhonenumber,
+  businessPhonenumber, additionalInformation, email, minOrderPrice) {
   var clientCredentials = {
     legal_name: legalName,
     nit: nit,
@@ -1120,7 +1178,8 @@ function createClientCredentials(legalName, nit, tradeName, ownerName, ownerPhon
     owner_name: ownerName,
     owner_phonenumber: ownerPhonenumber,
     business_phonenumber: businessPhonenumber,
-    additional_information: additionalInformation
+    additional_information: additionalInformation,
+    min_order_price: minOrderPrice
   };
   return clientCredentials;
 }

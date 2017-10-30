@@ -8,6 +8,7 @@
     $scope.products = [];
     var orderParam = null;
     var tmpProductsEnabled = [];
+    const minPrice = 80000;
 
     // Verify that the form is to update or create.
     if ($stateParams.order) {
@@ -170,6 +171,7 @@
           title: 'Resumen del pedido',
           contentUrl: 'templates/private/client/order-summary.html',
           scope: $scope,
+          useBootstrap: false,
           theme: 'light',
           columnClass: 'medium',
           backgroundDismiss: true,
@@ -280,13 +282,37 @@
       });
     }
 
-    // Function to validate products selected to make an order.
+    // Function to te products selected to make an order.
     $scope.validateProducts = function() {
       if ($scope.orderList.length == 0) {
         $ngConfirm('Debe seleccionar al menos un producto.');
         return;
       }
-      $state.go('order.create.info');
+      var productsToOrder = {};
+      $scope.orderList.forEach(function(product) {
+        if (!productsToOrder[product.clientProduct]) {
+          productsToOrder[product.clientProduct] = {id: product.clientProduct, amount: product.amount};
+        } else {
+          productsToOrder[product.clientProduct].amount += product.amount;
+        }
+      });
+
+      console.log(productsToOrder);
+      OrderService.validateMinOrderPrice({productsToOrder: productsToOrder})
+      .then((res) => {
+        if (!res.data.isValid) {
+          $ngConfirm({
+            title: 'Error',
+            content: 'El valor minimo del pedido debe ser de $' + res.data.minOrderPrice,
+            type: 'red'
+          })
+        } else {
+          $state.go('order.create.info');
+        }
+      })
+      .catch((err) => {
+
+      })
     }
 
     // Function to delete a product from the order list.
@@ -294,6 +320,8 @@
       var index = $scope.orderList.indexOf(product);
       $scope.orderList.splice(index, 1);
       product.amount = 0;
+      console.log($scope.orderList);
+      $scope.calculateTotal();
     }
 
     // Function to reset product creation values.
@@ -312,23 +340,16 @@
       $scope.$apply();
     }
 
-
-    // Validación de los campos hora inicial y hora final.
-    // $scope.$watch('order.timeInitial', function(newValue, oldValue) {
-    //   if (newValue < 9 || newValue > 18) {
-    //     $scope.order.timeInitial = new Date();
-    //     $scope.order.timeInitial.setHours(9);
-    //     // $scope.order.timeInitial.setMinutes(0);
-    //   }
-    //   // console.log(newValue);
-    //   // console.log(oldValue);
-    // });
-    //
-    // //Validación de los campos hora inicial y hora final.
-    // $scope.$watch('order.timeFinal', function(newValue, oldValue) {
-    //   console.log(newValue);
-    //   console.log(oldValue);
-    // });
+    $scope.totalPrice = 0;
+    // Function to calculate the total of an order.
+    $scope.calculateTotal = function () {
+      var total = 0;
+      $scope.orderList.forEach(function (product, index, orderList) {
+        var subtotal = product.amount * product.price;
+        total = total + subtotal;
+      })
+      $scope.totalPrice = total;
+    }
 
     $scope.changedInitial = function() {
 

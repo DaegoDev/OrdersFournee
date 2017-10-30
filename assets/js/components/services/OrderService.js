@@ -99,6 +99,15 @@ function ($http, $rootScope) {
         data: params
       });
       return order;
-    }
+    },
+    // Service to validate the min order price.
+    validateMinOrderPrice: function (params) {
+      var isValid = $http({
+        url: '/order/validateMinOrderPrice',
+        method: 'POST',
+        data: params
+      });
+      return isValid;
+    },
   };
 }]);

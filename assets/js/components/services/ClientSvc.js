@@ -131,6 +131,14 @@ function ($http) {
         data: productCredentials
       });
       return product;
+    },
+    setMinOrderPrice: function (params) {
+      var client = $http({
+        url: '/client/setMinOrderPrice',
+        method: 'PUT',
+        data: params
+      });
+      return client;
     }
   };
 }]);

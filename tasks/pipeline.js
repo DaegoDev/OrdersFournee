@@ -23,6 +23,7 @@ var cssFilesToInject = [
   'bower_components/angular-tooltips/dist/angular-tooltips.min.css',
   'bower_components/summernote/dist/summernote.css',
   'bower_components/angularPrint/angularPrint.css',
+  'bower_components/angular-toastr/dist/angular-toastr.min.css',
   'styles/**/*.css'
 ];
 
@@ -59,6 +60,8 @@ var jsFilesToInject = [
   'bower_components/color-hash/dist/color-hash.js',
   'bower_components/angularPrint/angularPrint.js',
   'bower_components/format-as-currency/dist/format-as-currency.js',
+  'bower_components/angular-toastr/dist/angular-toastr.min.js',
+  'bower_components/angular-toastr/dist/angular-toastr.tpls.js',
 
   // Angular files are here.
   'js/main.js',

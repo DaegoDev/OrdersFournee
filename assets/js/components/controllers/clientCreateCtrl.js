@@ -40,6 +40,11 @@ function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
       $scope.infoMsgOptions.showMessage = true;
       return;
     }
+    if (!$scope.client.minOrderPrice) {
+      $scope.infoMsgOptions.message = 'Debe ingresar el precio minimo para los pedidos.';
+      $scope.infoMsgOptions.showMessage = true;
+      return;
+    }
 
     var clientInfo = {
       legalName: $scope.client.legalName,
@@ -64,12 +69,43 @@ function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
 
   }
 
+  // Function to format the number in input price.
+  $scope.formatPrice = function(field, type) {
+    if (!field) {
+      return;
+    }
+    var number = field.replace(/\D/g, '');
+    var numberLength = number.length
+    if (numberLength > 3) {
+      var n = Math.trunc(numberLength / 3);
+      for (var i = 1; i <= n; i++) {
+        var arrNumber = number.split("");
+        var index = (numberLength - (3 * i));
+        if (index != 0) {
+          arrNumber.splice(index, 0, '.');
+        }
+        number = arrNumber.join("");
+      }
+    }
+    if (type === 1) {
+      $scope.newCustomPrice = number;
+    }else if (type === 2) {
+      $scope.client.minOrderPrice = number;
+    }
+  }
+
   $scope.selectProduct = function(product) {
     $ngConfirm({
       title: 'Asignar precio',
       content: 'Desea asignar precio especial para este producto.',
       backgroundDismiss: false,
       scope: $scope,
+      onClose: function() {
+        $scope.newCustomPrice = '';
+        if ($scope.messageModalOptions) {
+          $scope.messageModalOptions.showMessage = false;
+        }
+      },
       buttons: {
         set: {
           text: 'Asignar',
@@ -78,7 +114,7 @@ function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
             $ngConfirm({
               title: 'Asignar precio',
               content: 'Ingrese el precio especial ' +
-                '.<br> <input type="number" ng-model="newCustomPrice" class="form-control"/>' +
+                '.<br> <input type="text" ng-model="newCustomPrice" ng-change="formatPrice(' + "newCustomPrice" + ', 1)" class="form-control"/>' +
                 '<br><alert-message options="messageModalOptions"></alert-message>',
               backgroundDismiss: false,
               scope: $scope,
@@ -106,7 +142,7 @@ function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
                     }
                     var index = $scope.productsSelected.indexOf(product);
                     if (index == -1) {
-                      product.customPrice = $scope.newCustomPrice;
+                      product.customPrice = $scope.newCustomPrice.replace(/\D/g, '');
                       product.sectionGeneralPrice = false;
                       $scope.productsSelected.push(product);
                       $scope.newCustomPrice = '';
@@ -150,7 +186,7 @@ function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
 
   $scope.createClient = function() {
     angular.forEach($scope.productsSelected, function(product, key) {
-      $scope.productsCodes.push({product: product.code, customPrice: product.customPrice});
+      $scope.productsCodes.push({product: product.code, custom_price: product.customPrice});
     });
 
     var clientCredentials = {
@@ -162,6 +198,7 @@ function($scope, $log, $state, productSvc, SignupService, $ngConfirm) {
       ownerPhonenumber: $scope.client.ownerPhonenumber,
       businessPhonenumber: $scope.client.businessPhonenumber,
       clientAdditionalInformation: $scope.client.additionalInformation,
+      minOrderPrice: $scope.client.minOrderPrice.replace(/\D/g, ''),
       productCodes: $scope.productsCodes
     }
     // $log.info(clientCredentials);

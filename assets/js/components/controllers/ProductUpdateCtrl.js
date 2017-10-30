@@ -8,7 +8,7 @@
     $scope.selectedElement = null;
     var currentElement = $scope.selectedElement;
 
-
+    console.log($scope.selectedProduct);
     productSvc.getProducts()
     .then(function (res) {
       $scope.products = res.data;
@@ -73,7 +73,8 @@
     $scope.updateProduct = function () {
       var credentials = {
         productCode: $scope.selectedProduct.code,
-        price: $scope.selectedProduct.price.replace(/\D/g,''),
+        // price: $scope.selectedProduct.price.replace(/\D/g,''),
+        unitsPack: $scope.selectedProduct.unitsPack,
       }
       var items = [];
 
@@ -138,6 +139,7 @@
       $scope.selectedProduct.name = product.name;
       $scope.selectedProduct.shortName = product.shortName;
       $scope.selectedProduct.price = product.price;
+      $scope.selectedProduct.unitsPack = product.unitsPack;
 
       var element = null;
       var item = null;

@@ -31,7 +31,10 @@
         var productCodes = [];
         var client = {};
         angular.forEach($scope.selectedProducts, function(product, key) {
-          productCodes.push({product: product.code, customPrice: product.customPrice});
+          productCodes.push({
+            product: product.code,
+            customPrice: product.customPrice
+          });
         })
 
         client.clientId = $scope.client.id;
@@ -79,22 +82,107 @@
         });
       }
 
+      // Function to format the number in input price.
+      $scope.formatNumber = function(number, type) {
+        if (!number) {
+          return;
+        }
+        var number = number.replace(/\D/g, '');
+        var numberLength = number.length
+        if (numberLength > 3) {
+          var n = Math.trunc(numberLength / 3);
+          for (var i = 1; i <= n; i++) {
+            var arrNumber = number.split("");
+            var index = (numberLength - (3 * i));
+            if (index != 0) {
+              arrNumber.splice(index, 0, '.');
+            }
+            number = arrNumber.join("");
+          }
+        }
+        if (type === 1) {
+          $scope.customPrice = number;
+        } else if (type === 2) {
+          $scope.newCustomPrice = number;
+        } else if (type === 3) {
+          $scope.client.minOrderPrice = number;
+        }
+      }
+
+      if ($scope.client.minOrderPrice) {
+        $scope.formatNumber($scope.client.minOrderPrice.toString(), 3)
+      }
+
+      // Function to update the min order price for the client.
+      $scope.setMinOrderPrice = function () {
+        var minOrderPrice = null;
+        var clientId = null
+
+        minOrderPrice = $scope.client.minOrderPrice;
+        clientId = $scope.client.id;
+
+        if (!minOrderPrice || !clientId) {
+          return;
+        }
+
+        var params = {
+          clientId: clientId,
+          minOrderPrice: minOrderPrice.replace(/\D/g, '')
+        }
+
+        ClientSvc.setMinOrderPrice(params)
+        .then((res) => {
+          $scope.formatNumber(minOrderPrice, 3)
+          $ngConfirm({
+            title: 'Exito',
+            content: 'Se actualizó correctamente.',
+            type: 'green',
+            autoClose: 'ok|2000',
+            buttons: {
+              ok: {
+                text: 'Ok',
+                action: function () {
+
+                }
+              }
+            }
+          })
+        })
+        .catch((err) => {
+          console.log(err);
+          $ngConfirm({
+            title: 'Error',
+            content: 'No se pudo actualizar el precio minimo para los pedidos.',
+            type: 'red',
+            autoClose: '8000',
+          })
+        })
+
+      }
+
+      // Function to open the form to add the custom price;
       $scope.setSpecialPrice = function(customProduct) {
         console.log(customProduct);
         $scope.customPriceEnabled = customProduct.customPrice ? true : false;
         $ngConfirm({
           title: 'Asignar precio',
           content: 'Ingrese el precio que desea asignarle al producto ' + customProduct.product.name + ', para el cliente ' + $scope.client.tradeName +
-            '.<br> <input type="number" ng-model="customPrice" class="form-control"/>' +
+            '.<br><div class="form-group"><input type="text" ng-model="customPrice" ng-change="formatNumber(' + "customPrice" + ', 1)" class="form-control"/> </div>' +
             '<br><alert-message options="messageModalOptions"></alert-message>',
           backgroundDismiss: true,
           scope: $scope,
+          onClose: function() {
+            $scope.customPrice = '';
+            if ($scope.messageModalOptions) {
+              $scope.messageModalOptions.showMessage = false;
+            }
+          },
           buttons: {
             removePrice: {
               text: 'Precio general',
               btnClass: 'btn-green',
               disabled: !$scope.customPriceEnabled,
-              action : function (scope, button) {
+              action: function(scope, button) {
                 var clientProduct = {
                   clientId: $scope.client.id,
                   productCode: customProduct.product.code,
@@ -124,7 +212,7 @@
                 var clientProduct = {
                   clientId: $scope.client.id,
                   productCode: customProduct.product.code,
-                  customPrice: $scope.customPrice
+                  customPrice: $scope.customPrice.replace(/\D/g, '')
                 }
                 $scope.changePrice(clientProduct);
               }
@@ -133,8 +221,8 @@
         });
       }
 
+      // Set the special price defined by admin;
       $scope.changePrice = function(clientProduct) {
-        console.log(clientProduct);
         if (!$scope.customPrice && clientProduct.customPrice != "#") {
           return;
         }
@@ -218,6 +306,12 @@
           content: 'Desea asignar precio especial para este producto.',
           backgroundDismiss: false,
           scope: $scope,
+          onClose: function() {
+            $scope.newCustomPrice = '';
+            if ($scope.messageModalOptions) {
+              $scope.messageModalOptions.showMessage = false;
+            }
+          },
           buttons: {
             set: {
               text: 'Asignar',
@@ -226,7 +320,7 @@
                 $ngConfirm({
                   title: 'Asignar precio',
                   content: 'Ingrese el precio especial ' +
-                    '.<br> <input type="number" ng-model="newCustomPrice" class="form-control"/>' +
+                    '.<br> <input type="text" ng-model="newCustomPrice" ng-change="formatNumber(' + "newCustomPrice" + ', 2)" class="form-control"/>' +
                     '<br><alert-message options="messageModalOptions"></alert-message>',
                   backgroundDismiss: false,
                   scope: $scope,
@@ -254,7 +348,7 @@
                         }
                         var index = $scope.selectedProducts.indexOf(product);
                         if (index == -1) {
-                          product.customPrice = $scope.newCustomPrice;
+                          product.customPrice = $scope.newCustomPrice.replace(/\D/g, '');
                           product.sectionGeneralPrice = false;
                           $scope.selectedProducts.push(product);
                           $scope.newCustomPrice = '';

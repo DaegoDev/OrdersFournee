@@ -877,8 +877,71 @@ module.exports = {
       .catch(function(err) {
         res.serverError(err);
       })
-
     },
+    /**
+    * Funcion para validar el precio minimo del pedido.
+    * @param  {Object} req Request object
+    * @param  {Object} res Response object
+    * @return {Object}
+    */
+    validateMinOrderPrice: function (req, res) {
+      var productsToOrder = {};
+      var user = null;
+      var minOrderPrice = null;
+      var clientProductsId = []
+
+      // Arreglo de productos para registrar con la pedido
+      productsToOrder = req.param('productsToOrder');
+
+      if (!productsToOrder) {
+        return res.badRequest("Se deben ingresar productos al pedido.");
+      }
+
+      var clientProductsId = Object.keys(productsToOrder);
+
+      // Cliente que va a realizar el pedido.
+      user = req.user;
+
+      Client.findOne({
+        user: user.id
+      })
+      .then((client) => {
+        if (!client.minOrderPrice) {
+          return res.ok({
+            isValid: true,
+            msg: 'Min order price not asigned'
+          })
+        }
+        minOrderPrice = client.minOrderPrice;
+        return ClientProduct.find({
+          id: clientProductsId
+        })
+      })
+      .then((clientProducts) => {
+        sails.log.debug(clientProducts);
+        var total = 0;
+        clientProducts.forEach(function (clientProduct, index, clientProducts) {
+          var amount = productsToOrder[clientProduct.id].amount;
+          var subTotal = clientProduct.customPrice * amount;
+          total += subTotal;
+        })
+        sails.log.debug(total);
+        if (total < minOrderPrice) {
+          res.ok({
+            isValid: false,
+            minOrderPrice: minOrderPrice
+          });
+        }else {
+          res.ok({
+            isValid: true,
+            minOrderPrice: minOrderPrice
+          });
+        }
+      })
+      .catch((err) => {
+        sails.log.debug(err)
+      })
+    }
   };
 
   function isCorrectUpdatedDate(updatedAt, deliveryDate) {

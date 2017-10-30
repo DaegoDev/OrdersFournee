@@ -1,12 +1,20 @@
-<div>
+<div >
   <form class="form-horizontal" name="shoppingCart" ng-submit="validateProducts()" novalidate>
     <div class="product-selection">
       <div class="products">
         <div class="title">
           Lista de productos
         </div>
-        <product-card ng-repeat="product in products" product="product" type="orderProduct"
-        select-list="orderList" control="product.control">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            Importante! <br>
+            <p style="text-align: justify;">Cada producto tiene asignado unas unidades por paquete que se muestra en la información de cada producto,
+            favor tener en cuenta este valor al momento de pedir cierta cantidad del producto. En caso
+            de ingresar una cantidad de producto que no corresponda a un multiplo de las unidades por paquete, el sistemas
+            redondea al valor por encima o por debajo del ingresado (Ej. uds. paquete = 6; cantidad ingresada = 9; valor redondeado = 12).</p>
+          </div>
+        </div>
+        <product-card ng-repeat="product in products" product="product" type="orderProduct" select-list="orderList" control="product.control">
         </product-card>
       </div>
       <!-- <div class="row" style="margin-left:2px; margin-right:2px">
@@ -33,14 +41,21 @@
           Seleccionados
         </div>
         <div ng-repeat="product in orderList" class="product order" ng-click="deselectProduct(product)">
-          <span class="product-name">{{product.name}}</span>
+          <p class="product-name">{{product.name}}</p>
           <span class="product-baked">{{product.baked | bakedFilter}}</span>
           <span class="product-amount">X{{product.amount}}</span>
+          <p style="color: white; ">Subtotal: {{product.amount * product.price | currency : '$' : '0'}}</p>
+          {{calculateTotal()}}
           <div class="hover-trash">
             <span class="fa fa-trash"></span>
           </div>
         </div>
       </div>
+
+    </div>
+    <div class="total-price">
+      <span>Total: </span>
+      <span>{{totalPrice | currency : '$' : '0'}}</span>
     </div>
     <div class="button-nav">
       <button type="submit" class="btn btn-md btn-sienna">Confirmar</button>

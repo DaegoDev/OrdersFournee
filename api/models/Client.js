@@ -57,6 +57,11 @@ module.exports = {
       type: 'text',
       columnName: 'additional_information'
     },
+    minOrderPrice: {
+      type: 'float',
+      defaultsTo: 0,
+      columnName: 'min_order_price'
+    },
     // Añade una referencia a address
     billAddress: {
       columnName: 'bill_address',

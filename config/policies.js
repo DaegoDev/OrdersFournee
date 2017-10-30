@@ -43,7 +43,8 @@ module.exports.policies = {
     updateDeliveryAddress: 'isClient',
     createReceptionHour: 'isClient',
     createClientEmployee: 'isClient',
-    changeProductName: 'isClient'
+    changeProductName: 'isClient',
+    setMinOrderPrice: 'isAdmin'
   },
 
   ClientEmployeeController: {
@@ -78,7 +79,8 @@ module.exports.policies = {
     getProductsSelected: 'isClient',
     update: 'isClient',
     validateDateToUpdate: 'isClient',
-    validateStateToCancel: 'isClient'
+    validateStateToCancel: 'isClient',
+    validateMinOrderPrice: 'isClient'
   },
 
   ProductController: {

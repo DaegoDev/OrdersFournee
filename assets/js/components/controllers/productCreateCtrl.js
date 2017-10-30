@@ -7,6 +7,7 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
     $scope.product.name = '';
     $scope.product.shortName = '';
     $scope.product.price = '';
+    $scope.product.unitsPack = '';
 
     // Message options configuration to further error messages.
     $scope.messageOptions = {
@@ -66,6 +67,7 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
     $scope.createProduct = function() {
       var items = [];
       var price = null;
+      var unitsPack = null;
       $scope.selectedItems.forEach(function(item, index, itemList) {
         items.push({
           id: item.id,
@@ -74,8 +76,11 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
           shortValue: item.shortValue
         });
       });
+
+      unitsPack = $scope.product.unitsPack;
+
       price = $scope.product.price.replace(/\D/g,'');
-      if (price == null || parseInt(price) <= 0) {
+      if (parseInt(price) < 0) { //price == null ||
         $scope.messageOptions = {
           showMessage: true,
           message: 'Debe ingresar correctamente el precio. ',
@@ -84,10 +89,21 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
         }
         return;
       }
-      
+
+      if (unitsPack == null || parseInt(unitsPack) <= 0) {
+        $scope.messageOptions = {
+          showMessage: true,
+          message: 'Debe ingresar correctamente las unidades por paquete. ',
+          type: 'error',
+          title: 'Error.'
+        }
+        return;
+      }
+
       productSvc.createProduct({
           items: items,
           price: price,
+          unitsPack: unitsPack,
         })
         .then(function(res) {
           $ngConfirm({
@@ -137,7 +153,7 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
           } else if (err.data.code == 5) {
             $scope.messageOptions = {
               showMessage: true,
-              message: 'El precio no se ha enviado',
+              message: 'Las unidades por paquete no se han enviado',
               type: 'error',
               title: 'Error.'
             }

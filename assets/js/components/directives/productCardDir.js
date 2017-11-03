@@ -184,6 +184,7 @@ function productCardCtrl($scope, $log, ClientSvc, $ngConfirm, toastr) {
         $scope.selectList.push(product);
       }
     }
+    console.log($scope.selectList);
   }
 
   // Function to build current product selected.

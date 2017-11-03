@@ -660,9 +660,9 @@ module.exports = {
     var bakedProduct = null;
     var orderProductQueryStr =
     'SELECT ' +
-    'cp.id, cp.custom_name, cp.product, cp.client, ' +
+    'cp.id, cp.custom_name, cp.product, cp.client, cp.custom_price, ' +
     'op.baked, op.amount,' +
-    'p.name, p.short_name, ' +
+    'p.name, p.short_name, p.price, p.units_pack,' +
     'i.value, i.short_value, ' +
     'e.name AS element_name ' +
     'FROM product AS p, item_product AS ip, item AS i, element AS e, client_product AS cp, order_product AS op ' +
@@ -691,6 +691,8 @@ module.exports = {
                 code: data.product,
                 name: data.name,
                 shortName: data.short_name,
+                price: data.price,
+                unitsPack: data.units_pack,
                 items: []
               }
             }
@@ -706,6 +708,7 @@ module.exports = {
               rawProduct = {
                 clientProduct: data.id,
                 name: data.customName ? data.customName : data.short_name,
+                price: data.custom_price ? data.custom_price : 0,
                 amount: data.amount,
                 baked: false
               }
@@ -714,6 +717,7 @@ module.exports = {
               bakedProduct = {
                 clientProduct: data.id,
                 name: data.customName ? data.customName : data.short_name,
+                price: data.custom_price ? data.custom_price : 0,
                 amount: data.amount,
                 baked: true
               }

@@ -14,6 +14,7 @@
     if ($stateParams.order) {
       $scope.formToUpdate = true;
       orderParam = $stateParams.order;
+      console.log(orderParam);
       $scope.order.additionalInformation = orderParam.additionalInformation;
     }
 
@@ -27,6 +28,7 @@
     })
     .then(function (products) {
       if (products) {
+        console.log(products.data);
         products.data.forEach(function(productSelected, indexPs) {
           var idProductSelected = productSelected.id;
           tmpProductsEnabled.forEach(function(productEnabled, indexPe) {

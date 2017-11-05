@@ -14,7 +14,7 @@
     if ($stateParams.order) {
       $scope.formToUpdate = true;
       orderParam = $stateParams.order;
-      console.log(orderParam);
+      // console.log(orderParam);
       $scope.order.additionalInformation = orderParam.additionalInformation;
     }
 
@@ -28,7 +28,7 @@
     })
     .then(function (products) {
       if (products) {
-        console.log(products.data);
+        // console.log(products.data);
         products.data.forEach(function(productSelected, indexPs) {
           var idProductSelected = productSelected.id;
           tmpProductsEnabled.forEach(function(productEnabled, indexPe) {
@@ -390,7 +390,9 @@
     // Datepicker para la fecha de entrega
     $scope.deliveryDateDefault = function() {
       if ($scope.formToUpdate) {
+        console.log(orderParam.deliveryDate);
         $scope.order.dt = new Date(orderParam.deliveryDate);
+        console.log($scope.order.dt);
       } else {
         $scope.order.dt = new Date();
         if ($scope.order.dt.getDay() == 6) {

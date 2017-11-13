@@ -67,7 +67,7 @@ function _onLocalUser(username, password, next) {
           code: 'E_USER_NOT_ACTIVE',
           message: username + ' not active'
         });
-      } else if (!CriptoService.compararHash(password, registro.password)) {
+      } else if (!CriptoService.compareHash(password, registro.password)) {
         return next(null, false, {
           code: 'E_WRONG_PASSWORD',
           message: 'Password is wrong'

@@ -27,7 +27,7 @@ function _onPassportAuth(req, res, err, user, info) {
     return res.serverError(null, info && info.code, info && info.message);
   }
   return res.ok({
-    token: CriptoService.crearToken(user),
+    token: CriptoService.createToken(user),
     role: user.role
   });
 }
@@ -39,5 +39,89 @@ module.exports = {
    */
   signinUser: function(req, res) {
     passport.authenticate('local-user', _onPassportAuth.bind(this, req, res))(req, res);
+  },
+  /**
+   * Function to request token to recover the user's password.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return
+   */
+  requestTokenRecovery: function(req, res) {
+    var email = req.param('email');
+    var code = null;
+    var token = null;
+    if (!email) {
+      return res.badRequest('Correo requerido');
+    }
+
+    Client.findOne({
+        email: email
+      })
+      .then(function(client) {
+        if (!client) {
+          return res.badRequest('El usuario no está registrado');
+        }
+        code = CriptoService.generateString(15);
+        token = CriptoService.createTokenRecovery({
+          email: email,
+          code: code
+        });
+        MailerService.sendMailCode(client, code);
+        return res.json(token);
+      })
+      .catch((err) => {
+        res.serverError(err)
+      });
+  },
+
+  /**
+   * Function to recover user's password.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return
+   */
+  recoverPassword: function(req, res) {
+    var user = null;
+    var email = null;;
+    var codeToken = null;
+    var code = null;
+
+    user = req.user;
+    if (!user) {
+      return serverError("Error");
+    }
+
+    email = user.email
+    codeToken = user.code;
+    code = req.param('code');
+
+    if (!email | !codeToken | !code) {
+      return res.serverError("Error");
+    }
+
+    if (code !== codeToken) {
+      return res.badRequest("El codigo ingresado no es invalido.");
+    }
+
+    var newPassword = CriptoService.generateString(20);
+    var passwordEncrypted = CriptoService.hashValor(newPassword);
+
+    Client.findOne({
+        email: email
+      })
+      .then((client) => {
+        return User.update({
+          id: client.user
+        }, {
+          password: passwordEncrypted
+        })
+      })
+      .then(function(user) {
+        MailerService.sendMailPassword(email, newPassword);
+        res.ok();
+      })
+      .catch(function(err) {
+        res.serverError(err);
+      });
   },
 };

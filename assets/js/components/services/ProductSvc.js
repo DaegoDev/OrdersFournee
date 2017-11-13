@@ -62,6 +62,23 @@ function ($http, $rootScope) {
         params: client
       });
       return products;
+    },
+    // Service to get all products with clients.
+    getClientsProducts: function () {
+      var clientProducts = $http({
+        url: '/product/getClientsProducts',
+        method: 'GET',
+      });
+      return clientProducts;
+    },
+    // Service to update all prices.
+    updateAllPrices: function (params) {
+      var products = $http({
+        url: '/product/updateAllPrices',
+        method: 'PUT',
+        data: params
+      });
+      return products;
     }
   };
 }]);

@@ -28,6 +28,10 @@ module.exports.policies = {
 
   '*': true,
 
+  AuthController : {
+    recoverPassword: 'isValidRecovery',
+  },
+
   ClientController: {
     signup: 'isAdmin',
     delete: 'isAdmin',

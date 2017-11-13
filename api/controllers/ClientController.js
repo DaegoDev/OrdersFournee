@@ -197,7 +197,7 @@ module.exports = {
       })
       .populate('user')
       .then(function(client) {
-        if (CriptoService.compararHash(currentPassword, client.user.password)) {
+        if (CriptoService.compareHash(currentPassword, client.user.password)) {
           newPassword = CriptoService.hashValor(newPassword);
           return User.update({
             id: client.user.id

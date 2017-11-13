@@ -36,7 +36,7 @@ module.exports = {
   * @return {bool}        Retorna true si los dos dato ingresados son equivalentes,
   *                               retorna falso de lo contrario.
   */
-  compararHash: function (valor1, valor2) {
+  compareHash: function (valor1, valor2) {
     return bcrypt.compareSync(valor1, valor2);
   },
 
@@ -46,7 +46,7 @@ module.exports = {
   *                       generación de un token.
   * @return {String}      Retorna un string el cual corresponde a el token generado.
   */
-  crearToken: function (user) {
+  createToken: function (user) {
     delete user.password;
     return jwt.sign({
       // Payload
@@ -68,7 +68,7 @@ module.exports = {
   * @param  {Object} payload Objeto usado la validación y generación de un token.
   * @return {String}      Retorna un string el cual corresponde a el token generado.
   */
-  crearTokenRecuperacion: function (user) {
+  createTokenRecovery: function (user) {
     return jwt.sign({
       // Payload
       user: user
@@ -89,7 +89,7 @@ module.exports = {
   * @param  {Object} longitud Cantidad de caracteres que tendrá la hilera generada.
   * @return {String}      Retorna un string el cual corresponde a la hilera generada.
   */
-  generarString: function (longitud) {
+  generateString: function (longitud) {
     var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ!¡@#$%&^*+-()<>1234567890";
     var string = '';
     var j = 0;

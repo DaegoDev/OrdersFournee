@@ -4,16 +4,31 @@
     <h1>Selecciona el producto.</h1>
   </div>
 
+
   <!-- SEARCH FILTER -->
   <div class="col-sm-12">
-    <div>
-      <div class="input-group stylish-input-group" style="margin: 10px">
-        <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchText.shortName">
-        <span class="input-group-addon">
+    <div class="input-group stylish-input-group" style="margin: 10px">
+      <input type="text" class="form-control" placeholder="Filtrar los productos" ng-model="searchText.shortName">
+      <span class="input-group-addon">
           <button type="submit">
             <span class="glyphicon glyphicon-search"></span>
-          </button>
-        </span>
+      </button>
+      </span>
+    </div>
+  </div>
+
+  <!-- CHANGE PRICES SECTION -->
+  <div class="panel panel-default panel-change-price">
+    <div class="panel-body">
+      <div class="col-sm-4">
+        <label for="">Subir o bajar el precio de todos los productos para todos los clientes.</label>
+      </div>
+      <div class="input-group col-sm-5">
+        <select class="form-control percentages" ng-change="verifyPercentage()" ng-model="percentages.selected" ng-options="percentage for percentage in percentages.choices"></select>
+        <span ng-if="!showInputPercentage" class="input-group-addon">%</span>
+        <input ng-if="showInputPercentage" type="number" class="form-control percentage-input" ng-model="percentageInput.value">
+        <span ng-if="showInputPercentage" class="input-group-addon">%</span>
+        <select ng-change="showConfirmChangePrice()" class="form-control option-change-price" ng-model="changePriceOptions.selected" ng-options="option.text for option in changePriceOptions.choices">HIlll</select>
       </div>
     </div>
   </div>
@@ -62,20 +77,18 @@
         </div>
       </div>
       <div class="item-list" ng-class="{selecting: selectingElement}">
-        <div class="item" ng-repeat="item in selectedElement.items"
-        ng-class="{selected: item.selected}" ng-click="selectItem(item)">
-        <p>{{item.value}}</p>
-        <p><i>{{item.shortValue}}</i></p>
+        <div class="item" ng-repeat="item in selectedElement.items" ng-class="{selected: item.selected}" ng-click="selectItem(item)">
+          <p>{{item.value}}</p>
+          <p><i>{{item.shortValue}}</i></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-container">
+      <div class="element" ng-repeat="element in elements" ng-class="{selected: element.selected}" ng-click="selectElement(element)">
+        <p>{{element.name}}</p>
+        <p><i>{{element.selectedItem.shortValue}}</i></p>
       </div>
     </div>
   </div>
-
-  <div class="right-container">
-    <div class="element" ng-repeat="element in elements"
-    ng-class="{selected: element.selected}" ng-click="selectElement(element)">
-    <p>{{element.name}}</p>
-    <p><i>{{element.selectedItem.shortValue}}</i></p>
-    </div>
-  </div>
-</div>
 </div>

@@ -95,12 +95,16 @@ module.exports.routes = {
   'GET /product/getProductsByClient' : {controller: "ProductController", action:"getProductsByClient"},
   'GET /product/getAllEnabled' : {controller: "ProductController", action:"getAllEnabled"},
   'GET /product/getAllDisabled' : {controller: "ProductController", action:"getAllDisabled"},
+  'GET /product/getClientsProducts' : {controller: "ProductController", action:"getClientsProducts"},
   'PUT /product/disableProduct' : {controller: "ProductController", action:"disableProduct"},
   'PUT /product/enableProduct' : {controller: "ProductController", action:"enableProduct"},
+  'PUT /product/updateAllPrices' : {controller: "ProductController", action:"updateAllPrices"},
   'POST /announcement/create' : {controller: "AnnouncementController", action:"create"},
   'PUT /announcement/update' : {controller: "AnnouncementController", action:"update"},
   'DELETE /announcement/delete' : {controller: "AnnouncementController", action:"delete"},
   'GET /announcement/getAll' : {controller: "AnnouncementController", action:"getAll"},
   'GET /receptionHour/getWeekDays' : {controller: "ReceptionHourController", action:"getWeekDays"},
-  'POST /auth/signinUser' : {controller: "AuthController", action:"signinUser"}
+  'POST /auth/signinUser' : {controller: "AuthController", action:"signinUser"},
+  'GET /auth/requestTokenRecovery' : {controller: "AuthController", action:"requestTokenRecovery"},
+  'PUT /auth/recoverPassword' : {controller: "AuthController", action:"recoverPassword"},
 };

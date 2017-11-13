@@ -346,6 +346,13 @@ function($stateProvider, $urlRouterProvider) {
     }
   })
 
+  // Recover password routes
+  .state('recoverPassword', {
+    url: '/recoverPassword',
+    templateUrl: 'templates/private/client/recover-password.html',
+    controller: 'RecoverPasswordCtrl'
+  })
+
   /**
   * RUTAS DE ACCESO DE UN EMPLEADO.
   */

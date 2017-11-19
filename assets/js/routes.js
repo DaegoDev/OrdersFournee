@@ -200,6 +200,8 @@ function($stateProvider, $urlRouterProvider) {
       }
     }
   })
+
+  // Announcements routes
   .state('announcement', {
     url: '/announcement',
     templateUrl: 'templates/private/admin/announcement.html',
@@ -250,6 +252,30 @@ function($stateProvider, $urlRouterProvider) {
     }
   })
 
+  // Reports routes
+  .state('report', {
+    url: '/report',
+    templateUrl: 'templates/private/admin/report/report.html',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('report.productMinMaxPrice', {
+    url: '/productMinMaxPrice',
+    templateUrl: 'templates/private/admin/report/product-price.html',
+    controller: 'ReportProductPriceCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
 
   /**
   * RUTAS DE ACCESO DE UN CLIENTE.

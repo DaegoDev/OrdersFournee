@@ -775,11 +775,43 @@ module.exports = {
         return res.serverError(err);
       }
 
-      sails.log.debug(rawResult);
       return res.ok();
 
     });
-  }
+  },
+  /**
+   * Función para obtener todos los productos con los precios minimos y maximos asignados a los clientes.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+   getMinMaxPrices: function (req, res) {
+     var queryString = null;
+
+     queryString = 'SELECT cp.product, p.name, p.short_name, ' +
+     'MAX(cp.custom_price) as maximum, MIN(cp.custom_price) as minimum ' +
+     'FROM client_product as cp, product as p ' +
+     'WHERE cp.product=p.code and cp.enabled=true ' +
+     'GROUP BY cp.product ASC'
+
+     ClientProduct.query(queryString, [], function(err, rawResult) {
+       if (err) {
+         return res.serverError(err);
+       }
+
+       var productsArray = [];
+       sails.log.debug(Object.keys(rawResult)[9])
+       sails.log.debug(rawResult['0'])
+       sails.log.debug(rawResult.length)
+       for (var key in rawResult) {
+         if (rawResult.hasOwnProperty(key)) {
+           productsArray.push(rawResult[key])
+         }
+       }
+       return res.ok(productsArray);
+
+     });
+   }
 };
 
 // Retorna la letra siguiente de acuerdo al alfabeto de la letra ingresada

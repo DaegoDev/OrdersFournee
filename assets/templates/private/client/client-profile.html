@@ -68,7 +68,7 @@
           </div>
         </div>
         <!-- PANEL DE ALERTA PARA INGO GENERAL -->
-        <div class="alert col-sm-12" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertGeneral">
+        <div class="alert col-sm-8" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertGeneral">
           <button type="button" class="close" ng-click="switchAlert('showAlertGeneral')">×</button>
           <strong> {{alertMessageGeneral}}</strong>
         </div>
@@ -213,7 +213,7 @@
           </div>
         </div>
         <!-- PANEL DE ALERTA PARA DIRECCIÓN DE FACTURACIÓN -->
-        <div class="alert col-sm-12" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertBill">
+        <div class="alert col-sm-8" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertBill">
           <button type="button" class="close" ng-click="switchAlert('showAlertBill')">×</button>
           <strong> {{alertMessageBillAddress}}</strong>
         </div>
@@ -305,7 +305,7 @@
           </div>
         </div>
         <!-- PANEL DE ALERTA PARA DIRECCIÓN DE FACTURACIÓN -->
-        <div class="alert col-sm-12" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertDelivery">
+        <div class="alert col-sm-7" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertDelivery">
           <button type="button" class="close" ng-click="switchAlert('showAlertDelivery')">×</button>
           <strong> {{alertMessageDeliveryAddress}}</strong>
         </div>
@@ -364,7 +364,7 @@
                 </div>
               </div>
             </div>
-            <!-- PANEL DE ALERTA PARA DIRECCIÓN DE FACTURACIÓN -->
+            <!-- PANEL DE ALERTA PARA EMPLEADO -->
             <div class="alert col-sm-12" ng-class="{'alert-success': !signupError, 'alert-danger': signupError}" ng-show="showAlertEmployee">
               <button type="button" class="close" ng-click="switchAlert('showAlertEmployee')">×</button>
               <strong> {{alertMessageEmployee}}</strong>

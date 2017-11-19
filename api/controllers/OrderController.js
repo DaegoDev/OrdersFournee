@@ -332,9 +332,12 @@ module.exports = {
       })
     }
 
+    // sails.log.debug(deliveryDate);
     deliveryDate = TimeZoneService.getDate({
       timestamp: deliveryDate
     });
+    // sails.log.debug(deliveryDate);
+    // return;
     //Verifica que la orden exista. Si existe cambia el campo fecha de entrega con el nuevo valor enviado
     Order.find({
         id: orderIds

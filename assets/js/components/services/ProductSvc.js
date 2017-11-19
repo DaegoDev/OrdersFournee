@@ -79,6 +79,14 @@ function ($http, $rootScope) {
         data: params
       });
       return products;
+    },
+    // Service to get the min and max price of each product assigned.
+    getMinMaxPrices: function () {
+      var products = $http({
+        url: '/product/getMinMaxPrices',
+        method: 'GET',
+      });
+      return products;
     }
   };
 }]);

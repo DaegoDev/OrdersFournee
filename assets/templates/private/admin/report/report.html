@@ -1,0 +1,27 @@
+<ul class="nav-step lg">
+  <li>
+    <div class="btn-group" uib-dropdown keyboard-nav>
+      <button id="btn-append-to-body" type="button" class="btn" style="background: #201300; color: #bb9944; font-size: 130%;" uib-dropdown-toggle>
+            Productos <span class="caret"></span>
+        </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+        <li role="menuitem"><a ui-sref=".productMinMaxPrice">Promedio precio MIN y MAX</a></li>
+      </ul>
+    </div>
+  </li>
+  <li>
+    <div class="btn-group" uib-dropdown keyboard-nav>
+      <button id="btn-append-to-body" type="button" class="btn" style="background: #201300; color: #bb9944; font-size: 130%;" uib-dropdown-toggle>
+            Pedidos <span class="caret"></span>
+        </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+        <li>Ningún item</li>
+      </ul>
+    </div>
+  </li>
+  <!-- <li><a ui-sref=".create" ui-sref-active="active" class="last">Clientes</a></li> -->
+</ul>
+
+<div class="content-wrapper lg">
+  <div class="tab-animate" ui-view></div>
+</div>

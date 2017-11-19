@@ -96,6 +96,7 @@ module.exports.routes = {
   'GET /product/getAllEnabled' : {controller: "ProductController", action:"getAllEnabled"},
   'GET /product/getAllDisabled' : {controller: "ProductController", action:"getAllDisabled"},
   'GET /product/getClientsProducts' : {controller: "ProductController", action:"getClientsProducts"},
+  'GET /product/getMinMaxPrices' : {controller: "ProductController", action:"getMinMaxPrices"},
   'PUT /product/disableProduct' : {controller: "ProductController", action:"disableProduct"},
   'PUT /product/enableProduct' : {controller: "ProductController", action:"enableProduct"},
   'PUT /product/updateAllPrices' : {controller: "ProductController", action:"updateAllPrices"},

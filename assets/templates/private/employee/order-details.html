@@ -1,5 +1,5 @@
 <div class="order-details">
-  <fieldset>
+  <fieldset ng-if="isOrderDetailsEmployee">
     <legend print-remove>Dirección de la entrega</legend>
     <div class="group">
       <label print-remove class="label-item">Cliente:</label>
@@ -64,7 +64,7 @@
           </thead>
           <tbody print-section>
             <tr ng-repeat="product in orderDetails.products">
-              <td class="col-name">{{product.short_name}}</td>
+              <td class="col-name">{{product.custom_name ? product.custom_name : product.short_name}}</td>
               <td class="col-amount">{{product.amount}}</td>
               <td class="col-baked">{{product.baked | bakedFilter}}</td>
             </tr>
@@ -72,8 +72,12 @@
         </table>
       </div>
     </div>
-    <div class="button-nav">
+    <div ng-if="isOrderDetailsEmployee" class="button-nav">
       <button class="btn btn-md btn-sienna" print-btn>Imprimir comanda</button>
+    </div>
+    <div ng-if="!isOrderDetailsEmployee" style="color: #FFFFFF; background-color: #201300; padding: 10px" print-remove>
+        <strong>Precio total: </strong>
+        {{totalPrice | currency : '$' : '0'}}
     </div>
   </fieldset>
 </div>

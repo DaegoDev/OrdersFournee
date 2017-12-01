@@ -4,6 +4,7 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
   OrderService.getOrdersByClient()
     .then(function(res) {
       $scope.orders = res.data;
+      console.log($scope.orders);
       // $log.info(res);
     })
     .catch(function(err) {
@@ -63,6 +64,24 @@ fournee.controller('OrderMyListCtrl', ['$scope', '$log', '$state', 'OrderService
       .catch(function(err) {
         $ngConfirm("No se puedo cancelar el pedido");
       })
+  }
+
+  $scope.showDetails = function(order) {
+    $scope.orderDetails = order;
+    var totalPrice = 0;
+    order.products.forEach((product) => {
+      var subTotal = product.custom_price * product.amount;
+      totalPrice += subTotal;
+    })
+    $scope.totalPrice = totalPrice;
+    $ngConfirm({
+      title: 'Detalles del pedido con código: ' + $scope.orderDetails.id.toString(),
+      useBootstrap: false,
+      contentUrl: 'templates/private/employee/order-details.html',
+      scope: $scope,
+      theme: 'light',
+      columnClass: 'medium'
+    })
   }
 
 }]);

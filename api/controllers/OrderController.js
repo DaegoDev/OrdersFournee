@@ -580,20 +580,72 @@ module.exports = {
     // de la solicitud.
     var user = req.user;
 
-    Client.findOne({
-        user: user.id
+    Order.query('SELECT orders.id, orders.created_at, orders.delivery_date, orders.state, orders.initial_suggested_time, \
+    orders.final_suggested_time, orders.additional_information, client_employee.name as employeeName, \
+    client.trade_name, client.legal_name, client.business_phonenumber, client.user, \
+    client_product.custom_name, client_product.custom_price, \
+    product.short_name, order_product.amount, order_product.baked \
+    FROM `order` as orders \
+    LEFT JOIN client_employee ON orders.client_employee = client_employee.id \
+    LEFT JOIN client ON orders.client = client.id \
+    LEFT JOIN order_product ON order_product.order_id = orders.id \
+    LEFT JOIN client_product ON order_product.client_product = client_product.id \
+    LEFT JOIN product ON client_product.product = product.code \
+    WHERE client.user=? order by orders.id', user.id,
+      function(err, orders) {
+        if (err) {
+          return res.serverError(err);
+        }
+        
+        var arrayOrders = [];
+        var orderTmp = null;
+        orders.forEach(function(order, index, orders) {
+          var orderId = order.id.toString();
+          var short_name = order.short_name;
+          var amount = order.amount;
+          var baked = order.baked;
+          var custom_name = order.custom_name;
+          var custom_price = order.custom_price;
+          delete order.short_name;
+          delete order.amount;
+          delete order.baked;
+          delete order.custom_name;
+          delete order.custom_price;
+
+          if (!orderTmp) {
+            orderTmp = order;
+            orderTmp.products = [];
+            arrayOrders.push(orderTmp);
+          }
+
+          orderTmp.products.push({
+            short_name: short_name,
+            amount: amount,
+            baked: baked,
+            custom_name: custom_name,
+            custom_price: custom_price
+          });
+
+          if (orders[index + 1] && orders[index + 1].id.toString() != orderId) {
+            orderTmp = null;
+          }
+        });
+        res.ok(arrayOrders);
       })
-      .then(function(client) {
-        return Order.find({
-          client: client.id
-        }).sort('createdAt DESC');
-      })
-      .then(function(order) {
-        res.ok(order);
-      })
-      .catch(function(err) {
-        res.serverError();
-      })
+    // Client.findOne({
+    //     user: user.id
+    //   })
+    //   .then(function(client) {
+    //     return Order.find({
+    //       client: client.id
+    //     }).sort('createdAt DESC');
+    //   })
+    //   .then(function(order) {
+    //     res.ok(order);
+    //   })
+    //   .catch(function(err) {
+    //     res.serverError();
+    //   })
   },
   /**
    * Funcion para obtener los pedidos por cliente.

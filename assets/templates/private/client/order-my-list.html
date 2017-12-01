@@ -16,12 +16,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="order in orders">
-            <td style="vertical-align:middle">{{order.id}}</td>
-            <td style="vertical-align:middle">{{order.createdAt | date:'medium':'+0000'}}</td>
-            <td style="vertical-align:middle">{{order.deliveryDate | date:'mediumDate':'+0000'}}</td>
-            <td style="vertical-align:middle">{{order.additionalInformation}}</td>
-            <td style="background-color: #201300; color: white;">{{order.state | capitalize}}</td>
+          <tr ng-repeat="order in orders" class="orderList">
+            <td ng-click="showDetails(order)" style="vertical-align:middle">{{order.id}}</td>
+            <td ng-click="showDetails(order)" style="vertical-align:middle">{{order.created_at | date:'medium':'+0000'}}</td>
+            <td ng-click="showDetails(order)" style="vertical-align:middle">{{order.delivery_date | date:'mediumDate':'+0000'}}</td>
+            <td ng-click="showDetails(order)" style="vertical-align:middle">{{order.additional_information}}</td>
+            <td ng-click="showDetails(order)" style="background-color: #201300; color: white;">{{order.state | capitalize}}</td>
             <td>
               <a class="fa fa-edit" tooltips tooltip-template="Editar" ng-click='showEditForm(order)'></a>
               <a class="fa fa-trash" tooltips tooltip-template="Cancelar" ng-click="cancelOrderConfirm(order)"></a>

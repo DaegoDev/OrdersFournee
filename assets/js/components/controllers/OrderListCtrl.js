@@ -26,6 +26,9 @@ fournee.controller('OrderListCtrl', ['$scope', '$log', 'OrderService', '$ngConfi
   // Obtiene el role del usuario.
   $scope.role = AuthService.getRole();
 
+  // Flag to indicate the order details for the order list in employee.
+  $scope.isOrderDetailsEmployee = true;
+
   // Verifica que el usuario sea un administrador.
   $scope.isAdmin = function() {
     return $scope.role === "ADMINISTRADOR";
@@ -131,6 +134,7 @@ fournee.controller('OrderListCtrl', ['$scope', '$log', 'OrderService', '$ngConfi
       })
       .then(function(res) {
         $scope.orders = res.data;
+        console.log($scope.orders);
         $scope.setCheckboxObj();
       })
       .catch(function(err) {

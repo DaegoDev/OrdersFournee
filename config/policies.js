@@ -48,7 +48,9 @@ module.exports.policies = {
     createReceptionHour: 'isClient',
     createClientEmployee: 'isClient',
     changeProductName: 'isClient',
-    setMinOrderPrice: 'isAdmin'
+    setMinOrderPrice: 'isAdmin',
+    updateGeneralInfoAdmin: 'isAdmin',
+    updateDeliveryAddressAdmin: 'isAdmin',
   },
 
   ClientEmployeeController: {

@@ -1138,7 +1138,235 @@ module.exports = {
         }
       });
 
-  }
+  },
+  /**
+   * Funcion para resetear la contraseña de un cliente.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   */
+   resetPassword: function (req, res) {
+     var clientId = null;
+     var newPassword = null;
+
+     // Definition of the variables.
+     clientId = parseInt(req.param('clientId'));
+     if (!clientId) {
+       return res.badRequest('Id del cliente vacio.');
+     }
+
+     newPassword = "123456"
+
+     // valida si existe el cliente con el ese id, si existe cambia la contraseña de su usuario en false
+     Client.findOne({
+         id: clientId
+       })
+       .populate('user')
+       .then(function(client) {
+           newPassword = CriptoService.hashValor(newPassword);
+           return User.update({
+             id: client.user.id
+           }, {
+             password: newPassword
+           });
+       })
+       .then(function(user) {
+         return res.ok();
+       })
+       .catch(function(err) {
+         sails.log.debug(err);
+         res.serverError();
+       });
+   },
+   /**
+    * Funcion para actualizar la información general de un cliente.
+    * @param  {Object} req Request object
+    * @param  {Object} res Response object
+    */
+   updateGeneralInfoAdmin: function(req, res) {
+     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+     // de la solicitud.
+     var clientId = null;
+     var legalName = null;
+     var tradeName = null;
+     var email = null;
+     var nit = null;
+     var ownerName = null;
+     var ownerPhonenumber = null;
+     var businessPhonenumber = null;
+
+     // Definición de variables apartir de los parametros de la solicitud y validaciones.
+
+     tradeName = req.param('tradeName');
+     if (!tradeName) {
+       return res.badRequest('Se debe ingresar el nombre de la empresa.');
+     }
+
+     legalName = req.param('legalName');
+     if (!legalName) {
+       return res.badRequest('Se debe ingresar la razón social.');
+     }
+
+     nit = req.param('nit');
+     if (!nit) {
+       return res.badRequest('Se debe ingresar el nit.');
+     }
+
+     clientId = parseInt(req.param('clientId'));
+     if (!clientId) {
+       return res.badRequest('Se debe ingresar el id del cliente.');
+     }
+
+     email = req.param('email');
+     ownerName = req.param('ownerName');
+     ownerPhonenumber = req.param('ownerPhonenumber');
+     businessPhonenumber = req.param('businessPhonenumber');
+
+     // Organización de credenciales del cliente
+     var clientCredentials = {
+       legal_name: legalName,
+       trade_name: tradeName,
+       nit: nit,
+       email: email,
+       owner_name: ownerName,
+       owner_phonenumber: ownerPhonenumber,
+       business_phonenumber: businessPhonenumber
+     }
+
+     //Obtengo la conección para realizar transacciones
+     var connectionConfig = AlternativeConnectionService.getConnection();
+     var sql = connectionConfig.sql;
+
+     sql.beginTransaction()
+       .then(() => {
+         return sql.update('client', clientCredentials, {
+           id: clientId
+         });
+       })
+       .then(function(clientUpdated) {
+         return sql.update('user', {
+           username: nit
+         }, {
+           id: clientUpdated.user
+         });
+       })
+       .then((userUpdated) => {
+         sql.commit();
+         connectionConfig.connection.end(function(err) {
+           if (err) {
+             sails.log.debug(err);
+           }
+         });
+         return Client.findOne({
+           id: clientId
+         })
+       })
+       .then((client) => {
+         res.ok(client);
+       })
+       .catch(function(err) {
+         sails.log.debug(err);
+         sql.rollback(function(err) {
+           connectionConfig.connection.end(function(err) {
+             if (err) {
+               sails.log.debug(err);
+             }
+           });
+         });
+         res.serverError(err);
+       })
+   },
+   /**
+    * Funcion para crear o actualizar la dirección de entrega de un cliente.
+    * @param  {Object} req Request object
+    * @param  {Object} res Response object
+    */
+   updateDeliveryAddressAdmin: function(req, res) {
+     // Inicialización de variables necesarias. los parametros necesarios viajan en el cuerpo
+     // de la solicitud.
+     var clientId = null;
+     var deliveryCountry = null;
+     var deliveryDepartment = null;
+     var deliveryCity = null;
+     var deliveryNeighborhood = null;
+     var deliveryNomenclature = null;
+     var deliveryAdditionalInformation = null;
+
+     // Definición de variables apartir de los parametros de la solicitud y validaciones.
+     deliveryCountry = req.param('deliveryCountry');
+     if (!deliveryCountry) {
+       return res.badRequest('Se debe ingresar el pais.');
+     }
+
+     deliveryDepartment = req.param('deliveryDepartment');
+     if (!deliveryDepartment) {
+       return res.badRequest('Se debe ingresar el departamento.');
+     }
+
+     deliveryCity = req.param('deliveryCity');
+     if (!deliveryCity) {
+       return res.badRequest('Se debe ingresar la cuidad.');
+     }
+
+     deliveryNeighborhood = req.param('deliveryNeighborhood');
+     if (!deliveryNeighborhood) {
+       return res.badRequest('Se debe ingresar el barrio.');
+     }
+
+     deliveryNomenclature = req.param('deliveryNomenclature');
+     if (!deliveryNomenclature) {
+       return res.badRequest('Se debe ingresar la nomenclatura.');
+     }
+
+     deliveryAdditionalInformation = req.param('deliveryAdditionalInformation');
+     if (!deliveryAdditionalInformation) {
+       return res.badRequest('Se debe ingresar un punto de referencia.');
+     }
+
+     clientId = parseInt(req.param('clientId'));
+     if (!clientId) {
+       return res.badRequest('Se debe ingresar el id del cliente.');
+     }
+
+     // Organización de credenciales de la dirección de entrega del cliente.
+     addressCredentials = {
+       country: deliveryCountry,
+       department: deliveryDepartment,
+       city: deliveryCity,
+       neighborhood: deliveryNeighborhood,
+       nomenclature: deliveryNomenclature,
+       additionalInformation: deliveryAdditionalInformation,
+     }
+
+     Client.findOne({
+         id: clientId
+       })
+       .then(function(client) {
+         var deliveryAddress = client.deliveryAddress;
+         if (deliveryAddress == null) {
+           return Address.create(addressCredentials);
+         } else {
+           return Address.update({
+             id: deliveryAddress
+           }, addressCredentials);
+         }
+       })
+       .then(function(result) {
+         if (result.country) {
+           return Client.update({
+             id: clientId
+           }, {
+             deliveryAddress: result.id
+           });
+         }
+         return res.ok();
+       })
+       .then(function(client) {
+         res.ok();
+       })
+       .catch(function(err) {
+         res.serverError(err);
+       })
+   },
 };
 
 // crea las credenciales para insertar una dirección

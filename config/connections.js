@@ -30,10 +30,14 @@ module.exports.connections = {
    ***************************************************************************/
   localMysql: {
     adapter: 'sails-mysql',
-    host: 'localhost',
-    database: 'ordersFournee',
-    user: 'root', //optional
-    password: 'jrv92328', //optional
+    // host: 'localhost',
+    host: 'imagenanddesign.com',
+    // database: 'ordersFournee',
+    database: 'imagenan_lafournee',
+    // user: 'root', //optional
+    user: 'imagenan_fournee',
+    // password: 'jrv92328', //optional
+    password: 'L@Fourn33',
     timezone: 'utc'
   },
 

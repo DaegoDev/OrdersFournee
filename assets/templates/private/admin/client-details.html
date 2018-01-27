@@ -1,6 +1,20 @@
 <div class="client-details-wrapper">
   <div class="section-header">
-    <h1>Detalles del cliente: {{client.legalName}}</h1>
+    <div class="row">
+      <div style="margin-top: 12px;" class="col-sm-1">
+        <div class="dropdown">
+          <button class="btn btn-sienna dropdown-toggle fa fa-cog" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li style="cursor: pointer;"><a ng-click="resetPasswordConfirm()">Resetear contraseña</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-9">
+        <h1>Detalles del cliente: {{client.legalName}}</h1>
+      </div>
+    </div>
   </div>
 
   <div class="client-info" ng-hide="enablingProduct">
@@ -10,39 +24,39 @@
       <div class="form-group">
         <label class="control-label col-sm-2">Razón social</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" readonly value="{{client.legalName}}">
+          <input ng-class="enableFieldGI" type="text" class="form-control" ng-readonly="!updateGeneralInfo" ng-model="client.legalName">
         </div>
         <label class="control-label col-sm-2">NIT</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" readonly value="{{client.nit}}">
+          <input type="text" class="form-control" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.nit">
         </div>
       </div>
 
       <div class="form-group">
         <label class="control-label col-sm-2">Nombre de la empresa</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" readonly value="{{client.tradeName}}">
+          <input type="text" class="form-control" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.tradeName">
         </div>
         <label class="control-label col-sm-2">Telefono de la empresa</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" readonly value="{{client.businessPhonenumber}}">
+          <input type="text" class="form-control" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.businessPhonenumber">
         </div>
       </div>
 
       <div class="form-group">
         <label class="control-label col-sm-2">Correo electrónico:</label>
         <div class="col-sm-4">
-          <input type="email" class="form-control" readonly value="{{client.email}}">
+          <input type="email" class="form-control" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.email">
         </div>
         <label class="control-label col-sm-2">Nombre del dueño</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" readonly value="{{client.ownerName}}">
+          <input type="text" class="form-control" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.ownerName">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-sm-2">Telefono del dueño</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" readonly value="{{client.ownerPhonenumber}}">
+          <input type="text" class="form-control" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.ownerPhonenumber">
         </div>
         <form name="clientInfo" class="form-horizontal" ng-submit="setMinOrderPrice()" novalidate>
           <!-- MIN ORDER PRICE FIELD - -->
@@ -52,8 +66,7 @@
             'has-success': !clientInfo.minOrderPrice.$invalid}">
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <input type="text" name="minOrderPrice" id="minOrderPrice" class="form-control" ng-change="formatNumber(client.minOrderPrice, 3)"
-              ng-model="client.minOrderPrice" required placeholder="Ej. $50.000">
+              <input type="text" name="minOrderPrice" id="minOrderPrice" class="form-control" ng-change="formatNumber(client.minOrderPrice, 3)" ng-model="client.minOrderPrice" required placeholder="Ej. $50.000">
               <span class="input-group-btn">
                 <button class="btn btn-sienna" type="submit">Actualizar</button>
               </span>
@@ -68,44 +81,77 @@
       <div class="form-group">
         <label class="control-label col-sm-2">Información adicional</label>
         <div class="col-sm-10">
-          <textarea class="form-control" rows="5" readonly >{{client.additionalInformation}}</textarea>
+          <textarea class="form-control" rows="5" ng-class="enableFieldGI" ng-readonly="!updateGeneralInfo" ng-model="client.additionalInformation"></textarea>
         </div>
       </div>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <alert-message options="infoMsgOptions"> </alert-message>
+        </div>
+      </div>
+      <div class="button-list">
+        <button ng-if="!updateGeneralInfo" type="button" name="btUpdateGeneralInfo" class="btn btn-sienna" ng-click="enableFieldsGI()">
+          Actualizar información
+        </button>
+        <button ng-if="updateGeneralInfo" type="button" name="btCancelGI" class="btn" ng-click="cancelUpdateGeneralInfo()">
+          Cancelar
+        </button>
+        <button ng-if="updateGeneralInfo" type="button" name="btSaveGeneralInfo" class="btn btn-sienna" ng-click="saveNewGeneralInfo()">
+          Guardar
+        </button>
+      </div>
+
     </fieldset>
     <fieldset class="general-info form-horizontal">
       <legend>Dirección de entrega</legend>
       <div class="form-group">
         <label class="control-label col-sm-2">País</label>
         <div class="col-sm-4">
-          <input type="text" readonly id="country" name="country" class="form-control" value="{{client.deliveryAddress.country}}">
+          <input type="text" ng-class="enableFieldAD" ng-readonly="!updateDeliveryAddress" id="country" name="country" class="form-control" ng-model="client.deliveryAddress.country">
         </div>
         <label class="control-label col-sm-2">Despartamento</label>
         <div class="col-sm-4">
-          <input type="text" id="department" name="department" readonly class="form-control" value="{{client.deliveryAddress.department}}">
+          <input type="text" id="department" name="department" ng-class="enableFieldAD" ng-readonly="!updateDeliveryAddress" class="form-control" ng-model="client.deliveryAddress.department">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-sm-2">Ciudad</label>
         <div class="col-sm-4">
-          <input type="text" id="city" name="city" class="form-control" value="{{client.deliveryAddress.city}}" readonly>
+          <input type="text" id="city" name="city" class="form-control" ng-model="client.deliveryAddress.city" ng-class="enableFieldAD" ng-readonly="!updateDeliveryAddress">
         </div>
 
         <label class="control-label col-sm-2">Barrio</label>
         <div class="col-sm-4">
-          <input type="text" id="neighborhood" name="neighborhood" class="form-control" value="{{client.deliveryAddress.neighborhood}}" readonly>
+          <input type="text" id="neighborhood" name="neighborhood" class="form-control" ng-model="client.deliveryAddress.neighborhood" ng-class="enableFieldAD" ng-readonly="!updateDeliveryAddress">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-sm-2">Nomenclatura</label>
         <div class="col-sm-4">
-          <input type="text" id="nomenclature" name="nomenclature" class="form-control" value="{{client.deliveryAddress.nomenclature}}" readonly>
+          <input type="text" id="nomenclature" name="nomenclature" class="form-control" ng-model="client.deliveryAddress.nomenclature" ng-class="enableFieldAD" ng-readonly="!updateDeliveryAddress">
         </div>
       </div>
       <div class="form-group">
         <label for="" class="control-label col-sm-2">Punto de referencia</label>
         <div class="col-sm-10">
-          <textarea rows="5" style="resize:none" class="form-control" readonly>{{client.deliveryAddress.additionalInformation}}</textarea>
+          <textarea rows="5" style="resize:none" class="form-control" ng-class="enableFieldAD" ng-readonly="!updateDeliveryAddress" ng-model="client.deliveryAddress.additionalInformation"></textarea>
         </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <alert-message options="infoMsgOptionsAD"> </alert-message>
+        </div>
+      </div>
+      <div class="button-list">
+        <button ng-if="!updateDeliveryAddress" type="button" name="btUpdateDeliveryAddress" class="btn btn-sienna" ng-click="enableFieldsAD()">
+          Actualizar información
+        </button>
+        <button ng-if="updateDeliveryAddress" type="button" name="btCancelDA" class="btn" ng-click="cancelUpdateDeliveryAddress()">
+          Cancelar
+        </button>
+        <button ng-if="updateDeliveryAddress" type="button" name="btSaveDeliveryAddress" class="btn btn-sienna" ng-click="saveNewDeliveryAddress()">
+          Guardar
+        </button>
       </div>
     </fieldset>
     <fieldset class="employee-list">

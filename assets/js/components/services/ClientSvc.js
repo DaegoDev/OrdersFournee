@@ -139,6 +139,32 @@ function ($http) {
         data: params
       });
       return client;
-    }
+    },
+    resetPassword: function (params) {
+      var resetPassword = $http({
+        url: '/client/resetPassword',
+        method: 'PUT',
+        data: params
+      });
+      return resetPassword;
+    },
+    // Service to update the general information of a client by admin.
+    updateGeneralInfoAdmin: function(credentials) {
+      var clientUpdated = $http({
+        url: '/client/updateGeneralInfoAdmin',
+        method: 'PUT',
+        data: credentials
+      });
+      return clientUpdated;
+    },
+    // Service to update the delivery address of a client by admin.
+    updateDeliveryAddressAdmin: function(credentials) {
+      var addressUpdated = $http({
+        url: '/client/updateDeliveryAddressAdmin',
+        method: 'PUT',
+        data: credentials
+      });
+      return addressUpdated;
+    },
   };
 }]);

@@ -7,6 +7,28 @@
       $scope.receptionHour = [];
       $scope.simbolGeneral = 'G';
       $scope.simbolSpecial = 'E';
+      $scope.updateGeneralInfo = false;
+      $scope.enableFieldGI = "";
+      $scope.updateDeliveryAddress = false;
+      $scope.enableFieldAD = "";
+
+
+
+      // Error control variables general info.
+      $scope.infoMsgOptionsGI = {
+        showMessage: false,
+        message: '',
+        type: 'error',
+        title: ''
+      }
+
+      // Error control variables delivery address.
+      $scope.infoMsgOptionsAD = {
+        showMessage: false,
+        message: '',
+        type: 'error',
+        title: ''
+      }
 
       ReceptionHourSvc.getReceptionHourByClient({
           clientId: $scope.client.id
@@ -400,5 +422,265 @@
             $log.error('Cant\' get the client products.');
           });
       }
+
+      //Function to reset the password of a client.
+      $scope.resetPasswordConfirm = function () {
+        // confirm of the action.
+        $ngConfirm({
+          title: 'Alerta!!',
+          content: '<b>¿Está seguro que desea restaurar la contraseña del cliente ' + $scope.client.legalName + '</b>?' +
+            '<br><p>Si confirma esta acción la contraseña del cliente será: 123456</p>',
+          buttons: {
+            exit: {
+              text: 'Salir',
+              // btnClass: 'btn-sienna',
+              action: function() {}
+            },
+            confirm: {
+              text: 'Confirmar',
+              btnClass: 'btn-sienna',
+              action: function() {
+                var client = {
+                  clientId: $scope.client.id,
+                }
+                ClientSvc.resetPassword(client)
+                .then((res) => {
+                  $ngConfirm({
+                    title: 'Proceso exitoso',
+                    content: 'Se reseteó la contraseña del cliente ' + $scope.client.legalName,
+                    buttons: {
+                      ok: {
+                        text: 'Ok',
+                        btnClass: 'btn-sienna',
+                        action: function () {
+
+                        }
+                      }
+                    }
+                  })
+                })
+                .catch((err) => {
+                  console.log(err);
+                  $ngConfirm({
+                    title: 'Error!',
+                    content: 'No se pudo resetear la contraseña del cliente ' + $scope.client.legalName + ', intente más tarde.',
+                    buttons: {
+                      ok: {
+                        text: 'Ok',
+                        btnClass: 'btn-sienna',
+                        action: function () {
+
+                        }
+                      }
+                    }
+                  })
+                })
+              }
+            }
+          }
+        });
+      }
+
+      // Enable de inputs to edit de data in general info section and copy de data.
+      $scope.enableFieldsGI = function () {
+        $scope.updateGeneralInfo = true;
+        $scope.enableFieldGI = "field-enable";
+        var clientOriginalCopy = {
+          legalName: $scope.client.legalName,
+          nit: $scope.client.nit,
+          tradeName: $scope.client.tradeName,
+          businessPhonenumber: $scope.client.businessPhonenumber,
+          email: $scope.client.email,
+          ownerName: $scope.client.ownerName,
+          ownerPhonenumber: $scope.client.ownerPhonenumber,
+          additionalInformation: $scope.client.additionalInformation
+        };
+        $scope.clientOriginalCopy = clientOriginalCopy;
+      }
+
+      // Cancel the action of edit of general data before the data is saved.
+      $scope.cancelUpdateGeneralInfo = function () {
+        $scope.client.legalName = $scope.clientOriginalCopy.legalName;
+        $scope.client.nit = $scope.clientOriginalCopy.nit;
+        $scope.client.tradeName = $scope.clientOriginalCopy.tradeName;
+        $scope.client.businessPhonenumber = $scope.clientOriginalCopy.businessPhonenumber;
+        $scope.client.email = $scope.clientOriginalCopy.email;
+        $scope.client.ownerName = $scope.clientOriginalCopy.ownerName;
+        $scope.client.ownerPhonenumber = $scope.clientOriginalCopy.ownerPhonenumber;
+        $scope.client.additionalInformation = $scope.clientOriginalCopy.additionalInformation;
+        $scope.updateGeneralInfo = false;
+        $scope.enableFieldGI = "";
+      }
+
+      // Create the params to realize the request to edit of general information.
+      $scope.saveNewGeneralInfo = function () {
+        var legalName = $scope.client.legalName;
+        var nit = $scope.client.nit;
+        var tradeName = $scope.client.tradeName;
+        var email = $scope.client.email;
+        var ownerName = $scope.client.ownerName;
+        var ownerPhonenumber = $scope.client.ownerPhonenumber;
+        var businessPhonenumber = $scope.client.businessPhonenumber;
+
+        if (!legalName) {
+          $scope.infoMsgOptionsGI.message = 'Debe ingresar el nombre de la razón social.';
+          $scope.infoMsgOptionsGI.showMessage = true;
+          return;
+        }
+        if (!nit) {
+          $scope.infoMsgOptionsGI.message = 'Debe ingresar el nit de la empresa.';
+          $scope.infoMsgOptionsGI.showMessage = true;
+          return;
+        }
+        if (!tradeName) {
+          $scope.infoMsgOptionsGI.message = 'Debe ingresar el nombre de la empresa.';
+          $scope.infoMsgOptionsGI.showMessage = true;
+          return;
+        }
+
+        var clientCredentials = {
+          legalName: legalName,
+          nit: nit,
+          tradeName: tradeName,
+          email: email,
+          ownerName: ownerName,
+          ownerPhonenumber: ownerPhonenumber,
+          businessPhonenumber: businessPhonenumber,
+          clientId: $scope.client.id
+        }
+
+        ClientSvc.updateGeneralInfoAdmin(clientCredentials)
+          .then(function(res) {
+            var clientUpdated = res.data;
+            $scope.client.legalName = clientUpdated.legalName;
+            $scope.client.nit = clientUpdated.nit;
+            $scope.client.tradeName = clientUpdated.tradeName;
+            $scope.client.email = clientUpdated.email;
+            $scope.client.ownerName = clientUpdated.ownerName;
+            $scope.client.ownerPhonenumber = clientUpdated.ownerPhonenumber;
+            $scope.client.businessPhonenumber = clientUpdated.businessPhonenumber;
+            showMessageSuccessGI("Información actualizada!");
+            $scope.updateGeneralInfo = false;
+            $scope.enableFieldGI = "";
+          })
+          .catch(function(err) {
+            console.log(err);
+            if (err.data.statusCode == 400) {
+              $scope.infoMsgOptionsGI.message = 'El NIT o Razón social ya existen.';
+              $scope.infoMsgOptionsGI.showMessage = true;
+            }else {
+              $scope.infoMsgOptionsGI.message = 'No se ha podido actualizar la información.';
+              $scope.infoMsgOptionsGI.showMessage = true;
+            }
+          })
+      }
+
+      // Show the success message after save of general information.
+      function showMessageSuccessGI(message) {
+        $scope.infoMsgOptionsGI.type = 'success';
+        $scope.infoMsgOptionsGI.message = message;
+        $scope.infoMsgOptionsGI.showMessage = true;
+        setTimeout(function () {
+          $scope.infoMsgOptionsGI.type = 'error';
+          $scope.infoMsgOptionsGI.showMessage = false;
+        }, 2000);
+      }
+
+      // Enable de inputs to edit data in delivery address section and copy de data.
+      $scope.enableFieldsAD = function () {
+        $scope.updateDeliveryAddress = true;
+        $scope.enableFieldAD = "field-enable";
+        var clientOriginalCopy = {
+          country: $scope.client.deliveryAddress.country,
+          department: $scope.client.deliveryAddress.department,
+          city: $scope.client.deliveryAddress.city,
+          neighborhood: $scope.client.deliveryAddress.neighborhood,
+          nomenclature: $scope.client.deliveryAddress.nomenclature,
+          additionalInformation: $scope.client.deliveryAddress.additionalInformation,
+        };
+        $scope.clientOriginalCopyDA = clientOriginalCopy;
+      }
+
+      // Cancel the action of edit delivery address before the data is saved.
+      $scope.cancelUpdateDeliveryAddress = function () {
+        $scope.client.deliveryAddress.country = $scope.clientOriginalCopyDA.country;
+        $scope.client.deliveryAddress.department = $scope.clientOriginalCopyDA.department;
+        $scope.client.deliveryAddress.city = $scope.clientOriginalCopyDA.city;
+        $scope.client.deliveryAddress.neighborhood = $scope.clientOriginalCopyDA.neighborhood;
+        $scope.client.deliveryAddress.nomenclature = $scope.clientOriginalCopyDA.nomenclature;
+        $scope.client.deliveryAddress.additionalInformation = $scope.clientOriginalCopyDA.additionalInformation;
+        $scope.updateDeliveryAddress = false;
+        $scope.enableFieldAD = "";
+      }
+
+      // Create the params to realize the request to edit of delivery address.
+      $scope.saveNewDeliveryAddress = function () {
+        var country = $scope.client.deliveryAddress.country;
+        var department = $scope.client.deliveryAddress.department;
+        var city = $scope.client.deliveryAddress.city;
+        var neighborhood = $scope.client.deliveryAddress.neighborhood;
+        var nomenclature = $scope.client.deliveryAddress.nomenclature;
+        var additionalInformation = $scope.client.deliveryAddress.additionalInformation;
+
+        if (!country) {
+          $scope.infoMsgOptionsAD.message = 'Debe ingresar el país.';
+          $scope.infoMsgOptionsAD.showMessage = true;
+          return;
+        }
+        if (!department) {
+          $scope.infoMsgOptionsAD.message = 'Debe ingresar el departamento.';
+          $scope.infoMsgOptionsAD.showMessage = true;
+          return;
+        }
+        if (!city) {
+          $scope.infoMsgOptionsAD.message = 'Debe ingresar la ciudad.';
+          $scope.infoMsgOptionsAD.showMessage = true;
+          return;
+        }
+        if (!neighborhood) {
+          $scope.infoMsgOptionsAD.message = 'Debe ingresar el barrio.';
+          $scope.infoMsgOptionsAD.showMessage = true;
+          return;
+        }
+
+        if (!nomenclature) {
+          $scope.infoMsgOptionsAD.message = 'Debe ingresar la nomenclatura.';
+          $scope.infoMsgOptionsAD.showMessage = true;
+          return;
+        }
+
+        var addressCredentials = {
+          deliveryCountry: country,
+          deliveryDepartment: department,
+          deliveryCity: city,
+          deliveryNeighborhood: neighborhood,
+          deliveryNomenclature: nomenclature,
+          deliveryAdditionalInformation: additionalInformation,
+          clientId: $scope.client.id
+        }
+
+        ClientSvc.updateDeliveryAddressAdmin(addressCredentials)
+          .then(function(res) {
+            showMessageSuccessAD('Dirección actualizada.');
+            $scope.updateDeliveryAddress = false;
+            $scope.enableFieldAD = "";
+          })
+          .catch(function(err) {
+            $scope.infoMsgOptionsGI.message = 'No se ha podido actualizar la dirección.';
+            $scope.infoMsgOptionsGI.showMessage = true;
+          })
+      }
+
+      // Show the success message after save of delivery address.
+      function showMessageSuccessAD(message) {
+        $scope.infoMsgOptionsAD.type = 'success';
+        $scope.infoMsgOptionsAD.message = message;
+        $scope.infoMsgOptionsAD.showMessage = true;
+        setTimeout(function () {
+          $scope.infoMsgOptionsAD.type = 'error';
+          $scope.infoMsgOptionsAD.showMessage = false;
+        }, 2000);
+      }
+
     }
   ]);

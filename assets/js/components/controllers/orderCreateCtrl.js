@@ -14,7 +14,6 @@
     if ($stateParams.order) {
       $scope.formToUpdate = true;
       orderParam = $stateParams.order;
-      // console.log(orderParam);
       $scope.order.additionalInformation = orderParam.additionalInformation;
     }
 

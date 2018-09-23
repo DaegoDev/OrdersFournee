@@ -1,0 +1,45 @@
+<div class="clients-products-report" style="height: 400px">
+  <fieldset class="form-group filters-border">
+    <legend class="filters-border">Filtros de la busqueda</legend>
+    <div class="row filters-dates">
+      <div class="col-sm-1 label-filter">
+        <label for="initialDate">Desde:</label>
+      </div>
+      <div class="col-sm-4">
+        <p class="input-group">
+          <input type="text" id="initialDate" class="form-control" uib-datepicker-popup="{{format}}" ng-model="filters.initialDate" is-open="popupInitialDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" readonly/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="openInitialDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+      </div>
+      <div class="col-sm-1 label-filter">
+        <label for="finalDate">Hasta:</label>
+      </div>
+      <div class="col-sm-4">
+        <p class="input-group">
+          <input type="text" id="finalDate" class="form-control" uib-datepicker-popup="{{format}}" ng-model="filters.finalDate" is-open="popupFinalDate.opened"
+          datepicker-options="dateOptionsFinalDate" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
+          readonly/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="openFinalDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+      </div>
+    </div>
+    <div class="row filters-client-products">
+      <div class="col-sm-2 label-filter">
+        <label for="">Clientes</label>
+      </div>
+      <div class="col-sm-4">
+        <div ng-dropdown-multiselect="" translation-texts="textOptions" options="clients" selected-model="clientsSelected" extra-settings="clientsSettings"></div>
+      </div>
+      <div class="col-sm-2 label-filter">
+        <label for="">Productos</label>
+      </div>
+      <div class="col-sm-4">
+        <div ng-dropdown-multiselect="" translation-texts="textOptions" options="products" selected-model="productsSelected" extra-settings="productsSettings"></div>
+      </div>
+    </div>
+  </fieldset>
+</div>

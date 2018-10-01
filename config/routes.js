@@ -78,6 +78,7 @@ module.exports.routes = {
   'GET /item/getByName' : {controller: "ItemController", action:"getByName"},
   'GET /item/getAll' : {controller: "ItemController", action:"getAll"},
   'POST /item/createElement' : {controller: "ItemController", action:"createElement"},
+  'DELETE /item/deleteElement' : {controller: "ItemController", action:"deleteElement"},
   'GET /item/getProductPriority' : {controller: "ItemController", action:"getProductPriority"},
   'POST /order/create' : {controller: "OrderController", action:"create"},
   'PUT /order/updateDeliveryDate' : {controller: "OrderController", action:"updateDeliveryDate"},

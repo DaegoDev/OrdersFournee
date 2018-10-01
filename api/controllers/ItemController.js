@@ -105,7 +105,8 @@ module.exports = {
     }
     //Obtenemos los valores y los valores abreviados dado su nombre.
     Element.find({
-        name: name
+        name: name,
+        enabled: true
       })
       .populate('items')
       .then(function(items) {
@@ -125,7 +126,7 @@ module.exports = {
    */
   getAll: function(req, res) {
     // Consultamos todos los items en la base de datos
-    Element.find()
+    Element.find({enabled: true})
       .sort('id ASC')
       .populate('items')
       .then(function(items) {
@@ -194,5 +195,33 @@ module.exports = {
         sails.log.debug(err);
         return res.serverError();
       });
+  },
+
+  /**
+   * Funcion para realizar borrado lógico de un element.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  deleteElement: function(req, res) {
+    // variables declaration
+    var elementId = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    elementId = req.param('elementId');
+
+    if (!elementId) {
+      return res.badRequest('Se debe ingresar el id del elemento.');
+    }
+
+    Element.update({id: elementId})
+    .set({enabled: false})
+    .then((element) => {
+      sails.log.debug("Element: ", element);
+      return res.ok(element);
+    })
+    .catch((err) => {
+      res.serverError(err);
+    })
   }
 };

@@ -19,6 +19,14 @@ var fournee = angular.module('fournee');
           });
           return element;
         },
+        deleteElement: function (elementId) {
+          var element = $http({
+            url: '/item/deleteElement',
+            method: 'DELETE',
+            data: elementId
+          });
+          return element;
+        },
         getByName: function(nameStr) {
           var item = $http({
             url: '/item/getByName',

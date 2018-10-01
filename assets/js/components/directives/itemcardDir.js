@@ -101,4 +101,41 @@ var fournee = angular.module('fournee');
     $scope.dirControl.getCurrentItem = function () {
       return $scope.currentItem;
     }
+
+    // Function to delete item selected.
+    $scope.deleteElement = function(){
+      console.log("Elemento actual: ", $scope.item);
+      var elementParam = {
+        elementId: $scope.item.id
+      }
+      console.log("Parametros: ", elementParam);
+      console.log("Id del elemento: ", $scope.item.id);
+      productItemSvc.deleteElement(elementParam)
+      .then(function (res) {
+        console.log("Data response: ", res.data);
+        
+      })
+      .catch(function (err) {
+        console.log("Data error response: ", err);
+        
+      });
+    }
+
+    // Function to update item selected.
+    $scope.updateElement = function(){
+      console.log("Elemento actual: ", $scope.item);
+      var elementParam = {
+        elementId: $scope.item.id
+      }
+      
+      productItemSvc.updateElement(elementParam)
+      .then(function (res) {
+        
+        
+      })
+      .catch(function (err) {
+        console.log("Data error response: ", err);
+        
+      });
+    }
   }]);

@@ -1,8 +1,18 @@
 <div class="">
-  <div class="card-header" ng-click="toggleCollapse()">
-    <p>{{item.name | capitalize}}:</p>
-    <p>{{currentItem.value || 'Seleccione un valor'}}</p>
-    <span>#{{item.items.length}}</span>
+  <div class="item-header" style="display: flex">
+    <div class="element-options" style="display: flex">
+        <button class="btn btn-sienna fa fa-edit" type="button" id="editOption"
+          style="height: 39px !important; border-radius: 0px !important;">
+        </button>
+        <button class="btn btn-sienna fa fa-remove" type="button" id="removeOption" ng-click="deleteElement()" 
+          style="height: 39px !important; border-radius: 0px !important;">
+        </button>
+      </div>
+    <div class="card-header" ng-click="toggleCollapse()">
+      <p>{{item.name | capitalize}}:</p>
+      <p>{{currentItem.value || 'Seleccione un valor'}}</p>
+      <span>#{{item.items.length}}</span>
+    </div>
   </div>
   <div class="main-content" ng-hide="isCollapsed">
     <div class="items-content">

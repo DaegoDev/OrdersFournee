@@ -21,6 +21,13 @@ module.exports = {
     items: {
       collection: 'item',
       via: 'element'
+    },
+    enabled: {
+      type: 'boolean',
+      notNull: true,
+      defaultsTo: true,
+      required: true,
+      columnName: 'enabled'
     }
   }
 };

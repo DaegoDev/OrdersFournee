@@ -24,6 +24,13 @@ module.exports = {
       required: true,
       columnName: 'short_value'
     },
+    enabled: {
+      type: 'boolean',
+      notNull: true,
+      defaultsTo: true,
+      required: true,
+      columnName: 'enabled'
+    },
     // Añade una referencia a product
     products: {
       collection: 'product',

@@ -50,6 +50,14 @@ var fournee = angular.module('fournee');
             method: 'GET',
           });
           return items;
+        },
+        disableItem: function (itemId) {
+          var item = $http({
+            url: '/item/disableItem',
+            method: 'PUT',
+            data: itemId
+          });
+          return item;
         }
       }
     }

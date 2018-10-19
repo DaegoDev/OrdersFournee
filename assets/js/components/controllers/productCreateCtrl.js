@@ -9,6 +9,9 @@ fournee.controller('productCreateCtrl', ['$scope', '$log', '$state', '$ngConfirm
     $scope.product.price = '';
     $scope.product.unitsPack = '';
 
+    // show or hide element in list
+    $scope.show = true;
+
     // Message options configuration to further error messages.
     $scope.messageOptions = {
       showMessage: false,

@@ -1,11 +1,8 @@
-<div class="">
+<div ng-show="showHidden">
   <div class="item-header" style="display: flex">
-    <div class="element-options" style="display: flex">
-        <button class="btn btn-sienna fa fa-edit" type="button" id="editOption"
-          style="height: 39px !important; border-radius: 0px !important;">
-        </button>
-        <button class="btn btn-sienna fa fa-remove" type="button" id="removeOption" ng-click="deleteElement()" 
-          style="height: 39px !important; border-radius: 0px !important;">
+    <div class="element-options">
+        <button class="btn btn-sienna fa fa-remove btn-remove-elements" type="button" id="removeOption" 
+          ng-click="confirmDeleteElement()" >
         </button>
       </div>
     <div class="card-header" ng-click="toggleCollapse()">
@@ -17,7 +14,9 @@
   <div class="main-content" ng-hide="isCollapsed">
     <div class="items-content">
       <ul class="items">
-        <li ng-repeat="jsonValue in item.items | orderBy:'value'" ng-class="{selected: jsonValue.isSelected}" ng-click="selectItem(jsonValue)">
+        <li ng-mouseenter="remove=true" ng-mouseleave="remove=false" ng-repeat="jsonValue in item.items | orderBy:'value'" 
+        ng-class="{selected: jsonValue.isSelected}" style="display: inline-block; position: relative;" ng-click="selectItem(jsonValue)">
+          <i ng-show="remove" ng-click="confirmDeleteItem($event, jsonValue, $index, item.items | orderBy:'value')" class="fa fa-remove icon-remove-item"></i>
           <h2>{{jsonValue.value}}</h2>
           <h3>{{jsonValue.shortValue}}</h3>
         </li>

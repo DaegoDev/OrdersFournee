@@ -108,7 +108,10 @@ module.exports = {
         name: name,
         enabled: true
       })
-      .populate('items')
+      .populate('items', {
+        where: {
+          enabled: true
+        }})
       .then(function(items) {
         // delete items['name'];
         res.ok(items);
@@ -128,7 +131,10 @@ module.exports = {
     // Consultamos todos los items en la base de datos
     Element.find({enabled: true})
       .sort('id ASC')
-      .populate('items')
+      .populate('items', {
+        where: {
+          enabled: true
+        }})
       .then(function(items) {
         res.ok(items);
       })
@@ -161,8 +167,9 @@ module.exports = {
     // Organización de credenciales de un elemento.
     var elementCredentials = {
       name: name,
+      enabled: true
     };
-
+    sails.log.debug("Elemento: ", elementCredentials);
     // se crea un elemento en la base de datos
     Element.create(elementCredentials)
       .then(function(element) {
@@ -223,5 +230,34 @@ module.exports = {
     .catch((err) => {
       res.serverError(err);
     })
+  },
+
+  /**
+   * Funcion para realizar borrado lógico de un element.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  disableItem: function(req, res) {
+    // variables declaration
+    var itemId = null;
+
+    // Definición de variables apartir de los parametros de la solicitud y validaciones.
+    itemId = req.param('itemId');
+
+    if (!itemId) {
+      return res.badRequest('Se debe ingresar el id del item.');
+    }
+
+    Item.update({id: itemId})
+    .set({enabled: false})
+    .then((item) => {
+      sails.log.debug("Item: ", item);
+      return res.ok(item);
+    })
+    .catch((err) => {
+      res.serverError(err);
+    })
   }
+
 };

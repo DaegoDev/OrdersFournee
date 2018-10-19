@@ -7,13 +7,15 @@ var fournee = angular.module('fournee');
       scope : {
         item: '=',
         selectedItem: '=',
-        control: '='
+        control: '=',
+        showHidden: '=?'
       },
       controller: 'itemCard',
     }
   })
 
-  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc', '$ngConfirm', function($scope, $log, productItemSvc, $ngConfirm) {
+  fournee.controller('itemCard', ['$scope', '$log', 'productItemSvc', '$ngConfirm', 'orderByFilter', '$state',
+   function($scope, $log, productItemSvc, $ngConfirm, orderBy, $state) {
     $scope.currentItem = null;
     $scope.isCollapsed = false;
     $scope.dirControl = null;
@@ -103,39 +105,84 @@ var fournee = angular.module('fournee');
     }
 
     // Function to delete item selected.
-    $scope.deleteElement = function(){
-      console.log("Elemento actual: ", $scope.item);
-      var elementParam = {
-        elementId: $scope.item.id
-      }
-      console.log("Parametros: ", elementParam);
-      console.log("Id del elemento: ", $scope.item.id);
-      productItemSvc.deleteElement(elementParam)
-      .then(function (res) {
-        console.log("Data response: ", res.data);
-        
-      })
-      .catch(function (err) {
-        console.log("Data error response: ", err);
-        
-      });
-    }
-
-    // Function to update item selected.
-    $scope.updateElement = function(){
-      console.log("Elemento actual: ", $scope.item);
+    deleteElement = function(){
       var elementParam = {
         elementId: $scope.item.id
       }
       
-      productItemSvc.updateElement(elementParam)
+      productItemSvc.deleteElement(elementParam)
       .then(function (res) {
-        
-        
+        console.log("Data response: ", res.data);
+        $scope.showHidden = false;
       })
       .catch(function (err) {
-        console.log("Data error response: ", err);
-        
+        $ngConfirm("Error al eliminar el elemento");
       });
     }
+
+    $scope.confirmDeleteElement = function(){
+      $ngConfirm({
+        title: '¿Está seguro que desea eliminar el elemento?',
+        useBootstrap: true,
+        content: 'Se desabilitará el elemento permanentemente.',
+        buttons: {
+          deleteReceptionHour: {
+            text: 'Eliminar',
+            btnClass: 'btn-red',
+            action: function() {
+              deleteElement();
+            }
+          },
+          cancel: function() {
+            
+          }
+        }
+      });
+    }
+
+    $scope.confirmDeleteItem = function($event, item, index, items){
+      console.log("Items ", items);
+      console.log("Item id", item);
+      console.log("Index", index);
+      console.log("Indice del item a remover indexof: ", items.indexOf(item));
+      $event.stopPropagation();
+      $ngConfirm({
+        title: '¿Está seguro que desea eliminar el item?',
+        useBootstrap: true,
+        content: 'Se desabilitará el item permanentemente.',
+        buttons: {
+          deleteReceptionHour: {
+            text: 'Eliminar',
+            btnClass: 'btn-red',
+            action: function() {
+              disableItem(item, index, items);
+            }
+          },
+          cancel: function() {
+            
+          }
+        }
+      });
+    }
+
+    // Función que llama el servicio para desabilitar un item.
+    disableItem = function(item, indexItem, items){
+      // Parametros del servicio para desabilitar item
+      var disableItemParam = {
+        itemId: item.id
+      }
+      
+      // Llamado al servicio para desabilitar un item.
+      productItemSvc.disableItem(disableItemParam)
+      .then(function (res) {
+        $ngConfirm("Item removido");
+        items.splice(items.indexOf(item), 1);
+        $state.reload();
+      })
+      .catch(function (err) {
+        console.log(err);
+        $ngConfirm("Error al eliminar el item");
+      });
+    }
+
   }]);

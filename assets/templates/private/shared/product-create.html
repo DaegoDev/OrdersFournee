@@ -33,7 +33,7 @@
         <!-- CREATE NEW ELEMENT AND CONFIRM PRODUCT CREATION. -->
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <input type="button" value="Añadir elemento" class="btn btn-sienna"
+            <input type="button" value="Añadir elemento" class="btn btn-sienna btn-add-element"
             ng-click="modalCreateElement()">
             <input type="button" value="Crear producto" class="btn btn-sienna"
             ng-click="createProduct()">
@@ -51,7 +51,8 @@
 
       <!-- LIST OF ELEMENTS TO CREATE A PRODUCT -->
       <div class="product-items">
-        <item-card ng-repeat="item in items" item="item" selected-item="selectedItems" control="item.control"></item-card>
+        <item-card ng-repeat="item in items" item="item" selected-item="selectedItems" 
+        control="item.control" show-hidden="show"></item-card>
       </div>
   </div>
 </div>

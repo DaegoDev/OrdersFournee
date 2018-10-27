@@ -1,0 +1,69 @@
+.production-config-wrapper{
+    padding: 30px;
+
+    .global-configuration{
+        margin-bottom: 15px;
+
+        .row-configuration {
+            
+            label {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .form-compl-configuration {
+        padding: 20px;
+
+        .id-column {
+            width: 5%;
+        }
+
+        .name-column {
+            width: 25%;
+        }
+
+        .short-name-column {
+            width: 10%;
+        }
+
+        .amount-column {
+            width: 12%;
+        }
+
+        .amount-by-tin-column {
+            width: 14%;
+        }
+
+        .options-column {
+            width: 15%;
+        }
+
+        table>tbody {
+            
+            input[type=text] {
+                width: 90px;
+            }
+
+            .options-field {
+                display: flex;
+
+                .icon-aceptar {
+                    color: green;
+
+                    &:hover {
+                        background-color: @bg-white;
+                    }
+                }
+
+                .icon-cancelar {
+                    color: red;
+
+                    &:hover {
+                        background-color: @bg-white;
+                    }
+                }
+            }
+        }
+    }
+}

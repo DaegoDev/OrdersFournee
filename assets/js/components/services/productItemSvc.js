@@ -58,6 +58,14 @@ var fournee = angular.module('fournee');
             data: itemId
           });
           return item;
+        },
+        //Function to get form complements.
+        getFormComplements: function () {
+          var formComplements = $http({
+            url: '/item/getFormComplements',
+            method: 'GET',
+          });
+          return formComplements;
         }
       }
     }

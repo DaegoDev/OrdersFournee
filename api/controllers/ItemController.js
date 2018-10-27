@@ -258,6 +258,38 @@ module.exports = {
     .catch((err) => {
       res.serverError(err);
     })
+  },
+
+  /**
+   * Funcion obtener los complementos de forma.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getFormComplements: function(req, res) {
+    const COMPLEMENTO_FORMA = "Compl. forma";
+    var err;
+    var complForm = [];
+    
+    Item.find({enabled: true})
+      .populate('element')
+      .populate('itemConfig')
+      .then(function(items) {
+          var lengthCompl = items.length;
+          for (i = 0; i < lengthCompl; i++) {
+            if (typeof items[i] !== "undefined") {
+              if ( items[i].element.name === COMPLEMENTO_FORMA) {
+                items[i]["update"] = false;
+                complForm.push(items[i]);
+              }
+            }
+          }
+          res.ok(complForm);
+        })
+        .catch(function(err) {
+          sails.log.debug(err);
+          res.serverError(err);
+        });
   }
 
 };

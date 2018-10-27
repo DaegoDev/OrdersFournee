@@ -276,6 +276,42 @@ function($stateProvider, $urlRouterProvider) {
       }
     }
   })
+  // Productions routes
+  .state('production', {
+    url: '/production',
+    templateUrl: 'templates/private/admin/production/production.html',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('production.config', {
+    url: '/config',
+    templateUrl: 'templates/private/admin/production/production-config.html',
+    controller: 'ProductionConfigCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('production.report', {
+    url: '/report',
+    templateUrl: 'templates/private/admin/production/production-report.html',
+    controller: 'ProductionReportCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
 
   /**
   * RUTAS DE ACCESO DE UN CLIENTE.

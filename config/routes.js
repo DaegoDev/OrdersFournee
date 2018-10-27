@@ -80,6 +80,7 @@ module.exports.routes = {
   'POST /item/createElement' : {controller: "ItemController", action:"createElement"},
   'DELETE /item/deleteElement' : {controller: "ItemController", action:"deleteElement"},
   'PUT /item/disableItem' : {controller: "ItemController", action:"disableItem"},
+  'GET /item/getFormComplements' : {controller: "ItemController", action:"getFormComplements"},
   'GET /item/getProductPriority' : {controller: "ItemController", action:"getProductPriority"},
   'POST /order/create' : {controller: "OrderController", action:"create"},
   'PUT /order/updateDeliveryDate' : {controller: "OrderController", action:"updateDeliveryDate"},
@@ -113,4 +114,8 @@ module.exports.routes = {
   'POST /auth/signinUser' : {controller: "AuthController", action:"signinUser"},
   'GET /auth/requestTokenRecovery' : {controller: "AuthController", action:"requestTokenRecovery"},
   'PUT /auth/recoverPassword' : {controller: "AuthController", action:"recoverPassword"},
+  'POST /itemConfig/create' : {controller: "ItemConfigController", action:"createItemConfig"},
+  'PUT /itemConfig/update' : {controller: "ItemConfigController", action:"updateItemConfig"},
+  'PUT /productionConfig/update' : {controller: "ProductionConfigController", action:"updateProductionConfig"},
+  'GET /productionConfig/get' : {controller: "ProductionConfigController", action:"getProductionConfig"},
 };

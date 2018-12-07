@@ -116,6 +116,15 @@ module.exports.policies = {
   ProductionConfigController: {
     updateProductionConfig: 'isAdmin',
     getProductionConfig: 'isAdmin'
+  },
+
+  ProductionReportConstroller: {
+    getProductionReport: 'isAdmin'
+  },
+
+  IngredientController: {
+    addIngredient: 'isAdmin',
+    getAll: 'isAdmin'
   }
 
   /***************************************************************************

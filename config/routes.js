@@ -118,4 +118,7 @@ module.exports.routes = {
   'PUT /itemConfig/update' : {controller: "ItemConfigController", action:"updateItemConfig"},
   'PUT /productionConfig/update' : {controller: "ProductionConfigController", action:"updateProductionConfig"},
   'GET /productionConfig/get' : {controller: "ProductionConfigController", action:"getProductionConfig"},
+  'GET /productionReport/get' : {controller: "ProductionReportController", action:"getProductionReport"},
+  'POST /ingredient/add' : {controller: "IngredientController", action:"addIngredient"},
+  'GET /ingredient/getAll' : {controller: "IngredientController", action:"getAll"},
 };

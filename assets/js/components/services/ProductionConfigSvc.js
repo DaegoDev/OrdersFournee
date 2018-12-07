@@ -27,6 +27,15 @@ function ($http, $rootScope) {
         data: params
       });
       return itemUpdated;
+    },
+    // Service to get the production report
+    getProductionReport: function(params) {
+      var productionReport = $http({
+        url: '/productionReport/get',
+        method: 'GET',
+        params: params
+      });
+      return productionReport;
     }
   };
 }]);

@@ -45,11 +45,11 @@
 
 
     $scope.order.timeInitial = new Date();
-    $scope.order.timeInitial.setHours($scope.formToUpdate ? orderParam.initialSuggestedTime.split(":")[0] : 12);
-    $scope.order.timeInitial.setMinutes($scope.formToUpdate ? orderParam.initialSuggestedTime.split(":")[1] : 0);
+    // $scope.order.timeInitial.setHours($scope.formToUpdate ? orderParam.initialSuggestedTime.split(":")[0] : 12);
+    // $scope.order.timeInitial.setMinutes($scope.formToUpdate ? orderParam.initialSuggestedTime.split(":")[1] : 0);
     $scope.order.timeFinal = new Date();
-    $scope.order.timeFinal.setHours($scope.formToUpdate ? orderParam.finalSuggestedTime.split(":")[0] : $scope.order.timeInitial.getHours() + 2);
-    $scope.order.timeFinal.setMinutes($scope.formToUpdate ? orderParam.finalSuggestedTime.split(":")[1] : $scope.order.timeInitial.getMinutes());
+    // $scope.order.timeFinal.setHours($scope.formToUpdate ? orderParam.finalSuggestedTime.split(":")[0] : $scope.order.timeInitial.getHours() + 2);
+    // $scope.order.timeFinal.setMinutes($scope.formToUpdate ? orderParam.finalSuggestedTime.split(":")[1] : $scope.order.timeInitial.getMinutes());
 
     $scope.order.hstep = 1;
     $scope.order.mstep = 10;

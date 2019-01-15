@@ -729,13 +729,49 @@ module.exports = {
    * @return {Object}
    */
   getClientsProducts: function(req, res) {
+    //Declaration of variables
+    var productsByClient = {};
+    var clientsByProduct = {};
+    var response = {};
+
     ClientProduct.find({
         enabled: true
       })
       .populate('product')
       .populate('client')
       .then((clientsProducts) => {
-        res.ok(clientsProducts);
+        clientsProducts.forEach((clientProduct, index, clientsProducts) => {
+          // Validamos si ya se creo el atributo con el id del cliente
+          if (!productsByClient.hasOwnProperty(clientProduct.client.id)) {
+            var productsAssociated = [];
+            productsByClient[clientProduct.client.id] = {
+              id: clientProduct.client.id,
+              legalName: clientProduct.client.legalName,
+              tradeName: clientProduct.client.tradeName,
+              nit: clientProduct.client.nit,
+              products: productsAssociated
+            }
+          }
+          // Validamos si ya se creo el atributo con el código del producto
+          if (!clientsByProduct.hasOwnProperty(clientProduct.product.code)) {
+            var clientsAssociated = [];
+            clientsByProduct[clientProduct.product.code] = {
+              code: clientProduct.product.code,
+              name: clientProduct.product.name,
+              price: clientProduct.product.price,
+              shortName: clientProduct.product.shortName,
+              clients: clientsAssociated
+            }
+          }
+          //Vamos añadiendo los productos y los clientes.
+          productsByClient[clientProduct.client.id].products.push(clientProduct.product.code);
+          clientsByProduct[clientProduct.product.code].clients.push(clientProduct.client.id);
+        })
+
+        response.productsByClient = productsByClient;
+        response.clientsByProduct = clientsByProduct;
+        response.clientsProducts = clientsProducts;
+        res.ok(response);
       })
       .catch((err) => {
         sails.log.debug(err)

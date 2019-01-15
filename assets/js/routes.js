@@ -313,6 +313,19 @@ function($stateProvider, $urlRouterProvider) {
     }
   })
 
+  .state('report.amountProductsByClients', {
+    url: '/amountProductsByClients',
+    templateUrl: 'templates/private/admin/report/products-clients-amount.html',
+    controller: 'AmountProductsByClientsCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+
   // Recipes routes
   .state('recipe', {
     url: '/recipes',

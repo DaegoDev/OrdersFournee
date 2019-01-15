@@ -9,7 +9,7 @@ module.exports = {
   tableName: 'recipe',
   attributes: {
     amount: {
-      type: 'integer',
+      type: 'float',
       notNull: true,
       required: true,
       columnName: 'amount'

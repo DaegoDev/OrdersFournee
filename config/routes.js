@@ -81,6 +81,7 @@ module.exports.routes = {
   'DELETE /item/deleteElement' : {controller: "ItemController", action:"deleteElement"},
   'PUT /item/disableItem' : {controller: "ItemController", action:"disableItem"},
   'GET /item/getFormComplements' : {controller: "ItemController", action:"getFormComplements"},
+  'GET /item/getDoughs' : {controller: "ItemController", action:"getDoughs"},
   'GET /item/getProductPriority' : {controller: "ItemController", action:"getProductPriority"},
   'POST /order/create' : {controller: "OrderController", action:"create"},
   'PUT /order/updateDeliveryDate' : {controller: "OrderController", action:"updateDeliveryDate"},
@@ -121,4 +122,7 @@ module.exports.routes = {
   'GET /productionReport/get' : {controller: "ProductionReportController", action:"getProductionReport"},
   'POST /ingredient/add' : {controller: "IngredientController", action:"addIngredient"},
   'GET /ingredient/getAll' : {controller: "IngredientController", action:"getAll"},
+  'POST /recipe/create' : {controller: "RecipeController", action:"createRecipe"},
+  'GET /recipe/get' : {controller: "RecipeController", action:"getByDough"},
+  'PUT /recipe/removeIngredient' : {controller: "RecipeController", action:"removeIngredient"},
 };

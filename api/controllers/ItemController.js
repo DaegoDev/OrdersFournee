@@ -290,6 +290,35 @@ module.exports = {
           sails.log.debug(err);
           res.serverError(err);
         });
+  },
+
+  /**
+   * Funcion obtener las masas.
+   * @param  {Object} req Request object
+   * @param  {Object} res Response object
+   * @return {Object}
+   */
+  getDoughs: function(req, res) {
+    const DOUGH = "Masa";
+    var doughs = [];
+    
+    Item.find({enabled: true})
+      .populate('element')
+      .then(function(items) {
+          var lengthCompl = items.length;
+          for (i = 0; i < lengthCompl; i++) {
+            if (typeof items[i] !== "undefined") {
+              if ( items[i].element.name === DOUGH) {
+                doughs.push(items[i]);
+              }
+            }
+          }
+          res.ok(doughs);
+        })
+        .catch(function(err) {
+          sails.log.debug(err);
+          res.serverError(err);
+        });
   }
 
 };

@@ -49,11 +49,12 @@ module.exports = {
             var tinsOven = config[0].value;
             var kneadingCapacity = config[1].value;
             response.globalConfig = config;
-            Order.query('SELECT id, code, name, short_name, amount, group_concat(itemConfig separator "/") as items \
+            Order.query('SELECT id, code, name, short_name, amount, group_concat(itemConfig separator "/") as items, group_concat(recipeIng separator "/") as recipe \
             FROM \
             ( \
               SELECT DISTINCT ord.id, prod.code, prod.name, prod.short_name, op.amount, \
-                concat_ws(",", item.element, item.id, item.short_value, item.value, ic.mold_amount, ic.amount_by_tin) as itemConfig \
+                concat_ws(",", item.element, item.id, item.short_value, item.value, ic.mold_amount, ic.amount_by_tin) as itemConfig, \
+                concat_ws(",", ing.name, recipe.amount) as recipeIng \
                 FROM `order` as ord \
                 LEFT JOIN order_product as op ON op.order_id = ord.id \
                 LEFT JOIN client_product as cp ON op.client_product = cp.id \
@@ -61,6 +62,8 @@ module.exports = {
                 LEFT JOIN item_product as ip ON ip.product_code = prod.code \
                 LEFT JOIN item ON item.id = ip.item_id \
                 LEFT JOIN item_config as ic ON ic.item = item.id \
+                LEFT JOIN recipe ON item.id = recipe.dough \
+                LEFT JOIN ingredient ing ON ing.id = recipe.ingredient \
                 WHERE item.element in (11, 13, 15) AND ord.created_at >= ? AND ord.created_at <= ? \
             ) AS report \
             group by id, code, name, short_name, amount ORDER BY code;', dateInterval,
@@ -85,9 +88,6 @@ module.exports = {
                             weight = item;
                         }
                     });
-                    sails.log.debug("Masa: ", dough);
-                    sails.log.debug("Comp forma: ", compForm);
-                    sails.log.debug("Peso: ", weight);
                     var doughData = dough.split(",");
                     var compFormData = compForm.split(",");
                     var weightData = weight.split(",");
@@ -101,6 +101,11 @@ module.exports = {
                     if(!report[doughId].products){
                         report[doughId].products = [];
                     }
+
+                    if(!report[doughId].recipe){
+                        report[doughId].recipe = product.recipe;
+                    }
+
                     var product = {
                         code: product.code,
                         name: product.name,
@@ -120,6 +125,7 @@ module.exports = {
                         tmpProductAdded = product;
                     }
                     sails.log.debug("Producto añadido: ", tmpProductAdded);
+                    
                     if(!report[doughId].totalAmount){
                         report[doughId].totalAmount = 0;
                     }
@@ -136,13 +142,14 @@ module.exports = {
                     report[doughId].doughName = doughName;
                     report[doughId].totalAmount += product.amount;
                     report[doughId].totalWeight += (product.amount * (parseFloat(weightData[2])) / 1000);
-                    sails.log.debug("Cantidad total: ", parseFloat(report[doughId].totalAmount));
-                    sails.log.debug("Peso: ", parseFloat(weightData[2]));
-                    sails.log.debug("Capacidad amasadora: ", parseFloat(kneadingCapacity));
+                    // sails.log.debug("Cantidad total: ", parseFloat(report[doughId].totalAmount));
+                    // sails.log.debug("Peso: ", parseFloat(weightData[2]));
+                    // sails.log.debug("Capacidad amasadora: ", parseFloat(kneadingCapacity));
                     var kneadingBatches = Math.ceil((parseFloat(report[doughId].totalAmount) * parseFloat(report[doughId].totalWeight)) / (parseFloat(kneadingCapacity) * 1000));
                     var ovenBatches = Math.ceil(parseFloat(tmpProductAdded.tinAmount) / parseFloat(tinsOven));
                     sails.log.debug("Tandas según amasadora: ", kneadingBatches);
                     sails.log.debug("Tandas según horno: ", ovenBatches);
+                    
                     // report[doughId].maxBatches = Math.max(report[doughId].maxBatches, kneadingBatches, ovenBatches, tmpProductAdded.batchesMoldAmount);
                     // Valida si el max es de la configuración general o por producto.
                     // var maxGeneralBatches = Math.max(kneadingBatches, ovenBatches);
@@ -151,7 +158,7 @@ module.exports = {
                     //     report[doughId].maxBatches = kneadingBatches;
                     //     sails.log.debug("totalWeigth: ", report[doughId].totalWeight);
                     //     sails.log.debug("totalWeigth: ", report[doughId].totalWeight);
-                        report[doughId].maxByProductKneading = Math.round(kneadingCapacity / report[doughId].products.length);
+                        report[doughId].maxByProductKneading = (kneadingCapacity / report[doughId].products.length).toFixed(2);
                     // }
 
                     // if (ovenBatches > report[doughId].maxBatches) {
@@ -170,7 +177,8 @@ module.exports = {
             })
         })
         .catch(error => {
-            sails.log.error("Error obteniendo la configuración de producción: ", error)
+            sails.log.error("Error obteniendo la configuración de producción: ", error);
+            res.serverError();
         })
    }
 };

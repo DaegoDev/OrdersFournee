@@ -74,7 +74,8 @@ module.exports.policies = {
     createElement: 'isAdmin',
     deleteElement: 'isAdmin',
     disableItem: 'isAdmin',
-    getFormComplements: 'isAdmin'
+    getFormComplements: 'isAdmin',
+    getDoughs: 'isAdmin'
   },
 
   OrderController: {
@@ -125,6 +126,12 @@ module.exports.policies = {
   IngredientController: {
     addIngredient: 'isAdmin',
     getAll: 'isAdmin'
+  },
+
+  RecipeController: {
+    createRecipe: 'isAdmin',
+    getByDough: 'isAdmin',
+    removeIngredient: 'isAdmin'
   }
 
   /***************************************************************************

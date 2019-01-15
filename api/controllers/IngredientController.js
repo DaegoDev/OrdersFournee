@@ -60,7 +60,7 @@ module.exports = {
    */
   getAll: function(req, res) {
     // Consultamos todos los ingredientes en la base de datos
-    Ingrediente.find({enabled: true})
+    Ingredient.find({enabled: true})
       .sort('id ASC')
       .then(function(ingrediente) {
         res.ok(ingrediente);

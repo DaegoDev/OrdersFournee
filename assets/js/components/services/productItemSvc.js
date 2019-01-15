@@ -66,6 +66,14 @@ var fournee = angular.module('fournee');
             method: 'GET',
           });
           return formComplements;
+        },
+        //Function to get doughs.
+        getDoughs: function () {
+          var doughs = $http({
+            url: '/item/getDoughs',
+            method: 'GET',
+          });
+          return doughs;
         }
       }
     }

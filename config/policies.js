@@ -71,7 +71,11 @@ module.exports.policies = {
     createItem: 'isAdmin',
     getByName: 'isAdmin',
     getAll: 'isAdmin',
-    createElement: 'isAdmin'
+    createElement: 'isAdmin',
+    deleteElement: 'isAdmin',
+    disableItem: 'isAdmin',
+    getFormComplements: 'isAdmin',
+    getDoughs: 'isAdmin'
   },
 
   OrderController: {
@@ -103,8 +107,32 @@ module.exports.policies = {
     create: 'isAdmin',
     update: 'isAdmin',
     delete: 'isAdmin',
-  }
+  },
 
+  ItemConfigController: {
+    createItemConfig: 'isAdmin',
+    updateItemConfig: 'isAdmin'
+  },
+
+  ProductionConfigController: {
+    updateProductionConfig: 'isAdmin',
+    getProductionConfig: 'isAdmin'
+  },
+
+  ProductionReportConstroller: {
+    getProductionReport: 'isAdmin'
+  },
+
+  IngredientController: {
+    addIngredient: 'isAdmin',
+    getAll: 'isAdmin'
+  },
+
+  RecipeController: {
+    createRecipe: 'isAdmin',
+    getByDough: 'isAdmin',
+    removeIngredient: 'isAdmin'
+  }
 
   /***************************************************************************
    *                                                                          *

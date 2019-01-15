@@ -42,6 +42,17 @@ module.exports = {
       model: 'element',
       notNull: true,
       columnName: 'element'
+    },
+    // Añade una referencia a itemConfig
+    itemConfig: {
+      collection:'itemConfig',
+      via: 'item'
+    },
+    // Añade una referencia a ingredient
+    ingredient: {
+      collection: 'ingredient',
+      via: 'item',
+      through: 'recipe'
     }
   }
 };

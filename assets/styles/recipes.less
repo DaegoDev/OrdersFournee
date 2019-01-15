@@ -1,0 +1,97 @@
+.recipe-wrapper {
+    padding: 30px;
+
+    #addIngredient {
+        margin: 22px;
+    }
+
+    #doughs-table {
+        thead, tbody {
+            display: block;
+        }
+
+        thead th {
+            width: 10%;
+        }
+        tbody tr{
+            .id-cell {
+                width: 71px;
+            }
+
+            .name-cell {
+                width: 103px;
+            }
+
+            .shortName-cell {
+                width: 147px;
+            }
+
+            .detail-cell {
+                width: 96px;
+            }
+        }
+
+        thead th:last-child {
+            width: 11%; 
+        }
+        tbody {
+            height: 450px;
+            overflow-y: auto;    
+            overflow-x: hidden;
+        }
+    }
+
+    #recipe-table {
+
+        .input-amount {
+            width: 60%;
+        }
+        .amount-column{
+            width: 35%;
+        }
+
+        .remove-cell {
+            text-align: center;
+
+            .icon-cancelar {
+                color: red;
+    
+                &:hover {
+                    background-color: @bg-white;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+}
+#table-ingredients {
+    thead {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    tbody {
+    
+        .options-field {
+            text-align: center;
+    
+            .icon-aceptar {
+                color: green;
+    
+                &:hover {
+                    background-color: @bg-white;
+                }
+            }
+    
+            .icon-cancelar {
+                color: red;
+    
+                &:hover {
+                    background-color: @bg-white;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

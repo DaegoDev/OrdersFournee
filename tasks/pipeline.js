@@ -62,6 +62,7 @@ var jsFilesToInject = [
   'bower_components/format-as-currency/dist/format-as-currency.js',
   'bower_components/angular-toastr/dist/angular-toastr.min.js',
   'bower_components/angular-toastr/dist/angular-toastr.tpls.js',
+  'bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js',
 
   // Angular files are here.
   'js/main.js',

@@ -1,0 +1,95 @@
+<div class="production-report" ng-sty>
+    <fieldset style="height: 330px;" class="form-group filters-border">
+      <legend class="filters-border">Filtros de la busqueda</legend>
+      <div class="row filters-dates">
+        <div class="col-sm-1 label-filter">
+          <label for="initialDate">Desde:</label>
+        </div>
+        <div class="col-sm-5">
+          <p class="input-group">
+            <input type="text" id="initialDate" class="form-control" datetime-picker="dd MMM yyyy HH:mm" ng-model="filters.initialDate" 
+              is-open="popupInitialDate.opened" buttonBar="buttonsOptions" datepicker-options="dateOptions" ng-required="true" 
+              close-text="Close" alt-input-formats="altInputFormats" readonly/>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="openInitialDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+        <div class="col-sm-1 col-sm-offset-2 label-filter">
+          <label for="finalDate">Hasta:</label>
+        </div>
+        <div class="col-sm-5">
+          <p class="input-group">
+            <input type="text" id="finalDate" class="form-control" datetime-picker="dd MMM yyyy HH:mm" ng-model="filters.finalDate" is-open="popupFinalDate.opened"
+            datepicker-options="dateOptionsFinalDate" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
+            readonly/>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="openFinalDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="get-production-report">
+        <button type="button" name="getReport" class="btn btn-sienna" ng-click="getProductionReport()" >
+          Generar reporte
+        </button>
+      </div>
+    </fieldset>
+    <fieldset ng-if="reports.length > 0" class="form-group filters-border">
+      <legend class="filters-border">Resultado</legend>
+        <div ng-repeat="report in reports" ng-init="getBatchesValues(report)" ng-class-odd="'report-alternate'" >
+          <p class="dough-title">
+            Masa:
+            <span>{{report.doughName}}</span>
+          </p>
+          <div class="production-table table-responsive">
+            <table class="table table-hover table-bordered table-condensed">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>KG</th>
+                  <th>Cantidad</th>
+                  <th>Total</th>
+                  <th ng-repeat="i in report.totalByBatch track by $index">Tanda {{$index+1}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="product in report.products">
+                  <td>{{product.shortName}}</td>
+                  <td>{{product.weightValue / 1000 | number : 2}}</td>
+                  <td>{{product.amount}}</td>
+                  <td>{{(product.weightValue / 1000) * product.amount | number : 2}}</td>
+                  <th ng-repeat="batch in product.batches track by $index">
+                    {{batch / 1000| number : 2}}
+                  </th>
+                </tr>
+                <tr>
+                  <td colspan="4">Total de masa a producir: {{report.total / 1000| number : 2}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="recipe-title">
+              <span>Receta</span>
+          </p>
+          <div class="production-table table-responsive">
+            <table class="table table-hover table-bordered table-condensed">
+              <thead>
+                <tr>
+                  <th>Ingrediente</th>
+                  <th ng-repeat="totalBatch in report.totalByBatch track by $index">Tanda {{$index + 1}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="ingredient in report.recipe.split('/') track by $index" ng-if="ingredient.length > 0">
+                  <td>{{ingredient.split(',')[0]}}</td>
+                  <td class="cell-batch" ng-repeat="totalBatch in report.totalByBatch track by $index">{{ingredient.split(',')[1] * (totalBatch / 1000) | number : 2}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+          </div>
+      </div>
+    </fieldset>
+  </div>
+  <preloader ng-show="isRequesting"></preloader>

@@ -276,6 +276,79 @@ function($stateProvider, $urlRouterProvider) {
       }
     }
   })
+  // Productions routes
+  .state('production', {
+    url: '/production',
+    templateUrl: 'templates/private/admin/production/production.html',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('production.config', {
+    url: '/config',
+    templateUrl: 'templates/private/admin/production/production-config.html',
+    controller: 'ProductionConfigCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('production.report', {
+    url: '/report',
+    templateUrl: 'templates/private/admin/production/production-report.html',
+    controller: 'ProductionReportCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+
+  // Recipes routes
+  .state('recipe', {
+    url: '/recipes',
+    templateUrl: 'templates/private/admin/recipe/recipes.html',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('recipe.config', {
+    url: '/recipes',
+    templateUrl: 'templates/private/admin/recipe/recipes-config.html',
+    controller: 'RecipeConfigCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
+  .state('recipe.ingredients', {
+    url: '/ingredients',
+    templateUrl: 'templates/private/admin/recipe/recipe-ingredients.html',
+    controller: 'IngredientsCtrl',
+    data: {
+      permissions: {
+        only: "ADMINISTRADOR",
+        except: "ANON",
+        redirectTo: 'home'
+      }
+    }
+  })
 
   /**
   * RUTAS DE ACCESO DE UN CLIENTE.

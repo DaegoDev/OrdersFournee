@@ -1,0 +1,42 @@
+<div class="container-product-table">
+  <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group stylish-input-group">
+          <input type="text" class="form-control" placeholder="Filtrar ingrediente" ng-model="searchTextIngredient">
+          <span class="input-group-addon">
+          <button type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="client-list-wrapper"> -->
+        <div class="table-container" >
+              <table id="table-ingredients" class="highlight bordered responsive-table">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Código</th>
+                    <th style="width: 17%">Nombre</th>
+                    <th style="width: 13%">Añadir</th>
+                    <th style="width: 13%">opciones</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr ng-repeat="ingredient in ingredients | filter:searchTextIngredient | orderBy: sortByProperty:sortReversed"" >
+                    <td>{{ingredient.id}}</td>
+                    <td>{{ingredient.name}}</td>
+                    <td style="width:100px">
+                      <a class="btn" ng-click="addIngredientToList(ingredient)">Añadir</a>
+                    </td>
+                    <td class="options-field" ng-if="ingredient.added">
+                        <span class="fa fa-check fa-lg icon-aceptar"></span>
+                        <span ng-click="removeIngredientOfList(ingredient)" class="fa fa-close fa-lg icon-cancelar"></span>           
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+    <!-- </div> -->
+</div>
